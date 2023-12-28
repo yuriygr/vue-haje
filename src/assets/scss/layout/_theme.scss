@@ -1,0 +1,42 @@
+:root {
+  --tabbar--height: 48px;
+
+  --large-screen-max-width: 620px;
+  --mobile-page-vertical-padding: 12px;
+  --desktop-page-vertical-padding: 2rem;
+
+  --mobile-page-horizontal-padding: 12px;
+  --desktop-page-horizontal-padding: 24px;
+}
+
+// Светлая тема
+html {
+  --x-background: #fff;
+  --x-color: #111;
+
+  --tabbar--background: #fff;
+
+  --entry-pseudo-form--color: #111;
+  --entry-pseudo-form--backgroud: #f7f7f7;
+  --entry-pseudo-form--border-color: #f1f1f1;
+  --entry-pseudo-form__icon--color: #aaa;
+  --entry-pseudo-form__placeholder--color: #999;
+
+  --entry-item__divider-color: rgba(0, 0, 0, 0.08);
+}
+
+// Темная тема
+html[data-theme="black"] {
+  --x-background: #111;
+  --x-color: #fffcea;
+
+  --tabbar--background: #111;
+
+  --entry-pseudo-form--color: #fffcea;
+  --entry-pseudo-form--backgroud: #181818;
+  --entry-pseudo-form--border-color: #222;
+  --entry-pseudo-form__icon--color: #aaa;
+  --entry-pseudo-form__placeholder--color: #999;
+
+  --entry-item__divider-color: rgba(255, 255, 255, 0.08);
+}

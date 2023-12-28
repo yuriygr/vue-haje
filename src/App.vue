@@ -1,30 +1,70 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <app-layout>
+    <app-tabbar />
+    <app-content />
+  </app-layout>
+
+  <alerts-layer />
+  <modals-layer />
+  <loading-layer :loading="loading" />
+  <popover-layer />
+
+  <icons-sprite-layer :path="require('@/assets/symbols.svg')" />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { AlertsLayer, IconsSpriteLayer, LoadingLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
 
-nav {
-  padding: 30px;
+import { AppTabbar, AppContent, AppLayout } from '@/components/_app'
+import { mapGetters, mapState } from 'vuex'
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+export default {
+  name: 'app',
+  components: {
+    AlertsLayer, IconsSpriteLayer, LoadingLayer, ModalsLayer, PopoverLayer,
+    AppTabbar, AppContent, AppLayout
+  },
+  data() {
+    return {
+      modal: false,
+    }
+  },
+  computed: {
+    ...mapState('app', [ 'theme', 'pwa', 'loading' ]),
+    ...mapState('auth', [ 'data' ]),
+    ...mapGetters('app', [ 'themeStatusBar' ])
+  },
+  methods: {
 
-    &.router-link-exact-active {
-      color: #42b983;
+  },
+  mounted() {
+    this.$store.dispatch('initApplication')
+    this.$store.dispatch('auth/fetch')
+
+    this.changeDataset('layout', this.$route.meta.layout ?? false)
+    this.changeDataset('modal', this.modal ? 'on' : false)
+    this.changeDataset('pwa', this.pwa ? 'on' : false)
+    this.changeDataset('theme', this.theme)
+    this.changeMeta('theme-color', this.themeStatusBar)
+  },
+  created() {
+    this.$modals.on('show', _ => this.modal = true)
+    this.$modals.on('close', _ => this.modal = false)
+  },
+  watch: {
+    modal(to) {
+      this.changeDataset('modal', to ? 'on' : false)
+    },
+    pwa(to) {
+      this.changeDataset('pwa', to ? 'on' : false)
+    },
+    theme(to) {
+      this.changeDataset('theme', to)
+      this.changeMeta('theme-color', this.themeStatusBar)
+    },
+    '$route.meta.layout'(to) {
+      this.changeDataset('layout', to ?? false)
     }
   }
 }
-</style>
+</script>

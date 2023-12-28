@@ -1,0 +1,168 @@
+const humanizeError = (error) => {
+  const snakeCase = string => {
+    return string.replace(/\W+/g, " ")
+      .split(/ |\B(?=[A-Z])/)
+      .map(word => word.toLowerCase())
+      .join('_');
+  }
+
+  let _code = snakeCase(error.status)
+
+  return {
+    icon: `errors.${_code}.icon`,
+    title: `errors.${_code}.title`,
+    description: `errors.${_code}.description`
+  }
+}
+
+const formatBytes = (bytes, decimals) => {
+  if (bytes == 0) return '0 Bytes'
+  let k = 1024,
+    dm = decimals || 1,
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
+let _datetimeToNormal = (datetime) => {
+  if (typeof datetime === 'object') {
+    return datetime
+  } else {
+    const _date = new Date(datetime)
+    return new Date(_date.getTime() + _date.getTimezoneOffset() * 60000)
+  }
+}
+let _localizedMonths = (locale) => {
+  let l = {
+    en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    ru: ['янв','фев','мар','апр','май','июнь','июль','авг','сент','окт','нояб','дек']
+  }
+	return l[locale] || l['en']
+}
+
+const formatDuration = (seconds) => {
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = Math.round(seconds % 60)
+  return [
+    h,
+    m > 9 ? m : (h ? '0' + m : m || '0'),
+    s > 9 ? s : '0' + s
+  ].filter(Boolean).join(':')
+}
+
+const timeFormat = (timestamp, prefomattedDate = false, hideYear = false, locale = false) => {
+	if (!timestamp) { return null }
+
+  const date = _datetimeToNormal(timestamp)
+	const months = _localizedMonths(locale)
+
+	const year = date.getFullYear()
+	const month = months[date.getMonth()]
+	const day = date.getDate()
+	const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+	const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+
+  if (year > (new Date()).getFullYear() && hideYear != false) {
+    hideYear = true
+  }
+
+  if (prefomattedDate) {
+    return `${prefomattedDate} @ ${hours}:${minutes}`
+  }
+
+  if (hideYear) {
+    return `${day} ${month} @ ${hours}:${minutes}`
+  }
+
+  return `${day} ${month} ${year} @ ${hours}:${minutes}`
+}
+
+const timeFormatOnlyYear = (timestamp, locale) => {
+	if (!timestamp) { return null }
+
+  const date = _datetimeToNormal(timestamp)
+	const months = _localizedMonths(locale)
+
+	const year = date.getFullYear()
+	const month = months[date.getMonth()]
+	const day = date.getDate()
+
+  return `${day} ${month} ${year}`
+}
+
+const timeAgo = (timestamp, locale) => {
+	if (!timestamp) { return null }
+
+  const date = _datetimeToNormal(timestamp)
+  const DAY_IN_MS = 86400000 // 24 * 60 * 60 * 1000
+
+  const today = new Date()
+  const yesterday = new Date(today - DAY_IN_MS)
+  const seconds = Math.round((today - date) / 1000)
+  const minutes = Math.round(seconds / 60)
+  const isToday = today.toDateString() === date.toDateString()
+  const isYesterday = yesterday.toDateString() === date.toDateString()
+  const isThisYear = today.getFullYear() === date.getFullYear()
+
+  if (seconds < 5) {
+    return 'now';
+  } else if (seconds < 60) {
+    return `${ seconds } seconds ago`;
+  } else if (seconds < 90) {
+    return 'about a minute ago';
+  } else if (minutes < 60) {
+    return `${ minutes } minutes ago`;
+  } else if (isToday) {
+    return timeFormat(date, 'today', false, locale); // Today at 10:20
+  } else if (isYesterday) {
+    return timeFormat(date, 'yesterday', false, locale); // Yesterday at 10:20
+  } else if (isThisYear) {
+    return timeFormat(date, false, true, locale); // 10. January at 10:20
+  }
+
+  return timeFormat(timestamp) // 10 January 2017 at 10:20
+}
+
+// ochen' mnogo kostiley
+const contentFormat = (value) => {
+  let
+    // http://, https://, ftp://
+    urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim,
+
+    // www. sans http:// or https://
+    pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim,
+
+    // e-mail addresses
+    emailAddressPattern = /[\w.+]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim,
+
+    // new lines
+    newLinesPattern = /(?:\r\n|\r|\n)/g,
+
+    // hashtags
+    tagsPatter = /\B(#([^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
+
+    // hashtags
+    mentionsPatter = /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi
+
+  return value
+    .replace(tagsPatter, `<a href="/t/$2" target="_self">$1</a>`)
+    .replace(mentionsPatter, `<a href="/u/$2" target="_self">$1</a>`)
+    .replace(urlPattern, `<a target="_blank" rel="nofollow" href="$&">$&</a>`)
+    .replace(pseudoUrlPattern, `$1<a target="_blank" rel="nofollow" href="https://$2">$2</a>`)
+    .replace(emailAddressPattern, `<a href="mailto:$&">$&</a>`)
+    .replace(newLinesPattern, `<br />`)
+}
+
+let filters = { contentFormat, humanizeError, formatBytes, formatDuration, timeFormat, timeFormatOnlyYear, timeAgo }
+
+export default new class {
+  install(app) {
+    Object.keys(filters).forEach((key) => 
+      app.config.globalProperties.$filters = {
+        ...app.config.globalProperties.$filters,
+        [key]: filters[key]
+      }
+    )
+  }
+}

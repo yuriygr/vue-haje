@@ -1,0 +1,7 @@
+export { default as SettingsMenu } from '@/views/_settings/Menu'
+export { default as SettingsProfile } from '@/views/_settings/Profile'
+export { default as SettingsPassword } from '@/views/_settings/Password'
+export { default as SettingsLoginActivity } from '@/views/_settings/LoginActivity'
+export { default as SettingsNotifications } from '@/views/_settings/Notifications'
+export { default as SettingsDeleteAccount } from '@/views/_settings/DeleteAccount'
+export { default as SettingsGDPR } from '@/views/_settings/GDPR'

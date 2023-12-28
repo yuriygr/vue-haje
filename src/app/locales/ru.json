@@ -1,0 +1,428 @@
+{
+  "app": {
+    "brand": "Futubra",
+    "title": "Futubra",
+    "description": "Социальная сеть для не социальных людей"
+  },
+  "header": {
+    "nav": {
+      "home": "Главная",
+      "search": "@:search.title",
+      "compose": "Написать",
+      "notifications": "@:notifications.title",
+      "profile": "@:user.title",
+      "auth": "Авторизация"
+    }
+  },
+  "footer": {
+    "about": "{date} &copy; @:app.brand",
+    "links": {
+      "about": "О приложении",
+      "privacy": "Политика конфиденциальности",
+      "legal": "Юридическая информация"
+    }
+  },
+  "feed": {
+    "title": "Лента",
+    "errors": {
+      "entries_empty": "Постов пока-что нет"
+    }
+  },
+  "user": {
+    "title": "Профиль",
+    "tabs": {
+      "entries": "Нет постов | {n} пост | {n} поста | {n} постов",
+      "subscribers": "Нет подписчиков | {n} подписчик | {n} подписчика | {n} подписчиков",
+      "subscriptions": "Нет подписок | {n} подписка | {n} подписки | {n} подписок",
+      "tags": "Нет хештегов | {n} хештег | {n} хештега | {n} хештегов"
+    },
+    "meta": {
+      "from_date": "На проекте с {date}",
+      "badges": "Нет значков | {n} значок | {n} значка | {n} значков"
+    },
+    "errors": {
+      "entries_empty": "Постов пока-что нет",
+      "subscribers_empty": "Подписчиков пока-что нет",
+      "subscriptions_empty": "Подписок пока-что нет",
+      "badges_empty": "Значков пока-что нет",
+      "tags_empty": "Хештегов пока-что нет"
+    },
+    "action": {
+      "settings": "Настройки",
+      "menu": "Меню",
+      "logout": "Выйти",
+      "options": "Еще",
+      "subscribe": "Подписаться",
+      "unsubscribe": "Отписаться",
+      "copy_link": "Скопировать ссылку",
+      "report": "Пожаловаться",
+      "notify_new_posts": "Уведомлять о новых постах",
+      "dont_notify_new_posts": "Не уведомлять о новых постах"
+    }
+  },
+  "tag": {
+    "title": "Тег",
+    "meta": {
+      "official": "Официальный",
+      "nsfw": "NFSW",
+      "from_date": "Появился {date}"
+    }
+  },
+  "search": {
+    "title": "Поиск",
+    "search-field": {
+      "placeholder": "Поиск"
+    },
+    "filter": "Фильтр",
+    "tabs": {
+      "all": "Всюду",
+      "users": "Пользователи",
+      "entries": "Посты",
+      "tags": "Теги"
+    },
+    "section": {
+      "users": "@:search.tabs.users",
+      "entries": "@:search.tabs.entries",
+      "tags": "@:search.tabs.tags"
+    }
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "action": {
+      "read_all": "Отметить все как прочитанное",
+      "settings": "Настроить уведомления",
+      "options": "Еще",
+      "hide": "Скрыть",
+      "dont": "Не уведомлять"
+    },
+    "tabs": {
+      "all": "Все",
+      "subscriptions": "Подписки",
+      "replies": "Ответы",
+      "mentions": "Упоминания",
+      "new_post": "Новые посты",
+      "system": "Системные"
+    },
+    "user": {
+      "subscriptions": "{user} подписался на вас",
+      "new_post": "{0} опубликовал новый пост",
+      "replies": "{0} ответил на вашу запись",
+      "mentions": "{0} упомянул вас"
+    },
+    "system": {
+      "reports": "Получена жалоба на вас",
+      "login": "Произведен вход"
+    },
+    "support": {
+      "replies": "Поступил ответ на ваше обращение"
+    }
+  },
+  "menu": {
+    "title": "Меню",
+    "item": {
+      "settings": "@:settings.title",
+      "help": "@:help.title",
+      "about": "@:about.title",
+      "donate": "@:donate.title",
+      "logout": "Выход"
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "section": {
+      "base": "Основные",
+      "secure": "Безопасность",
+      "danger": "Опасная зона"
+    },
+    "item": {
+      "profile": "Изменить профиль",
+      "notifications": "Настройка уведомлений",
+      "connections": "Связанные аккаунты",
+      "appearance": "Внешний вид",
+      "account": "Настройки аккаунта",
+      "password": "Изменение пароля",
+      "login_activity": "История активности",
+      "gdpr": "GDPR",
+      "delete_account": "Удалить аккаунт"
+    },
+    "action": {
+      "change_password": "Изменить пароль",
+      "delete_account": "Подтвердить",
+      "request_data": "Запросить данные"
+    },
+    "profile": {
+      "title": "Изменить профиль",
+      "data": "Данные профиля",
+      "tint": {
+        "title": "Оттенок профиля",
+        "help": "В качестве дополнительного способа самовыражения вы можете выбрать один из нескольких оттенков. Что это значит? Я не знаю!"
+      },
+      "avatar": {
+        "title": "Аватар профиля",
+        "help": "Вы можете изменить свой аватар в сервисе Gravatar"
+      }
+    },
+    "notifications": {
+      "title": "Настройка уведомлений",
+      "site": {
+        "title": "Уведомления на сайте"
+      },
+      "email": {
+        "title": "Уведомления на почту"
+      }
+    },
+    "password": {
+      "title": "Изменение пароля",
+      "help": "Правила все же те"
+    },
+    "login-activity": {
+      "title": "История активности"
+    },
+    "gdpr": {
+      "title": "GDPR",
+      "help": "Мы бережно относимся к вашим данным, не передаем ее третьим лицам, не используем со злым умыслом и собираем исключительно только самое нобходимое."
+    },
+    "delete-account": {
+      "title": "Удаление аккаунта",
+      "help": "Чтобы удалить аккаунт введите пароль от аккаунта"
+    },
+    "field": {
+      "name": "Имя",
+      "bio": "Описание",
+      "sex": "Секс",
+      "current_password": "Текущий пароль",
+      "new_password": "Новый пароль",
+      "password": "Пароль",
+      "username": "Логин"
+    }
+  },
+  "help": {
+    "title": "Помощь",
+    "section": {
+      "base": "Основные",
+      "my": "Мое"
+    },
+    "item": {
+      "all-questions": "База знаний",
+      "my-questions": "Мои вопросы",
+      "add-question": "Задать вопрос"
+    }
+  },
+  "donate": {
+    "title": "Поддержать"
+  },
+  "about": {
+    "title": "О приложении"
+  },
+  "entry": {
+    "meta": {
+      "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
+      "edited": "ред"
+    },
+    "pseudo-form": {
+      "placeholder": "Напишите что-нибудь..."
+    },
+    "errors": {
+      "empty": "Пусто",
+      "comments_disabled": "Комментарии отключены"
+    },
+    "action": {
+      "copy_link": "Скопировать ссылку",
+      "report": "Пожаловаться",
+      "edit": "Редактировать",
+      "pin": "Закрепить",
+      "unpin": "Открепить",
+      "delete": "Удалить"
+    }
+  },
+  "comment": {
+    "meta": {
+      "replies": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
+      "edited": "ред"
+    },
+    "pseudo-form": {
+      "placeholder": "Напишите что-нибудь..."
+    },
+    "errors": {
+      "empty": "Пусто"
+    },
+    "action": {
+      "copy_link": "Скопировать ссылку",
+      "report": "Пожаловаться",
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Вход",
+      "create_account": "У вас ещё нет аккаунта? {0}"
+    },
+    "forgot": {
+      "title": "Восстановление пароля",
+      "suggest": "Мы отправим ссылку и код для восстановления пароля на вашу почту",
+      "contact_us": "Свяжитесь с нами",
+      "help": "{0}, если Вы не помните свою электронную почту или не имеете доступа к ней",
+      "remember": "Вспомнили пароль?"
+    },
+    "create_account": {
+      "title": "Создать аккаунт",
+      "already": "Уже зарегистрированы?",
+      "agreement": "Нажимая «Продолжить», вы принимаете {0} и {1}",
+      "terms": "пользовательское соглашение",
+      "privacy": "политику конфиденциальности"
+    },
+    "reset-password": {
+      "title": "Изменение пароля",
+      "suggest": "Пароль должен быть не короче 6 символов и не являться вашим днем рождения",
+      "contact_us": "Свяжитесь с нами",
+      "help": "{0}, если не приходит код или у вас что-то не получается",
+      "remember": "Вспомнили пароль?"
+    },
+    "button": {
+      "login": "Войти",
+      "continue": "Продолжить"
+    },
+    "field": {
+      "name": "Имя",
+      "username": "Логин",
+      "email": "E-mail",
+      "password": "Пароль"
+    }
+  },
+  "badge": {
+    "type": {
+      "common": "Обычный",
+      "rare": "Редкий",
+      "epic": "Эпический",
+      "legendary": "Легендарный"
+    },
+    "date": "Получен {date}"
+  },
+  "errors": {
+    "todo": {
+      "icon": "ghost-line",
+      "title": "На стадии разработки",
+      "description": "Данная фича еще недоступна и находится на стадии разработки. Или может дело в Плюсе..."
+    },
+    "method_not_allowed": {
+      "icon": "cloud-off-line",
+      "title": "Метод недоступен",
+      "description": "Возможно, разработчики допустили ошибку и так быть не должно"
+    },
+    "unauthorized": {
+      "icon": "spy-line",
+      "title": "Доступ запрещен",
+      "description": "Для просмотра содержимого необходимо авторизироваться"
+    },
+    "tag_not_found": {
+      "icon": "ghost-line",
+      "title": "Тег не найден",
+      "description": "Возможно вам показалось что такой тег существует"
+    },
+    "user_not_found": {
+      "icon": "user-unfollow-line",
+      "title": "Пользователь не найден",
+      "description": "Попробуйте поискать других, существующих, пользователей"
+    },
+    "user_suspended": {
+      "icon": "ghost-line",
+      "title": "Пользователь суспендет",
+      "description": "Я не знаю что это значит, но что-то короче интересное сделал он"
+    },
+    "user_blocked": {
+      "icon": "ghost-line",
+      "title": "Пользователь заблокирован",
+      "description": "Вел себя плохо, все верно. Будешь вести себя так же и отправишься следом"
+    },
+    "user_deleted": {
+      "icon": "ghost-line",
+      "title": "Пользователь удален",
+      "description": "Да и вообще, откуда такая уверенность что он существовал?"
+    },
+    "user_not_activated": {
+      "icon": "ghost-line",
+      "title": "Пользователь не активирован",
+      "description": "Как только он подтвердит почту - появится тут"
+    },
+    "entry_not_found": {
+      "icon": "user-unfollow-line",
+      "title": "Запись не найдена",
+      "description": "Вероятнее всего, ее тут никогда и небыло. Но кто знает наверняка, правда?"
+    },
+    "entry_hidden": {
+      "icon": "user-unfollow-line",
+      "title": "Запись скрыта",
+      "description": "Да, и такое бывает в нашей обители свободы слова"
+    },
+    "bad_request": {
+      "icon": "user-line",
+      "title": "Плохой запрос",
+      "description": "Вероятнее всего, вы что-то сделали не так и сервер вас не понял"
+    },
+    "network_error": {
+      "icon": "cloud-off-line",
+      "title": "Ошибка соединения",
+      "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+    },
+    "invalid_connection": {
+      "icon": "cloud-off-line",
+      "title": "Некорректное соединения",
+      "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+    },
+    "timeout_exceeded" : {
+      "icon": "cloud-off-line",
+      "title": "Сервер очень долго не отвечал",
+      "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+    },
+    "empty_feed": {
+      "icon": "timeline-line",
+      "title": "Лента пуста",
+      "description": "Возможно, стоит подписаться на кого-нибудь?"
+    },
+    "empty_notifications": {
+      "icon": "bell-line",
+      "title": "Уведомлений нет",
+      "description": "Скорее всего, они скоро появятся"
+    },
+    "empty_search": {
+      "icon": "search-line",
+      "title": "Нет результатов",
+      "description": "Возможно, стоит уточнить запрос"
+    }
+  },
+  "action": {
+    "apply": "Применить",
+    "save": "Сохранить",
+    "go_away": "Перейти",
+    "create_entry": "Отправить",
+    "send_report": "Отправить жалобу",
+    "load_more": "Загрузить еще",
+    "show_more": "Смотреть все",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "delete": "Удалить",
+    "options": "Опции"
+  },
+  "brands": {
+    "grustnogram": "Грустнограм"
+  },
+  "modals": {
+    "search-filter": {
+      "title": "Фильтр поиска"
+    },
+    "report_entry": {
+      "title": "Жалоба на пост"
+    },
+    "report_user": {
+      "title": "Жалоба на пользователя"
+    },
+    "edit-entry": {
+      "title": "Изменить запись"
+    },
+    "delete-entry": {
+      "title": "Удалить запись",
+      "help": "По каким-то причинам вы собираетесь удалить пост, вы уверены, что это действительно нужно?"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+export { default as HelpMenu } from '@/views/_help/Menu'
