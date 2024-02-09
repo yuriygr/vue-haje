@@ -81,7 +81,21 @@ export default {
         }
     },
     optionsItems() {
+      let _bookmark = [
+        this.data.state.is_bookmarked ?
+        {
+          icon: 'ui-bookmark-remove',
+          label: this.$t('user.action.remove-bookmark'),
+          disabled: true
+        } : {
+          icon: 'ui-bookmark-add',
+          label: this.$t('user.action.add-bookmark'),
+          disabled: true
+        }
+      ]
+
       return [
+        ...(this.data.state.is_me) ? [] : _bookmark,
         {
           icon: 'ui-link',
           label: this.$t('user.action.copy_link'),

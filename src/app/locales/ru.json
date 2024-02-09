@@ -1,8 +1,8 @@
 {
   "app": {
-    "brand": "Futubra",
     "title": "Futubra",
-    "description": "Социальная сеть для не социальных людей"
+    "description": "Социальная сеть для не социальных людей",
+    "version": "Версия {version}"
   },
   "header": {
     "nav": {
@@ -15,7 +15,7 @@
     }
   },
   "footer": {
-    "about": "{date} &copy; @:app.brand",
+    "about": "{date} &copy; @:app.title",
     "links": {
       "about": "О приложении",
       "privacy": "Политика конфиденциальности",
@@ -24,6 +24,11 @@
   },
   "feed": {
     "title": "Лента",
+    "tabs": {
+      "timeline": "Моя лента",
+      "popular": "Популярное",
+      "abyss": "Бездна"
+    },
     "errors": {
       "entries_empty": "Постов пока-что нет"
     }
@@ -38,7 +43,8 @@
     },
     "meta": {
       "from_date": "На проекте с {date}",
-      "badges": "Нет значков | {n} значок | {n} значка | {n} значков"
+      "badges": "Нет значков | {n} значок | {n} значка | {n} значков",
+      "links": "Нет ссылок | {n} ссылка | {n} ссылки | {n} ссылок"
     },
     "errors": {
       "entries_empty": "Постов пока-что нет",
@@ -57,7 +63,9 @@
       "copy_link": "Скопировать ссылку",
       "report": "Пожаловаться",
       "notify_new_posts": "Уведомлять о новых постах",
-      "dont_notify_new_posts": "Не уведомлять о новых постах"
+      "dont_notify_new_posts": "Не уведомлять о новых постах",
+      "remove-bookmark": "Убрать из закладок",
+      "add-bookmark": "Добавить в закладки"
     }
   },
   "tag": {
@@ -104,10 +112,10 @@
       "system": "Системные"
     },
     "user": {
-      "subscriptions": "{user} подписался на вас",
-      "new_post": "{0} опубликовал новый пост",
-      "replies": "{0} ответил на вашу запись",
-      "mentions": "{0} упомянул вас"
+      "subscriptions": "{0} подписалось на вас",
+      "new_post": "{0} опубликовало новый пост",
+      "replies": "{0} ответило на вашу запись",
+      "mentions": "{0} упомянуло вас"
     },
     "system": {
       "reports": "Получена жалоба на вас",
@@ -120,11 +128,24 @@
   "menu": {
     "title": "Меню",
     "item": {
+      "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "logout": "Выход"
+    }
+  },
+  "bookmarks": {
+    "title": "Закладки",
+    "tabs": {
+      "all": "Все",
+      "entries": "Посты",
+      "users": "Пользователи"
+    },
+    "section": {
+      "users": "@:bookmarks.tabs.users",
+      "entries": "@:bookmarks.tabs.entries"
     }
   },
   "settings": {
@@ -164,11 +185,15 @@
     },
     "notifications": {
       "title": "Настройка уведомлений",
-      "site": {
-        "title": "Уведомления на сайте"
-      },
-      "email": {
-        "title": "Уведомления на почту"
+      "events": "События",
+      "feedback": "Обратная связь",
+      "others": "Другое",
+      "field": {
+        "subscriptions": "Подписчики",
+        "replies": "Ответы",
+        "mentions": "Упоминания",
+        "new_post": "Новые посты",
+        "badges": "Значки"
       }
     },
     "password": {
@@ -212,9 +237,17 @@
     "title": "Поддержать"
   },
   "about": {
-    "title": "О приложении"
+    "title": "О приложении",
+    "item": {
+      "user-agreement": "Пользовательское соглашение",
+      "privacy": "Политика конфиденциальности",
+      "legal": "Правовая информация",
+      "data-security": "Защита данных"
+    },
+    "refresh": "Обновить"
   },
   "entry": {
+    "title": "Запись",
     "meta": {
       "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
       "edited": "ред"
@@ -228,20 +261,28 @@
     },
     "action": {
       "copy_link": "Скопировать ссылку",
+      "subscribe": "@:user.action.subscribe",
+      "unsubscribe": "@:user.action.unsubscribe",
       "report": "Пожаловаться",
       "edit": "Редактировать",
+      "remove-bookmark": "Убрать из закладок",
+      "add-bookmark": "Добавить в закладки",
       "pin": "Закрепить",
       "unpin": "Открепить",
       "delete": "Удалить"
-    }
+    },
+    "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов"
   },
   "comment": {
     "meta": {
       "replies": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
       "edited": "ред"
     },
-    "pseudo-form": {
-      "placeholder": "Напишите что-нибудь..."
+    "form": {
+      "placeholder": "Ответьте что-нибудь...",
+      "action": {
+        "attach_image": "Прикрепить изображение"
+      }
     },
     "errors": {
       "empty": "Пусто"
@@ -380,15 +421,20 @@
       "title": "Лента пуста",
       "description": "Возможно, стоит подписаться на кого-нибудь?"
     },
-    "empty_notifications": {
-      "icon": "bell-line",
-      "title": "Уведомлений нет",
-      "description": "Скорее всего, они скоро появятся"
+    "empty_bookmarks": {
+      "icon": "bookmarks-line",
+      "title": "Закладок нет",
+      "description": "Чтобы они тут появились необходимо их добавить"
     },
     "empty_search": {
       "icon": "search-line",
       "title": "Нет результатов",
       "description": "Возможно, стоит уточнить запрос"
+    },
+    "empty_notifications": {
+      "icon": "bell-line",
+      "title": "Уведомлений нет",
+      "description": "Скорее всего, они скоро появятся"
     }
   },
   "action": {
@@ -405,7 +451,30 @@
     "options": "Опции"
   },
   "brands": {
-    "grustnogram": "Грустнограм"
+    "grustnogram": {
+      "label": "Грустнограм",
+      "icon": "grustnogram-line"
+    },
+    "lichess": {
+      "label": "Lichess",
+      "icon": "lichess-fill"
+    },
+    "github": {
+      "label": "Github",
+      "icon": "github-fill"
+    },
+    "telegram": {
+      "label": "Телеграм",
+      "icon": "telegram-fill"
+    },
+    "donationalerts": {
+      "label": "Donation Alerts",
+      "icon": "donationalerts-fill"
+    },
+    "vk": {
+      "label": "Вконтакте",
+      "icon": "vk-fill"
+    }
   },
   "modals": {
     "search-filter": {

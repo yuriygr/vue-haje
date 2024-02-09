@@ -6,7 +6,7 @@
   >
     <div class="app-tabbar__layout">
       <tabbar class="app-tabbar__tabbar">
-        <tabbar-item :to="{ name: 'timeline' }" :title="$t('header.nav.home')">
+        <tabbar-item :to="{ name: 'feed' }" :title="$t('header.nav.home')">
           <icon name="home-line" size="20" />
         </tabbar-item>
       

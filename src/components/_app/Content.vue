@@ -15,9 +15,15 @@ export default {
   // Mobile first
   --layout-padding: var(--mobile-page-vertical-padding) var(--mobile-page-horizontal-padding) calc(var(--tabbar--height) + var(--mobile-page-vertical-padding));
 
-  // Desctop last
+  // Desktop last
   @media (min-width: 768px) {
     & { --layout-padding: var(--desktop-page-vertical-padding) var(--desktop-page-horizontal-padding); }
+  }
+
+  --layout-max-width: var(--large-screen-max-width);
+
+  html[data-layout="wide"] & {
+    --layout-max-width: var(--wide-large-screen-max-width);
   }
 }
 
@@ -27,7 +33,7 @@ export default {
   margin: 0 auto;
 
   @media (min-width: 768px) {
-    & { max-width: var(--large-screen-max-width); }
+    & { max-width: var(--layout-max-width); }
   }
 }
 </style>

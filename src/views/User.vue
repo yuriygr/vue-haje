@@ -27,17 +27,17 @@
           {{ $t('user.action.subscribe') }}
         </n-button>
       </template>
-      <n-button v-if="getUserLink('grustnogram')" icon_before="heart-crack-line" mode="secondary" component="a" target="_blank" :href="getUserLink('grustnogram')">
-        {{ $t('brands.grustnogram') }}
+      <n-button v-if="data.external_link" :icon_before="$t(`brands.${data.external_link.code}.icon`)" mode="secondary" component="a" target="_blank" :href="data.external_link.url">
+        {{ $t(`brands.${data.external_link.code}.label`) }}
       </n-button>
       <icon-button name="ui-more" mode="secondary" @click.exact="toggleOptions" ref="options" :title="$t('user.action.options')" />
     </buttons-group>
 
     <buttons-group :withGap="true" v-else>
-      <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'menu' }" icon_before="menu-line" >
+      <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'menu' }" icon_before="menu-line">
         {{ $t('user.action.menu') }}
       </n-button>
-      <n-button mode="secondary" component="router-link"  :to="{ name: 'settings' }" icon_before="settings-line" >
+      <n-button mode="secondary" component="router-link"  :to="{ name: 'settings' }" icon_before="settings-line">
         {{ $t('user.action.settings') }}
       </n-button>
       <icon-button component="router-link" name="logout-line" mode="secondary" :to="{ name: 'auth-logout' }" :title="$t('user.action.logout')" />
@@ -46,7 +46,7 @@
     <separator />
 
     <tabs>
-      <template v-for="(item, index) in tabs" :key="`user-tab-${item.key}-${index}`">
+      <template v-for="(item, index) in tabItems" :key="`user-tab-${item.key}-${index}`">
         <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
       </template>
     </tabs>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { Placeholder, PlaceholderLoading, Separator, Spacer, Icon, IconButton, NButton, Tabs, TabsItem, ButtonsGroup } from '@vue-norma/ui'
 
 import ReportUserModal  from '@/components/modals/ReportUser'
@@ -106,8 +106,7 @@ export default {
   },
   computed: {
     ...mapState('user', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('user', [ 'getUserLink' ]),
-    tabs() {
+    tabItems() {
       return [
         {
           key: 'entries',
@@ -140,6 +139,7 @@ export default {
 
       _result.push({ label: this.$t('user.meta.from_date', { date: this.formatedDate }) })
       _result.push({ label: this.$tc('user.meta.badges', this.data.counters.badges), to: { name: 'user-badges' } })
+      _result.push({ label: this.$tc('user.meta.links', this.data.counters.links), to: { name: 'user-links' } })
 
       return _result
     },
@@ -153,20 +153,35 @@ export default {
       return { name: 'user', params: { username: this.data.username } }
     },
     optionsItems() {
-      let _notify_on =  {
-        icon: 'ui-notification',
-        label: this.$t('user.action.notify_new_posts'),
-        action: this.toggleNotify
-      }
+      let _notify = [
+        this.data.state.me_subscribed_to_new_posts ?
+        {
+          icon: 'ui-notification-off',
+          label: this.$t('user.action.dont_notify_new_posts'),
+          action: this.toggleNotify
+        } : {
+          icon: 'ui-notification',
+          label: this.$t('user.action.notify_new_posts'),
+          action: this.toggleNotify
+        }
+      ]
 
-      let _notify_off =  {
-        icon: 'ui-notification-off',
-        label: this.$t('user.action.dont_notify_new_posts'),
-        action: this.toggleNotify
-      }
+      let _bookmark = [
+        this.data.state.is_bookmarked ?
+        {
+          icon: 'ui-bookmark-remove',
+          label: this.$t('user.action.remove-bookmark'),
+          disabled: true
+        } : {
+          icon: 'ui-bookmark-add',
+          label: this.$t('user.action.add-bookmark'),
+          disabled: true
+        }
+      ]
 
       return [
-        this.data.state.me_subscribed_to_new_posts ?  _notify_off : _notify_on,
+        ...(this.data.state.is_me) ? [] : _notify,
+        ...(this.data.state.is_me) ? [] : _bookmark,
         {
           icon: 'ui-link',
           label: this.$t('user.action.copy_link'),
@@ -228,6 +243,13 @@ export default {
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
     },
+    // Переключалка закладок
+    toggleBookmarks() {
+      let _path = this.data.state.is_bookmarked
+        ? `user/${this.data.username}/unnotify`
+        : `user/${this.data.username}/notify`
+    },
+    // Остальные действия
     copyLink() {
       let _url = this.$router.resolve(this.userLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {

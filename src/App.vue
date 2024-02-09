@@ -13,10 +13,10 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 import { AlertsLayer, IconsSpriteLayer, LoadingLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
 
 import { AppTabbar, AppContent, AppLayout } from '@/components/_app'
-import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'app',
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [ 'theme', 'pwa', 'loading' ]),
+    ...mapState('app', [ 'theme', 'loading' ]),
     ...mapState('auth', [ 'data' ]),
     ...mapGetters('app', [ 'themeStatusBar' ])
   },
@@ -43,7 +43,6 @@ export default {
 
     this.changeDataset('layout', this.$route.meta.layout ?? false)
     this.changeDataset('modal', this.modal ? 'on' : false)
-    this.changeDataset('pwa', this.pwa ? 'on' : false)
     this.changeDataset('theme', this.theme)
     this.changeMeta('theme-color', this.themeStatusBar)
   },
@@ -54,9 +53,6 @@ export default {
   watch: {
     modal(to) {
       this.changeDataset('modal', to ? 'on' : false)
-    },
-    pwa(to) {
-      this.changeDataset('pwa', to ? 'on' : false)
     },
     theme(to) {
       this.changeDataset('theme', to)

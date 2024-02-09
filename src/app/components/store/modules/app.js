@@ -11,7 +11,7 @@ export default {
       title:    process.env.VUE_APP_TITLE,
       basePath: process.env.VUE_APP_BASE_URL,
       theme:    process.env.VUE_APP_DEFAULT_THEME,
-      pwa:      process.env.VUE_APP_PWA_ENABLED,
+      version:  process.env.PACKAGE_VERSION,
 
       loading: false,
   
@@ -21,9 +21,6 @@ export default {
   mutations: {
     'SET_THEME'(state, payload) {
       state.theme = payload
-    },
-    'SET_PWA'(state, payload) {
-      state.pwa = payload
     },
     'SET_LOADING'(state, payload) {
       state.loading = payload

@@ -1,0 +1,73 @@
+<template>
+  <tabs>
+    <template v-for="(item, index) in tabs" :key="`bookmarks-tab-${item.key}-${index}`">
+      <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
+    </template>
+  </tabs>
+
+  <separator />
+
+  <router-view />
+</template>
+
+<script>
+import { Tabs, TabsItem, Separator } from '@vue-norma/ui'
+
+export default {
+  name: 'bookmarks',
+  components: {
+    Tabs, TabsItem, Separator
+  },
+  meta() { return this.meta },
+  data() {
+    return {
+      meta: {
+        title: this.$t('bookmarks.title')
+      }
+    }
+  },
+  computed: {
+    tabs() {
+      return [
+        {
+          key: 'all',
+          to: this.formatLink(),
+          label: this.$t('bookmarks.tabs.all'),
+          active: this.$route.meta.key == `all` 
+        },
+        {
+          key: 'users',
+          to: this.formatLink('users'),
+          label: this.$t('bookmarks.tabs.users'),
+          active: this.$route.meta.key == `users`
+        },
+        {
+          key: 'entries',
+          to: this.formatLink('entries'),
+          label: this.$t('bookmarks.tabs.entries'),
+          active: this.$route.meta.key == `entries`
+        }
+      ]
+    },
+    availableKeys() {
+      return this.tabs.flatMap(el => el.key)
+    }
+  },
+  methods: {
+    formatLink(tab = false) {
+      let query = Object.assign({}, this.$route.query),
+          q = query.q
+
+      if (tab) {
+        return { name: `bookmarks-${tab}`, query: { q }}
+      } else {
+        return { name: `bookmarks`, query: { q }}
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+
+</style>

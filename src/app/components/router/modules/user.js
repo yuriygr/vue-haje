@@ -1,5 +1,5 @@
 import User from '@/views/User'
-import { UserEntries, UserSubscribers, UserSubscriptions, UserBadges, UserTags } from '@/views/_user'
+import { UserEntries, UserSubscribers, UserSubscriptions, UserBadges, UserTags, UserLinks } from '@/views/_user'
 
 export default [
   {
@@ -14,6 +14,7 @@ export default [
       { path: 'subscriptions', name: 'user-subscriptions', component: UserSubscriptions },
       { path: 'badges', name: 'user-badges', component: UserBadges },
       { path: 'tags', name: 'user-tags', component: UserTags },
+      { path: 'links', name: 'user-links', component: UserLinks },
 	    { path: ':pathMatch(.*)*', redirect: { name: 'user' } }
     ]
   }

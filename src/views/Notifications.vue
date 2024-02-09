@@ -122,7 +122,9 @@ export default {
   },
   watch: {
     async '$route.query.tab'(to) {
-      await this.$store.dispatch('notifications/setFilters', { tab: this.availableKeys.includes(to) ? to : 'all', offset: undefined })
+      await this.$store.dispatch('notifications/setFilters', {
+        tab: this.availableKeys.includes(to) ? to : 'all', offset: undefined
+      })
       this.$store.dispatch('notifications/fetch')
     }
   }

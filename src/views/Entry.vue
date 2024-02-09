@@ -6,7 +6,6 @@
     
     <entry-comments v-if="data.state.is_comments_enabled" :entry="data" />
     <placeholder v-else :text="$t('entry.errors.comments_disabled')" />
-
   </template>
   
   <template v-if="Object.keys(data).length == 0">
@@ -39,6 +38,14 @@ export default {
   components: {
     EntryItem, EntryItemWrapper, EntryComments,
     Placeholder, PlaceholderLoading, Separator, NButton, LoadmoreTrigger
+  },
+  meta() { return this.meta },
+  data() {
+    return {
+      meta: {
+        title: this.$t('entry.title')
+      }
+    }
   },
   computed: {
     ...mapState('entry', [ 'data', 'loading', 'error' ]),

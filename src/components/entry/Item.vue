@@ -61,6 +61,19 @@ export default {
       return { name: 'entry', params: { uuid: this.data.uuid } }
     },
     optionsItems() {
+      let _subscribe = [
+        this.data.user.state.me_subscribed ? 
+        {
+          icon: 'user-unfollow-line',
+          label: this.$t('entry.action.unsubscribe'),
+          action: this.unsubscribe
+        } : {
+          icon: 'user-add-line',
+          label: this.$t('entry.action.subscribe'),
+          action: this.subscribe
+        }
+      ]
+
       let _edit = [
         {
           icon: 'ui-pencil',
@@ -71,6 +84,19 @@ export default {
           icon: 'ui-delete',
           label: this.$t('entry.action.delete'),
           action: this.delete
+        }
+      ]
+
+      let _bookmark = [
+        this.data.state.is_bookmarked ?
+        {
+          icon: 'ui-bookmark-remove',
+          label: this.$t('entry.action.remove-bookmark'),
+          disabled: true
+        } : {
+          icon: 'ui-bookmark-add',
+          label: this.$t('entry.action.add-bookmark'),
+          disabled: true
         }
       ]
 
@@ -88,6 +114,8 @@ export default {
       ]
 
       return [
+        ...(this.data.user.state.is_me) ? [] : _subscribe,
+        ...(this.data.user.state.is_me) ? [] : _bookmark,
         {
           icon: 'ui-link',
           label: this.$t('entry.action.copy_link'),
@@ -116,6 +144,26 @@ export default {
         align: 'right'
       })
     },
+    unsubscribe() {
+      this.$api.post(`user/${this.data.user.username}/unsubscribe`)
+      .then(result => {
+        this.data.user.state.me_subscribed = !(result.status == 'unsubscribed')
+        this.$popover.close()
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+    },
+    subscribe() {
+      this.$api.post(`user/${this.data.user.username}/subscribe`)
+      .then(result => {
+        this.data.user.state.me_subscribed = (result.status == 'subscribed')
+        this.$popover.close()
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+    },
     copyLink() {
       let _url = this.$router.resolve(this.entryLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
@@ -132,7 +180,6 @@ export default {
       .catch(error => {
         this.$alerts.danger({ text: error.status })
       })
-      this.$popover.close()
     },
     unpin() {
       this.$api.post(`entry/${this.data.uuid}/unpin`)

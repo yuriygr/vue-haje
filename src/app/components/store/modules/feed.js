@@ -4,7 +4,8 @@ export default {
     return {
       data: [],
       total_items: 0,
-
+      
+      tab: 'timeline',
       filters: { },
 
       loading: false,
@@ -24,6 +25,13 @@ export default {
     },
     'CLEAR_DATA'(state) {
       state.data = []
+    },
+    // TAB
+    'SET_TAB'(state, payload) {
+      state.tab = payload
+    },
+    'CLEAR_TAB'(state) {
+      state.tab = ''
     },
     // FILTERS
     'SET_FILTERS'(state, payload) {
@@ -45,7 +53,7 @@ export default {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get('feed/timeline', state.filters)
+      this.$api.get(`feed/${state.tab}`, state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -61,8 +69,23 @@ export default {
     },
     clear({ commit }) {
       commit('CLEAR_DATA')
+      commit('CLEAR_TAB')
       commit('CLEAR_FILTERS')
       commit('SET_TOTAL_ITEMS', 0)
+    },
+    // Tab
+    setTab({ commit }, payload) {
+      commit('SET_TAB', payload)
+    },
+    clearTab({ commit }) {
+      commit('CLEAR_TAB')
+    },
+    // Filters
+    setFilters({ state, commit }, payload) {
+      commit('SET_FILTERS', { ...state.filters, ...payload })
+    },
+    clearFilters({ commit }) {
+      commit('CLEAR_FILTERS')
     }
   },
   getters: {

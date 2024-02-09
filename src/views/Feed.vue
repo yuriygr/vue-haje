@@ -1,14 +1,9 @@
 <template>
-
-  <div class="feed-navigation">
-    <tabs>
-      <tabs-item size="s" selected="true">Моя лента</tabs-item>
-      <tabs-item size="s">Популярное</tabs-item>
-      <tabs-item size="s">Бездна</tabs-item>
-    </tabs>
-    <icon-button name="settings-line" size="s" mode="tertiary" :title="$t('feed.settings')" />
-  </div>
-
+  <tabs>
+    <template v-for="(item, index) in tabs" :key="`feed-tab-${item.key}-${index}`">
+      <tabs-item :to="item.to" size="s" :selected="item.key == $route.meta.tab">{{ item.label }}</tabs-item>
+    </template>
+  </tabs>
 
   <separator />
 
@@ -66,6 +61,13 @@ export default {
     ...mapState('feed', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('feed', [ 'hasMoreItems' ]),
     ...mapGetters('auth', [ 'isAuth' ]),
+    tabs() {
+      return [
+        { key: 'timeline', to: { name: 'feed-timeline' }, label: this.$t('feed.tabs.timeline') },
+        { key: 'popular', to: { name: 'feed-popular' }, label: this.$t('feed.tabs.popular') },
+        { key: 'abyss', to: { name: 'feed-abyss' }, label: this.$t('feed.tabs.abyss') }
+      ]
+    },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
@@ -82,18 +84,24 @@ export default {
       this.$store.dispatch('feed/more')
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$store.dispatch('feed/clear')
+    await this.$store.dispatch('feed/setTab', this.$route.meta.tab)
     this.$store.dispatch('feed/fetch')
   },
   unmounted() {
     this.$store.dispatch('feed/clear')
+  },
+  watch: {
+    async '$route'(to) {
+      await this.$store.dispatch('feed/clear')
+      await this.$store.dispatch('feed/setTab', to.meta.tab)
+      this.$store.dispatch('feed/fetch')
+    }
   }
 }
 </script>
 
 <style lang="scss">
-.feed-navigation {
-  display: flex;
-  justify-content: space-between;
-}
+
 </style>

@@ -28,7 +28,7 @@ export default {
       .then(result => {
         this.$store.dispatch('auth/fetch')
 
-        this.$router.push(this.$route.query.redirect || { name: 'timeline' })
+        this.$router.push(this.$route.query.redirect || { name: 'home' })
       })
       .catch(error => {
         this.error = error

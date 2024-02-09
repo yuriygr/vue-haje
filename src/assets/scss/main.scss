@@ -29,9 +29,18 @@ body {
   /* also see: https://allthingssmitty.com/2020/05/11/css-fix-for-100vh-in-mobile-webkit/ */
   height: -webkit-fill-available;
   -webkit-overflow-scrolling: auto;
+
+	&::-webkit-scrollbar {
+		width: 16px
+	}
 	
-  // We are fucking app or not?
-  html[data-pwa="on"] & { }
+	&::-webkit-scrollbar-thumb {
+		height: 56px;
+		border-radius: 8px;
+		border: 4px solid transparent;
+		background-clip: content-box;
+		background-color: #ababab
+	}
 
   html[data-modal="on"] & {
     overflow: hidden;

@@ -1,11 +1,23 @@
 <template>
   <div :class="[ 'notification-item' ]">
     <div class="notification-item__content">
-      <div class="notification-item__label">{{ $t(`notifications.${data.actor_type}.${data.type}`, payload) }}</div>
-      <div class="notification-item__time">{{ $filters.timeAgo(data.date_added, $i18n.locale) }}</div>
+
+      <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.subscriptions'">
+        <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
+          <router-link :to="{ name: 'user', params: { username: payload.user.username } }">{{ payload.user.name }}</router-link>
+        </i18n-t>
+      </div>
+
+      <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.mentions'">
+        <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
+          <router-link :to="{ name: 'user', params: { username: payload.user.username } }">{{ payload.user.name }}</router-link>
+        </i18n-t>
+      </div>
+
+      <meta-info class="notification-item__meta" :items="metaItems" />
     </div>
     <buttons-group :withGap="true" class="notification-item__actions">
-        <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+      <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
     </buttons-group>
   </div>
 </template>
@@ -33,6 +45,10 @@ export default {
     optionsItems() {
       return [
         {
+          label: `${this.data.actor_type}.${this.data.type}`,
+          disabled: true
+        },
+        {
           icon: 'ui-eye-off',
           label: this.$t('notifications.action.hide'),
           action: this.hideNotify
@@ -43,6 +59,11 @@ export default {
           action: this.dontNotify
         }
       ]
+    },
+    metaItems() {
+      let _result = []
+      _result.push({ label: this.$filters.timeAgo(this.data.date_added, this.$i18n.locale) })
+      return _result
     }
   },
   methods: {
@@ -116,16 +137,10 @@ $avatar-size: 38px;
 
   &__label {
     color: var(--notification-item__name--color, #111);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
-  }
-
-  &__time {
-    color: var(--notification-item__username--color, #999);
-    font-size: 1.3rem;
-    font-weight: var(--x-font-weight--normal);
-    line-height: calc(1.4 * 1em);
+    margin-bottom: .25rem;
   }
 
   &__actions {

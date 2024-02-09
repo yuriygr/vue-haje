@@ -1,27 +1,23 @@
 <template>
-  <div class="navigation">
-    <template v-for="(section, index) in sections" :key="`section-${index}`">
-      <navigation-section>
-        <template v-for="(item, jndex) in section.items" :key="`section-${index}-item-${jndex}`">
-          <navigation-item :icon="item.icon" :to="item.to" :chevron="item.chevron">
-            {{ item.label }}
-          </navigation-item>
-        </template>
-      </navigation-section>
-    </template>
-    <navigation-footer>
-      <a href="#" @click.prevent="refresh">{{ $t('refresh') }}</a>
-    </navigation-footer>
-  </div>
+  <template v-for="(section, index) in sections" :key="`section-${index}`">
+    <navigation-section>
+      <template v-for="(item, jndex) in section.items" :key="`section-${index}-item-${jndex}`">
+        <navigation-item :icon="item.icon" :to="item.to" :chevron="item.chevron">
+          {{ item.label }}
+        </navigation-item>
+      </template>
+    </navigation-section>
+  </template>
 </template>
 
 <script>
-import { NavigationSection, NavigationItem, NavigationFooter, Icon } from '@vue-norma/ui'
+import { mapState } from 'vuex'
+import { NavigationSection, NavigationItem } from '@vue-norma/ui'
 
 export default {
   name: 'menu',
   components: {
-    NavigationSection, NavigationItem, NavigationFooter, Icon
+    NavigationSection, NavigationItem
   },
   meta() { return this.meta },
   data() {
@@ -32,7 +28,19 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth', {
+      'session_data': state => state.data
+    }),
     sections() {
+      let sections = [
+        {
+          icon: 'bookmarks-line',
+          label: this.$t('menu.item.bookmarks'),
+          to: { name: 'bookmarks' },
+          chevron: true
+        }
+      ]
+
       let main = [
         {
           icon: 'settings-line',
@@ -70,14 +78,10 @@ export default {
       ]
 
       return [
+        { items: sections },
         { items: main },
         { items: last }
       ]
-    }
-  },
-  methods: {
-    refresh() {
-      window.location.reload()
     }
   }
 }

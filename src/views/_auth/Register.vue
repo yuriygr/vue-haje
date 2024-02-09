@@ -51,7 +51,7 @@
 
       <form-text align="center">
         <i18n-t keypath="auth.create_account.agreement">
-          <router-link :to="{ name: 'help-page', params: { uuid: 'terms' } }">{{ $t('auth.create_account.terms') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { uuid: 'user-agreement' } }">{{ $t('auth.create_account.terms') }}</router-link>
           <router-link :to="{ name: 'help-page', params: { uuid: 'privacy' } }">{{ $t('auth.create_account.privacy') }}</router-link>
         </i18n-t>
       </form-text>
@@ -93,7 +93,7 @@ export default {
       this.$api.post('auth/register', this.form)
       .then(result => {
         this.$store.dispatch('auth/fetch')
-        this.$router.push(this.$route.query.redirect || { name: 'timeline' })
+        this.$router.push(this.$route.query.redirect || { name: 'home' })
       })
       .catch(error => {
         this.error = error

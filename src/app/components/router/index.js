@@ -1,27 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Feed from '@/views/Feed'
-import Tag from '@/views/Tag'
-import Notifications from '@/views/Notifications'
 import Entry from '@/views/Entry'
-import Menu from '@/views/Menu'
-import About from '@/views/About'
 
+const Notifications = () => import('@/views/Notifications')
+const Tag = () => import('@/views/Tag')
+const Menu = () => import('@/views/Menu')
+const About = () => import('@/views/About')
+
+import FeedRoutes from '@/app/components/router/modules/feed'
 import UserRoutes from '@/app/components/router/modules/user'
 import SearchRoutes from '@/app/components/router/modules/search'
+import BookmarksRoutes from '@/app/components/router/modules/bookmarks'
 import SettingsRoutes from '@/app/components/router/modules/settings'
 import HelpRoutes from '@/app/components/router/modules/help'
 import AuthRoutes from '@/app/components/router/modules/auth'
 
 
 const routes = [
+	...FeedRoutes,
 	...UserRoutes,
 	...SettingsRoutes,
+	...BookmarksRoutes,
 	...SearchRoutes,
 	...HelpRoutes,
 	...AuthRoutes,
 	
-	{ path: '/timeline', name: 'timeline', component: Feed },
+	{ path: '/', name: 'home', redirect: { name: 'feed' } },
 	
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
 	{ path: '/t/:slug', name: 'tag', component: Tag, props: true  },
@@ -32,8 +36,7 @@ const routes = [
 	{ path: '/donate', name: 'donate', component: About },
 	{ path: '/about', name: 'about', component: About },
 
-
-	{ path: '/:pathMatch(.*)*', redirect: { name: 'timeline' } }
+	{ path: '/:pathMatch(.*)*', redirect: { name: 'feed' } }
 ]
 
 const router = createRouter({

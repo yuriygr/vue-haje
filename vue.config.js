@@ -1,6 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
+const { DefinePlugin } = require('webpack')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = ['js', 'css']
+
+const packageJson = require('./package.json')
 
 module.exports = defineConfig({
   chainWebpack: config => {
@@ -11,6 +14,9 @@ module.exports = defineConfig({
       test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
       threshold: 10240,
       minRatio: 0.8
+    }]),
+    config.plugin('DefinePlugin').use(DefinePlugin, [{
+      'process.env.PACKAGE_VERSION': JSON.stringify(packageJson.version)
     }])
   },
   transpileDependencies: true,
