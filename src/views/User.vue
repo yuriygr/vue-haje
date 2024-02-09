@@ -171,11 +171,11 @@ export default {
         {
           icon: 'ui-bookmark-remove',
           label: this.$t('user.action.remove-bookmark'),
-          disabled: true
+          action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
           label: this.$t('user.action.add-bookmark'),
-          disabled: true
+          action: this.toggleBookmarks
         }
       ]
 
@@ -245,9 +245,17 @@ export default {
     },
     // Переключалка закладок
     toggleBookmarks() {
-      let _path = this.data.state.is_bookmarked
-        ? `user/${this.data.username}/unnotify`
-        : `user/${this.data.username}/notify`
+      this.$api.post('my/bookmarks', {
+        type: this.data.state.is_bookmarked ? 'remove' : 'add',
+        object: 'user',
+        user_id: this.data.user_id
+      })
+      .then(result => {
+        this.data.state.is_bookmarked = (result.status == 'added')
+        this.$alerts.success({ text: result.status })
+        this.$popover.close()
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
     },
     // Остальные действия
     copyLink() {

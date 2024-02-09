@@ -39,6 +39,24 @@ let _localizedMonths = (locale) => {
   }
 	return l[locale] || l['en']
 }
+let _localizedToday = (locale) => {
+  let l = {
+    en: 'today',
+    ru: 'сегодня'
+  }
+	return l[locale] || l['en']
+}
+let _localizedYesterday = (locale) => {
+  let l = {
+    en: 'yesterday',
+    ru: 'вчера'
+  }
+	return l[locale] || l['en']
+}
+const _localizedAt = (locale) => {
+  let l = { en: 'at', ru: 'в' }
+  return l[locale] || l['en']
+}
 
 const formatDuration = (seconds) => {
   const h = Math.floor(seconds / 3600)
@@ -56,6 +74,7 @@ const timeFormat = (timestamp, prefomattedDate = false, hideYear = false, locale
 
   const date = _datetimeToNormal(timestamp)
 	const months = _localizedMonths(locale)
+  const _at = _localizedAt(locale)
 
 	const year = date.getFullYear()
 	const month = months[date.getMonth()]
@@ -68,14 +87,14 @@ const timeFormat = (timestamp, prefomattedDate = false, hideYear = false, locale
   }
 
   if (prefomattedDate) {
-    return `${prefomattedDate} @ ${hours}:${minutes}`
+    return `${prefomattedDate} ${_at} ${hours}:${minutes}`
   }
 
   if (hideYear) {
-    return `${day} ${month} @ ${hours}:${minutes}`
+    return `${day} ${month} ${_at} ${hours}:${minutes}`
   }
 
-  return `${day} ${month} ${year} @ ${hours}:${minutes}`
+  return `${day} ${month} ${_at} ${year} ${hours}:${minutes}`
 }
 
 const timeFormatOnlyYear = (timestamp, locale) => {
@@ -105,6 +124,9 @@ const timeAgo = (timestamp, locale) => {
   const isYesterday = yesterday.toDateString() === date.toDateString()
   const isThisYear = today.getFullYear() === date.getFullYear()
 
+  const _today = _localizedToday(locale)
+  const _yesterday = _localizedYesterday(locale)
+
   if (seconds < 5) {
     return 'now';
   } else if (seconds < 60) {
@@ -114,11 +136,11 @@ const timeAgo = (timestamp, locale) => {
   } else if (minutes < 60) {
     return `${ minutes } minutes ago`;
   } else if (isToday) {
-    return timeFormat(date, 'today', false, locale); // Today at 10:20
+    return timeFormat(date, _today, false, locale);
   } else if (isYesterday) {
-    return timeFormat(date, 'yesterday', false, locale); // Yesterday at 10:20
+    return timeFormat(date, _yesterday, false, locale);
   } else if (isThisYear) {
-    return timeFormat(date, false, true, locale); // 10. January at 10:20
+    return timeFormat(date, false, true, locale);
   }
 
   return timeFormat(timestamp) // 10 January 2017 at 10:20

@@ -53,8 +53,8 @@ export default {
     metaItems() {
       let _result = []
 
-      //_result.push({ label: this.$tc('comment.meta.replies', this.data.counters.comments), to: this.commentLink })
-      _result.push({ label: this.formatedDate, /*to: this.commentLink */ })
+      _result.push({ label: this.$tc('comment.meta.reply'), action: () => { alert('hack') } })
+      _result.push({ label: this.formatedDate })
       this.data.content.version > 1 && _result.push({ label: this.$t('comment.meta.edited') })
 
       return _result

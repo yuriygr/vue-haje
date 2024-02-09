@@ -3,13 +3,13 @@
     <template v-for="(item, index) in items" :key="`meta-info-${index}`">
 
       <template v-if="isHasLink(item)">
-        <router-link :to="item.to" class="meta-info__item" exact-active-class="" active-class="">
+        <router-link :to="item.to" @click="selectItem(item, $event)" :class="elClass(item)" exact-active-class="" active-class="">
           {{ item.label }}
         </router-link>
       </template>
 
       <template v-else>
-        <div class="meta-info__item">
+        <div :class="elClass(item)" @click="selectItem(item, $event)">
           {{ item.label }}
         </div>
       </template>
@@ -29,6 +29,34 @@ export default {
     }
   },
   methods: {
+    elClass(item) {
+      return [
+        'meta-info__item',
+        {
+          'meta-info__item--disabled': this.isItemDisabled(item),
+          'meta-info__item--action': this.isItemHasAction(item),
+          'meta-info__item--link': this.isHasLink(item)
+        }
+      ]
+    }, 
+    selectItem(e, t = null) {
+     if (this.isItemDisabled(e)) return
+
+
+    if (t && !e.to && !e.url && (t.preventDefault(), t.stopPropagation()), "function" == typeof e.action && e.action(e), !this.isSelectable)
+      return this.$emit("select", this.selected, e);
+    
+    },
+
+
+    isItemDisabled(item) {
+      return item.disabled
+    },
+    isItemHasAction(item) {
+      return typeof item.action === 'function'
+    }, 
+
+
     isHasLink(item) {
       return typeof item.to === 'string' || typeof item.to === 'object'
     },
@@ -53,7 +81,7 @@ export default {
     --meta-info__item--color: #999;
     --meta-info__item--color-hover: #fffcea;
     --meta-info__item--color-active: #fffcea;
-    --meta-info__separator--color: #999;
+    --meta-info__separator--color: #666;
   }
 }
 
@@ -69,12 +97,13 @@ export default {
   line-height: calc(1.2 * 1em);
 
   &__item {
-      position: relative;
+    position: relative;
     color: var(--meta-info__item--color);
     transition: var(--x-transition);
 
     @media(hover: hover) {
-      &:is(a):hover {
+      &:is(a, &--action):hover {
+        cursor: pointer;
         color: var(--meta-info__item--color-hover);
       }
     }

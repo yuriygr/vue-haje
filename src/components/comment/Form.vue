@@ -13,7 +13,8 @@
         <icon-button name="file-image-line" mode="tertiary" :disabled="true" :title="$t('comment.form.action.attach_image')" />
       </buttons-group>
       <buttons-group :withGap="true">
-        <n-button :disabled="!canSubmit" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
+        <n-button v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
+        <n-button :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
       </buttons-group>
     </div>
   </div>
@@ -80,6 +81,9 @@ export default {
     },
     hasFiles() {
       return this.attachedFiles.length != 0
+    },
+    isReply() {
+      return this.form.parent_id != 0
     }
   },
   methods: {
@@ -101,6 +105,7 @@ export default {
     },
     resetForm() {
       this.form.text = ""
+      this.form.parent_id = 0
       this.$refs.field.innerText = ""
       this.attachedFiles = []
     },

@@ -92,11 +92,11 @@ export default {
         {
           icon: 'ui-bookmark-remove',
           label: this.$t('entry.action.remove-bookmark'),
-          disabled: true
+          action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
           label: this.$t('entry.action.add-bookmark'),
-          disabled: true
+          action: this.toggleBookmarks
         }
       ]
 
@@ -163,6 +163,19 @@ export default {
       .catch(error => {
         this.$alerts.danger({ text: error.status })
       })
+    },
+    toggleBookmarks() {
+      this.$api.post('my/bookmarks', {
+        type: this.data.state.is_bookmarked ? 'remove' : 'add',
+        object: 'entry',
+        entry_id: this.data.entry_id
+      })
+      .then(result => {
+        this.data.state.is_bookmarked = (result.status == 'added')
+        this.$alerts.success({ text: result.status })
+        this.$popover.close()
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
     },
     copyLink() {
       let _url = this.$router.resolve(this.entryLink)
