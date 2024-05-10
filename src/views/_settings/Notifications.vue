@@ -13,24 +13,21 @@
     <form-block>
       <n-checkbox :label="$t('settings.notifications.field.new_post')" v-model="form.new_post" disabled="true" />
     </form-block>
-  </group>
 
-  <spacer height="40" />
-
-  <group>
     <n-header>{{ $t('settings.notifications.feedback') }}</n-header>
 
     <form-block>
       <n-checkbox :label="$t('settings.notifications.field.replies')" v-model="form.replies" disabled="true" />
     </form-block>
-  </group>
 
-  <spacer height="40" />
-
-  <group>
     <n-header>{{ $t('settings.notifications.others') }}</n-header>
+
     <form-block>
       <n-checkbox :label="$t('settings.notifications.field.badges')" v-model="form.badges" disabled="true" />
+    </form-block>
+
+    <form-block>
+      <n-button @click.prevent="submit" tabindex="4" size="l" :disabled="loading">{{ $t('action.save') }}</n-button>
     </form-block>
   </group>
 </template>
@@ -58,13 +55,37 @@ export default {
         badges: false
       },
 
-      loading: false
+      loading: true
     }
   },
   methods: {
-    changeValue() {
-      alert('@TODO')
+    // Fetching
+    fetch() {
+      this.loading = true
+      return this.$api.get('my/settings/notifications')
+      .then(result => {
+        this.form = result
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+      .then(_ => this.loading = false)
+    },
+    // Submit
+    submit() {
+      this.loading = true
+      return this.$api.post('my/settings/notifications', this.form)
+      .then(result => {
+        this.$alerts.success({ text: result.status })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+      .then(_ => this.loading = false)
     }
+  },
+  async mounted() {
+    await this.fetch()
   }
 }
 </script>

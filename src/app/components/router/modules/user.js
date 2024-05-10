@@ -13,7 +13,6 @@ export default [
       { path: 'subscribers', name: 'user-subscribers', component: UserSubscribers },
       { path: 'subscriptions', name: 'user-subscriptions', component: UserSubscriptions },
       { path: 'badges', name: 'user-badges', component: UserBadges },
-      { path: 'tags', name: 'user-tags', component: UserTags },
       { path: 'links', name: 'user-links', component: UserLinks },
 	    { path: ':pathMatch(.*)*', redirect: { name: 'user' } }
     ]

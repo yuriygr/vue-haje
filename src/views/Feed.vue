@@ -5,11 +5,12 @@
     </template>
   </tabs>
 
-  <separator />
-
-  <entry-pseudo-form @click="openComposeModal" />
-
   <spacer height="30" />
+
+  <template v-if="isAuth">
+    <entry-pseudo-form @click="openComposeModal" />
+    <spacer height="30" />
+  </template>
 
   <entries-list v-if="(!loading && !error) || data.length > 0">
     <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
@@ -37,11 +38,13 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Placeholder, PlaceholderLoading, Spacer, Tabs, TabsItem, Separator, NButton, LoadmoreTrigger, IconButton } from '@vue-norma/ui'
 
 import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
-import ComposeModal from '@/components/modals/Compose'
+
+let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 
 export default {
   name: 'feed',
@@ -58,6 +61,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('auth', {
+      'session_data': state => state.data
+    }),
     ...mapState('feed', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('feed', [ 'hasMoreItems' ]),
     ...mapGetters('auth', [ 'isAuth' ]),

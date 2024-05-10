@@ -1,5 +1,5 @@
 <template>
-  <template v-if="(data.entries.length + data.users.length + data.tags.length) > 0">
+  <template v-if="!emptyData">
     <group v-if="data.users.length > 0">
       <n-header>{{ $t('search.section.users') }}</n-header>
 
@@ -41,9 +41,37 @@
 
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('entries')">{{ $t('action.show_more') }}</n-button>
     </group>
+
+    <group v-if="data.comments.length > 0">
+      <n-header>{{ $t('search.section.comments') }}</n-header>
+
+      <div class="comments-list">
+        <comment-item-wrapper v-for="item in data.comments" :key="`comment-${item.comment_id}`">
+          <comment-item :data="item" :showReplyButton="false" :index="1" replyButton="link" />
+        </comment-item-wrapper>
+      </div>
+
+      <spacer height="20" />
+
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('comments')">{{ $t('action.show_more') }}</n-button>
+    </group>
+
+    <group v-if="data.communities.length > 0">
+      <n-header>{{ $t('search.section.communities') }}</n-header>
+
+      <communities-list>
+        <community-item-wrapper v-for="item in data.communities" :key="`community-${item.community_id}`">
+          <community-item :data="item" type="short" />
+        </community-item-wrapper>
+      </communities-list>
+
+      <spacer height="20" />
+
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class=""  :to="formatLink('communities')">{{ $t('action.show_more') }}</n-button>
+    </group>
   </template>
 
-  <template v-if="(data.entries.length + data.users.length + data.tags.length) == 0">
+  <template v-if="emptyData">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
@@ -68,6 +96,7 @@ import {
 
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { CommentItem, CommentItemWrapper } from '@/components/comment'
 import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
 
 export default {
@@ -78,11 +107,12 @@ export default {
     Group, NButton,
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
+    CommentItem, CommentItemWrapper,
     TagsList, TagItem, TagItemWrapper
   },
   computed: {
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/all', [ 'emptyQuery', 'searching' ]),
+    ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }

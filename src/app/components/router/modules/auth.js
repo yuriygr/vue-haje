@@ -1,4 +1,5 @@
-import Auth from '@/views/Auth'
+const Auth = () => import('@/views/Auth')
+
 import { AuthLogin, AuthRegister, AuthForgot, AuthLogout, AuthResetPassword } from '@/views/_auth'
 
 export default [

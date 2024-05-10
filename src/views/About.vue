@@ -23,14 +23,14 @@
 </template>
 
 <script>
-import { NHeader, Separator, NavigationSection, NavigationItem, NavigationFooter} from '@vue-norma/ui'
+import { NHeader, Separator, NavigationSection, NavigationItem, NavigationFooter, MetaInfo } from '@vue-norma/ui'
 import { mapState } from 'vuex'
 
 export default {
   name: 'about',
   components: {
     NHeader, Separator,
-    NavigationSection, NavigationItem, NavigationFooter
+    NavigationSection, NavigationItem, NavigationFooter, MetaInfo
   },
   meta() { return this.meta },
   data() {

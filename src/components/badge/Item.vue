@@ -1,7 +1,7 @@
 <template>
   <div :class="elClass">
     <div class="badge-item__icon">
-      <icon :name="data.content.icon" />
+      <icon :name="data.content.icon" :size="22" />
     </div>
     <div class="badge-item__content">
       <div class="badge-item__label">{{ data.content.label }}</div>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import { Icon, IconButton } from '@vue-norma/ui'
+import { Icon, IconButton, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'badge-item',
   components: {
-    Icon, IconButton
+    Icon, IconButton, MetaInfo
   },
   props: {
     data: false
@@ -56,8 +56,7 @@ export default {
   --badge-item__icon--background: #f5f5f5;
   --badge-item__icon--color: #333;
   --badge-item__label--color: #111;
-  --badge-item__description--color: #999;
-  --badge-item__meta--color: #999;
+  --badge-item__description--color: #495057;
 
   &--type-common {
     --badge-item__icon--background: var(--x-color-green--tint80);
@@ -89,7 +88,6 @@ export default {
     --badge-item__icon--color: #fff;
     --badge-item__label--color: #fffcea;
     --badge-item__description--color: #999;
-    --badge-item__meta--color: #999;
 
     &--type-common {
       --badge-item__icon--background: var(--x-color-green--shade70);
@@ -132,14 +130,14 @@ export default {
     color: var(--badge-item__icon--color);
     display: flex;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 1.3rem;
     margin-right: 1rem;
     border-radius: 8px;
 
     svg {
       fill: currentColor;
-      width: 2rem;
-      height: 2rem;
+      width: 2.7rem;
+      height: 2.7rem;
       display: block;
     }
   }
@@ -154,7 +152,7 @@ export default {
     font-size: 1.4rem;
     font-weight: var(--x-font-weight--semi-bold);
     line-height: calc(1.4 * 1em);
-    margin-bottom: 2px;
+    margin-bottom: 0;
   }
 
   &__description {
@@ -162,22 +160,7 @@ export default {
     font-size: 1.4rem;
     font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
-    margin-bottom: 5px;
-  }
-
-  &__meta {
-    display: flex;
-    color: var(--badge-item__meta--color);
-    font-size: 1.3rem;
-    font-weight: var(--x-font-weight--normal);
-    line-height: calc(1.4 * 1em);
-
-    .separator {
-      user-select: none;
-      margin: 0 .5rem;
-
-      &::after { content: "·"; }
-    }
+    margin-bottom: .75rem;
   }
 }
 </style>

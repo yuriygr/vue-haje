@@ -1,25 +1,22 @@
 <template>
-  <div :class="elClass">
-    <div class="comment__branches">
-      <template v-for="i in index - 1" :key="`comment-branch-${data.comment_id}-${i}`">
-          <div class="branch" />
-      </template>
-    </div>
+  <div :class="elClass" :id="`comment-${data.comment_id}`">
+    <branches :count="level - 1" :key="data.comment_id" />
     <div class="comment__body">
       <div class="comment__header">
         <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
+        <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
       </div>
       <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
       <meta-info class="comment__meta" :items="metaItems" />
     </div>
   </div>
   <template v-for="item in data.replies" :key="`comment-${item.comment_id}`">
-    <comment-item :data="item" :index="index >= 4 ? index :index + 1"/>
+    <comment-item :data="item" :level="level >= maxBranchesLevel ? level : level + 1" :entryAuthorID="entryAuthorID" />
   </template>
 </template>
 
 <script>
-import { Icon, IconButton } from '@vue-norma/ui'
+import { Icon, IconButton, MetaInfo } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
 
@@ -27,40 +24,65 @@ export default {
   name: 'comment-item',
   components: {
     UserItem,
-    Icon, IconButton
+    Icon, IconButton, MetaInfo
   },
   props: {
     data: {
       type: Object
     },
-    index: {
+    level: {
       type: Number,
       default: 1
+    },
+    mode: {
+      type: String,
+      default: 'normal',
+      validator(value) {
+        return ['normal', 'small'].includes(value)
+      }
+    },
+    replyButton: {
+      type: String,
+      default: 'action',
+      validator(value) {
+        return ['action', 'link', 'none'].includes(value)
+      }
+    },
+    entryAuthorID: {
+      type: [ Boolean, Number ],
+      default: 0
+    },
+    maxBranchesLevel: {
+      type: Number,
+      default: 5
     }
   },
   data() {
     return {
-      isPopoverActive: false
+      isReply: false,
     }
   },
   computed: {
     elClass() {
       return [
         'comment',
-        'comment--level-' + this.index
+        'comment--level-' + this.level,
+        { 'comment--highlighted': false } // TODO: Сделать
       ]
     },
     metaItems() {
       let _result = []
 
-      _result.push({ label: this.$tc('comment.meta.reply'), action: () => { alert('hack') } })
-      _result.push({ label: this.formatedDate })
+      this.replyButton == 'action' && _result.push({ label: this.$tc('comment.meta.reply'), action: this.toggleReplyForm })
+      this.replyButton == 'link' && _result.push({ label: this.$tc('comment.meta.reply'), to: this.commentLink })
+
+      _result.push({ label: this.formatedDate, to: this.commentLink })
       this.data.content.version > 1 && _result.push({ label: this.$t('comment.meta.edited') })
 
       return _result
     },
     commentLink() {
-      return { name: 'entry', params: { uuid: this.data.uuid } }
+      return { name: 'entry', params: { uuid: this.data.entry.uuid }, query: { comment: this.data.comment_id } }
     },
     optionsItems() {
       let _edit = [
@@ -96,6 +118,13 @@ export default {
     }
   },
   methods: {
+    toggleReplyForm() {
+      this.isReply = !this.isReply
+      this.$bus.emit('comment-form.reply', {
+        level: this.level + 1,
+        comment_id: this.data.comment_id
+      })
+    },
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
       this.$popover.open({
@@ -134,26 +163,29 @@ export default {
   &--level-5 { --level: 5 }
 
   --gap-branch: 2rem;
+  --avatar-size: 18px;
 }
 
+.comment {
+  --comment--background-highlighted: rgba(255, 255, 255, .03);
+  --comment__author--backgroud: var(--x-color-pink--tint10); 
+  --comment__author--color: var(--x-color-pink--tint70); 
+
+  html[data-theme="black"] & {
+    --comment--background-highlighted: rgba(255, 255, 255, .03);
+    --comment__author--backgroud: var(--x-color-pink--tint60); 
+    --comment__author--color: var(--x-color-pink--shade50); 
+  }
+}
 
 .comment {
   display: grid;
   grid-template-columns: auto 1fr;
 
-  &__branches {
-    display: flex;
-    width: calc(var(--gap-branch) * (var(--level) - 1));
-
-    .branch {
-      width: var(--gap-branch, 0);
-      border-left: 1px solid #222;
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      -ms-flex-negative: 0;
-      flex-shrink: 0;
-    }
+  &--highlighted {
+    --animation-duration: 1.2s;
+    background-color: var(--comment--background-highlighted);
+    animation: commentAttention var(--animation-duration) forwards ease-in-out;
   }
 
   &__body {
@@ -162,16 +194,34 @@ export default {
 
   &__header {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     margin-bottom: .75rem;
+  }
+
+  &__author {
+    margin-left: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.6em;
+    color: var(--comment__author--backgroud);
+    background: var(--comment__author--color);
+    padding: 0 .3rem;
+    border-radius: 4px;
+    text-transform: lowercase;
   }
 
   &__content {
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
     margin-bottom: .75rem;
+    word-break: break-word;
   }
 
 }
+
+@keyframes commentAttention {
+  0%, 50% { background-color: var(--comment--background-highlighted) }
+  to { background-color: transparent }
+}
+
 </style>

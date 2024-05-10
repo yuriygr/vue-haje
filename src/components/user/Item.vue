@@ -1,37 +1,40 @@
 <template>
   <div :class="[ 'user-item', 'user-item--mode-' + mode ]">
     <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__avatar">
-      <img :src="avatarUrl(72)" alt="" />
+      <img :src="avatarUrl" alt="" />
     </component>
-    <template v-if="mode == 'normal'">
-      <div class="user-item__content">
+    <template v-if="!onlyAvatar">
+      <template v-if="mode == 'normal' || mode == 'hero'">
+        <div class="user-item__content">
+          <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
+            {{ data.name }}
+          </component>
+          <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">@{{ data.username }}</component>
+        </div>
+        <buttons-group :withGap="true" v-if="showSubscribeAction && !data.state.is_me" class="user-item__actions">
+          <template v-if="data.state.me_subscribed">
+            <icon-button name="user-follow-line" mode="tertiary" @click.exact="unsubscribe" :disabled="loading.unsubscribe" :title="$t('user.action.unsubscribe')" />
+          </template>
+          <template v-else>
+            <icon-button name="user-add-line" mode="tertiary" @click.exact="subscribe" :disabled="loading.subscribe" :title="$t('user.action.subscribe')" />
+          </template>
+          <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('user.action.options')" />
+        </buttons-group>
+      </template>
+      <template v-if="mode == 'small'">
         <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
           {{ data.name }}
         </component>
-        <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">@{{ data.username }}</component>
-      </div>
-      <buttons-group :withGap="true" v-if="showSubscribeAction && !data.state.is_me" class="user-item__actions">
-        <template v-if="data.state.me_subscribed">
-          <icon-button name="user-follow-line" mode="tertiary" @click.exact="unsubscribe" :disabled="loading.unsubscribe" :title="$t('user.action.unsubscribe')" />
-        </template>
-        <template v-else>
-          <icon-button name="user-add-line" mode="tertiary" @click.exact="subscribe" :disabled="loading.subscribe" :title="$t('user.action.subscribe')" />
-        </template>
-        <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('user.action.options')" />
-      </buttons-group>
-    </template>
-    <template v-if="mode == 'small'">
-      <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
-        {{ data.name }}
-      </component>
+      </template>
     </template>
   </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { Icon, IconButton, ButtonsGroup } from '@vue-norma/ui'
 
-import ReportUserModal  from '@/components/modals/ReportUser'
+let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/ReportUser.vue"))
 
 export default {
   name: 'user-item',
@@ -48,12 +51,16 @@ export default {
       type: String,
       default: 'normal',
       validator(value) {
-        return ['normal', 'small'].includes(value)
+        return ['hero', 'normal', 'small'].includes(value)
       }
     },
     showSubscribeAction: {
       type: Boolean,
       default: true
+    },
+    onlyAvatar: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -61,10 +68,18 @@ export default {
       loading: {
         unsubscribe: false,
         subscribe: false
+      },
+      sizes: {
+        'hero': 120,
+        'normal': 100,
+        'small': 50
       }
     }
   },
   computed: {
+    avatarUrl() {
+      return `https://www.gravatar.com/avatar/${this.data.avatar.hash}?s=${this.sizes[this.mode]}&d=identicon`
+    },
     userLink() {
       return { name: 'user', params: { username: this.data.username } }
     },
@@ -76,9 +91,7 @@ export default {
           activeClass: ''
         }
       else 
-        return {
-
-        }
+        return { }
     },
     optionsItems() {
       let _bookmark = [
@@ -101,18 +114,18 @@ export default {
           label: this.$t('user.action.copy_link'),
           action: this.copyLink
         },
-        {
-          icon: 'ui-error-warning',
-          label: this.$t('user.action.report'),
-          action: this.report
-        },
+         ...(this.data.state.is_me) ? [] : [
+          {
+            icon: 'ui-error-warning',
+            label: this.$t('user.action.report'),
+            action: this.report
+          }
+         ],
       ]
     }
   },
   methods: {
-    avatarUrl(size) {
-      return `https://www.gravatar.com/avatar/${this.data.avatar.md5}?s=${size}&d=identicon`
-    },
+    // Подписки
     unsubscribe() {
       this.loading.unsubscribe = true
       this.$api.post(`user/${this.data.username}/unsubscribe`)
@@ -141,6 +154,16 @@ export default {
         this.loading.subscribe = false
       })
     },
+    // Опции
+    toggleOptions(e) {
+      let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
+      this.$popover.open({
+        items: this.optionsItems,
+        target: target,
+        align: 'right'
+      })
+    },
+    // Переключалка закладок
     toggleBookmarks() {
       this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
@@ -154,14 +177,7 @@ export default {
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
     },
-    toggleOptions(e) {
-      let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
-      this.$popover.open({
-        items: this.optionsItems,
-        target: target,
-        align: 'right'
-      })
-    },
+    // Остальные действия
     copyLink() {
       let _url = this.$router.resolve(this.userLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
@@ -181,27 +197,33 @@ export default {
 
 <style lang="scss">
 .user-item {
-  --user-item__name--color: #111;
-  --user-item__name--color-hover: #111;
+  --user-item__name--color: var(--x-color);
+  --user-item__name--color-hover: var(--x-color);
   --user-item__username--color: #666;
-  --user-item__username--color-hover: #111;
+  --user-item__username--color-hover: var(--x-color);
+  --user-item__avatar--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
     --user-item__name--color: #fffcea;
     --user-item__name--color-hover: #fffcea;
     --user-item__username--color: #999;
     --user-item__username--color-hover: #fffcea;
+    --user-item__avatar--background: rgba(255, 255, 255, 0.09);
   }
 }
 
 .user-item {
+  &--mode-hero {
+    --user-item__avatar--size: 46px;
+    --user-item__avatar--border-radius: 8px;
+  }
   &--mode-normal {
-    --user-item__avatar-size: 38px;
-    --user-item__avatar-border-radius: 8px;
+    --user-item__avatar--size: 38px;
+    --user-item__avatar--border-radius: 8px;
   }
   &--mode-small {
-    --user-item__avatar-size: 18px;
-    --user-item__avatar-border-radius: 4px;
+    --user-item__avatar--size: 18px;
+    --user-item__avatar--border-radius: 4px;
   }
 }
 
@@ -211,12 +233,12 @@ export default {
   position: relative;
 
   &__avatar {
-    background: #00000019;
-    border-radius: var(--user-item__avatar-border-radius, 8px);
+    background: var(--user-item__avatar--background, rgba(0, 0, 0, 0.09));
+    border-radius: var(--user-item__avatar--border-radius, 8px);
     position: relative;
     overflow: hidden;
-    width: var(--user-item__avatar-size, 38px);
-    height: var(--user-item__avatar-size, 38px);
+    width: var(--user-item__avatar--size, 38px);
+    height: var(--user-item__avatar--size, 38px);
     margin-right: .75rem;
     flex-shrink: 0;
     
@@ -235,29 +257,30 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
+    align-items: start;
   }
 
   &__name {
-    color: var(--user-item__name--color, #111);
+    color: var(--user-item__name--color, #212529);
     font-size: 1.3rem;
-    font-weight: var(--x-font-weight--semi-bold);
+    font-weight: 500;
     line-height: calc(1.4 * 1em);
 
     @media(hover: hover) {
-      &:is(a):hover {
-        color: var(--user-item__name--color-hover, #111);
+      &[href]:hover {
+        color: var(--user-item__name--color-hover, #212529);
       }
     }
   }
   &__username {
     color: var(--user-item__username--color, #666);
     font-size: 1.3rem;
-    font-weight: var(--x-font-weight--normal);
+    font-weight: 400;
     line-height: calc(1.4 * 1em);
 
     @media(hover: hover) {
-      &:is(a):hover {
-        color: var(--user-item__username--color-hover, #111);
+      &[href]:hover {
+        color: var(--user-item__username--color-hover, #212529);
       }
     }
   }

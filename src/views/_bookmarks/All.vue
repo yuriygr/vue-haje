@@ -1,5 +1,5 @@
 <template>
-  <template v-if="(data.entries.length + data.users.length) > 0">
+  <template v-if="!emptyData">
     <group v-if="data.users.length > 0">
       <n-header>{{ $t('bookmarks.section.users') }}</n-header>
 
@@ -11,7 +11,7 @@
 
       <spacer height="20" />
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'boookmarks-users' }">{{ $t('action.show_more') }}</n-button>
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-users' }">{{ $t('action.show_more') }}</n-button>
     </group>
 
     <group v-if="data.entries.length > 0">
@@ -25,11 +25,25 @@
 
       <spacer height="20" />
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'boookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
+    </group>
+
+    <group v-if="data.communities.length > 0">
+      <n-header>{{ $t('bookmarks.section.communities') }}</n-header>
+
+      <communities-list>
+        <community-item-wrapper v-for="item in data.communities" :key="`community-${item.community_id}`">
+          <community-item :data="item" type="short" />
+        </community-item-wrapper>
+      </communities-list>
+
+      <spacer height="20" />
+
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-communities' }">{{ $t('action.show_more') }}</n-button>
     </group>
   </template>
 
-  <template v-if="(data.entries.length + data.users.length) == 0">
+  <template v-if="emptyData">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
@@ -54,6 +68,7 @@ import {
 
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
 
 export default {
   name: 'bookmarks-all',
@@ -62,11 +77,12 @@ export default {
     Placeholder, PlaceholderLoading, Separator, Spacer,
     Group, NButton,
     UsersList, UserItem, UserItemWrapper,
-    EntriesList, EntryItem, EntryItemWrapper
+    EntriesList, EntryItem, EntryItemWrapper,
+    CommunitiesList, CommunityItem, CommunityItemWrapper
   },
   computed: {
     ...mapState('bookmarks/all', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/all', [ 'emptyQuery', 'bookmarksing' ]),
+    ...mapGetters('bookmarks/all', [ 'emptyData' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }

@@ -11,36 +11,24 @@
         {{ error.message }}
       </form-status>
 
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.name') }}</div>
-          <input v-validation class="l-input__item" tabindex="1" type="text" name="name" v-model.trim="form.name" autocomplete="name">
-        </div>
+      <form-block :label="$t('auth.field.name')">
+        <text-field tabindex="1" type="text" name="name" v-model.trim="form.name" :disabled="loading" autocomplete="name" />
+      </form-block>
+
+      <form-block :label="$t('auth.field.username')">
+        <text-field tabindex="2" type="text" name="username" v-model.trim="form.username" :disabled="loading" autocomplete="username" />
+      </form-block>
+
+      <form-block :label="$t('auth.field.email')">
+        <text-field tabindex="3" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
+      </form-block>
+
+      <form-block :label="$t('auth.field.password')">
+        <text-field tabindex="4" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.username') }}</div>
-          <input v-validation class="l-input__item" tabindex="1" type="text" name="username" v-model.trim="form.username" autocomplete="username">
-        </div>
-      </form-block>
-
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.email') }}</div>
-          <input v-validation class="l-input__item" tabindex="2" type="email" name="email" v-model.trim="form.email" autocomplete="email">
-        </div>
-      </form-block>
-
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.password') }}</div>
-          <input v-validation class="l-input__item" tabindex="3" type="password" name="password" v-model.trim="form.password" autocomplete="new-password">
-        </div>
-      </form-block>
-
-      <form-block>
-        <n-button tabindex="4" size="l" :stretched="true" :disabled="loading">{{ $t('auth.button.continue') }}</n-button>
+        <n-button tabindex="5" size="l" :stretched="true" :disabled="loading">{{ $t('auth.button.continue') }}</n-button>
       </form-block>
 
       <form-block>

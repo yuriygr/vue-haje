@@ -2,7 +2,15 @@
   "app": {
     "title": "Futubra",
     "description": "Социальная сеть для не социальных людей",
-    "version": "Версия {version}"
+    "version": "Версия {version}",
+    "locale": {
+      "pt": "Португальский",
+      "ru": "Русский"
+    },
+    "theme": {
+      "white": "Светлая тема",
+      "black": "Темная тема"
+    }
   },
   "header": {
     "nav": {
@@ -12,14 +20,6 @@
       "notifications": "@:notifications.title",
       "profile": "@:user.title",
       "auth": "Авторизация"
-    }
-  },
-  "footer": {
-    "about": "{date} &copy; @:app.title",
-    "links": {
-      "about": "О приложении",
-      "privacy": "Политика конфиденциальности",
-      "legal": "Юридическая информация"
     }
   },
   "feed": {
@@ -51,7 +51,8 @@
       "subscribers_empty": "Подписчиков пока-что нет",
       "subscriptions_empty": "Подписок пока-что нет",
       "badges_empty": "Значков пока-что нет",
-      "tags_empty": "Хештегов пока-что нет"
+      "tags_empty": "Хештегов пока-что нет",
+      "links_empty": "Ссылок пока-что нет"
     },
     "action": {
       "settings": "Настройки",
@@ -86,12 +87,16 @@
       "all": "Всюду",
       "users": "Пользователи",
       "entries": "Посты",
+      "comments": "Комментарии",
+      "communities": "Сообщества",
       "tags": "Теги"
     },
     "section": {
       "users": "@:search.tabs.users",
       "entries": "@:search.tabs.entries",
-      "tags": "@:search.tabs.tags"
+      "comments": "@:search.tabs.comments",
+      "tags": "@:search.tabs.tags",
+      "communities": "@:search.tabs.communities"
     }
   },
   "notifications": {
@@ -128,12 +133,21 @@
   "menu": {
     "title": "Меню",
     "item": {
+      "communities": "@:communities.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
-      "logout": "Выход"
+      "login": "Войти",
+      "logout": "Выйти"
+    }
+  },
+  "communities": {
+    "title": "Сообщества",
+    "tabs": {
+      "subscribed": "Все сообщества",
+      "manage": "Управление"
     }
   },
   "bookmarks": {
@@ -141,11 +155,13 @@
     "tabs": {
       "all": "Все",
       "entries": "Посты",
-      "users": "Пользователи"
+      "users": "Пользователи",
+      "communities": "Сообщества"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries"
+      "entries": "@:bookmarks.tabs.entries",
+      "communities": "@:bookmarks.tabs.communities"
     }
   },
   "settings": {
@@ -156,15 +172,16 @@
       "danger": "Опасная зона"
     },
     "item": {
-      "profile": "Изменить профиль",
-      "notifications": "Настройка уведомлений",
-      "connections": "Связанные аккаунты",
-      "appearance": "Внешний вид",
-      "account": "Настройки аккаунта",
-      "password": "Изменение пароля",
-      "login_activity": "История активности",
-      "gdpr": "GDPR",
-      "delete_account": "Удалить аккаунт"
+      "profile": "@:settings.profile.title",
+      "feed": "@:settings.feed.title",
+      "notifications": "@:settings.notifications.title",
+      "connections": "@:settings.connections.title",
+      "appearance": "@:settings.appearance.title",
+      "account": "@:settings.account.title",
+      "password": "@:settings.password.title",
+      "login-activity": "@:settings.login-activity.title",
+      "gdpr": "@:settings.gdpr.title",
+      "delete-account": "@:settings.delete-account.title"
     },
     "action": {
       "change_password": "Изменить пароль",
@@ -183,6 +200,9 @@
         "help": "Вы можете изменить свой аватар в сервисе Gravatar"
       }
     },
+    "feed": {
+      "title": "Настройка новостных лент"
+    },
     "notifications": {
       "title": "Настройка уведомлений",
       "events": "События",
@@ -198,7 +218,21 @@
     },
     "password": {
       "title": "Изменение пароля",
-      "help": "Правила все же те"
+      "help": "Пароль должен быть не короче 6 символов и не являться вашим днем рождения или кличкой домашнего животного",
+      "apply": "Я гарантирую что не пытаюсь украсть чужой аккаунт и меняю пароль по своей собственной воле и никто мне не угрожает"
+    },
+    "appearance": {
+      "title": "Внешний вид"
+    },
+    "connections": {
+      "title": "Связанные аккаунты"
+    },
+    "account": {
+      "title": "Настройки аккаунта",
+      "verification": {
+        "title": "Подтверждение аккаунта",
+        "help": "Верификация — это процесс подтверждения того, что профиль действительно принадлежит известной персоне"
+      }
     },
     "login-activity": {
       "title": "История активности"
@@ -209,16 +243,24 @@
     },
     "delete-account": {
       "title": "Удаление аккаунта",
-      "help": "Чтобы удалить аккаунт введите пароль от аккаунта"
+      "help": "Чтобы удалить аккаунт введите пароль от аккаунта",
+      "apply": "Я осознаю что восстановление аккаунта невозможно ввиду того что разработчики крайне ленивые"
     },
     "field": {
       "name": "Имя",
       "bio": "Описание",
-      "sex": "Секс",
+      "sex": "Пол",
       "current_password": "Текущий пароль",
       "new_password": "Новый пароль",
       "password": "Пароль",
-      "username": "Логин"
+      "username": "Логин",
+      "locale": "Язык интерфейса",
+      "theme": "Тема интерфейса"
+    },
+    "sex": {
+      "male": "Мужской",
+      "female": "Женский",
+      "none": "Боевой вертолет «Апач»"
     }
   },
   "help": {
@@ -250,19 +292,27 @@
     "title": "Запись",
     "meta": {
       "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
-      "edited": "ред"
+      "edited": "ред",
+      "pinned": "Закреплен"
+    },
+    "history": {
+      "edit-content": "Изменено содержимое"
     },
     "pseudo-form": {
-      "placeholder": "Напишите что-нибудь..."
+      "placeholder": "Напишите что-нибудь...",
+      "comments-on": "Комментарии включены",
+      "comments-off": "Комментарии выключены"
     },
     "errors": {
       "empty": "Пусто",
-      "comments_disabled": "Комментарии отключены"
+      "comments_disabled": "Комментарии отключены",
+      "empty_entry_history": "История изменений пуста"
     },
     "action": {
       "copy_link": "Скопировать ссылку",
       "subscribe": "@:user.action.subscribe",
       "unsubscribe": "@:user.action.unsubscribe",
+      "history": "История версий",
       "report": "Пожаловаться",
       "edit": "Редактировать",
       "remove-bookmark": "Убрать из закладок",
@@ -270,20 +320,17 @@
       "pin": "Закрепить",
       "unpin": "Открепить",
       "delete": "Удалить"
-    },
-    "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов"
+    }
   },
   "comment": {
     "meta": {
+      "author": "Автор",
       "reply": "Ответить",
       "replies": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
       "edited": "ред"
     },
     "form": {
-      "placeholder": "Ответьте что-нибудь...",
-      "action": {
-        "attach_image": "Прикрепить изображение"
-      }
+      "placeholder": "Ответьте что-нибудь..."
     },
     "errors": {
       "empty": "Пусто"
@@ -443,13 +490,16 @@
     "save": "Сохранить",
     "go_away": "Перейти",
     "create_entry": "Отправить",
+    "save_entry": "Сохранить",
     "send_report": "Отправить жалобу",
     "load_more": "Загрузить еще",
     "show_more": "Смотреть все",
     "cancel": "Отмена",
     "close": "Закрыть",
     "delete": "Удалить",
-    "options": "Опции"
+    "refresh": "Обновить",
+    "options": "Опции",
+    "attach_image": "Прикрепить изображение"
   },
   "brands": {
     "grustnogram": {
@@ -481,14 +531,14 @@
     "search-filter": {
       "title": "Фильтр поиска"
     },
-    "report_entry": {
+    "entry-history": {
+      "title": "История версий"
+    },
+    "report-entry": {
       "title": "Жалоба на пост"
     },
-    "report_user": {
+    "report-user": {
       "title": "Жалоба на пользователя"
-    },
-    "edit-entry": {
-      "title": "Изменить запись"
     },
     "delete-entry": {
       "title": "Удалить запись",

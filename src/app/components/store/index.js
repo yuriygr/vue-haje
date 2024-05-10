@@ -36,6 +36,7 @@ const store = createStore({
 store.subscribe((mutation, state) => {
   mutation.type == "auth/SET_DATA" && localStorage.setItem('auth', JSON.stringify(mutation.payload))
   mutation.type == "app/SET_THEME" && localStorage.setItem('theme', mutation.payload)
+  mutation.type == "app/SET_LOCALE" && localStorage.setItem('locale', mutation.payload)
   mutation.type == "app/TOGGLE_THEME" && localStorage.setItem('theme', state.app.theme)
 })
 

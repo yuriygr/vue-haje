@@ -1,7 +1,7 @@
 <template>
   <tabs>
     <template v-for="(item, index) in tabs" :key="`bookmarks-tab-${item.key}-${index}`">
-      <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
+      <tabs-item :to="item.to" :selected="item.active" :disabled="item.disabled">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 
@@ -46,6 +46,12 @@ export default {
           to: this.formatLink('entries'),
           label: this.$t('bookmarks.tabs.entries'),
           active: this.$route.meta.key == `entries`
+        },
+        {
+          key: 'communities',
+          to: this.formatLink('communities'),
+          label: this.$t('bookmarks.tabs.communities'),
+          active: this.$route.meta.key == `communities`
         }
       ]
     },

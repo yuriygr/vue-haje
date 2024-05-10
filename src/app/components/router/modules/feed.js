@@ -11,6 +11,7 @@ export default [
 			{ path: '', name: 'feed-timeline', component: Feed, meta: { tab: 'timeline' } },
 			{ path: 'popular', name: 'feed-popular', component: Feed, meta: { tab: 'popular' } },
 			{ path: 'abyss', name: 'feed-abyss', component: Feed, meta: { tab: 'abyss' } },
+			{ path: ':uuid', name: 'feed-custom', component: Feed, props: true },
 		]
 	}
 ]

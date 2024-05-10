@@ -1,30 +1,35 @@
 <template>
-  <article :class="[ 'entry' ]">
+  <div :class="[ 'entry' ]">
     <div class="entry__header">
       <user-item :data="data.user" :showSubscribeAction="false" />
-      <buttons-group class="entry__actions">
+      <buttons-group class="entry__options">
+        <icon-button v-if="showPinAction && data.state.is_pinned" name="ui-pushpin" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
         <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
       </buttons-group>
     </div>
     <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
+    <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
     <meta-info class="entry__meta" :items="metaItems" />
-  </article>
+  </div>
 </template>
 
 <script>
-import { Icon, IconButton, ButtonsGroup } from '@vue-norma/ui'
+import { defineAsyncComponent } from 'vue'
+import { Icon, IconButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
-import ReportEntryModal from '@/components/modals/ReportEntry'
-import EditEntryModal from '@/components/modals/EditEntry'
-import DeleteEntryModal from '@/components/modals/DeleteEntry'
+let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
+let ReportEntryModal = defineAsyncComponent(() => import("@/components/modals/ReportEntry.vue"))
+let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/EntryHistory.vue"))
+let DeleteEntryModal = defineAsyncComponent(() => import("@/components/modals/DeleteEntry.vue"))
 
 import { UserItem } from '@/components/user'
+import Attachments from '@/components/attachments'
 
 export default {
   name: 'entry-item',
   components: {
-    UserItem,
-    Icon, IconButton, ButtonsGroup
+    UserItem, Attachments,
+    Icon, IconButton, ButtonsGroup, MetaInfo
   },
   props: {
     data: {
@@ -50,7 +55,7 @@ export default {
 
       this.data.state.is_comments_enabled && _result.push({ label: this.$tc('entry.meta.comments', this.data.counters.comments), to: this.commentsLink })
       _result.push({ label: this.formatedDate, to: this.entryLink })
-      this.data.content.version > 1 && _result.push({ label: this.$t('entry.meta.edited') })
+      this.data.state.is_edited && _result.push({ label: this.$t('entry.meta.edited'), action: this.history })
 
       return _result
     },
@@ -105,22 +110,27 @@ export default {
         {
           icon: 'ui-unpin',
           label: this.$t('entry.action.unpin'),
-          action: this.unpin
+          action: this.togglePin
         } : {
           icon: 'ui-pushpin',
           label: this.$t('entry.action.pin'),
-          action: this.pin
+          action: this.togglePin
         }
       ]
 
       return [
         ...(this.data.user.state.is_me) ? [] : _subscribe,
-        ...(this.data.user.state.is_me) ? [] : _bookmark,
+        ..._bookmark,
         {
           icon: 'ui-link',
           label: this.$t('entry.action.copy_link'),
           action: this.copyLink
         },
+        ...(this.data.state.is_edited) ? [{
+          icon: 'ui-history',
+          label: this.$t('entry.action.history'),
+          action: this.history
+        }] : [],
         ...(this.data.user.state.is_me && this.showPinAction) ? _pin : [],
         ...(this.data.user.state.is_me) ? _edit : [
           {
@@ -144,15 +154,21 @@ export default {
         align: 'right'
       })
     },
+    copyLink() {
+      let _url = this.$router.resolve(this.entryLink)
+      navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
+        this.$alerts.success({ text: this.$t('success.link_copied') })
+      })
+      this.$popover.close()
+    },
+    // State togglers
     unsubscribe() {
       this.$api.post(`user/${this.data.user.username}/unsubscribe`)
       .then(result => {
         this.data.user.state.me_subscribed = !(result.status == 'unsubscribed')
         this.$popover.close()
       })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
     },
     subscribe() {
       this.$api.post(`user/${this.data.user.username}/subscribe`)
@@ -160,9 +176,7 @@ export default {
         this.data.user.state.me_subscribed = (result.status == 'subscribed')
         this.$popover.close()
       })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
     },
     toggleBookmarks() {
       this.$api.post('my/bookmarks', {
@@ -177,42 +191,35 @@ export default {
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
     },
-    copyLink() {
-      let _url = this.$router.resolve(this.entryLink)
-      navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
-      })
-      this.$popover.close()
-    },
-    pin() {
-      this.$api.post(`entry/${this.data.uuid}/pin`)
+    togglePin() {
+      let path = this.data.state.is_pinned
+        ? `entry/${this.data.uuid}/unpin`
+        : `entry/${this.data.uuid}/pin`
+      this.$api.post(path)
       .then(result => {
         this.data.state.is_pinned = (result.status == 'pinned')
+        this.$alerts.success({ text: result.status })
         this.$popover.close()
       })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
     },
-    unpin() {
-      this.$api.post(`entry/${this.data.uuid}/unpin`)
-      .then(result => {
-        this.data.state.is_pinned = !(result.status == 'unpinned')
-        this.$popover.close()
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
-    },
+    // Modals
     report() {
       this.$modals.show(ReportEntryModal, {
         data: this.data
       })
       this.$popover.close()
     },
+    history() {
+      this.$modals.show(EntryHistoryModal, {
+        uuid: this.data.uuid
+      })
+      this.$popover.close()
+    },
     edit() {
-      this.$modals.show(EditEntryModal, {
-        data: this.data
+      this.$modals.show(ComposeModal, {
+        data: this.data,
+        mode: 'edit'
       })
       this.$popover.close()
     },
@@ -239,7 +246,11 @@ export default {
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
     margin-bottom: .75rem;
+    word-break: break-word;
   }
 
+  &__attachments {
+    margin-bottom: 1rem;
+  }
 }
 </style>

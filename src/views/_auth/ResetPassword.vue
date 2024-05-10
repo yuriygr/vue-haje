@@ -7,11 +7,8 @@
         {{ $t('auth.reset-password.suggest') }}
       </form-text>
 
-      <form-block>
-        <div class="l-input --password">
-          <div class="l-input__title">{{ $t('auth.field.password') }}</div>
-          <input v-validation class="l-input__item" tabindex="1" type="password" name="password" v-model.trim="form.password" autocomplete="password">
-        </div>
+      <form-block :label="$t('auth.field.password')">
+        <text-field tabindex="1" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>

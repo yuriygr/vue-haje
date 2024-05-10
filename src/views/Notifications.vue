@@ -12,31 +12,33 @@
     </template>
   </tabs>
 
-  <separator />
+  <spacer height="30" />
 
-  <template v-if="(!loading && !error) || data.length > 0">
-    <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`">
-      <notification-item :data="item" />
-    </notification-item-wrapper>
+  <pull-to-refresh :on-refresh="onRefresh">
+    <template v-if="(!loading && !error) || data.length > 0">
+      <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`">
+        <notification-item :data="item" />
+      </notification-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </template>
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
 
-  <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
-    <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
-    />
-    <placeholder v-else
-      :icon="$t('errors.empty_notifications.icon')"
-      :header="$t('errors.empty_notifications.title')"
-      :text="$t('errors.empty_notifications.description')"
-    />
-  </template>
+    <template v-if="data.length == 0">
+      <placeholder-loading v-if="loading" />
+      <placeholder v-else-if="error"
+        :icon="$t(humanizeError.icon)"
+        :header="$t(humanizeError.title)"
+        :text="$t(humanizeError.description)"
+      />
+      <placeholder v-else
+        :icon="$t('errors.empty_notifications.icon')"
+        :header="$t('errors.empty_notifications.title')"
+        :text="$t('errors.empty_notifications.description')"
+      />
+    </template>
+  </pull-to-refresh>
 </template>
 
 <script>
@@ -81,6 +83,9 @@ export default {
     }
   },
   methods: {
+    onRefresh() {
+      console.log('ssss')
+    },
     formatLink(tab = false) {
       if (tab) {
         return { name: this.$route.name, query: { tab }}

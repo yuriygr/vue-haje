@@ -44,11 +44,11 @@ export default {
 
 <style lang="scss">
 .tag-item {
-  --tag-item--background: #f7f7f7;
-  --tag-item__hash--color: #999;
-  --tag-item__label--color: #111;
+  --tag-item--background: #f1f3f5;
+  --tag-item__hash--color: #868e96;
+  --tag-item__label--color: #212529;
 
-  --tag-item--background-hover: #f1f1f1;
+  --tag-item--background-hover: #e9ecef;
 
   html[data-theme='black'] & {
     --tag-item--background: #1f1f1f;
@@ -101,7 +101,7 @@ export default {
   }
 
   @media(hover: hover) {
-    &:is(a):hover {
+    &[href]:hover {
       background: var(--tag-item--background-hover);
       text-decoration: none;
 

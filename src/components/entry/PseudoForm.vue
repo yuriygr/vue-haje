@@ -26,6 +26,20 @@ export default {
 
 <style lang="scss">
 .entry-pseudo-form {
+  --entry-pseudo-form--background: #fff;
+  --entry-pseudo-form--border: 1px solid #f0f0f0;
+  --entry-pseudo-form__icon--color: #868e96;
+  --entry-pseudo-form__placeholder--color: #868e96;
+  
+  html[data-theme="black"] & {
+    --entry-pseudo-form--background: #181818;
+    --entry-pseudo-form--border: 1px solid #1f1f1f;
+    --entry-pseudo-form__icon--color: #aaa;
+    --entry-pseudo-form__placeholder--color: #999;
+  }
+}
+
+.entry-pseudo-form {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -34,12 +48,14 @@ export default {
   padding: 1rem;
   cursor: text;
 
-  background: var(--entry-pseudo-form--backgroud, #f7f7f7);
+  background: var(--entry-pseudo-form--background);
+  border: var(--entry-pseudo-form--border);
   border-radius: 8px;
-  border: 1px solid var(--entry-pseudo-form--border-color, #f1f1f1);
+  transition: var(--x-transition);
+  box-shadow: var(--x-box-shadow--elevation-2);
 
   &__icon {
-    color: var(--entry-pseudo-form__icon--color, #aaa);
+    color: var(--entry-pseudo-form__icon--color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,7 +74,7 @@ export default {
     width: 100%;
     outline: none;
     font-size: 1.4rem;
-    color: var(--search-field__placeholder--color, #999);
+    color: var(--entry-pseudo-form__placeholder--color);
     font-family: inherit;
     line-height: 1.6;
     padding: .1rem 0.2rem;

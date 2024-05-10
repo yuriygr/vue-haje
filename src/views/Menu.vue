@@ -1,8 +1,17 @@
 <template>
+  <router-link v-if="session_data.user" :to="{ name: 'user', params: { username: session_data.user.username } }" class="user-item-button">
+    <user-item :data="session_data.user"  :clickable="false" :showSubscribeAction="false" />
+    <div class="user-item-button__chevron">
+      <icon name="chevron-line" size="18" />
+    </div>
+  </router-link>
+
+  <spacer height="15" />
+
   <template v-for="(section, index) in sections" :key="`section-${index}`">
     <navigation-section>
       <template v-for="(item, jndex) in section.items" :key="`section-${index}-item-${jndex}`">
-        <navigation-item :icon="item.icon" :to="item.to" :chevron="item.chevron">
+        <navigation-item :icon="item.icon" :to="item.to" :chevron="item.chevron" :disabled="item.disabled">
           {{ item.label }}
         </navigation-item>
       </template>
@@ -12,12 +21,15 @@
 
 <script>
 import { mapState } from 'vuex'
-import { NavigationSection, NavigationItem } from '@vue-norma/ui'
+import { NavigationSection, NavigationItem, Icon, Spacer } from '@vue-norma/ui'
+
+import { UserItem } from '@/components/user'
 
 export default {
   name: 'menu',
   components: {
-    NavigationSection, NavigationItem
+    UserItem,
+    NavigationSection, NavigationItem, Icon, Spacer
   },
   meta() { return this.meta },
   data() {
@@ -34,30 +46,36 @@ export default {
     sections() {
       let sections = [
         {
+          icon: 'communities-line',
+          label: this.$t('menu.item.communities'),
+          to: { name: 'communities' },
+          chevron: true
+        },
+        {
           icon: 'bookmarks-line',
           label: this.$t('menu.item.bookmarks'),
           to: { name: 'bookmarks' },
+          chevron: true
+        },
+        {
+          icon: 'settings-line',
+          label: this.$t('menu.item.settings'),
+          to: { name: 'settings' },
           chevron: true
         }
       ]
 
       let main = [
         {
-          icon: 'settings-line',
-          label: this.$t('menu.item.settings'),
-          to: { name: 'settings' },
-          chevron: true
-        },
-        {
-          icon: 'kb-line',
-          label: this.$t('menu.item.help'),
-          to: { name: 'helps' },
-          chevron: true
-        },
-        {
           icon: 'charity-line',
           label: this.$t('menu.item.donate'),
           to: { name: 'donate' },
+          chevron: true
+        },
+        {
+          icon: 'help-line',
+          label: this.$t('menu.item.help'),
+          to: { name: 'helps' },
           chevron: true
         },
         {
@@ -69,11 +87,16 @@ export default {
       ]
 
       let last = [
-        {
+        this.session_data.is_auth ? {
           icon: 'logout-line',
           label: this.$t('menu.item.logout'),
           to: { name: 'auth-logout' },
           chevron: false
+        } : {
+          icon: 'login-line',
+          label: this.$t('menu.item.login'),
+          to: { name: 'auth-login' },
+          chevron: true
         }
       ]
 
@@ -88,5 +111,53 @@ export default {
 </script>
 
 <style lang="scss">
+.user-item-button {
+  --user-item-button--background: transparent;
+  --user-item-button--background-hover: #f1f3f5;
+  --user-item-button__chevron--color: #adb5bd;
+  --user-item-button__chevron--color-hover: #212529;
 
+  html[data-theme='black'] & {
+    --user-item-button--background: transparent;
+    --user-item-button--background-hover: #1f1f1f;
+    --user-item-button__chevron--color: #666;
+    --user-item-button__chevron--color-hover: #888;
+  }
+}
+
+.user-item-button {
+  $parent: &;
+
+  background: var(--user-item-button--background, transparent);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px;
+  margin: 0;
+  cursor: pointer;
+  transition: var(--x-transition);
+
+  &__chevron {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--user-item-button__chevron--color);
+
+    svg { display: block; fill: currentColor; }
+
+    @media(hover: hover) {
+      #{$parent}:hover > & {
+        color: var(--user-item-button__chevron--color-hover);
+      }
+    }
+  }
+
+  @media(hover: hover) {
+    &:hover {
+      background: var(--user-item-button--background-hover);
+      text-decoration: none;
+    }
+  }
+}
 </style>

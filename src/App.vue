@@ -30,21 +30,35 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [ 'theme', 'loading' ]),
+    ...mapState('app', [ 'locale', 'theme', 'loading' ]),
     ...mapState('auth', [ 'data' ]),
     ...mapGetters('app', [ 'themeStatusBar' ])
   },
   methods: {
-
+    setModal(state = false) {
+     this.changeDataset('modal', state ? 'on' : false)
+    }, 
+    setLocale(state = false) {
+      this.$i18n.locale = state
+      this.changeDataset('locale', state ? state : false)
+      document.documentElement.setAttribute("lang", state ? state : false);
+    }, 
+    setTheme(state = false) {
+      this.changeDataset('theme', state)
+      this.changeMeta('theme-color', this.themeStatusBar)
+    }, 
+    setLayout(state = false) {
+      this.changeDataset('layout', state ?? false)
+    }, 
   },
   mounted() {
     this.$store.dispatch('initApplication')
     this.$store.dispatch('auth/fetch')
 
-    this.changeDataset('layout', this.$route.meta.layout ?? false)
-    this.changeDataset('modal', this.modal ? 'on' : false)
-    this.changeDataset('theme', this.theme)
-    this.changeMeta('theme-color', this.themeStatusBar)
+    this.setModal(this.modal)
+    this.setLocale(this.locale)
+    this.setTheme(this.theme)
+    this.setLayout(this.$route.meta.layout)
   },
   created() {
     this.$modals.on('show', _ => this.modal = true)
@@ -52,14 +66,16 @@ export default {
   },
   watch: {
     modal(to) {
-      this.changeDataset('modal', to ? 'on' : false)
+      this.setModal(to)
+    },
+    locale(to) {
+      this.setLocale(to)
     },
     theme(to) {
-      this.changeDataset('theme', to)
-      this.changeMeta('theme-color', this.themeStatusBar)
+      this.setTheme(to)
     },
     '$route.meta.layout'(to) {
-      this.changeDataset('layout', to ?? false)
+      this.setLayout(to)
     }
   }
 }

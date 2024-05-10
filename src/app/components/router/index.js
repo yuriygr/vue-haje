@@ -1,34 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Entry from '@/views/Entry'
-
 const Notifications = () => import('@/views/Notifications')
-const Tag = () => import('@/views/Tag')
-const Menu = () => import('@/views/Menu')
-const About = () => import('@/views/About')
+import Menu from '@/views/Menu'
+import About from '@/views/About'
 
 import FeedRoutes from '@/app/components/router/modules/feed'
+import TagRoutes from '@/app/components/router/modules/tag'
 import UserRoutes from '@/app/components/router/modules/user'
 import SearchRoutes from '@/app/components/router/modules/search'
 import BookmarksRoutes from '@/app/components/router/modules/bookmarks'
 import SettingsRoutes from '@/app/components/router/modules/settings'
 import HelpRoutes from '@/app/components/router/modules/help'
 import AuthRoutes from '@/app/components/router/modules/auth'
-
+import CommunitiesRoutes from '@/app/components/router/modules/communities'
 
 const routes = [
 	...FeedRoutes,
+	...TagRoutes,
 	...UserRoutes,
 	...SettingsRoutes,
 	...BookmarksRoutes,
 	...SearchRoutes,
 	...HelpRoutes,
 	...AuthRoutes,
+	...CommunitiesRoutes,
 	
 	{ path: '/', name: 'home', redirect: { name: 'feed' } },
 	
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
-	{ path: '/t/:slug', name: 'tag', component: Tag, props: true  },
 
 	{ path: '/notifications', name: 'notifications', component: Notifications },
 	

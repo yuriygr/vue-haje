@@ -2,8 +2,8 @@
   <label :class="elClass">
     <input
      class="n-checkbox__input"
-      v-bind="elBinds"
-      v-on="elEvents"
+      v-bind="$elBinds"
+      v-on="$elEvents"
     >
     <div class="n-checkbox__control">
       <icon name="ui-check" v-if="checked" size="16" />
@@ -61,7 +61,7 @@ export default {
         }
       ]
     },
-    elBinds() {
+    $elBinds() {
       return {
         type:     'checkbox',
         tabindex: this.tabindex,
@@ -70,7 +70,7 @@ export default {
         disabled: this.disabled,
       }
     },
-    elEvents() {
+    $elEvents() {
       return {
         change: this.onChange
       }

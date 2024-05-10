@@ -40,10 +40,11 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Tabbar, TabbarItem, Icon } from '@vue-norma/ui'
 
-import ComposeModal from '@/components/modals/Compose'
+let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 
 export default {
   name: 'app-tabbar',
@@ -72,7 +73,17 @@ export default {
 <style lang="scss">
 .app-tabbar {
   --tabbar-item-count: 5;
+}
 
+.app-tabbar {
+  --tabbar--background: var(--x-background);
+
+  html[data-theme="black"] & {
+    --tabbar--background: var(--x-background);
+  }
+}
+
+.app-tabbar {
   background: var(--tabbar--background);
   height: var(--tabbar--height);
   z-index: 500;

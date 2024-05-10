@@ -1,6 +1,6 @@
 <template>
   <modal size="small">
-    <modal-header :title="$t('modals.report_user.title')">
+    <modal-header :title="$t('modals.report-user.title')">
       <template #after>
         <icon-button name="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>

@@ -11,10 +11,10 @@ export default {
       title:    process.env.VUE_APP_TITLE,
       basePath: process.env.VUE_APP_BASE_URL,
       theme:    process.env.VUE_APP_DEFAULT_THEME,
+      locale:   process.env.VUE_APP_I18N_LOCALE,
       version:  process.env.PACKAGE_VERSION,
 
       loading: false,
-  
       error: {}
     }
   },
@@ -22,6 +22,9 @@ export default {
     'SET_THEME'(state, payload) {
       state.theme = payload
     },
+    'SET_LOCALE'(state, payload) {
+      state.locale = payload
+    }, 
     'SET_LOADING'(state, payload) {
       state.loading = payload
     },
@@ -37,9 +40,7 @@ export default {
   actions: {
     init({ commit, state }) {
       commit('SET_THEME', localStorage.getItem('theme') || state.theme)
-    },
-    toggleTheme({ commit, state }) {
-      commit('SET_THEME', (state.theme == 'white') ? 'black' : 'white')
+      commit('SET_LOCALE', localStorage.getItem('locale') || state.locale)
     }
   },
   getters: {

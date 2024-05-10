@@ -1,37 +1,39 @@
 <template>
   <div class="search-form">
     <div class="search-form__field">
-      <n-input
+      <text-field
         icon="search-line"
         size="m"
-        :value="query"
+        :modelValue="query"
         :placeholder="$t('search.search-field.placeholder')"
 
         @keyup.enter="changeInput($event.target.value)"
       />
     </div>
+
     <div v-if="hasFilters" class="search-form__filter">
       <icon-button @click="openFilterModal" :badge="filterBadge" name="bars-filter-line" size="l" mode="tertiary" :title="$t('search.filter')" />
     </div>
   </div>
-
+  
   <spacer height="15" />
 
   <tabs>
     <template v-for="(item, index) in tabs" :key="`search-tab-${item.key}-${index}`">
-      <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
+      <tabs-item :to="item.to" :selected="item.active" :disabled="item.disabled">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 
-  <separator />
+  <spacer height="30" />
 
   <router-view />
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { IconButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
 
-import SearchFilterModal from '@/components/modals/SearchFilter'
+let SearchFilterModal = defineAsyncComponent(() => import("@/components/modals/SearchFilter.vue"))
 
 export default {
   name: 'search',
@@ -78,11 +80,23 @@ export default {
           active: this.$route.meta.key == `entries`
         },
         {
+          key: 'comments',
+          to: this.formatLink('comments'),
+          label: this.$t('search.tabs.comments'),
+          active: this.$route.meta.key == `comments`
+        },
+        {
+          key: 'communities',
+          to: this.formatLink('communities'),
+          label: this.$t('search.tabs.communities'),
+          active: this.$route.meta.key == `communities`
+        },
+        {
           key: 'tags',
           to: this.formatLink('tags'),
           label: this.$t('search.tabs.tags'),
           active: this.$route.meta.key == `tags`
-        },
+        }
       ]
     },
     availableKeys() {

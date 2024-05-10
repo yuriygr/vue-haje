@@ -1,13 +1,13 @@
 <template>
-  <tags-list v-if="(!loading && !error) || data.length > 0">
-    <tag-item-wrapper v-for="item in data" :key="`tag-item-${item.tag_id}`">
-      <tag-item :data="item" />
-    </tag-item-wrapper>
+  <entries-list v-if="(!loading && !error) || data.length > 0">
+    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
+      <entry-item :data="item" type="short" :showPinAction="false" />
+    </entry-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-    
+
     <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </tags-list>
+  </entries-list>
 
   <template v-if="data.length == 0">
     <placeholder-loading v-if="loading" />
@@ -16,43 +16,41 @@
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder v-else :text="$t('user.errors.tags_empty')" />
+    <placeholder v-else :text="$t('user.errors.entries_empty')" />
   </template>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
+import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 
 export default {
-  name: 'user-tags',
+  name: 'tag-entries',
   components: {
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger,
-    TagsList, TagItem, TagItemWrapper
+    EntriesList, EntryItem, EntryItemWrapper,
+    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('user/tags', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('user/tags', [ 'hasMoreItems' ]),
+    ...mapState('tag/entries', [ 'data', 'loading', 'error' ]),
+    ...mapGetters('tag/entries', [ 'hasMoreItems' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
   data() {
-    return {
-      params: { }
-    }
+    return { }
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('user/tags/more')
+      this.$store.dispatch('tag/entries/more')
     }
   },
   mounted() {
-    this.$store.dispatch('user/tags/fetch')
+    this.$store.dispatch('tag/entries/fetch')
   },
   unmounted() {
-    this.$store.dispatch('user/tags/clear')
+    this.$store.dispatch('tag/entries/clear')
   }
 }
 </script>

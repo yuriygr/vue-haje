@@ -11,10 +11,18 @@ export default {
 </script>
 
 <style lang="scss">
+.entry-item-wrapper {
+  --entry-item__divider-color: #f1f3f5;
+
+  html[data-theme="black"] & {
+    --entry-item__divider-color: #242424;
+  }
+}
+
 .entry-item-wrapper:not(:last-child) {
   border-bottom: 1px solid var(--entry-item__divider-color);
   position: relative;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
 }
 </style>

@@ -7,11 +7,12 @@
         {{ $t('settings.delete-account.help') }}
       </form-text>
 
+      <form-block :label="$t('settings.field.password')">
+        <text-field tabindex="1" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
+      </form-block>
+
       <form-block>
-        <div class="l-input --password">
-          <div class="l-input__title">{{ $t('settings.field.password') }}</div>
-          <input class="l-input__item" tabindex="1" type="password" name="password" v-model.trim="form.password" />
-        </div>
+        <n-checkbox :label="$t('settings.delete-account.apply')" v-model="form.apply"  />
       </form-block>
 
       <form-block>
@@ -37,7 +38,8 @@ export default {
       },
       loading: false,
       form: {
-        password: ''
+        password: '',
+        apply: true
       }
     }
   },

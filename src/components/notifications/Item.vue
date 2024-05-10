@@ -23,12 +23,12 @@
 </template>
 
 <script>
-import { Icon, IconButton, ButtonsGroup } from '@vue-norma/ui'
+import { Icon, IconButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'notification-item',
   components: {
-    Icon, IconButton, ButtonsGroup
+    Icon, IconButton, ButtonsGroup, MetaInfo
   },
   props: {
     data: false,

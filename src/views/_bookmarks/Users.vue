@@ -50,7 +50,7 @@ export default {
       this.$store.dispatch('bookmarks/users/more')
     }
   },
- mounted() {
+  mounted() {
     this.$store.dispatch('bookmarks/users/fetch')
   },
   unmounted() {

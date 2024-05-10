@@ -1,4 +1,5 @@
-import Help from '@/views/Help'
+const Help = () => import('@/views/Help')
+
 import { HelpMenu } from '@/views/_help'
 
 export default [

@@ -10,11 +10,11 @@
 
     <separator />
 
-    <placeholder
-      :icon="$t('errors.todo.icon')"
-      :header="$t('errors.todo.title')"
-      :text="$t('errors.todo.description')"
-    />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </template>
 
   <template v-if="Object.keys(data).length == 0">
@@ -34,8 +34,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
-
+import { Placeholder, PlaceholderLoading, Separator, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'tag',
@@ -45,7 +44,7 @@ export default {
       defalult: false
     }
   },
-  components: { Placeholder, PlaceholderLoading, Separator },
+  components: { Placeholder, PlaceholderLoading, Separator, MetaInfo },
   meta() { return this.meta },
   data() {
     return {
@@ -55,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('tag', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapState('tag', [ 'data', 'loading', 'error' ]),
     metaItems() {
       let _result = []
 
@@ -97,12 +96,12 @@ export default {
 
 <style lang="scss">
 .tag-header {
-  --tag-header__hash-color: #999;
-  --tag-header__label-color: #111;
+  --tag-header__hash-color: #868e96;
+  --tag-header__label-color: var(--x-color);
 
   html[data-theme='black'] & {
     --tag-header__hash-color: #999;
-    --tag-header__label-color: #fff;
+    --tag-header__label-color: var(--x-color);
   }
 }
 

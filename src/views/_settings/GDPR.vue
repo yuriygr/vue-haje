@@ -7,11 +7,8 @@
         {{ $t('settings.gdpr.help') }}
       </form-text>
 
-      <form-block>
-        <div class="l-input --password">
-          <div class="l-input__title">{{ $t('settings.field.password') }}</div>
-          <input class="l-input__item" tabindex="1" type="password" name="password" v-model.trim="form.password" />
-        </div>
+     <form-block :label="$t('settings.field.password')">
+        <text-field tabindex="1" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>

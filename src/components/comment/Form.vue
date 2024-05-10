@@ -1,21 +1,22 @@
 <template>
-  <div class="comment-form">
-    <div
-      ref="field"
-      class="comment-form__field"
+  <div :class="elClass">
+    <branches :count="level - 1" key="comment-form" />
+    <div :class="$formClass" v-on="$formEvents">
+      <div class="comment-form__field"
+        v-on="$fieldEvents"
+        v-bind="$fieldBinds"
+      ></div>
 
-      v-on="$fieldEvents"
-      v-bind="$fieldBinds"
-    ></div>
-
-    <div class="comment-form__actions">
-      <buttons-group :withGap="true">
-        <icon-button name="file-image-line" mode="tertiary" :disabled="true" :title="$t('comment.form.action.attach_image')" />
-      </buttons-group>
-      <buttons-group :withGap="true">
-        <n-button v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
-        <n-button :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
-      </buttons-group>
+      <div class="comment-form__actions">
+        <buttons-group :withGap="true">
+          <icon-button @click="attachFiles" name="add-image-line" mode="tertiary" :title="$t('action.attach_image')" />
+        </buttons-group>
+        <buttons-group :withGap="true">
+          <n-button v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
+          <n-button :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
+        </buttons-group>
+      </div>
+      <input type="file" ref="file" @change="_handleFilesAttach" :accept="acceptetFiles" multiple hidden>
     </div>
   </div>
 </template>
@@ -42,8 +43,15 @@ export default {
   emits: [ 'success', 'error' ],
   data() {
     return {
+      hovered: false,
+      dragover: false,
       loading: false,
       error: false,
+
+      acceptetFiles: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+
+      originalParentNode: false,
+      level: 1,
 
       form: {
         parent_id: 0,
@@ -54,11 +62,35 @@ export default {
     }
   },
   computed: {
+    elClass() {
+      return [
+        'comment-form-wrapper',
+        `comment-form-wrapper--level-${this.level}`
+      ]
+    },
+    $formClass() {
+      return [
+        'comment-form',
+        { 'comment-form--hovered': this.hovered },
+        { 'comment-form--dragover': this.dragover },
+      ]
+    },
+    $formEvents() {
+      return {
+        mouseover:  this.form_onMouseOver,
+        mouseleave: this.form_onMouseLeave,
+        drop:       this.form_onDrop,
+        dragenter:  this.form_onDragEnter,
+        dragleave:  this.form_onDragLeave,
+        dragover:   this.form_onDragOver
+      }
+    },
     $field() {
       return this.$refs.field
     },
     $fieldBinds() {
       return {
+        ref: 'field',
         tabindex: 1,
         placeholder: this.$t('comment.form.placeholder'),
         contenteditable: true,
@@ -67,17 +99,15 @@ export default {
     },
     $fieldEvents() {
       return {
-        input:     this.field_onInput,
-        keyup:     this.field_onKeyup,
-        keydown:   this.field_onKeydown,
-        paste:     this.field_onPaste,
-        dragenter: this.field_onDragEnter,
-        dragover:  this.field_onDragOver
+        input:   this.field_onInput,
+        keyup:   this.field_onKeyup,
+        keydown: this.field_onKeydown,
+        paste:   this.field_onPaste
       }
     },
 
     canSubmit() {
-      return this.form.text != '' || this.hasFiles || this.loading
+      return (this.form.text != '' || this.hasFiles) && !this.loading
     },
     hasFiles() {
       return this.attachedFiles.length != 0
@@ -104,10 +134,19 @@ export default {
       .then(_ => this.loading = false)
     },
     resetForm() {
+      if (this.originalParentNode) {
+        this.originalParentNode.insertBefore(this.$el, this.originalParentNode.firstChild)
+      }
+      
+      this.level = 1
       this.form.text = ""
       this.form.parent_id = 0
       this.$refs.field.innerText = ""
       this.attachedFiles = []
+    },
+    attachFiles() {
+      this.$refs.file.value = ''
+      this.$refs.file.click()
     },
 
     field_onInput(e) {
@@ -139,28 +178,114 @@ export default {
       }
     },
     field_onPaste(e) {
-      document.execCommand('insertText', false, (e.originalEvent || e).clipboardData.getData('text/plain'))
+      let cData = (e.originalEvent || e).clipboardData
+      
+      // Загружаем файлики
+      let items = cData && cData.items || []
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          this._processFilesUpload([item.getAsFile()])
+        }
+      }
+
+      // Копируем текстик
+      let itemsText = cData.getData('text/plain')
+      if (itemsText.length > 0) {
+        document.execCommand('insertText', false, itemsText)
+      }
+
       return cancelEvent(e)
     },
-    field_onDragEnter(e) {
-      return cancelEvent(e)
+    // form events
+    form_onMouseOver(e) {
+      this.hovered = true
     },
-    field_onDragOver(e) {
-      return cancelEvent(e)
+    form_onMouseLeave(e) {
+      this.hovered = false
+    },
+    form_onDrop(e) {
+      e.preventDefault()
+      this.dragover = false
+      this._handleFilesAttach(e)
+    },
+    form_onDragEnter(e) {
+      e.preventDefault()
+      this.dragover = true
+    },
+    form_onDragLeave(e) {
+      e.preventDefault()
+      this.dragover = false
+    },
+    form_onDragOver(e) {
+      e.preventDefault()
+      this.dragover = true
+    },
+    // Грузилки
+    _handleFilesAttach(e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) return
+
+      this._processFilesUpload(files)
+    },
+    _processFilesUpload(filesList) {
+      [...filesList]
+        .filter(file => this.acceptetFiles.includes(file.type))
+        .forEach(file => {
+          console.log(file)
+        })
     }
   },
-  mounted() {}
+  mounted() {
+    this.$bus.on('comment-form.reply', (payload) => {
+      if (!this.originalParentNode) {
+        this.originalParentNode = this.$el.parentNode
+      }
+
+      let target_comment = document.getElementById(`comment-${payload.comment_id}`)
+      target_comment.parentNode.insertBefore(this.$el, target_comment.nextSibling)
+
+      this.level = payload.level
+      this.form.parent_id = payload.comment_id
+    })
+  },
+  unmounted() {
+    this.$bus.off('comment-form.reply')
+  }
 }
 </script>
 
 <style lang="scss">
+.comment-form-wrapper {
+  &--level-1 { --level: 1 }
+  &--level-2 { --level: 2 }
+  &--level-3 { --level: 3 }
+  &--level-4 { --level: 4 }
+  &--level-5 { --level: 5 }
+
+  --gap-branch: 2rem;
+  --avatar-size: 18px;
+}
+
+.comment-form-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
 .comment-form {
-  --comment-form--background: #f7f7f7;
-  --comment-form--border-color: #f1f1f1;
+  --comment-form--background: #fff;
+  --comment-form--border: 1px solid #f0f0f0;
+  --comment-form--background-dragover: #f5f5f5;
+  --comment-form--border-dragover: 1px dashed var(--x-color-pink--tint10);
+  --comment-form--background-hovered: #fff;
+  --comment-form--border-hovered: 1px solid #f0f0f0;
 
   html[data-theme='black'] & {
     --comment-form--background: #181818;
-    --comment-form--border-color: #222;
+    --comment-form--border: 1px solid #1f1f1f;
+    --comment-form--background-dragover: #151515;
+    --comment-form--border-dragover: 1px dashed var(--x-color-pink--shade50);
+    --comment-form--background-hovered: #181818;
+    --comment-form--border-hovered: 1px solid #1f1f1f;
   }
 }
 
@@ -168,16 +293,29 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
   background: var(--comment-form--background);
+  border: var(--comment-form--border);
   border-radius: 8px;
-  border: 1px solid var(--comment-form--border-color, #f1f1f1);
+  transition: background-color .1s linear, border-color .1s linear, box-shadow .1s linear;
+  box-shadow: var(--x-box-shadow--elevation-2);
+
+  &--dragover {
+    background: var(--comment-form--background-dragover);
+    border: var(--comment-form--border-dragover);
+  }
+
+  &--hovered {
+    background: var(--comment-form--background-hovered);
+    border: var(--comment-form--border-hovered);
+  }
 
   &__field {
     border: none;
     padding: 1rem 1.5rem;
     margin: 0;
     outline: 0;
-    min-height: 4rem;
+    min-height: 5rem;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -208,7 +346,7 @@ export default {
     align-items: center;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
-    padding: 1rem;
+    padding: .5rem;
   }
 }
 </style>

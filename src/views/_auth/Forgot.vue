@@ -15,11 +15,8 @@
         {{ $t('auth.forgot.suggest') }}
       </form-text>
 
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.email') }}</div>
-          <input v-validation class="l-input__item" tabindex="1" type="email" name="email" v-model.trim="form.email"  autocomplete="username">
-        </div>
+      <form-block :label="$t('auth.field.email')">
+        <text-field tabindex="1" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
 
       <form-block>

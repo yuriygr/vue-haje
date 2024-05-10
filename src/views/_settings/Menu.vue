@@ -2,7 +2,7 @@
   <div class="navigation">
     <template v-for="(section, index) in sections" :key="`section-${index}`">
       <navigation-section>
-        <navigation-title v-if="!section.label">{{ section.label }}</navigation-title>
+        <navigation-title v-if="section.label && false">{{ section.label }}</navigation-title>
         <template v-for="(item, jndex) in section.items" :key="`section-${index}-item-${jndex}`">
           <navigation-item :icon="item.icon" :to="item.to" :disabled="item.disabled">
             {{ item.label }}
@@ -14,12 +14,13 @@
 </template>
 
 <script>
-import { NavigationSection, NavigationItem } from '@vue-norma/ui'
+import { mapGetters } from 'vuex'
+import { NavigationSection, NavigationItem, NavigationTitle } from '@vue-norma/ui'
 
 export default {
   name: 'settngs-menu',
   components: {
-    NavigationSection, NavigationItem
+    NavigationSection, NavigationItem, NavigationTitle
   },
   meta() { return this.meta },
   data() {
@@ -30,29 +31,37 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('auth', [ 'isAuth' ]),
     sections() {
       let base = [
         {
           icon: 'user-edit-line',
           label: this.$t('settings.item.profile'),
-          to: { name: 'settings-profile' }
+          to: { name: 'settings-profile' },
+          disabled: !this.isAuth
+        },
+       {
+          icon: 'feeds-line',
+          label: this.$t('settings.item.feed'),
+          to: { name: 'settings-feed' },
+          disabled: !this.isAuth || true
         },
         {
           icon: 'bell-line',
           label: this.$t('settings.item.notifications'),
-          to: { name: 'settings-notifications' }
+          to: { name: 'settings-notifications' },
+          disabled: !this.isAuth
         },
         {
           icon: 'link-line',
           label: this.$t('settings.item.connections'),
           to: { name: 'settings-connections' },
-          disabled: true
+          disabled: !this.isAuth || true
         },
         {
           icon: 'palette-line',
           label: this.$t('settings.item.appearance'),
-          to: { name: 'settings-appearance' },
-          disabled: true
+          to: { name: 'settings-appearance' }
         }
       ]
 
@@ -61,17 +70,19 @@ export default {
           icon: 'user-lock-line',
           label: this.$t('settings.item.account'),
           to: { name: 'settings-account' },
-          disabled: true
+          disabled: !this.isAuth
         },
         {
           icon: 'password-line',
           label: this.$t('settings.item.password'),
-          to: { name: 'settings-password' }
+          to: { name: 'settings-password' },
+          disabled: !this.isAuth
         },
         {
           icon: 'history-line',
-          label: this.$t('settings.item.login_activity'),
-          to: { name: 'settings-login-activity' }
+          label: this.$t('settings.item.login-activity'),
+          to: { name: 'settings-login-activity' },
+          disabled: !this.isAuth
         }
       ]
 
@@ -79,12 +90,14 @@ export default {
         {
           icon: 'gdpr-line',
           label: this.$t('settings.item.gdpr'),
-          to: { name: 'settings-gdpr' }
+          to: { name: 'settings-gdpr' },
+          disabled: !this.isAuth || true
         },
         {
           icon: 'delete-bin-line',
-          label: this.$t('settings.item.delete_account'),
-          to: { name: 'settings-delete-account' }
+          label: this.$t('settings.item.delete-account'),
+          to: { name: 'settings-delete-account' },
+          disabled: !this.isAuth
         }
       ]
 

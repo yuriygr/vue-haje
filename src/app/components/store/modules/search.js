@@ -5,7 +5,9 @@ let all = {
       data: {
         users: [],
         entries: [],
-        tags: []
+        comments: [],
+        tags: [],
+        communities: []
       },
 
       filters: {
@@ -25,7 +27,9 @@ let all = {
       state.data = {
         users: [],
         entries: [],
+        comments: [],
         tags: [],
+        communities: []
       }
     },
     // FILTEST
@@ -72,6 +76,11 @@ let all = {
   getters: {
     hasFilters() {
       return false
+    },
+    emptyData(state) {
+      return (
+        state.data.entries.length + state.data.users.length + state.data.comments.length + state.data.tags.length + state.data.communities.length
+      ) == 0
     },
     emptyQuery(state) {
       return state.filters.query === ''
@@ -358,9 +367,194 @@ let entries = {
   }
 }
 
+let comments = {
+  namespaced: true,
+  state() {
+    return {
+      data: [],
+      total_items: 0,
+
+      filters: {
+        query: ''
+      },
+
+      loading: false,
+      error: false
+    }
+  },
+  mutations: {
+    // DATA
+    'SET_DATA'(state, payload) {
+      state.data = payload
+    },
+    'ADD_DATA'(state, payload) {
+      state.data = [...state.data, ...payload]
+    },
+    'SET_TOTAL_ITEMS'(state, payload) {
+      state.total_items = payload
+    },
+    'CLEAR_DATA'(state) {
+      state.data = []
+    },
+    // FILTEST
+    'SET_FILTERS'(state, payload) {
+      state.filters = payload
+    },
+    'CLEAR_FILTERS'(state) {
+      state.filters = {}
+    },
+    // OTHER
+    'SET_LOADING'(state, payload) {
+      state.loading = payload
+    },
+    'SET_ERROR'(state, payload) {
+      state.error = payload
+    }
+  },
+  actions: {
+    fetch({ state, commit }, initial = true) {
+      commit('SET_LOADING', true)
+      commit('SET_ERROR', false)
+
+      this.$api.get('search/comments', state.filters)
+      .then(result => {
+        commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
+        commit('SET_TOTAL_ITEMS', result.total_items)
+      })
+      .catch(error => {
+        commit('SET_ERROR', error)
+      })
+      .then(_ => commit('SET_LOADING', false))
+    },
+    async more({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
+      dispatch('fetch', false)
+    },
+    clear({ commit }) {
+      commit('CLEAR_DATA')
+      commit('CLEAR_FILTERS')
+      commit('SET_TOTAL_ITEMS', 0)
+    },
+    // Filters
+    setFilters({ state, commit }, payload) {
+      commit('SET_FILTERS', { ...state.filters, ...payload })
+    },
+    clearFilters({ commit }) {
+      commit('CLEAR_FILTERS')
+    }
+  },
+  getters: {
+    hasFilters() {
+      return true
+    },
+    hasMoreItems(state) {
+      return state.data.length < state.total_items
+    },
+    emptyQuery(state) {
+      return state.filters.query === ''
+    },
+    searching(state) {
+      return state.filters.query != ''
+    }
+  }
+}
+
+let communities = {
+  namespaced: true,
+  state() {
+    return {
+      data: [],
+      total_items: 0,
+
+      filters: {
+        query: ''
+      },
+
+      loading: false,
+      error: false
+    }
+  },
+  mutations: {
+    // DATA
+    'SET_DATA'(state, payload) {
+      state.data = payload
+    },
+    'ADD_DATA'(state, payload) {
+      state.data = [...state.data, ...payload]
+    },
+    'SET_TOTAL_ITEMS'(state, payload) {
+      state.total_items = payload
+    },
+    'CLEAR_DATA'(state) {
+      state.data = []
+    },
+    // FILTEST
+    'SET_FILTERS'(state, payload) {
+      state.filters = payload
+    },
+    'CLEAR_FILTERS'(state) {
+      state.filters = {}
+    },
+    // OTHER
+    'SET_LOADING'(state, payload) {
+      state.loading = payload
+    },
+    'SET_ERROR'(state, payload) {
+      state.error = payload
+    }
+  },
+  actions: {
+    fetch({ state, commit }, initial = true) {
+      commit('SET_LOADING', true)
+      commit('SET_ERROR', false)
+
+      this.$api.get('search/communities', state.filters)
+      .then(result => {
+        commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
+        commit('SET_TOTAL_ITEMS', result.total_items)
+      })
+      .catch(error => {
+        commit('SET_ERROR', error)
+      })
+      .then(_ => commit('SET_LOADING', false))
+    },
+    async more({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
+      dispatch('fetch', false)
+    },
+    clear({ commit }) {
+      commit('CLEAR_DATA')
+      commit('CLEAR_FILTERS')
+      commit('SET_TOTAL_ITEMS', 0)
+    },
+    // Filters
+    setFilters({ state, commit }, payload) {
+      commit('SET_FILTERS', { ...state.filters, ...payload })
+    },
+    clearFilters({ commit }) {
+      commit('CLEAR_FILTERS')
+    }
+  },
+  getters: {
+    hasFilters() {
+      return true
+    },
+    hasMoreItems(state) {
+      return state.data.length < state.total_items
+    },
+    emptyQuery(state) {
+      return state.filters.query === ''
+    },
+    searching(state) {
+      return state.filters.query != ''
+    }
+  }
+}
+
+
 export default {
   namespaced: true,
-  modules: { all, users, tags, entries },
+  modules: { all, users, tags, entries, comments, communities },
   state() {
     return { }
   },

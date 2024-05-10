@@ -25,8 +25,6 @@
     --x-motion-timing--#{$name}: #{$timing};
   }
 
-  --x-transition: #{$x-transition};
-
   @each $name, $size in $x-border-radius {
     --x-border-radius--#{$name}: #{$size};
   }
@@ -34,4 +32,19 @@
   @each $name, $color in $x-brands-color {
     --x-brands-color--#{$name}: #{$color};
   }
+
+  --x-transition: #{$x-transition};
+}
+
+:root {
+  --tabbar--height: 49px;
+
+  --large-screen-max-width: 620px;
+  --wide-large-screen-max-width: 1720px;
+
+  --mobile-page-vertical-padding: 12px;
+  --mobile-page-horizontal-padding: 12px;
+
+  --desktop-page-vertical-padding: 2rem;
+  --desktop-page-horizontal-padding: 24px;
 }

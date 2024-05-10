@@ -1,13 +1,13 @@
 {
   "name": "vue-haje",
-  "version": "1.5.7",
+  "version": "1.6.10",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode local",
     "build": "vue-cli-service build --mode prod"
   },
   "dependencies": {
-    "@vue-norma/ui": "^2.2.20",
+    "@vue-norma/ui": "^2.3.6",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "localforage": "^1.10.0",

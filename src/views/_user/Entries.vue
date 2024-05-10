@@ -1,7 +1,7 @@
 <template>
   <entries-list v-if="(!loading && !error) || data.length > 0">
     <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
-      <entry-item :data="item" type="short" showPinAction="true" />
+      <entry-item :data="item" type="short" :showPinAction="true" />
     </entry-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />

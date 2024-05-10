@@ -11,18 +11,12 @@
         {{ error.message }}
       </form-status>
 
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.email') }}</div>
-          <input class="l-input__item" tabindex="1" type="email" name="email" v-model.trim="form.email" autocomplete="email">
-        </div>
+      <form-block :label="$t('auth.field.email')">
+        <text-field tabindex="1" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
 
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('auth.field.password') }}</div>
-          <input class="l-input__item" tabindex="2" type="password" name="password" v-model.trim="form.password" autocomplete="current-password">
-        </div>
+      <form-block :label="$t('auth.field.password')">
+        <text-field tabindex="2" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>

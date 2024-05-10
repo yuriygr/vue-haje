@@ -57,8 +57,6 @@ $x-border-radius: (
 
 // Shadows
 $x-box-shadows: (
-  // Modal
-  'modal': '0 10.5px 21px rgba(0,0,0,.08)',
   // Cards, Grid item thumbnails
   'depth-4': '0 1.6px 3.6px 0 rgba(0,0,0,.09), 0 0.3px 0.9px 0 rgba(10,10,10,.11)',
   // Command bars, Command dropdowns, Context menus
@@ -68,7 +66,13 @@ $x-box-shadows: (
   // Login form
   'depth-32': '0 12.8px 28.8px 0 rgba(0,0,0,.09), 0 2.4px 7.2px 0 rgba(10,10,10,.11)',
   // Panels, Pop up dialogs
-  'depth-64': '0 25.6px 57.6px 0 rgba(0,0,0,.22), 0 4.8px 14.4px 0 rgba(0,0,0,.18)'
+  'depth-64': '0 25.6px 57.6px 0 rgba(0,0,0,.22), 0 4.8px 14.4px 0 rgba(0,0,0,.18)',
+  // Нагло украл у ВК
+  'elevation-1': '0px 0px 2px rgba(0, 0, 0, 0.03), 0px 2px 2px rgba(0, 0, 0, 0.06)',
+  'elevation-1_invert_y': '0px 0px 2px rgba(0, 0, 0, 0.03), 0px -2px 2px rgba(0, 0, 0, 0.06)',
+  'elevation-2': '0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 4px rgba(0, 0, 0, 0.06)',
+  'elevation-3': '0px 0px 2px rgba(0, 0, 0, 0.08), 0px 4px 16px rgba(0, 0, 0, 0.08)',
+  'elevation-4': '0px 0px 8px rgba(0, 0, 0, 0.12), 0px 16px 16px rgba(0, 0, 0, 0.16)'
 );
 
 // Motion timing

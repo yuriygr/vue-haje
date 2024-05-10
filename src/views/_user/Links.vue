@@ -1,7 +1,11 @@
 <template>
   <links-list v-if="(!loading && !error) || data.length > 0">
     <link-item-wrapper v-for="item in data" :key="`link-item-${item.code}`">
-      <link-item :data="item" />
+      <link-item :data="{
+        url: item.url,
+        label: $t(`brands.${item.code}.label`),
+        icon: $t(`brands.${item.code}.icon`)
+      }" />
     </link-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />

@@ -1,11 +1,11 @@
 <template>
   <a class="external-link" :href="data.url" target="_blank">
     <div class="external-link__icon">
-      <icon :name="$t(`brands.${data.code}.icon`)" size="24" />
+      <icon :name="data.icon" size="20" />
     </div>
     <div class="external-link__content">
       <div class="external-link__label">
-        {{ $t(`brands.${data.code}.label`) }}
+        {{ data.label }}
       </div>
       <div class="external-link__url">
         {{ data.url }}
@@ -15,23 +15,15 @@
 </template>
 
 <script>
-import { Icon, IconButton } from '@vue-norma/ui'
+import { Icon } from '@vue-norma/ui'
 
 export default {
   name: 'external-link-item',
   components: {
-    Icon, IconButton
+    Icon
   },
   props: {
-    data: false,
-    clickable: {
-      type: Boolean,
-      default: true
-    },
-    showSubscribeAction: {
-      type: Boolean,
-      default: true
-    }
+    data: false
   },
   data() {
     return {
@@ -47,11 +39,11 @@ export default {
 
 <style lang="scss">
 .external-link {
-  --external-link__icon--background: #f7f7f7;
-  --external-link__icon--color: #111;
+  --external-link__icon--background: #f1f3f5;
+  --external-link__icon--color: #212529;
   
-  --external-link__label--color: #111;
-  --external-link__url--color: #999;
+  --external-link__label--color: #212529;
+  --external-link__url--color: #495057;
 
   html[data-theme='black'] & {
     --external-link__icon--background: #1f1f1f;
@@ -75,8 +67,8 @@ export default {
   &__icon {
     background: var(--external-link__icon--background);
     color: var(--external-link__icon--color);
-    margin-right: 12px;
-    padding: 10px;
+    margin-right: 9px;
+    padding: 9px;
     border-radius: 8px;
 
     svg { display: block; fill: currentColor; }
@@ -90,8 +82,8 @@ export default {
 
   &__label {
     color: var(--external-link__label--color);
-    font-size: 1.5rem;
-    font-weight: var(--x-font-weight--normal);
+    font-size: 1.4rem;
+    font-weight: 500;
     line-height: calc(1.4 * 1em);
   }
 
@@ -101,7 +93,6 @@ export default {
     font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
   }
-
 
   @media(hover: hover) {
     &:hover {

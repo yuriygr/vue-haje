@@ -7,18 +7,16 @@
         {{ $t('settings.password.help') }}
       </form-text>
 
-      <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('settings.field.current_password') }}</div>
-          <input class="l-input__item" tabindex="1" type="password" name="current_password" v-model.trim="form.current_password" autocomplete="current-password">
-        </div>
+      <form-block :label="$t('settings.field.current_password')">
+        <text-field tabindex="1" type="password" name="current_password" v-model.trim="form.current_password" :disabled="loading" autocomplete="current-password" />
+      </form-block>
+
+      <form-block :label="$t('settings.field.new_password')">
+        <text-field tabindex="2" type="password" name="new_password" v-model.trim="form.new_password" :disabled="loading" autocomplete="new-password" />
       </form-block>
 
       <form-block>
-        <div class="l-input">
-          <div class="l-input__title">{{ $t('settings.field.new_password') }}</div>
-          <input class="l-input__item" tabindex="2" type="password" name="new_password" v-model.trim="form.new_password" autocomplete="new-password">
-        </div>
+        <n-checkbox :label="$t('settings.password.apply')" v-model="form.apply"  />
       </form-block>
 
       <form-block>
@@ -42,16 +40,35 @@ export default {
       meta: {
         title: this.$t('settings.password.title')
       },
-      loading: false,
+
       form: {
         current_password: '',
-        new_password: ''
-      }
+        new_password: '',
+        apply: true
+      },
+
+      loading: false
+    }
+  },
+  computed: {
+    canSubmit() {
+      return (this.form.current_password != '') && (this.form.new_password != '')
     }
   },
   methods: {
+    validate() {
+
+    },
     submit() {
-      alert('@TODO')
+      this.loading = true
+      return this.$api.post('my/settings/password', this.form)
+      .then(result => {
+        this.$alerts.success({ text: result.status })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+      .then(_ => this.loading = false)
     }
   }
 }

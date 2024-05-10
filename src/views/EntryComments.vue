@@ -4,8 +4,10 @@
 
     <div class="comments-tree" v-if="(!loading && !error) || data.length > 0">
       <template v-for="item in tree" :key="`comment-${item.comment_id}`">
-        <comment-item :data="item" :index="1" />
+        <comment-item :data="item" :entryAuthorID="entry.user.user_id" />
       </template>
+
+      <n-button mode="tertiary" @click.exact="loadMore" size="m" :stretched="true" :disabled="loading">{{ $t('action.refresh') }}</n-button>
     </div>
 
     <template v-if="data.length == 0">
@@ -45,16 +47,22 @@ export default {
   methods: {
     onSuccessAddingComment(result) {
       this.entry.counters.comments += 1
-      console.log(result)
+      this.$store.dispatch('entry/comments/add', result.payload)
       this.$alerts.success({ text: result.status })
+      this.$nextTick(_ => {
+        document.getElementById(`comment-${result.payload.comment_id}`).scrollIntoView();
+      })
     },
     onErrorAddingComment(error) {
       console.log(error)
       this.$alerts.danger({ text: error.status })
     },
+    loadMore() {
+      this.$store.dispatch('entry/comments/more')
+    },
   },
   mounted() {
-    this.$store.dispatch('entry/comments/fetch', this.entry.uuid)
+    this.$store.dispatch('entry/comments/fetch')
   },
   unmounted() {
     this.$store.dispatch('entry/comments/clear')
