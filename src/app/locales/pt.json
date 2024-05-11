@@ -27,7 +27,7 @@
     "tabs": {
       "timeline": "Meu feed",
       "popular": "Popular",
-      "abyss": "Abismo"
+      "abyss": "O abismo"
     },
     "errors": {
       "entries_empty": "Nenhuma postagem ainda"
@@ -56,11 +56,11 @@
     },
     "action": {
       "settings": "Configurações",
-      "menu": "Cardápio",
+      "menu": "Menu",
       "logout": "Sair",
       "options": "Mais",
       "subscribe": "Se inscrever",
-      "unsubscribe": "Cancelar subscrição",
+      "unsubscribe": "Cancelar inscrição",
       "copy_link": "Link de cópia",
       "report": "Reclamação",
       "notify_new_posts": "Notificar sobre novas postagens",
@@ -72,9 +72,9 @@
   "tag": {
     "title": "Тег",
     "meta": {
-      "official": "Официальный",
+      "official": "Oficial",
       "nsfw": "NFSW",
-      "from_date": "Появился {date}"
+      "from_date": "Apareceu {date}"
     }
   },
   "search": {
@@ -98,38 +98,38 @@
     }
   },
   "notifications": {
-    "title": "Уведомления",
+    "title": "Notificações",
     "action": {
-      "read_all": "Отметить все как прочитанное",
-      "settings": "Настроить уведомления",
-      "options": "Еще",
-      "hide": "Скрыть",
-      "dont": "Не уведомлять"
+      "read_all": "Marque tudo como lido",
+      "settings": "Configurar notificações",
+      "options": "Mais",
+      "hide": "Esconder",
+      "dont": "Não notificar"
     },
     "tabs": {
-      "all": "Все",
-      "subscriptions": "Подписки",
-      "replies": "Ответы",
-      "mentions": "Упоминания",
-      "new_post": "Новые посты",
-      "system": "Системные"
+      "all": "Todo",
+      "subscriptions": "Inscrição",
+      "replies": "Respostas",
+      "mentions": "Mencionar",
+      "new_post": "Novas postagens",
+      "system": "Sistema"
     },
     "user": {
-      "subscriptions": "{0} подписалось на вас",
-      "new_post": "{0} опубликовало новый пост",
-      "replies": "{0} ответило на вашу запись",
-      "mentions": "{0} упомянуло вас"
+      "subscriptions": "{0} se inscreveu em voçê",
+      "new_post": "{0} publicou um novo post",
+      "replies": "{0} respondeu ao seu post",
+      "mentions": "{0} mencionou você"
     },
     "system": {
-      "reports": "Получена жалоба на вас",
-      "login": "Произведен вход"
+      "reports": "Foi recebida uma queixa contra voçê",
+      "login": "Conectado"
     },
     "support": {
-      "replies": "Поступил ответ на ваше обращение"
+      "replies": "Foi recebida uma resposta ao seu pedido"
     }
   },
   "menu": {
-    "title": "Cardápio",
+    "title": "Menu",
     "item": {
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
@@ -137,7 +137,7 @@
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "Entrar",
-      "logout": "Saída"
+      "logout": "Sair"
     }
   },
   "bookmarks": {
@@ -155,9 +155,9 @@
   "settings": {
     "title": "Configurações",
     "section": {
-      "base": "Основные",
-      "secure": "Безопасность",
-      "danger": "Опасная зона"
+      "base": "Principal",
+      "secure": "Segurança",
+      "danger": "Zona de perigo"
     },
     "item": {
       "profile": "@:settings.profile.title",
@@ -193,15 +193,15 @@
     },
     "notifications": {
       "title": "Configurando notificações",
-      "events": "События",
-      "feedback": "Обратная связь",
-      "others": "Другое",
+      "events": "Eventos",
+      "feedback": "Feedback",
+      "others": "Outro",
       "field": {
-        "subscriptions": "Подписчики",
-        "replies": "Ответы",
-        "mentions": "Упоминания",
-        "new_post": "Новые посты",
-        "badges": "Значки"
+        "subscriptions": "Assinantes",
+        "replies": "Respostas",
+        "mentions": "Mencionar",
+        "new_post": "Novos Posts",
+        "badges": "Ícones"
       }
     },
     "password": {
@@ -245,8 +245,8 @@
   "help": {
     "title": "Ajuda",
     "section": {
-      "base": "Основные",
-      "my": "Мое"
+      "base": "Principal",
+      "my": "Meu"
     },
     "item": {
       "all-questions": "Base de conhecimento",
@@ -278,9 +278,9 @@
       "placeholder": "Escreva algo..."
     },
     "errors": {
-      "empty": "Пусто",
-      "comments_disabled": "Комментарии отключены",
-      "empty_entry_history": "История изменений пуста"
+      "empty": "Vazio",
+      "comments_disabled": "Comentários desativados",
+      "empty_entry_history": "O log de alterações está vazio"
     },
     "action": {
       "copy_link": "Link de cópia",
@@ -318,49 +318,49 @@
   },
   "auth": {
     "login": {
-      "title": "Вход",
-      "create_account": "У вас ещё нет аккаунта? {0}"
+      "title": "Entrada",
+      "create_account": "Ainda não tem uma conta? {0}"
     },
     "forgot": {
-      "title": "Восстановление пароля",
-      "suggest": "Мы отправим ссылку и код для восстановления пароля на вашу почту",
-      "contact_us": "Свяжитесь с нами",
-      "help": "{0}, если Вы не помните свою электронную почту или не имеете доступа к ней",
-      "remember": "Вспомнили пароль?"
+      "title": "Recuperação de senha",
+      "suggest": "Enviaremos um link e um código de recuperação de senha para seu e-mail",
+      "contact_us": "Fale Conosco",
+      "help": "{0}, se você não se lembra ou não tem acesso ao seu e-mail",
+      "remember": "Lembra da sua senha?"
     },
     "create_account": {
-      "title": "Создать аккаунт",
-      "already": "Уже зарегистрированы?",
-      "agreement": "Нажимая «Продолжить», вы принимаете {0} и {1}",
-      "terms": "пользовательское соглашение",
-      "privacy": "политику конфиденциальности"
+      "title": "Criar uma conta",
+      "already": "Já é cadastrado?",
+      "agreement": "Ao clicar em «Continuar», você aceita {0} e {1}",
+      "terms": "Contrato do usuário",
+      "privacy": "Política de privacidade"
     },
     "reset-password": {
-      "title": "Изменение пароля",
-      "suggest": "Пароль должен быть не короче 6 символов и не являться вашим днем рождения",
-      "contact_us": "Свяжитесь с нами",
-      "help": "{0}, если не приходит код или у вас что-то не получается",
-      "remember": "Вспомнили пароль?"
+      "title": "Alterando sua senha",
+      "suggest": "Sua senha deve ter pelo menos 6 caracteres e não seu aniversário",
+      "contact_us": "Fale Conosco",
+      "help": "{0}, se o código não chegar ou algo não der certo para você",
+      "remember": "Lembra da sua senha?"
     },
     "button": {
-      "login": "Войти",
-      "continue": "Продолжить"
+      "login": "Iniciar sessão",
+      "continue": "Continuar"
     },
     "field": {
-      "name": "Имя",
-      "username": "Логин",
+      "name": "Nome",
+      "username": "Login",
       "email": "E-mail",
-      "password": "Пароль"
+      "password": "Senha"
     }
   },
   "badge": {
     "type": {
-      "common": "Обычный",
-      "rare": "Редкий",
-      "epic": "Эпический",
-      "legendary": "Легендарный"
+      "common": "Comum",
+      "rare": "Raro",
+      "epic": "Épico",
+      "legendary": "Lendário"
     },
-    "date": "Получен {date}"
+    "date": "Recebido {date}"
   },
   "errors": {
     "todo": {
@@ -416,7 +416,7 @@
     "entry_hidden": {
       "icon": "user-unfollow-line",
       "title": "Postagem oculta",
-      "description": "Sim, e isso acontece em nossa morada de liberdade de expressão."
+      "description": "Sim, e isso acontece em nossa casa de liberdade de expressão."
     },
     "bad_request": {
       "icon": "user-line",
@@ -426,17 +426,17 @@
     "network_error": {
       "icon": "cloud-off-line",
       "title": "Erro de conexão",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer conversar"
+      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
     },
     "invalid_connection": {
       "icon": "cloud-off-line",
       "title": "Conexão incorreta",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer conversar"
+      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
     },
     "timeout_exceeded" : {
       "icon": "cloud-off-line",
       "title": "O servidor não respondeu por muito tempo",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer conversar"
+      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
     },
     "empty_feed": {
       "icon": "timeline-line",
@@ -477,7 +477,7 @@
   },
   "brands": {
     "grustnogram": {
-      "label": "Грустнограм",
+      "label": "Grustnogram",
       "icon": "grustnogram-line"
     },
     "lichess": {
@@ -489,7 +489,7 @@
       "icon": "github-fill"
     },
     "telegram": {
-      "label": "Телеграм",
+      "label": "Telegram",
       "icon": "telegram-fill"
     },
     "donationalerts": {
@@ -497,7 +497,7 @@
       "icon": "donationalerts-fill"
     },
     "vk": {
-      "label": "Вконтакте",
+      "label": "Vkontakte",
       "icon": "vk-fill"
     }
   },
