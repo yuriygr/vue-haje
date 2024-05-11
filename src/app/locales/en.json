@@ -1,73 +1,73 @@
 {
   "app": {
     "title": "Futubra",
-    "description": "Rede social para pessoas não sociais",
-    "version": "Versão {version}",
+    "description": "Social networking for non-social people",
+    "version": "Version {version}",
     "locale": {
-      "pt": "Português",
-      "En": "Inglês",
-      "ru": "Russo"
+      "pt": "Portuguese",
+      "en": "English",
+      "ru": "Russian"
     },
     "theme": {
-      "white": "Tema claro",
-      "black": "Tema escuro"
+      "white": "White theme",
+      "black": "Black theme"
     }
   },
   "header": {
     "nav": {
-      "home": "Pagina inicial",
+      "home": "Start page",
       "search": "@:search.title",
-      "compose": "Escrever",
+      "compose": "Write",
       "notifications": "@:notifications.title",
       "profile": "@:user.title",
-      "auth": "Autorização"
+      "auth": "Authorization"
     }
   },
   "feed": {
-    "title": "Notícias",
+    "title": "News",
     "tabs": {
-      "timeline": "Meu feed",
+      "timeline": "My feed",
       "popular": "Popular",
-      "abyss": "O abismo"
+      "abyss": "The abyss"
     },
     "errors": {
-      "entries_empty": "Nenhuma postagem ainda"
+      "entries_empty": "No post yet"
     }
   },
   "user": {
-    "title": "Perfil",
+    "title": "Profile",
     "tabs": {
-      "entries": "Nenhumas entradas | {n} entrada | {n} entradas | {n} entradas",
-      "subscribers": "Nenhum assinante | {n} assinante | {n} assinantes | {n} assinantes",
-      "subscriptions": "Sem assinaturas | {n} assinatura | {n} assinaturas | {n} assinaturas",
-      "tags": "Sem hashtags | {n} hashtag | {n} hashtag | {n} hashtags"
+      "entries": "No entries | {n} entry | {n} entries | {n} entries",
+      "subscribers": "No subscriber | {n} subscriber | {n} subscribers | {n} subscribers",
+      "subscriptions": "No subscriptions | {n} subscription | {n} subscriptions | {n} subscriptions",
+      "tags": "No hashtags | {n} hashtag | {n} hashtag | {n} hashtags"
     },
     "meta": {
-      "from_date": "Em um projeto com {date}",
-      "badges": "Sem ícones | {n} ícone | {n} ícone | {n} ícones",
-      "links": "Sem links | {n} link | {n} links | {n} links"
+      "from_date": "In a project with {date}",
+      "badges": "No icons | {n} icon | {n} icon | {n} icons",
+      "links": "No links | {n} link | {n} links | {n} links"
     },
     "errors": {
-      "entries_empty": "Nenhum entrada ainda",
-      "subscribers_empty": "Ainda não há inscritos",
-      "subscriptions_empty": "Ainda não há assinaturas",
-      "badges_empty": "Ainda não há ícones",
-      "tags_empty": "Ainda não há hashtags",
-      "links_empty": "Ainda não há links"
+      "entries_empty": "No entry yet",
+      "subscribers_empty": "No subscribers yet",
+      "subscriptions_empty": "No subscriptions yet",
+      "badges_empty": "No icons yet",
+      "tags_empty": "No hashtags yet",
+      "links_empty": "No links yet"
     },
     "action": {
-      "settings": "Configurações",
+      "settings": "Settings",
       "menu": "Menu",
-      "logout": "Sair",
-      "options": "Mais",
-      "subscribe": "Se inscrever",
-      "unsubscribe": "Cancelar inscrição",
-      "copy_link": "Link de cópia",
-      "report": "Reportar",
-      "notify_new_posts": "Notificar sobre novas postagens",
-      "dont_notify_new_posts": "Não notificar sobre novas postagens",
-      "remove-bookmark": "Remover dos favoritos",
-      "add-bookmark": "Adicionar aos favoritos"
+      "logout": "Logout",
+      "options": "More",
+      "subscribe": "Subscribe",
+      "unsubscribe": "Unsubscribe",
+      "copy_link": "Copy link",
+      "report": "Report",
+      "notify_new_posts": "Notify about new posts",
+      "dont_notify_new_posts": "Do not notifying about new posts",
+      "remove-bookmark": "Remove from favorites",
+      "add-bookmark": "Add to wishlist"
     }
   },
   "tag": {
@@ -75,20 +75,20 @@
     "meta": {
       "official": "Oficial",
       "nsfw": "NFSW",
-      "from_date": "Publicado {date}"
+      "from_date": "Spawned {date}"
     }
   },
   "search": {
-    "title": "Procurar",
+    "title": "Search",
     "search-field": {
-      "placeholder": "Procurar"
+      "placeholder": "Search"
     },
-    "filter": "Filtro",
+    "filter": "Filter",
     "tabs": {
-      "all": "Em todos os lugares",
-      "users": "Usuários",
-      "entries": "Postagens",
-      "comments": "Comentários",
+      "all": "Everywhere",
+      "users": "Users",
+      "entries": "Posts",
+      "comments": "Comments",
       "tags": "Tag"
     },
     "section": {
@@ -99,34 +99,34 @@
     }
   },
   "notifications": {
-    "title": "Notificações",
+    "title": "Notifications",
     "action": {
-      "read_all": "Marque tudo como lido",
-      "settings": "Configurar notificações",
-      "options": "Mais",
-      "hide": "Esconder",
-      "dont": "Não notificar"
+      "read_all": "Mark everything as read",
+      "settings": "Set up notifications",
+      "options": "More",
+      "hide": "Hide",
+      "dont": "Do not Notify"
     },
     "tabs": {
-      "all": "Todo",
-      "subscriptions": "Inscrição",
-      "replies": "Respostas",
-      "mentions": "Mencionar",
-      "new_post": "Novas postagens",
-      "system": "Sistema"
+      "all": "All",
+      "subscriptions": "Subscription",
+      "replies": "Replies",
+      "mentions": "Mention",
+      "new_post": "New posts",
+      "system": "System"
     },
     "user": {
-      "subscriptions": "{0} se inscreveu em voçê",
-      "new_post": "{0} publicou um novo post",
-      "replies": "{0} respondeu ao seu post",
-      "mentions": "{0} mencionou você"
+      "subscriptions": "{0} subscribed to you",
+      "new_post": "{0} published a new post",
+      "replies": "{0} replied to your post",
+      "mentions": "{0} mentioned you"
     },
     "system": {
-      "reports": "Foi recebida uma denúncia contra voçê",
-      "login": "Conectado"
+      "reports": "A report has been received against you",
+      "login": "Connected"
     },
     "support": {
-      "replies": "Foi recebida uma resposta ao seu pedido"
+      "replies": "A response to your request has been received"
     }
   },
   "menu": {
@@ -137,16 +137,16 @@
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
-      "login": "Entrar",
-      "logout": "Sair"
+      "login": "Login",
+      "logout": "Logout"
     }
   },
   "bookmarks": {
-    "title": "Favoritos",
+    "title": "Bookmarks",
     "tabs": {
-      "all": "Todos",
-      "entries": "Postagens",
-      "users": "Usuários"
+      "all": "All",
+      "entries": "Posts",
+      "users": "Users"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
@@ -154,11 +154,11 @@
     }
   },
   "settings": {
-    "title": "Configurações",
+    "title": "Settings",
     "section": {
-      "base": "Principal",
-      "secure": "Segurança",
-      "danger": "Zona de perigo"
+      "base": "Main",
+      "secure": "Safety",
+      "danger": "Danger zone"
     },
     "item": {
       "profile": "@:settings.profile.title",
