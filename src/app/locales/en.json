@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Futubra",
-    "description": "Social networking for non-social people",
+    "description": "Social network for non-social people",
     "version": "Version {version}",
     "locale": {
       "pt": "Portuguese",
@@ -9,73 +9,73 @@
       "ru": "Russian"
     },
     "theme": {
-      "white": "White theme",
-      "black": "Black theme"
+      "white": "Light theme",
+      "black": "Dark theme"
     }
   },
   "header": {
     "nav": {
-      "home": "Start page",
+      "home": "Home",
       "search": "@:search.title",
-      "compose": "Write",
+      "compose": "Compose",
       "notifications": "@:notifications.title",
       "profile": "@:user.title",
       "auth": "Authorization"
     }
   },
   "feed": {
-    "title": "News",
+    "title": "Feed",
     "tabs": {
-      "timeline": "My feed",
+      "timeline": "Timeline",
       "popular": "Popular",
-      "abyss": "The abyss"
+      "abyss": "Abyss"
     },
     "errors": {
-      "entries_empty": "No post yet"
+      "entries_empty": "No posts yet"
     }
   },
   "user": {
     "title": "Profile",
     "tabs": {
-      "entries": "No entries | {n} entry | {n} entries | {n} entries",
-      "subscribers": "No subscriber | {n} subscriber | {n} subscribers | {n} subscribers",
-      "subscriptions": "No subscriptions | {n} subscription | {n} subscriptions | {n} subscriptions",
-      "tags": "No hashtags | {n} hashtag | {n} hashtag | {n} hashtags"
+      "entries": "No posts | {n} post | {n} posts",
+      "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
+      "subscriptions": "No subscriptions | {n} subscription | {n} subscriptions",
+      "tags": "No hashtags | {n} hashtag | {n} hashtags"
     },
     "meta": {
-      "from_date": "In a project with {date}",
-      "badges": "No icons | {n} icon | {n} icon | {n} icons",
-      "links": "No links | {n} link | {n} links | {n} links"
+      "from_date": "On a project with {date}",
+      "badges": "No badges | {n} badge | {n} badges",
+      "links": "No links | {n} link | {n} links"
     },
     "errors": {
-      "entries_empty": "No entry yet",
+      "entries_empty": "No posts yet",
       "subscribers_empty": "No subscribers yet",
       "subscriptions_empty": "No subscriptions yet",
-      "badges_empty": "No icons yet",
-      "tags_empty": "No hashtags yet",
+      "badges_empty": "There are no icons yet",
+      "tags_empty": "There are no hashtags yet",
       "links_empty": "No links yet"
     },
     "action": {
       "settings": "Settings",
       "menu": "Menu",
-      "logout": "Logout",
+      "logout": "Go out",
       "options": "More",
       "subscribe": "Subscribe",
       "unsubscribe": "Unsubscribe",
       "copy_link": "Copy link",
-      "report": "Report",
+      "report": "Complain",
       "notify_new_posts": "Notify about new posts",
-      "dont_notify_new_posts": "Do not notifying about new posts",
-      "remove-bookmark": "Remove from favorites",
-      "add-bookmark": "Add to wishlist"
+      "dont_notify_new_posts": "Don't notify about new posts",
+      "remove-bookmark": "Remove from bookmarks",
+      "add-bookmark": "Add to bookmarks"
     }
   },
   "tag": {
-    "title": "Тег",
+    "title": "Tag",
     "meta": {
-      "official": "Oficial",
+      "official": "Official",
       "nsfw": "NFSW",
-      "from_date": "Spawned {date}"
+      "from_date": "Appeared on {date}"
     }
   },
   "search": {
@@ -89,56 +89,66 @@
       "users": "Users",
       "entries": "Posts",
       "comments": "Comments",
-      "tags": "Tag"
+      "communities": "Communities",
+      "tags": "Tags"
     },
     "section": {
       "users": "@:search.tabs.users",
       "entries": "@:search.tabs.entries",
       "comments": "@:search.tabs.comments",
-      "tags": "@:search.tabs.tags"
+      "tags": "@:search.tabs.tags",
+      "communities": "@:search.tabs.communities"
     }
   },
   "notifications": {
     "title": "Notifications",
     "action": {
-      "read_all": "Mark everything as read",
+      "read_all": "Mark all as read",
       "settings": "Set up notifications",
       "options": "More",
       "hide": "Hide",
-      "dont": "Do not Notify"
+      "dont": "Do not notify"
     },
     "tabs": {
       "all": "All",
-      "subscriptions": "Subscription",
-      "replies": "Replies",
-      "mentions": "Mention",
+      "subscriptions": "Subscriptions",
+      "replies": "Answers",
+      "mentions": "Mentions",
       "new_post": "New posts",
       "system": "System"
     },
     "user": {
       "subscriptions": "{0} subscribed to you",
       "new_post": "{0} published a new post",
-      "replies": "{0} replied to your post",
+      "replies": "{0} responded to your post",
       "mentions": "{0} mentioned you"
     },
     "system": {
-      "reports": "A report has been received against you",
-      "login": "Connected"
+      "reports": "A complaint has been received against you",
+      "login": "Logged in"
     },
     "support": {
-      "replies": "A response to your request has been received"
+      "replies": "We have received a response to your request."
     }
   },
   "menu": {
     "title": "Menu",
     "item": {
+      "communities": "@:communities.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
-      "login": "Login",
-      "logout": "Logout"
+      "login": "To come in",
+      "logout": "Go out"
+    }
+  },
+  "communities": {
+    "title": "Communities",
+    "tabs": {
+      "subscribed": "All communities",
+      "manage": "Control"
     }
   },
   "bookmarks": {
@@ -146,19 +156,21 @@
     "tabs": {
       "all": "All",
       "entries": "Posts",
-      "users": "Users"
+      "users": "Users",
+      "communities": "Communities"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries"
+      "entries": "@:bookmarks.tabs.entries",
+      "communities": "@:bookmarks.tabs.communities"
     }
   },
   "settings": {
     "title": "Settings",
     "section": {
-      "base": "Main",
+      "base": "Basic",
       "secure": "Safety",
-      "danger": "Danger zone"
+      "danger": "Dangerous area"
     },
     "item": {
       "profile": "@:settings.profile.title",
@@ -173,312 +185,326 @@
       "delete-account": "@:settings.delete-account.title"
     },
     "action": {
-      "change_password": "Alterar a senha",
-      "delete_account": "Confirme",
-      "request_data": "Solicitar dados"
+      "change_password": "Change password",
+      "delete_account": "Confirm",
+      "request_data": "Request data"
     },
     "profile": {
-      "title": "Editar perfil",
-      "data": "Dados do perfil",
+      "title": "Edit profile",
+      "data": "Profile data",
       "tint": {
-        "title": "Sombra de perfil",
-        "help": "Como forma adicional de se expressar, você pode escolher entre vários tons. O que isso significa? Não sei!"
+        "title": "Profile shade",
+        "help": "As an additional way to express yourself, you can choose from several shades. "
       },
       "avatar": {
-        "title": "Avatar do perfil",
-        "help": "Você pode alterar seu avatar no serviço Gravatar"
+        "title": "Profile Avatar",
+        "help": "You can change your avatar in the Gravatar service"
       }
     },
     "feed": {
-      "title": "Configurando feeds de notícias"
+      "title": "Setting up news feeds"
     },
     "notifications": {
-      "title": "Configurando notificações",
-      "events": "Eventos",
+      "title": "Notifications setting",
+      "events": "Events",
       "feedback": "Feedback",
-      "others": "Outro",
+      "others": "Other",
       "field": {
-        "subscriptions": "Assinantes",
-        "replies": "Respostas",
-        "mentions": "Mencionar",
-        "new_post": "Novos Posts",
-        "badges": "Ícones"
+        "subscriptions": "Subscribers",
+        "replies": "Answers",
+        "mentions": "Mentions",
+        "new_post": "New posts",
+        "badges": "Badges"
       }
     },
     "password": {
-      "title": "Alterar a senha",
-      "help": "A senha deve ter pelo menos 6 caracteres e não ser sua data de nascimento",
-      "apply": "Garanto que não estou tentando roubar a conta de outra pessoa e mudo a senha por vontade própria e ninguém me ameaça"
+      "title": "Change password",
+      "help": "The password must be at least 6 characters and not be your birthday or pet name",
+      "apply": "I guarantee that I am not trying to steal someone else's account and I change the password of my own free will and no one threatens me"
     },
     "appearance": {
-      "title": "Aparência"
+      "title": "Appearance"
     },
     "connections": {
-      "title": "Contas ligadas"
+      "title": "Linked accounts"
     },
     "account": {
-      "title": "Configurações de Conta"
+      "title": "Account settings",
+      "verification": {
+        "title": "Account confirmation",
+        "help": "Verification is the process of confirming that a profile really belongs to a famous person"
+      }
     },
     "login-activity": {
-      "title": "Histórico de atividades"
+      "title": "Activity history"
     },
     "gdpr": {
       "title": "GDPR",
-      "help": "Tratamos seus dados com cuidado, não os repassamos a terceiros, não os utilizamos com intenção maliciosa e coletamos apenas o que é mais necessário."
+      "help": "We treat your data with care, do not pass it on to third parties, do not use it with malicious intent, and only collect what is absolutely necessary."
     },
     "delete-account": {
-      "title": "Exclusão de conta",
-      "help": "Para excluir sua conta, digite a senha da sua conta",
-      "apply": "Entendo que a recuperação de conta é impossível devido ao fato dos desenvolvedores serem extremamente preguiçosos"
+      "title": "Account deleting",
+      "help": "To delete your account, enter your account password",
+      "apply": "I understand that account recovery is impossible due to the fact that the developers are extremely lazy"
     },
     "field": {
-      "name": "Nome",
-      "bio": "Descrição",
-      "sex": "Sexo",
-      "current_password": "Senha atual",
-      "new_password": "Nova Senha",
-      "password": "Senha",
-      "username": "Conecte-se",
-      "locale": "Idioma da interface",
-      "theme": "Tema de interface"
+      "name": "Name",
+      "bio": "Description",
+      "sex": "Sex",
+      "current_password": "Current Password",
+      "new_password": "New Password",
+      "password": "Password",
+      "username": "Login",
+      "locale": "Interface language",
+      "theme": "Interface theme"
+    },
+    "sex": {
+      "male": "Male",
+      "female": "Female",
+      "none": "Combat helicopter \"Apache\""
     }
   },
   "help": {
-    "title": "Ajuda",
+    "title": "Help",
     "section": {
-      "base": "Principal",
-      "my": "Meu"
+      "base": "Basic",
+      "my": "My"
     },
     "item": {
-      "all-questions": "Base de conhecimento",
-      "my-questions": "Minhas perguntas",
-      "add-question": "Faça uma pergunta"
+      "all-questions": "Knowledge base",
+      "my-questions": "My questions",
+      "add-question": "Ask a Question"
     }
   },
   "donate": {
-    "title": "Apoiar"
+    "title": "Support"
   },
   "about": {
-    "title": "Sobre o aplicativo",
+    "title": "About the application",
     "item": {
-      "user-agreement": "Termos de uso",
-      "privacy": "política de Privacidade",
-      "legal": "informação legal",
-      "data-security": "Proteção de dados"
+      "user-agreement": "Terms of use",
+      "privacy": "Privacy Policy",
+      "legal": "legal information",
+      "data-security": "Data protection"
     },
-    "refresh": "Atualizar"
+    "refresh": "Update"
   },
   "entry": {
-    "title": "Entrada",
+    "title": "Record",
     "meta": {
-      "comments": "0 respostas | {n} resposta | {n} respostas | {n} respostas",
-      "edited": "editar",
-      "pinned": "pinned"
+      "comments": "0 replies | {n} reply | {n} replies",
+      "edited": "edit",
+      "pinned": "Pinned"
+    },
+    "history": {
+      "edit-content": "Contents changed"
     },
     "pseudo-form": {
-      "placeholder": "Escreva algo..."
+      "placeholder": "Write something...",
+      "comments-on": "Comments included",
+      "comments-off": "Comments are turned off"
     },
     "errors": {
-      "empty": "Vazio",
-      "comments_disabled": "Comentários desativados",
-      "empty_entry_history": "O log de alterações está vazio"
+      "empty": "Empty",
+      "comments_disabled": "Comments are disabled",
+      "empty_entry_history": "Change history is empty"
     },
     "action": {
-      "copy_link": "Link de cópia",
+      "copy_link": "Copy link",
       "subscribe": "@:user.action.subscribe",
       "unsubscribe": "@:user.action.unsubscribe",
-      "history": "Histórico de versões",
-      "report": "Reclamar",
-      "edit": "Editar",
-      "remove-bookmark": "Remover dos favoritos",
-      "add-bookmark": "Adicionar aos favoritos",
-      "pin": "Alfinete",
-      "unpin": "Liberar",
-      "delete": "Excluir"
+      "history": "Version history",
+      "report": "Complain",
+      "edit": "Edit",
+      "remove-bookmark": "Remove from bookmarks",
+      "add-bookmark": "Add to bookmarks",
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "delete": "Delete"
     }
   },
   "comment": {
     "meta": {
-      "author": "Autor",
-      "reply": "Responder",
-      "replies": "0 respostas | {n} resposta | {n} respostas | {n} respostas",
-      "edited": "editar"
+      "author": "Author",
+      "reply": "Reply",
+      "replies": "0 replies | {n} reply | {n} replies",
+      "edited": "edit"
     },
     "form": {
-      "placeholder": "Responda alguma coisa..."
+      "placeholder": "Answer something..."
     },
     "errors": {
-      "empty": "Пусто"
+      "empty": "Empty"
     },
     "action": {
-      "copy_link": "Link de cópia",
-      "report": "Reclamar",
-      "edit": "Editar",
-      "delete": "Excluir"
+      "copy_link": "Copy link",
+      "report": "Complain",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   },
   "auth": {
     "login": {
-      "title": "Entrada",
-      "create_account": "Ainda não tem uma conta? {0}"
+      "title": "Log in",
+      "create_account": "Don't have an account yet?"
     },
     "forgot": {
-      "title": "Recuperação de senha",
-      "suggest": "Enviaremos um link e um código de recuperação de senha para seu e-mail",
-      "contact_us": "Fale Conosco",
-      "help": "{0}, se você não se lembra ou não tem acesso ao seu e-mail",
-      "remember": "Lembra da sua senha?"
+      "title": "Password recovery",
+      "suggest": "We will send a link and password recovery code to your email.",
+      "contact_us": "Contact us",
+      "help": "{0} if you don't remember your email or don't have access to it",
+      "remember": "Remember your password?"
     },
     "create_account": {
-      "title": "Criar uma conta",
-      "already": "Já é cadastrado?",
-      "agreement": "Ao clicar em «Continuar», você aceita {0} e {1}",
-      "terms": "Contrato do usuário",
-      "privacy": "Política de privacidade"
+      "title": "Create an account",
+      "already": "Already registered?",
+      "agreement": "By clicking \"Continue\", you accept {0} and {1}",
+      "terms": "Terms of use",
+      "privacy": "privacy policy"
     },
     "reset-password": {
-      "title": "Alterando sua senha",
-      "suggest": "Sua senha deve ter pelo menos 6 caracteres e não seu aniversário",
-      "contact_us": "Fale Conosco",
-      "help": "{0}, se o código não chegar ou algo não der certo para você",
-      "remember": "Lembra da sua senha?"
+      "title": "Change password",
+      "suggest": "The password must be at least 6 characters and not be your birthday",
+      "contact_us": "Contact us",
+      "help": "{0} if you don’t receive the code or something doesn’t work for you",
+      "remember": "Remember your password?"
     },
     "button": {
-      "login": "Iniciar sessão",
-      "continue": "Continuar"
+      "login": "Log in",
+      "continue": "Continue"
     },
     "field": {
-      "name": "Nome",
+      "name": "Name",
       "username": "Login",
-      "email": "E-mail",
-      "password": "Senha"
+      "email": "Email",
+      "password": "Password"
     }
   },
   "badge": {
     "type": {
-      "common": "Comum",
-      "rare": "Raro",
-      "epic": "Épico",
-      "legendary": "Lendário"
+      "common": "Common",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary"
     },
-    "date": "Recebido {date}"
+    "date": "Received {date}"
   },
   "errors": {
     "todo": {
       "icon": "ghost-line",
-      "title": "Em desenvolvimento",
-      "description": "Este recurso ainda não está disponível e está em desenvolvimento"
+      "title": "Under development",
+      "description": "This feature is not yet available and is under development. "
     },
     "method_not_allowed": {
       "icon": "cloud-off-line",
-      "title": "Método não disponível",
-      "description": "Talvez os desenvolvedores tenham cometido um erro e não deveria ser assim"
+      "title": "Method not available",
+      "description": "Perhaps the developers made a mistake and it shouldn't be like this"
     },
     "unauthorized": {
       "icon": "spy-line",
-      "title": "Acesso negado",
-      "description": "Para visualizar o conteúdo você deve fazer login"
+      "title": "Access is denied",
+      "description": "To view the content you must log in"
     },
     "tag_not_found": {
       "icon": "ghost-line",
-      "title": "Etiqueta não encontrada",
-      "description": "Você pode ter pensado que tal tag existe"
+      "title": "Tag not found",
+      "description": "You may have thought that such a tag exists"
     },
     "user_not_found": {
       "icon": "user-unfollow-line",
-      "title": "O usuário não foi encontrado",
-      "description": "Tente pesquisar outros usuários existentes"
+      "title": "User is not found",
+      "description": "Try searching for other existing users"
     },
     "user_suspended": {
       "icon": "ghost-line",
-      "title": "Suspensão do usuário",
-      "description": "Não sei o que isso significa, mas ele fez algo interessante"
+      "title": "User suspendet",
+      "description": "I don’t know what this means, but he did something interesting"
     },
     "user_blocked": {
       "icon": "ghost-line",
-      "title": "O usuário está bloqueado",
-      "description": "Eu me comportei mal, isso mesmo. Você se comportará da mesma maneira e seguirá"
+      "title": "the user is blocked",
+      "description": "I behaved badly, that's right. "
     },
     "user_deleted": {
       "icon": "ghost-line",
-      "title": "Usuário excluído",
-      "description": "E de qualquer forma, onde existe tanta confiança de que ele existiu?"
+      "title": "User deleted",
+      "description": "And anyway, where is such confidence that he existed?"
     },
     "user_not_activated": {
       "icon": "ghost-line",
-      "title": "O usuário não está ativado",
-      "description": "Assim que ele confirmar seu e-mail, ele aparecerá aqui"
+      "title": "User is not activated",
+      "description": "As soon as he confirms his email, he will appear here"
     },
     "entry_not_found": {
       "icon": "user-unfollow-line",
-      "title": "Registro não encontrado",
-      "description": "Muito provavelmente, ela nunca esteve aqui. Mas quem sabe com certeza, a verdade?"
+      "title": "Record not found",
+      "description": "Most likely, she was never here. "
     },
     "entry_hidden": {
       "icon": "user-unfollow-line",
-      "title": "Postagem oculta",
-      "description": "Sim, e isso acontece em nossa casa de liberdade de expressão."
+      "title": "Post hidden",
+      "description": "Yes, and this happens in our abode of free speech."
     },
     "bad_request": {
       "icon": "user-line",
-      "title": "Pedido ruim",
-      "description": "Provavelmente você fez algo errado e o servidor não entendeu você"
+      "title": "Bad request",
+      "description": "Most likely, you did something wrong and the server did not understand you"
     },
     "network_error": {
       "icon": "cloud-off-line",
-      "title": "Erro de conexão",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+      "title": "Connection error",
+      "description": "Most likely, the server is unavailable or simply does not want to talk"
     },
     "invalid_connection": {
       "icon": "cloud-off-line",
-      "title": "Conexão incorreta",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+      "title": "Incorrect connection",
+      "description": "Most likely, the server is unavailable or simply does not want to talk"
     },
-    "timeout_exceeded" : {
+    "timeout_exceeded": {
       "icon": "cloud-off-line",
-      "title": "O servidor não respondeu por muito tempo",
-      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+      "title": "The server did not respond for a very long time",
+      "description": "Most likely, the server is unavailable or simply does not want to talk"
     },
     "empty_feed": {
       "icon": "timeline-line",
-      "title": "O feed está vazio",
-      "description": "Pode valer a pena seguir alguém?"
+      "title": "The feed is empty",
+      "description": "Perhaps you should follow someone?"
     },
     "empty_bookmarks": {
       "icon": "bookmarks-line",
-      "title": "Sem favoritos",
-      "description": "Para fazê-los aparecer aqui você precisa adicioná-los"
+      "title": "No bookmarks",
+      "description": "To make them appear here you need to add them"
     },
     "empty_search": {
       "icon": "search-line",
-      "title": "Nenhum resultado",
-      "description": "Talvez valha a pena esclarecer seu pedido"
+      "title": "No results",
+      "description": "It might be worth clarifying your request."
     },
     "empty_notifications": {
       "icon": "bell-line",
-      "title": "Nenhuma notificação",
-      "description": "Muito provavelmente eles aparecerão em breve"
+      "title": "No notifications",
+      "description": "Most likely they will appear soon"
     }
   },
   "action": {
-    "apply": "Aplicar",
-    "save": "Salvar",
-    "go_away": "Ir",
-    "create_entry": "Enviar",
-    "save_entry": "Salvar",
-    "send_report": "Enviar uma reclamação",
-    "load_more": "Carregue mais",
-    "show_more": "Ver tudo",
-    "cancel": "Cancelar",
-    "close": "Fechar",
-    "delete": "Excluir",
-    "refresh": "Atualizar",
-    "options": "Opções",
-    "attach_image": "Anexe uma imagem"
+    "apply": "Apply",
+    "save": "Save",
+    "go_away": "Go",
+    "create_entry": "Send",
+    "save_entry": "Save",
+    "send_report": "Submit a complaint",
+    "load_more": "Load more",
+    "show_more": "See all",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "refresh": "Update",
+    "options": "Options",
+    "attach_image": "Attach an image"
   },
   "brands": {
     "grustnogram": {
-      "label": "Grustnogram",
+      "label": "Sadgram",
       "icon": "grustnogram-line"
     },
     "lichess": {
@@ -498,26 +524,26 @@
       "icon": "donationalerts-fill"
     },
     "vk": {
-      "label": "Vkontakte",
+      "label": "In contact with",
       "icon": "vk-fill"
     }
   },
   "modals": {
     "search-filter": {
-      "title": "Filtro de pesquisa"
+      "title": "Search filter"
     },
     "entry-history": {
-      "title": "Histórico de versões"
+      "title": "Version history"
     },
     "report-entry": {
-      "title": "Reclamação sobre a postagem"
+      "title": "Complaint about the post"
     },
     "report-user": {
-      "title": "Reclamação do usuário"
+      "title": "User complaint"
     },
     "delete-entry": {
-      "title": "Excluir entrada",
-      "help": "Por algum motivo você vai deletar a postagem, tem certeza que isso é realmente necessário?"
+      "title": "Delete entry",
+      "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
     }
   }
 }
