@@ -1,7 +1,7 @@
 <template>
   <entries-list v-if="(!loading && !error) || data.length > 0">
     <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
-      <entry-item :data="item" type="short" />
+      <entry-item :data="item" type="short" :showPinAction="false" />
     </entry-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
@@ -16,11 +16,7 @@
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder v-else
-      :icon="$t('errors.empty_search.icon')"
-      :header="$t('errors.empty_search.title')"
-      :text="$t('errors.empty_search.description')"
-    />
+    <placeholder v-else :text="$t('user.errors.entries_empty')" />
   </template>
 </template>
 
@@ -30,45 +26,31 @@ import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 
 export default {
-  name: 'search-entries',
+  name: 'community-entries',
   components: {
     EntriesList, EntryItem, EntryItemWrapper,
     Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('search/entries', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/entries', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
+    ...mapState('community/entries', [ 'data', 'loading', 'error' ]),
+    ...mapGetters('community/entries', [ 'hasMoreItems' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
-  meta() { return this.meta },
   data() {
-    return {
-      meta: {
-        title: this.$t('search.title.entries')
-      }
-    }
+    return { }
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('search/entries/more')
+      this.$store.dispatch('community/entries/more')
     }
   },
-  async mounted() {
-    await this.$store.dispatch('search/entries/setFilters', {
-      query: this.$route.query.q, offset: undefined
-    })
-    this.$store.dispatch('search/entries/fetch')
+  mounted() {
+    this.$store.dispatch('community/entries/fetch')
   },
   unmounted() {
-    this.$store.dispatch('search/entries/clear')
-  },
-  watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('search/entries/setFilters', { query: to, offset: undefined })
-      this.$store.dispatch('search/entries/fetch')
-    }
+    this.$store.dispatch('community/entries/clear')
   }
 }
 </script>

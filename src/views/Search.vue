@@ -40,13 +40,8 @@ export default {
   components: {
     IconButton, Tabs, TabsItem, Separator, Spacer
   },
-  meta() { return this.meta },
   data() {
-    return {
-      meta: {
-        title: this.$t('search.title')
-      }
-    }
+    return { }
   },
   computed: {
     query() {

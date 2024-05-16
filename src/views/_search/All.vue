@@ -98,6 +98,7 @@ import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 import { CommentItem, CommentItemWrapper } from '@/components/comment'
 import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
+import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
 
 export default {
   name: 'search-all',
@@ -108,7 +109,8 @@ export default {
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
     CommentItem, CommentItemWrapper,
-    TagsList, TagItem, TagItemWrapper
+    TagsList, TagItem, TagItemWrapper,
+    CommunitiesList, CommunityItem, CommunityItemWrapper
   },
   computed: {
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
@@ -117,8 +119,13 @@ export default {
       return this.$filters.humanizeError(this.error)
     }
   },
+  meta() { return this.meta },
   data() {
-    return { }
+    return {
+      meta: {
+        title: this.$t('search.title.all')
+      }
+    }
   },
   methods: {
     formatLink(tab = false) {

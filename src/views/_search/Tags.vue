@@ -42,8 +42,13 @@ export default {
       return this.$filters.humanizeError(this.error)
     }
   },
+  meta() { return this.meta },
   data() {
-    return { }
+    return {
+      meta: {
+        title: this.$t('search.title.tags')
+      }
+    }
   },
   methods: {
     loadMore() {

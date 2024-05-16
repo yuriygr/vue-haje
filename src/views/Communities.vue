@@ -22,21 +22,41 @@
   
   <spacer height="15" />
 
-  <placeholder
-    :icon="$t('errors.todo.icon')"
-    :header="$t('errors.todo.title')"
-    :text="$t('errors.todo.description')"
-  />
+  <communities-list v-if="(!loading && !error) || data.length > 0">
+    <community-item-wrapper v-for="item in data" :key="`community-${item.community_id}`">
+      <community-item :data="item" type="short" />
+    </community-item-wrapper>
+
+    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+
+    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+  </communities-list>
+
+  <template v-if="data.length == 0">
+    <placeholder-loading v-if="loading" />
+    <placeholder v-else-if="error"
+      :icon="$t(humanizeError.icon)"
+      :header="$t(humanizeError.title)"
+      :text="$t(humanizeError.description)"
+    />
+    <placeholder v-else
+      :icon="$t('errors.empty_bookmarks.icon')"
+      :header="$t('errors.empty_bookmarks.title')"
+      :text="$t('errors.empty_bookmarks.description')"
+    />
+  </template>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { IconButton, Tabs, TabsItem, Separator, Spacer, Placeholder } from '@vue-norma/ui'
+import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
 
 export default {
   name: 'communities',
   components: {
-    IconButton, Tabs, TabsItem, Separator, Spacer, Placeholder
+    IconButton, Tabs, TabsItem, Separator, Spacer, Placeholder,
+    CommunitiesList, CommunityItem, CommunityItemWrapper
   },
   meta() { return this.meta },
   data() {
@@ -47,8 +67,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('notifications', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('notifications', [ 'hasMoreItems' ]),
+    ...mapState('communities', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('communities', [ 'hasMoreItems' ]),
     query() {
       return this.$route.query.q
     },
@@ -85,7 +105,7 @@ export default {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })
     },
     loadMore() {
-      this.$store.dispatch('notifications/more')
+      this.$store.dispatch('communities/more')
     },
     deleteTabQuery() {
       let query = Object.assign({}, this.$route.query)
@@ -94,22 +114,22 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('notifications/setFilters', {
+    await this.$store.dispatch('communities/setFilters', {
       tab: this.availableKeys.includes(this.$route.query.tab)
             ? this.$route.query.tab
             : ( this.deleteTabQuery(), 'subscribed' ), offset: undefined
     })
-    this.$store.dispatch('notifications/fetch')
+    this.$store.dispatch('communities/fetch')
   },
   unmounted() {
-    this.$store.dispatch('notifications/clear')
+    this.$store.dispatch('communities/clear')
   },
   watch: {
     async '$route.query.tab'(to) {
-      await this.$store.dispatch('notifications/setFilters', {
+      await this.$store.dispatch('communities/setFilters', {
         tab: this.availableKeys.includes(to) ? to : 'subscribed', offset: undefined
       })
-      this.$store.dispatch('notifications/fetch')
+      this.$store.dispatch('communities/fetch')
     }
   }
 }

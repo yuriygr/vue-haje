@@ -1,5 +1,8 @@
 import Communities from '@/views/Communities'
 
+import Community from '@/views/Community'
+import { CommunityEntries } from '@/views/_community'
+
 export default [
   {
     path: '/communities',
@@ -11,12 +14,13 @@ export default [
     ]
   },
   {
-    path: '/c',
-    component: Communities,
+    path: '/c/:slug',
+    component: Community,
+    props: true,
     meta: { section: 'community' },
     children: [
-      { path: ':slug', name: 'community', component: Communities },
-      { path: 'entries', name: 'community-entries', component: Communities, meta: { key: 'entries' }}
+			{ path: '', name: 'community', component: CommunityEntries },
+	    { path: ':pathMatch(.*)*', redirect: { name: 'community' } }
     ]
   }
 ]

@@ -1,7 +1,7 @@
 <template>
   <communities-list v-if="(!loading && !error) || data.length > 0">
     <community-item-wrapper v-for="item in data" :key="`community-${item.community_id}`">
-      <community-item :data="item" type="short" />
+      <community-item :data="item" />
     </community-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
@@ -42,8 +42,13 @@ export default {
       return this.$filters.humanizeError(this.error)
     }
   },
+  meta() { return this.meta },
   data() {
-    return { }
+    return {
+      meta: {
+        title: this.$t('search.title.communities')
+      }
+    }
   },
   methods: {
     loadMore() {

@@ -23,8 +23,8 @@
         </tabbar-item>
 
         <template v-if="session_data.is_auth">
-          <tabbar-item :to="{ name: 'user', params: { username: session_data.user.username  } }" :title="$t('header.nav.profile')">
-            <icon name="user-line" size="20" />
+          <tabbar-item :to="{ name: 'menu' }" :title="$t('header.nav.menu')">
+            <icon name="menu-line" size="20" />
           </tabbar-item>
         </template>
 

@@ -19,7 +19,7 @@
       "search": "@:search.title",
       "compose": "Написать",
       "notifications": "@:notifications.title",
-      "profile": "@:user.title",
+      "menu": "@:menu.title",
       "auth": "Авторизация"
     }
   },
@@ -56,18 +56,13 @@
       "links_empty": "Ссылок пока-что нет"
     },
     "action": {
-      "settings": "Настройки",
-      "menu": "Меню",
+      "settings": "Изменить профиль",
       "logout": "Выйти",
       "options": "Еще",
       "subscribe": "Подписаться",
       "unsubscribe": "Отписаться",
-      "copy_link": "Скопировать ссылку",
-      "report": "Пожаловаться",
       "notify_new_posts": "Уведомлять о новых постах",
-      "dont_notify_new_posts": "Не уведомлять о новых постах",
-      "remove-bookmark": "Убрать из закладок",
-      "add-bookmark": "Добавить в закладки"
+      "dont_notify_new_posts": "Не уведомлять о новых постах"
     }
   },
   "tag": {
@@ -79,7 +74,14 @@
     }
   },
   "search": {
-    "title": "Поиск",
+    "title": {
+      "all": "Поиск",
+      "users": "Поиск пользователей",
+      "entries": "Поиск постов",
+      "comments": "Поиск комментариев",
+      "communities": "Поиск сообществ",
+      "tags": "Поиск тегов"
+    },
     "search-field": {
       "placeholder": "Поиск"
     },
@@ -310,17 +312,11 @@
       "empty_entry_history": "История изменений пуста"
     },
     "action": {
-      "copy_link": "Скопировать ссылку",
       "subscribe": "@:user.action.subscribe",
       "unsubscribe": "@:user.action.unsubscribe",
       "history": "История версий",
-      "report": "Пожаловаться",
-      "edit": "Редактировать",
-      "remove-bookmark": "Убрать из закладок",
-      "add-bookmark": "Добавить в закладки",
       "pin": "Закрепить",
-      "unpin": "Открепить",
-      "delete": "Удалить"
+      "unpin": "Открепить"
     }
   },
   "comment": {
@@ -336,11 +332,17 @@
     "errors": {
       "empty": "Пусто"
     },
+    "action": {}
+  },
+  "community": {
     "action": {
-      "copy_link": "Скопировать ссылку",
-      "report": "Пожаловаться",
-      "edit": "Редактировать",
-      "delete": "Удалить"
+      "subscribe": "Подписаться",
+      "unsubscribe": "Отписаться",
+      "options": "Еще"
+    },
+    "meta": {
+      "subscribers": "Нет подписчиков | {n} подписчик | {n} подписчика | {n} подписчиков",
+      "official": "Официальный"
     }
   },
   "auth": {
@@ -414,6 +416,11 @@
       "icon": "user-unfollow-line",
       "title": "Пользователь не найден",
       "description": "Попробуйте поискать других, существующих, пользователей"
+    },
+    "community_not_found": {
+      "icon": "communities-line",
+      "title": "Сообщество не найдено",
+      "description": "Попробуйте поискать другие, существующие, сообщества"
     },
     "user_suspended": {
       "icon": "ghost-line",
@@ -497,10 +504,15 @@
     "show_more": "Смотреть все",
     "cancel": "Отмена",
     "close": "Закрыть",
+    "edit": "Изменить",
     "delete": "Удалить",
     "refresh": "Обновить",
     "options": "Опции",
-    "attach_image": "Прикрепить изображение"
+    "attach_image": "Прикрепить изображение",
+    "copy_link": "Скопировать ссылку",
+    "report": "Пожаловаться",
+    "remove-bookmark": "Убрать из закладок",
+    "add-bookmark": "Добавить в закладки"
   },
   "brands": {
     "grustnogram": {

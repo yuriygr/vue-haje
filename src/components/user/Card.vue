@@ -32,10 +32,7 @@
     </buttons-group>
 
     <buttons-group :withGap="true" v-else class="user-card__actions">
-      <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'menu' }" icon_before="menu-line">
-        {{ $t('user.action.menu') }}
-      </n-button>
-      <n-button mode="secondary" component="router-link"  :to="{ name: 'settings' }" icon_before="settings-line">
+      <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'settings-profile' }" icon_before="user-edit-line">
         {{ $t('user.action.settings') }}
       </n-button>
       <icon-button component="router-link" name="logout-line" mode="secondary" :to="{ name: 'auth-logout' }" :title="$t('user.action.logout')" />
@@ -115,11 +112,11 @@ export default {
         this.data.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
-          label: this.$t('user.action.remove-bookmark'),
+          label: this.$t('action.remove-bookmark'),
           action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
-          label: this.$t('user.action.add-bookmark'),
+          label: this.$t('action.add-bookmark'),
           action: this.toggleBookmarks
         }
       ]
@@ -129,12 +126,12 @@ export default {
         ...(this.data.state.is_me) ? [] : _bookmark,
         {
           icon: 'ui-link',
-          label: this.$t('user.action.copy_link'),
+          label: this.$t('action.copy_link'),
           action: this.copyLink
         },
         {
           icon: 'ui-error-warning',
-          label: this.$t('user.action.report'),
+          label: this.$t('action.report'),
           action: this.report
         }
       ]

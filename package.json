@@ -1,6 +1,6 @@
 {
   "name": "vue-haje",
-  "version": "1.6.10",
+  "version": "1.6.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode local",
