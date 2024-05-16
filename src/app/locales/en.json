@@ -292,7 +292,7 @@
     "refresh": "Update"
   },
   "entry": {
-    "title": "Record",
+    "title": "Posts",
     "meta": {
       "comments": "0 replies | {n} reply | {n} replies",
       "edited": "edit",
@@ -336,7 +336,11 @@
     "action": {}
   },
   "community": {
-    "action": {},
+    "action": {
+      "subscribe": "Subscribe",
+      "unsubscribe": "Unsubscribe",
+      "options": "More"
+    },
     "meta": {
       "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
       "official": "Official"

@@ -5,7 +5,7 @@
     "version": "Versão {version}",
     "locale": {
       "pt": "Português",
-      "En": "Inglês",
+      "en": "Inglês",
       "ru": "Russo"
     },
     "theme": {
@@ -271,7 +271,7 @@
     "refresh": "Atualizar"
   },
   "entry": {
-    "title": "Entrada",
+    "title": "Postagens",
     "meta": {
       "comments": "0 respostas | {n} resposta | {n} respostas | {n} respostas",
       "edited": "editar",
@@ -290,7 +290,8 @@
       "unsubscribe": "@:user.action.unsubscribe",
       "history": "Histórico de versões",
       "pin": "Alfinete",
-      "unpin": "Liberar"
+      "unpin": "Liberar",
+      "delete": "Apagar"
     }
   },
   "comment": {
@@ -304,12 +305,16 @@
       "placeholder": "Responda alguma coisa..."
     },
     "errors": {
-      "empty": "Пусто"
+      "empty": "Vazio"
     },
     "action": {}
   },
   "community": {
-    "action": {},
+    "action": {
+      "subscribe": "Inscrever",
+      "unsubscribe": "Desinscrever",
+      "options": "Mais"
+    },
     "meta": {
       "subscribers": "Nenhum assinante | {n} assinante | {n} assinantes | {n} assinantes",
       "official": "Official"
