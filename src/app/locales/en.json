@@ -19,7 +19,7 @@
       "search": "@:search.title",
       "compose": "Compose",
       "notifications": "@:notifications.title",
-      "profile": "@:user.title",
+      "menu": "@:menu.title",
       "auth": "Authorization"
     }
   },
@@ -56,18 +56,13 @@
       "links_empty": "No links yet"
     },
     "action": {
-      "settings": "Settings",
-      "menu": "Menu",
+      "settings": "Profile settings",
       "logout": "Logout",
       "options": "More",
       "subscribe": "Subscribe",
       "unsubscribe": "Unsubscribe",
-      "copy_link": "Copy link",
-      "report": "Complain",
       "notify_new_posts": "Notify about new posts",
-      "dont_notify_new_posts": "Don't notify about new posts",
-      "remove-bookmark": "Remove from bookmarks",
-      "add-bookmark": "Add to bookmarks"
+      "dont_notify_new_posts": "Don't notify about new posts"
     }
   },
   "tag": {
@@ -79,7 +74,14 @@
     }
   },
   "search": {
-    "title": "Search",
+    "title": {
+      "all": "Search",
+      "users": "Search for users",
+      "entries": "Search posts",
+      "comments": "Search comments",
+      "communities": "Search for communities",
+      "tags": "Search tags"
+    },
     "search-field": {
       "placeholder": "Search"
     },
@@ -310,14 +312,9 @@
       "empty_entry_history": "Change history is empty"
     },
     "action": {
-      "copy_link": "Copy link",
       "subscribe": "@:user.action.subscribe",
       "unsubscribe": "@:user.action.unsubscribe",
       "history": "Version history",
-      "report": "Complain",
-      "edit": "Edit",
-      "remove-bookmark": "Remove from bookmarks",
-      "add-bookmark": "Add to bookmarks",
       "pin": "Pin",
       "unpin": "Unpin",
       "delete": "Delete"
@@ -336,11 +333,13 @@
     "errors": {
       "empty": "Empty"
     },
-    "action": {
-      "copy_link": "Copy link",
-      "report": "Complain",
-      "edit": "Edit",
-      "delete": "Delete"
+    "action": {}
+  },
+  "community": {
+    "action": {},
+    "meta": {
+      "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
+      "official": "Official"
     }
   },
   "auth": {
@@ -415,6 +414,11 @@
       "title": "User is not found",
       "description": "Try searching for other existing users"
     },
+    "community_not_found": {
+      "icon": "communities-line",
+      "title": "Community not found",
+      "description": "Try looking for other existing communities"
+    },
     "user_suspended": {
       "icon": "ghost-line",
       "title": "User suspendet",
@@ -484,6 +488,11 @@
       "icon": "bell-line",
       "title": "No notifications",
       "description": "Most likely they will appear soon"
+    },
+    "empty_communities": {
+      "icon": "communities-line",
+      "title": "No communities",
+      "description": "Maybe it’s worth looking for suitable ones and subscribing to them, what do you think?"
     }
   },
   "action": {
@@ -497,10 +506,15 @@
     "show_more": "See all",
     "cancel": "Cancel",
     "close": "Close",
+    "edit": "Edit",
     "delete": "Delete",
     "refresh": "Update",
     "options": "Options",
-    "attach_image": "Attach an image"
+    "attach_image": "Attach an image",
+    "copy_link": "Copy link",
+    "report": "Complain",
+    "remove-bookmark": "Remove from bookmarks",
+    "add-bookmark": "Add to bookmarks"
   },
   "brands": {
     "grustnogram": {

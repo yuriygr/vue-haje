@@ -82,12 +82,12 @@ export default {
       let _edit = [
         {
           icon: 'ui-pencil',
-          label: this.$t('entry.action.edit'),
+          label: this.$t('action.edit'),
           action: this.edit
         },
         {
           icon: 'ui-delete',
-          label: this.$t('entry.action.delete'),
+          label: this.$t('action.delete'),
           action: this.delete
         }
       ]
@@ -96,11 +96,11 @@ export default {
         this.data.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
-          label: this.$t('entry.action.remove-bookmark'),
+          label: this.$t('action.remove-bookmark'),
           action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
-          label: this.$t('entry.action.add-bookmark'),
+          label: this.$t('action.add-bookmark'),
           action: this.toggleBookmarks
         }
       ]
@@ -123,7 +123,7 @@ export default {
         ..._bookmark,
         {
           icon: 'ui-link',
-          label: this.$t('entry.action.copy_link'),
+          label: this.$t('action.copy_link'),
           action: this.copyLink
         },
         ...(this.data.state.is_edited) ? [{
@@ -135,7 +135,7 @@ export default {
         ...(this.data.user.state.is_me) ? _edit : [
           {
             icon: 'ui-error-warning',
-            label: this.$t('entry.action.report'),
+            label: this.$t('action.report'),
             action: this.report
           }
         ]

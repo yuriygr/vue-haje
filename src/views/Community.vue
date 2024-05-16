@@ -2,7 +2,8 @@
   <template v-if="(!loading && !error) && Object.keys(data).length > 0">
     <div class="community-header">
       <div class="community-header__content">
-        <div class="community-header__name">{{ data.name }}</div>
+        <div class="community-header__title">{{ data.title }}</div>
+        <div class="community-header__description">{{ data.description }}</div>
       </div>
       <meta-info class="community-header__meta" :items="metaItems" />
     </div>
@@ -58,16 +59,12 @@ export default {
       let _result = []
 
       this.data.state.is_official && _result.push({ label: this.$t('community.meta.official') })
-      this.data.state.is_nsfw && _result.push({ label: this.$t('community.meta.nsfw') })
-      _result.push({ label: this.$t('community.meta.from_date', { date: this.formatedDate }) })
+      _result.push({ label: this.$tc('community.meta.subscribers', this.data.counters.subscribers) })
 
       return _result
     },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
-    },
-    formatedDate() {
-      return this.$filters.timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
     }
   },
   methods: {
@@ -82,7 +79,7 @@ export default {
   watch: {
     'data'(to) {
       if (to)
-        this.meta.title = `${to.name}`
+        this.meta.title = `${to.title}`
     },
     '$route.params.slug'(to, from) {
       if (to != from) {
@@ -95,26 +92,32 @@ export default {
 
 <style lang="scss">
 .community-header {
-  --community-header__name-color: var(--x-color);
 
-  html[data-theme='black'] & {
-    --community-header__name-color: var(--x-color);
-  }
 }
 
 .community-header {
   &__content {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
 
     margin-bottom: 1rem;
   }
 
-  &__name {
-    color: var(--community-header__name-color);
-    font-size: 2.3rem;
+  &__title {
+    white-space: pre-line;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 2.4rem;
     font-weight: var(--x-font-weight--bold);
+    line-height: calc(1.5 * 1em);
+  }
+
+  &__description {
+    white-space: pre-line;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 1.5rem;
+    font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
   }
 }

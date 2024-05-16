@@ -88,12 +88,12 @@ export default {
       let _edit = [
         {
           icon: 'ui-pencil',
-          label: this.$t('comment.action.edit'),
+          label: this.$t('action.edit'),
           action: this.edit
         },
         {
           icon: 'ui-delete',
-          label: this.$t('comment.action.delete'),
+          label: this.$t('action.delete'),
           action: this.delete
         }
       ]
@@ -101,13 +101,13 @@ export default {
       return [
         {
           icon: 'ui-link',
-          label: this.$t('comment.action.copy_link'),
+          label: this.$t('action.copy_link'),
           action: this.copyLink
         },
         ...(this.data.user.state.is_me) ? _edit : [
           {
             icon: 'ui-error-warning',
-            label: this.$t('comment.action.report'),
+            label: this.$t('action.report'),
             action: this.report
           }
         ]

@@ -19,7 +19,7 @@
       "search": "@:search.title",
       "compose": "Escrever",
       "notifications": "@:notifications.title",
-      "profile": "@:user.title",
+      "menu": "@:menu.title",
       "auth": "Autorização"
     }
   },
@@ -56,18 +56,13 @@
       "links_empty": "Ainda não há links"
     },
     "action": {
-      "settings": "Configurações",
-      "menu": "Menu",
+      "settings": "Configurações de perfil",
       "logout": "Sair",
       "options": "Mais",
       "subscribe": "Se inscrever",
       "unsubscribe": "Cancelar inscrição",
-      "copy_link": "Link de cópia",
-      "report": "Reportar",
       "notify_new_posts": "Notificar sobre novas postagens",
-      "dont_notify_new_posts": "Não notificar sobre novas postagens",
-      "remove-bookmark": "Remover dos favoritos",
-      "add-bookmark": "Adicionar aos favoritos"
+      "dont_notify_new_posts": "Não notificar sobre novas postagens"
     }
   },
   "tag": {
@@ -79,7 +74,14 @@
     }
   },
   "search": {
-    "title": "Procurar",
+    "title": {
+      "all": "Procurar",
+      "users": "Pesquisar usuários",
+      "entries": "Pesquisar postagens",
+      "comments": "Pesquisar comentários",
+      "communities": "Pesquisar comunidades",
+      "tags": "Tags de pesquisa"
+    },
     "search-field": {
       "placeholder": "Procurar"
     },
@@ -284,17 +286,11 @@
       "empty_entry_history": "O log de alterações está vazio"
     },
     "action": {
-      "copy_link": "Link de cópia",
       "subscribe": "@:user.action.subscribe",
       "unsubscribe": "@:user.action.unsubscribe",
       "history": "Histórico de versões",
-      "report": "Reclamar",
-      "edit": "Editar",
-      "remove-bookmark": "Remover dos favoritos",
-      "add-bookmark": "Adicionar aos favoritos",
       "pin": "Alfinete",
-      "unpin": "Liberar",
-      "delete": "Excluir"
+      "unpin": "Liberar"
     }
   },
   "comment": {
@@ -310,11 +306,13 @@
     "errors": {
       "empty": "Пусто"
     },
-    "action": {
-      "copy_link": "Link de cópia",
-      "report": "Reclamar",
-      "edit": "Editar",
-      "delete": "Excluir"
+    "action": {}
+  },
+  "community": {
+    "action": {},
+    "meta": {
+      "subscribers": "Nenhum assinante | {n} assinante | {n} assinantes | {n} assinantes",
+      "official": "Official"
     }
   },
   "auth": {
@@ -389,6 +387,11 @@
       "title": "O usuário não foi encontrado",
       "description": "Tente pesquisar outros usuários existentes"
     },
+    "community_not_found": {
+      "icon": "communities-line",
+      "title": "Comunidade não encontrada",
+      "description": "Tente procurar outras comunidades existentes"
+    },
     "user_suspended": {
       "icon": "ghost-line",
       "title": "Suspensão do usuário",
@@ -458,6 +461,11 @@
       "icon": "bell-line",
       "title": "Nenhuma notificação",
       "description": "Muito provavelmente eles aparecerão em breve"
+    },
+    "empty_communities": {
+      "icon": "communities-line",
+      "title": "Nenhuma comunidade",
+      "description": "Talvez valha a pena procurar os adequados e assiná-los, o que você acha?"
     }
   },
   "action": {
@@ -471,10 +479,15 @@
     "show_more": "Ver tudo",
     "cancel": "Cancelar",
     "close": "Fechar",
+    "edit": "Editar",
     "delete": "Excluir",
     "refresh": "Atualizar",
     "options": "Opções",
-    "attach_image": "Anexe uma imagem"
+    "attach_image": "Anexe uma imagem",
+    "copy_link": "Link de cópia",
+    "report": "Reportar",
+    "remove-bookmark": "Remover dos favoritos",
+    "add-bookmark": "Adicionar aos favoritos"
   },
   "brands": {
     "grustnogram": {
