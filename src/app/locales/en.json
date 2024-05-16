@@ -488,6 +488,11 @@
       "icon": "bell-line",
       "title": "No notifications",
       "description": "Most likely they will appear soon"
+    },
+    "empty_communities": {
+      "icon": "communities-line",
+      "title": "No communities",
+      "description": "Maybe it’s worth looking for suitable ones and subscribing to them, what do you think?"
     }
   },
   "action": {

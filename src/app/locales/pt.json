@@ -461,6 +461,11 @@
       "icon": "bell-line",
       "title": "Nenhuma notificação",
       "description": "Muito provavelmente eles aparecerão em breve"
+    },
+    "empty_communities": {
+      "icon": "communities-line",
+      "title": "Nenhuma comunidade",
+      "description": "Talvez valha a pena procurar os adequados e assiná-los, o que você acha?"
     }
   },
   "action": {

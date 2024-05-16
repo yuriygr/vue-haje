@@ -491,6 +491,11 @@
       "icon": "bell-line",
       "title": "Уведомлений нет",
       "description": "Скорее всего, они скоро появятся"
+    },
+    "empty_communities": {
+      "icon": "communities-line",
+      "title": "Сообществ нет",
+      "description": "Может, стоит поискать подходящие и подписаться на них, как считаешь?"
     }
   },
   "action": {

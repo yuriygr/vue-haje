@@ -40,9 +40,9 @@
       :text="$t(humanizeError.description)"
     />
     <placeholder v-else
-      :icon="$t('errors.empty_bookmarks.icon')"
-      :header="$t('errors.empty_bookmarks.title')"
-      :text="$t('errors.empty_bookmarks.description')"
+      :icon="$t('errors.empty_communities.icon')"
+      :header="$t('errors.empty_communities.title')"
+      :text="$t('errors.empty_communities.description')"
     />
   </template>
 </template>
