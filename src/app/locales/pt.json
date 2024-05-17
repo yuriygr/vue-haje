@@ -148,7 +148,7 @@
     "title": "Comunidades",
     "tabs": {
       "subscribed": "Todas as comunidades",
-      "manage": "Controle"
+      "manage": "Gerenciamento"
     }
   }, 
   "bookmarks": {
@@ -253,8 +253,8 @@
       "theme": "Tema de interface"
     },
     "sex": {
-      "male": "Homem",
-      "female": "Mulher",
+      "male": "Masculino",
+      "female": "Feminino",
       "none": "Helicóptero de ataque «Apache»"
     }
   },
