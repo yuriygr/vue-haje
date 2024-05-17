@@ -143,6 +143,13 @@
       "logout": "Sair"
     }
   },
+  "communities": {
+    "title": "Comunidades",
+    "tabs": {
+      "subscribed": "Todas as comunidades",
+      "manage": "Controle"
+    }
+  }, 
   "bookmarks": {
     "title": "Favoritos",
     "tabs": {
@@ -310,11 +317,7 @@
     "action": {}
   },
   "community": {
-    "action": {
-      "subscribe": "Inscrever",
-      "unsubscribe": "Desinscrever",
-      "options": "Mais"
-    },
+    "action": {},
     "meta": {
       "subscribers": "Nenhum assinante | {n} assinante | {n} assinantes | {n} assinantes",
       "official": "Official"

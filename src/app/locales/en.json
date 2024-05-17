@@ -336,11 +336,7 @@
     "action": {}
   },
   "community": {
-    "action": {
-      "subscribe": "Subscribe",
-      "unsubscribe": "Unsubscribe",
-      "options": "More"
-    },
+    "action": {},
     "meta": {
       "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
       "official": "Official"
