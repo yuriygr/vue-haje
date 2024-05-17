@@ -91,6 +91,7 @@
       "users": "Usuários",
       "entries": "Postagens",
       "comments": "Comentários",
+      "communities": "Comunidades",
       "tags": "Tag"
     },
     "section": {
@@ -250,6 +251,11 @@
       "username": "Conecte-se",
       "locale": "Idioma da interface",
       "theme": "Tema de interface"
+    },
+    "sex": {
+      "male": "Homem",
+      "female": "Mulher",
+      "none": "Helicóptero de ataque «Apache»"
     }
   },
   "help": {
