@@ -8,13 +8,8 @@
 </template>
 
 <script>
-import { Icon, IconButton } from '@vue-norma/ui'
-
 export default {
   name: 'tag-item',
-  components: {
-    Icon, IconButton
-  },
   props: {
     data: false,
     clickable: {

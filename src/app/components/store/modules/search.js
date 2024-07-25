@@ -150,6 +150,10 @@ let users = {
       })
       .then(_ => commit('SET_LOADING', false))
     },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
+    },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
       dispatch('fetch', false)
@@ -241,6 +245,10 @@ let tags = {
         commit('SET_ERROR', error)
       })
       .then(_ => commit('SET_LOADING', false))
+    },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
     },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
@@ -334,6 +342,10 @@ let entries = {
       })
       .then(_ => commit('SET_LOADING', false))
     },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
+    },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
       dispatch('fetch', false)
@@ -426,6 +438,10 @@ let comments = {
       })
       .then(_ => commit('SET_LOADING', false))
     },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
+    },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
       dispatch('fetch', false)
@@ -517,6 +533,10 @@ let communities = {
         commit('SET_ERROR', error)
       })
       .then(_ => commit('SET_LOADING', false))
+    },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
     },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })

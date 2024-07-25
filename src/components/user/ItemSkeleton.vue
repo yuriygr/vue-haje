@@ -7,18 +7,18 @@
       <div class="user-item__username"></div>
     </div>
     <buttons-group :withGap="true" class="user-item__actions">
-      <icon-button :disabled="true" name="ui-more" mode="tertiary" :title="$t('user.action.options')" />
+      <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('user.action.options')" />
     </buttons-group>
   </div>
 </template>
 
 <script>
-import { Icon, IconButton, ButtonsGroup } from '@vue-norma/ui'
+import { NButton, ButtonsGroup } from '@vue-norma/ui'
 
 export default {
   name: 'user-item-skeleton',
   components: {
-    Icon, IconButton, ButtonsGroup
+    NButton, ButtonsGroup
   },
   props: { },
   data() {

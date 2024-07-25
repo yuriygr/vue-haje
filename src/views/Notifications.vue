@@ -1,7 +1,7 @@
 <template>
   <buttons-group :withGap="true">
     <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="load_more_loading">{{ $t('notifications.action.read_all') }}</n-button>
-    <icon-button component="router-link" name="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="$t('notifications.action.settings')" />
+    <n-button component="router-link" icon_before="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="$t('notifications.action.settings')" />
   </buttons-group>
   
   <spacer height="15" />
@@ -43,7 +43,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, IconButton, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
+import { Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
 
 import { NotificationItem, NotificationItemWrapper } from '@/components/notifications'
 
@@ -51,7 +51,7 @@ export default {
   name: 'notifications',
   components: {
     NotificationItem, NotificationItemWrapper,
-    Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, NButton, LoadmoreTrigger, IconButton, ButtonsGroup
+    Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup
   },
   meta() { return this.meta },
   data() {

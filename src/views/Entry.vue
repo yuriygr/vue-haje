@@ -63,6 +63,10 @@ export default {
     this.$store.dispatch('entry/clear')
   },
   watch: {
+    'error'(to) {
+      if (to)
+        this.meta.title = this.$t(this.humanizeError.title)
+    },
     '$route.params.uuid'(to, from) {
       if (to != from) {
         this.$store.dispatch('entry/fetch', to)

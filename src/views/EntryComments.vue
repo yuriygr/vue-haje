@@ -18,14 +18,14 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader, IconButton } from '@vue-norma/ui'
+import { Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
 
 import { CommentItem, CommentItemWrapper, CommentForm } from '@/components/comment'
 
 export default {
   name: 'entry-comments',
   components: {
-    Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader, IconButton,
+    Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader,
     CommentItem, CommentItemWrapper, CommentForm
   },
   props: {

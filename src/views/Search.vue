@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="hasFilters" class="search-form__filter">
-      <icon-button @click="openFilterModal" :badge="filterBadge" name="bars-filter-line" size="l" mode="tertiary" :title="$t('search.filter')" />
+      <n-button icon_before="bars-filter-line" @click="openFilterModal" :badge="filterBadge" size="l" mode="tertiary" :title="$t('search.filter')" />
     </div>
   </div>
   
@@ -31,14 +31,14 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { IconButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
+import { NButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
 
 let SearchFilterModal = defineAsyncComponent(() => import("@/components/modals/SearchFilter.vue"))
 
 export default {
   name: 'search',
   components: {
-    IconButton, Tabs, TabsItem, Separator, Spacer
+    NButton, Tabs, TabsItem, Separator, Spacer
   },
   data() {
     return { }

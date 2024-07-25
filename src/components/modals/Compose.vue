@@ -11,8 +11,8 @@
     <div class="compose__actions">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
       <buttons-group :withGap="true">
-        <icon-button @click="toggleOptions" name="settings-line" mode="tertiary" ref="options" :title="$t('action.options')" />
-        <icon-button @click="attachFiles" name="add-image-line" mode="tertiary" :title="$t('action.attach_image')" />
+        <n-button icon_before="settings-line" @click="toggleOptions" mode="tertiary" ref="options" :title="$t('action.options')" />
+        <n-button icon_before="add-image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
         <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
         <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
       </buttons-group>
@@ -26,13 +26,13 @@ import { cancelEvent } from '@/app/services/utilities'
 import { UserItem } from '@/components/user'
 import { mapState } from 'vuex'
 
-import { Modal, NButton, IconButton, ButtonsGroup } from '@vue-norma/ui'
+import { Modal, NButton, ButtonsGroup } from '@vue-norma/ui'
 
 export default {
   name: 'compose-modal',
   components: {
     UserItem,
-    Modal, NButton, IconButton, ButtonsGroup
+    Modal, NButton, ButtonsGroup
   },
   props: {
     data: {
@@ -54,7 +54,8 @@ export default {
 
       form: {
         text: '',
-        is_comments_enabled: true
+        is_comments_enabled: true,
+        is_hidden_from_feed: false
       },
       attachedFiles: []
     }
@@ -109,15 +110,30 @@ export default {
         {
           icon: 'comments-line',
           label: this.$t('entry.pseudo-form.comments-on'),
-          action: this.toggleCommentsState
+          action: this.toggleState('is_comments_enabled')
         } : {
           icon: 'comments-off-line',
           label: this.$t('entry.pseudo-form.comments-off'),
-          action: this.toggleCommentsState
+          action: this.toggleState('is_comments_enabled')
         }
       ]
+
+      let _hidde_from_feed = [
+        this.form.is_hidden_from_feed ?
+        {
+          icon: 'eye-off-line',
+          label: this.$t('entry.pseudo-form.hidden_from_feed-on'),
+          action: this.toggleState('is_hidden_from_feed')
+        } : {
+          icon: 'eye-line',
+          label: this.$t('entry.pseudo-form.hidden_from_feed-off'),
+          action: this.toggleState('is_hidden_from_feed')
+        }
+      ]
+
       return [
-        ..._comments
+        ..._comments,
+        ..._hidde_from_feed
       ]
     },
   },
@@ -168,9 +184,11 @@ export default {
         align: 'right'
       })
     },
-    toggleCommentsState() {
-      this.form.is_comments_enabled = !this.form.is_comments_enabled
-      this.$popover.close()
+    toggleState(key) {
+      return () => {
+        this.form[key] = !this.form[key]
+        this.$popover.close()
+      }
     },
 
     attachFiles() {
@@ -246,9 +264,11 @@ export default {
     this.$field.focus()
 
     if (this.data) {
-      this.$refs.field.innerText = this.data.content.text
+      this.$refs.field.innerHTML = this.data.content.text
       this.form = {
-        text: this.data.content.text
+        text: this.data.content.text,
+        is_comments_enabled: this.data.state.is_comments_enabled,
+        is_hidden_from_feed: this.data.state.is_hidden_from_feed,
       }
     }
   }
@@ -292,7 +312,7 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     font-size: 1.5rem;
-    line-height: 1.4;
+    line-height: calc(1.4 * 1em);
     word-wrap: break-word;
     -webkit-font-smoothing: subpixel-antialiased;
     display: inline-block;

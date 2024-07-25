@@ -24,11 +24,6 @@
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder v-else
-      :icon="$t('errors.community_not_found.icon')"
-      :header="$t('errors.community_not_found.title')"
-      :text="$t('errors.community_not_found.description')"
-    />
   </template>
 </template>
 
@@ -60,11 +55,15 @@ export default {
 
       this.data.state.is_official && _result.push({ label: this.$t('community.meta.official') })
       _result.push({ label: this.$tc('community.meta.subscribers', this.data.counters.subscribers) })
+      //_result.push({ label: this.$t('community.meta.from_date', { date: this.formatedDate }) })
 
       return _result
     },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
+    },
+    formatedDate() {
+      return this.$filters.timeFormatOnlyYear(this.data.meta.date_added, this.$i18n.locale)
     }
   },
   methods: {
@@ -80,6 +79,10 @@ export default {
     'data'(to) {
       if (to)
         this.meta.title = `${to.title}`
+    },
+    'error'(to) {
+      if (to)
+        this.meta.title = this.$t(this.humanizeError.title)
     },
     '$route.params.slug'(to, from) {
       if (to != from) {
@@ -113,12 +116,10 @@ export default {
   }
 
   &__description {
-    white-space: pre-line;
-    word-wrap: break-word;
-    word-break: break-word;
     font-size: 1.5rem;
-    font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
+    word-break: break-word;
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 }
 </style>

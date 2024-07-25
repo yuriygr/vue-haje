@@ -4,7 +4,7 @@
     <div class="auth__content">
       <modal-header :title="$t('modals.auth')">
         <template #after>
-          <icon-button name="close-circle-line" @click.exact="closeModal" :title="$t('actions.close')" />
+          <n-button icon_before="close-circle-line" @click.exact="closeModal" :title="$t('action.close')" />
         </template>
       </modal-header>
       <div class="auth__list" v-show="activePanel == 'home'">

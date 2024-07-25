@@ -57,6 +57,10 @@ export default {
       })
       .then(_ => commit('SET_LOADING', false))
     },
+    async refresh({ state, commit, dispatch }) {
+      await commit('SET_FILTERS', { ...state.filters, offset: 0 })
+      dispatch('fetch')
+    },
     async more({ state, commit, dispatch }) {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
       dispatch('fetch', false)

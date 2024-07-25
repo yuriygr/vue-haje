@@ -26,11 +26,6 @@
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder v-else
-      :icon="$t('errors.user_not_found.icon')"
-      :header="$t('errors.user_not_found.title')"
-      :text="$t('errors.user_not_found.description')"
-    />
   </template>
 </template>
 
@@ -81,7 +76,13 @@ export default {
           to: { name: 'user-subscriptions' },
           label: this.$tc('user.tabs.subscriptions', this.data.counters.subscriptions),
           active: this.$route.name == `user-subscriptions`
-        }
+        },
+        {
+          key: 'badges',
+          to: { name: 'user-badges' },
+          label: this.$tc('user.tabs.badges', this.data.counters.badges),
+          active: this.$route.name == `user-badges`
+        },
       ]
     },
     humanizeError() {
@@ -101,6 +102,10 @@ export default {
     'data'(to) {
       if (to)
         this.meta.title = `${to.profile?.name} (@${to.username})`
+    },
+    'error'(to) {
+      if (to)
+        this.meta.title = this.$t(this.humanizeError.title)
     },
     '$route.params.username'(to, from) {
       if (to != from) {

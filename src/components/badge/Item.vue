@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import { Icon, IconButton, MetaInfo } from '@vue-norma/ui'
+import { Icon, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'badge-item',
   components: {
-    Icon, IconButton, MetaInfo
+    Icon, MetaInfo
   },
   props: {
     data: false

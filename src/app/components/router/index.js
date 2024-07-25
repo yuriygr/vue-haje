@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Entry from '@/views/Entry'
+const Home = () => import('@/views/Home')
 const Notifications = () => import('@/views/Notifications')
 import Menu from '@/views/Menu'
 import About from '@/views/About'
@@ -26,7 +27,7 @@ const routes = [
 	...AuthRoutes,
 	...CommunitiesRoutes,
 	
-	{ path: '/', name: 'home', redirect: { name: 'feed' } },
+	{ path: '/', name: 'home', component: Home },
 	
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
 

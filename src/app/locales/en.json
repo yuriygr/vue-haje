@@ -15,12 +15,33 @@
   },
   "header": {
     "nav": {
-      "home": "Home",
+      "feed": "@:feed.title",
       "search": "@:search.title",
       "compose": "Compose",
       "notifications": "@:notifications.title",
       "menu": "@:menu.title",
       "auth": "Authorization"
+    }
+  },
+  "home": {
+    "title": "Welcome",
+    "hero": {
+      "title": "Meet, <span>Futubra!</span>",
+      "description": "It’s somehow unfair that all social networks in Russia are in the hands of one person, don’t you think?"
+    },
+    "teasers": {
+      "item": {
+        "recommendations": { "title": "No recommendations", "info": "The news feed contains only what you subscribed to and without recommendations to add your ex and her new boyfriend as friends" }, 
+        "combine": { "title": "No extra features", "info": "Looking for delivery, horoscope, weather forecast, music and marketplace? Wrong tab, buddy" },
+        "friends": { "title": "No friends", "info": "Only subscriptions to user content that is interesting to you" },
+        "likes": { "title": "No likes", "info": "We don’t want to see posts with kittens on a regular basis for the sake of gaining ratings?" },
+        "blacklist": { "title": "No blacklists", "info": "Don't you like what the other person writes? Don't read it, it's not difficult" },
+        "ads": { "title": "No brands", "info": "Personally, I can’t get enough of their advertising on the Internet and in my mailbox" }
+      }
+    },
+    "action": {
+      "login": "Sign In",
+      "create_account": "@:auth.create_account.title"
     }
   },
   "feed": {
@@ -40,20 +61,16 @@
       "entries": "No posts | {n} post | {n} posts",
       "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
       "subscriptions": "No subscriptions | {n} subscription | {n} subscriptions",
-      "tags": "No hashtags | {n} hashtag | {n} hashtags"
+      "badges": "No badges | {n} badge | {n} badges"
     },
     "meta": {
-      "from_date": "On a project with {date}",
-      "badges": "No badges | {n} badge | {n} badges",
-      "links": "No links | {n} link | {n} links"
+      "from_date": "On a project with {date}"
     },
     "errors": {
       "entries_empty": "No posts yet",
       "subscribers_empty": "No subscribers yet",
       "subscriptions_empty": "No subscriptions yet",
-      "badges_empty": "There are no icons yet",
-      "tags_empty": "There are no hashtags yet",
-      "links_empty": "No links yet"
+      "badges_empty": "There are no badges yet"
     },
     "action": {
       "settings": "Profile settings",
@@ -296,7 +313,8 @@
     "meta": {
       "comments": "0 replies | {n} reply | {n} replies",
       "edited": "edit",
-      "pinned": "Pinned"
+      "pinned": "Pinned",
+      "hidden_from_feed": "Hidden from feed"
     },
     "history": {
       "edit-content": "Contents changed"
@@ -336,10 +354,12 @@
     "action": {}
   },
   "community": {
+    "title": "Community",
     "action": {},
     "meta": {
       "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
-      "official": "Official"
+      "official": "Official",
+      "from_date":"Exists since {date}"
     }
   },
   "auth": {
@@ -410,7 +430,7 @@
       "description": "You may have thought that such a tag exists"
     },
     "user_not_found": {
-      "icon": "user-unfollow-line",
+      "icon": "user-line",
       "title": "User is not found",
       "description": "Try searching for other existing users"
     },
@@ -440,17 +460,17 @@
       "description": "As soon as he confirms his email, he will appear here"
     },
     "entry_not_found": {
-      "icon": "user-unfollow-line",
+      "icon": "ghost-line",
       "title": "Record not found",
       "description": "Most likely, she was never here. "
     },
     "entry_hidden": {
-      "icon": "user-unfollow-line",
+      "icon": "ghost-line",
       "title": "Post hidden",
       "description": "Yes, and this happens in our abode of free speech."
     },
     "bad_request": {
-      "icon": "user-line",
+      "icon": "cloud-off-line",
       "title": "Bad request",
       "description": "Most likely, you did something wrong and the server did not understand you"
     },

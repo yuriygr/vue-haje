@@ -21,9 +21,12 @@ export default {
   components: {
     NavigationSection, NavigationItem, Icon
   },
+  meta() { return this.meta },
   data() {
     return {
-
+      meta: {
+        title: this.$t('help.title')
+      }
     }
   },
   computed: {

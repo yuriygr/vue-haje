@@ -2,7 +2,7 @@
   <modal size="small">
     <modal-header :title="$t('modals.report-user.title')">
       <template #after>
-        <icon-button name="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
+        <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
@@ -23,12 +23,12 @@
 </template>
 
 <script>
-import { Modal, ModalHeader, ModalChecklist, NButton, IconButton } from '@vue-norma/ui'
+import { Modal, ModalHeader, ModalChecklist, NButton } from '@vue-norma/ui'
 
 export default {
   name: 'report-user-modal',
   components: {
-    Modal, ModalHeader, ModalChecklist, NButton, IconButton
+    Modal, ModalHeader, ModalChecklist, NButton
   },
   props: {
     data: {

@@ -1,40 +1,34 @@
 <template>
   <div :class="[ 'community-item', 'community-item--mode-' + mode ]">
-    <template v-if="mode == 'normal'">
-      <div class="community-item__content">
-        <component :is="clickable ? 'router-link' : 'div'" v-bind="communityLinkBinds" class="community-item__name">
-          {{ data.title }}
-        </component>
-        <div class="community-item__description">
-          {{ data.description }}
-        </div>
-        <meta-info class="community-item__meta" :items="metaItems" />
-      </div>
-      <buttons-group :withGap="true" v-if="showSubscribeAction" class="community-item__actions">
-        <template v-if="data.state.me_subscribed">
-          <icon-button name="user-follow-line" mode="tertiary" @click.exact="unsubscribe" :disabled="loading.unsubscribe" :title="$t('community.action.unsubscribe')" />
-        </template>
-        <template v-else>
-          <icon-button name="user-add-line" mode="tertiary" @click.exact="subscribe" :disabled="loading.subscribe" :title="$t('community.action.subscribe')" />
-        </template>
-        <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('community.action.options')" />
-      </buttons-group>
-    </template>
-    <template v-if="mode == 'small'">
-      <component :is="clickable ? 'router-link' : 'div'" v-bind="communityLinkBinds" class="community-item__title">
+    <div class="community-item__content">
+      <component :is="clickable ? 'router-link' : 'div'" v-bind="communityLinkBinds" class="community-item__name">
         {{ data.title }}
       </component>
-    </template>
+      <div v-if="mode != 'small'" class="community-item__description">
+        {{ data.description }}
+      </div>
+      <meta-info class="community-item__meta" :items="metaItems" />
+    </div>
+    <buttons-group :withGap="true" v-if="showSubscribeAction" class="community-item__actions">
+      <n-button
+        :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
+        mode="tertiary"
+        @click.exact="toggleSubscribe"
+        :disabled="loading.subscribe"
+        :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+      />
+      <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+    </buttons-group>
   </div>
 </template>
 
 <script>
-import { Icon, IconButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'community-item',
   components: {
-    Icon, IconButton, ButtonsGroup, MetaInfo
+    NButton, ButtonsGroup, MetaInfo
   },
   props: {
     data: false,
@@ -57,8 +51,8 @@ export default {
   data() {
     return {
       loading: {
-        unsubscribe: false,
-        subscribe: false
+        subscribe: false,
+        bookmarks: false
       }
     }
   },
@@ -115,33 +109,6 @@ export default {
     }
   },
   methods: {
-    // Подписки
-    unsubscribe() {
-      this.loading.unsubscribe = true
-      this.$api.post(`community/${this.data.slug}/unsubscribe`)
-      .then(result => {
-        this.data.state.me_subscribed = !(result.status == 'unsubscribed')
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
-      .then(_ => {
-        this.loading.unsubscribe = false
-      })
-    },
-    subscribe() {
-      this.loading.subscribe = true
-      this.$api.post(`community/${this.data.slug}/subscribe`)
-      .then(result => {
-        this.data.state.me_subscribed = (result.status == 'subscribed')
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: error.status })
-      })
-      .then(_ => {
-        this.loading.subscribe = false
-      })
-    },
     // Опции
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
@@ -151,8 +118,23 @@ export default {
         align: 'right'
       })
     },
+    // Подписки
+    toggleSubscribe() {
+      this.loading.subscribe = true
+      let _path = this.data.state.me_subscribed
+        ? `community/${this.data.slug}/unsubscribe`
+        : `community/${this.data.slug}/subscribe`
+      this.$api.post(_path)
+      .then(result => {
+        this.data.state.me_subscribed = (result.status == 'subscribed')
+        this.$alerts.success({ text: result.status })
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
+      .then(_ => this.loading.subscribe = false)
+    },
     // Переключалка закладок
     toggleBookmarks() {
+      this.loading.bookmarks = true
       this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
         object: 'community',
@@ -164,6 +146,7 @@ export default {
         this.$popover.close()
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
+      .then(_ => this.loading.bookmarks = false)
     },
     // Остальные действия
     copyLink() {

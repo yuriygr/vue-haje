@@ -1,22 +1,30 @@
 <template>
-  <group>
-    <n-header>Футубра</n-header>
-    <p>Как-то несправедливо, что все социальные сети России в руках одного человека, вы не находите?</p>
-  </group>
+  <div class="hero">
+    <div class="hero__title" v-html="$t('home.hero.title')" />
+    <div class="hero__description" v-html="$t('home.hero.description')" />
+
+    <buttons-group class="hero__actions">
+      <n-button size="l" component="router-link" :to="{ name: 'auth-register' }">
+        {{ $t('home.action.create_account') }}
+      </n-button>
+      <n-button size="l" mode="tertiary" component="router-link" :to="{ name: 'auth-login' }">
+        {{ $t('home.action.login') }}
+      </n-button>
+    </buttons-group>
+  </div>
 
   <spacer height="40" />
 
   <group>
-    <n-header>{{ $t('about.section.teasers.title') }}</n-header>
     <div class="teasers__grid">
-      <template v-for="(item, index) in teasers" :key="`teaser-item${index}`">
-        <div :class="[ 'teaser-item', 'teaser-item--' + item.color ]">
+      <template v-for="(item, key) in teasers" :key="`teaser-item-${key}`">
+        <div :class="[ 'teaser-item' ]">
           <div class="teaser-item__icon">
             <icon :name="item.icon" size="20" />
           </div>
           <div class="teaser-item__content">
-            <div class="teaser-item__title">{{ item.title }}</div>
-            <div class="teaser-item__info">{{ item.info }}</div>
+            <div class="teaser-item__title">{{ $t(`home.teasers.item.${item.code}.title`) }}</div>
+            <div class="teaser-item__info">{{ $t(`home.teasers.item.${item.code}.info`) }}</div>
           </div>
         </div>
       </template>
@@ -25,12 +33,13 @@
 </template>
 
 <script>
-import { Icon, PageHeader, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { mapGetters } from 'vuex'
+import { Icon, NHeader, Group, Spacer, ButtonsGroup, NButton } from '@vue-norma/ui'
 
 export default {
   name: 'home',
   components: {
-    Icon, PageHeader, NHeader, Group, Spacer
+    Icon, NHeader, Group, Spacer, ButtonsGroup, NButton
   },
   meta() { return this.meta },
   data() {
@@ -39,32 +48,80 @@ export default {
         title: this.$t('home.title')
       },
       teasers: [
-        { color: 'pink', icon: 'sparkling-line', title: 'Никаких рекомендаций', info: 'Новостная лента содержит только то, на что ты подписался и без рекомендаций добавить бывшую и ее нового парня в друзья' },
-        { color: 'green', icon: 'team-line', title: 'Никаких друзей', info: 'Только подписки на контент пользователя что интересен тебе' },
-        { color: 'blue', icon: 'dislike-line', title: 'Никаких лайков', info: 'Мы же не хотим видеть посты с котятами на постоянке ради набора рейтинга?' },
-        { color: 'orange', icon: 'user-forbid-line', title: 'Никаких черных списков', info: 'Тебе не нравится что пишет другой человек? Не читай его, это не сложно' },
-        { color: 'violet', icon: 'advertisement-line', title: 'Никаких брендов', info: 'Лично мне хватает их рекламы в интернете' }
+        { code: 'recommendations', icon: 'sparkling-line' },
+        { code: 'combine',         icon: 'function-line' },
+        { code: 'friends',         icon: 'team-line' },
+        { code: 'likes',           icon: 'like-line' },
+        { code: 'blacklist',       icon: 'user-forbid-line' },
+        { code: 'ads',             icon: 'advertisement-line' }
       ]
+    }
+  },
+  computed: {
+    ...mapGetters('auth', [ 'isAuth' ]),
+  },
+  created() {
+    if (this.isAuth) {
+      this.$router.push({ name: 'feed' })
+      return
     }
   }
 }
 </script>
 
 <style lang="scss">
-.teasers__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
-  grid-gap: 3rem;
-}
-.teaser-item {
-  --icon-background: var(--x-color-white);
-  --icon-color: var(--x-color-black);
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4vh 0 5vh;
 
+  &__title {
+    font-size: 3rem;
+    line-height: calc(1.2 * 1em);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    font-size: 1.6rem;
+    line-height: calc(1.4 * 1em);
+    font-weight: 400;
+  }
+
+  &__actions {
+    margin-top: 3rem;
+  }
+}
+
+
+.teasers__grid {
+  .teaser-item + .teaser-item {
+    margin-top: 2rem;
+  }
+}
+
+.teaser-item {
+  --icon-background: var(--x-color-gray--tint90);
+  --icon-color: var(--x-color-black);
+  --teaser-item__title-color: var(--x-color-black);
+  --teaser-item__info-color: var(--x-color-black--tint40);
+  
+  html[data-theme="black"] & {
+    --icon-background: #f2f2f0;
+    --icon-color: #1d1d1d;
+    --teaser-item__title-color: #f2f2f0;
+    --teaser-item__info-color: var(--x-color-black--tint50);
+  }
+}
+
+.teaser-item {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 1.75rem;
 
   &__icon {
     background: var(--icon-background);
@@ -72,6 +129,7 @@ export default {
     justify-content: center;
     padding: 1.5rem;
     border-radius: 8px;
+    margin-right: 1rem;
 
     svg {
       fill: var(--icon-color);
@@ -82,76 +140,17 @@ export default {
   }
 
   &__title {
+    color: var(--teaser-item__title-color);
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
     line-height: calc(1.5 * 1em);
   }
 
   &__info {
+    color: var(--teaser-item__info-color);
     font-size: 1.4rem;
     font-weight: 400;
     line-height: calc(1.5 * 1em);
-  }
-
-  &--pink {
-    --icon-background: var(--x-color-pink--tint90);
-    --icon-color: var(--x-color-pink--tint20);
-  }
-
-  &--green {
-    --icon-background: var(--x-color-green--tint90);
-    --icon-color: var(--x-color-green--tint20)
-  }
-
-  &--orange {
-    --icon-background: var(--x-color-orange--tint90);
-    --icon-color: var(--x-color-orange--tint20)
-  }
-
-  &--blue {
-    --icon-background: var(--x-color-blue--tint90);
-    --icon-color: var(--x-color-blue--tint20)
-  }
-
-  &--red {
-    --icon-background: var(--x-color-red--tint90);
-    --icon-color: var(--x-color-red--tint20)
-  }
-
-  &--violet {
-    --icon-background: var(--x-color-violet--tint90);
-    --icon-color: var(--x-color-violet--tint20)
-  }
-}
-
-html[data-theme="black"] {
-  .teaser-item--pink {
-    --icon-background: var(--x-color-pink--shade70);
-    --icon-color: var(--x-color-pink--tint20);
-  }
-  .teaser-item--green {
-    --icon-background: var(--x-color-green--shade70);
-    --icon-color: var(--x-color-green--tint20)
-  }
-
-  .teaser-item--orange {
-    --icon-background: var(--x-color-orange--shade70);
-    --icon-color: var(--x-color-orange--tint20)
-  }
-
-  .teaser-item--blue {
-    --icon-background: var(--x-color-blue--shade70);
-    --icon-color: var(--x-color-blue--tint20)
-  }
-
-  .teaser-item--red {
-    --icon-background: var(--x-color-red--shade70);
-    --icon-color: var(--x-color-red--tint20)
-  }
-
-  .teaser-item--violet {
-    --icon-background: var(--x-color-violet--shade70);
-    --icon-color: var(--x-color-violet--tint20)
   }
 }
 </style>

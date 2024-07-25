@@ -81,7 +81,7 @@ export default {
       this.$api.post('auth/register', this.form)
       .then(result => {
         this.$store.dispatch('auth/fetch')
-        this.$router.push(this.$route.query.redirect || { name: 'home' })
+        this.$router.push(this.$route.query.redirect || { name: 'feed' })
       })
       .catch(error => {
         this.error = error

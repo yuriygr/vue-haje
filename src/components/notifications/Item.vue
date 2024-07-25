@@ -17,18 +17,18 @@
       <meta-info class="notification-item__meta" :items="metaItems" />
     </div>
     <buttons-group :withGap="true" class="notification-item__actions">
-      <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+      <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
     </buttons-group>
   </div>
 </template>
 
 <script>
-import { Icon, IconButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'notification-item',
   components: {
-    Icon, IconButton, ButtonsGroup, MetaInfo
+    Icon, NButton, ButtonsGroup, MetaInfo
   },
   props: {
     data: false,

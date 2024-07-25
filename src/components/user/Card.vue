@@ -5,7 +5,7 @@
         <div class="user-card__name">{{ data.profile.name }}</div>
         <div class="user-card__username">@{{ data.username }}</div>
       </div>
-      <div class="user-card__avatar user-card__avatar__has-view" @click.exact="viewAvatar">
+      <div class="user-card__avatar user-card__avatar--has-view" @click.exact="viewAvatar">
         <img :src="avatarUrl" alt="" />
       </div>
     </div>
@@ -14,35 +14,33 @@
     
     <spacer height="20" />
     
-    <buttons-group :withGap="true" v-if="!data.state.is_me" class="user-card__actions">
-      <template v-if="data.state.me_subscribed">
-        <n-button mode="secondary" :stretched="true" :disabled="actions_loading.unsubscribe" @click.exact="unsubscribe" icon_before="user-follow-line">
-          {{ $t('user.action.unsubscribe') }}
+    <buttons-group :withGap="true" class="user-card__actions">
+      <template v-if="data.state.is_me">
+        <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'settings-profile' }" icon_before="user-edit-line">
+          {{ $t('user.action.settings') }}
         </n-button>
+        <n-button component="router-link" icon_before="logout-line" mode="secondary" :to="{ name: 'auth-logout' }" :title="$t('user.action.logout')" />
       </template>
+      
       <template v-else>
-        <n-button mode="secondary" :stretched="true" :disabled="actions_loading.subscribe" @click.exact="subscribe" icon_before="user-add-line" >
-          {{ $t('user.action.subscribe') }}
+        <n-button
+          :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
+          mode="secondary"
+          @click.exact="toggleSubscribe"
+          :disabled="loading.subscribe"
+          :stretched="true"
+        >
+          {{ $t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe') }}
         </n-button>
+        <n-button icon_before="ui-more" mode="secondary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
       </template>
-      <n-button v-if="data.external_link" :icon_before="$t(`brands.${data.external_link.code}.icon`)" mode="secondary" component="a" target="_blank" :href="data.external_link.url">
-        {{ $t(`brands.${data.external_link.code}.label`) }}
-      </n-button>
-      <icon-button name="ui-more" mode="secondary" @click.exact="toggleOptions" ref="options" :title="$t('user.action.options')" />
-    </buttons-group>
-
-    <buttons-group :withGap="true" v-else class="user-card__actions">
-      <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'settings-profile' }" icon_before="user-edit-line">
-        {{ $t('user.action.settings') }}
-      </n-button>
-      <icon-button component="router-link" name="logout-line" mode="secondary" :to="{ name: 'auth-logout' }" :title="$t('user.action.logout')" />
     </buttons-group>
   </div>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { Icon, IconButton, NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
+import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
 let UserAvatarView = defineAsyncComponent(() => import("@/components/modals/UserAvatarView.vue"))
 let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/ReportUser.vue"))
@@ -50,16 +48,16 @@ let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/Rep
 export default {
   name: 'user-card',
   components: {
-    Icon, IconButton, NButton, ButtonsGroup, MetaInfo, Spacer
+    NButton, ButtonsGroup, MetaInfo, Spacer
   },
   props: {
     data: false
   },
   data() {
     return {
-      actions_loading: {
-        unsubscribe: false,
-        subscribe: false
+      loading: {
+        subscribe: false,
+        bookmarks: false
       }
     }
   },
@@ -73,8 +71,6 @@ export default {
       let _result = []
 
       _result.push({ label: this.$t('user.meta.from_date', { date: this.formatedDate }) })
-      _result.push({ label: this.$tc('user.meta.badges', this.data.counters.badges), to: { name: 'user-badges' } })
-      _result.push({ label: this.$tc('user.meta.links', this.data.counters.links), to: { name: 'user-links' } })
 
       return _result
     },
@@ -138,28 +134,6 @@ export default {
     }
   },
   methods: {
-    // Подписки
-    unsubscribe() {
-      this.actions_loading.unsubscribe = true
-      this.$api.post(`user/${this.data.username}/unsubscribe`)
-      .then(result => {
-        this.data.state.me_subscribed = !(result.status == 'unsubscribed')
-        this.data.counters.subscribers -= 1
-      })
-      .catch(error => this.$alerts.danger({ text: error.status }))
-      .then(_ => this.actions_loading.unsubscribe = false)
-    },
-    subscribe() {
-      this.actions_loading.subscribe = true
-      this.$api.post(`user/${this.data.username}/subscribe`)
-      .then(result => {
-        this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.data.counters.subscribers += 1
-      })
-      .catch(error => this.$alerts.danger({ text: error.status }))
-      .then(_ => this.actions_loading.subscribe = false)
-    },
-  
     // Опции
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
@@ -168,6 +142,22 @@ export default {
         target: target,
         align: 'right'
       })
+    },
+    // Подписки
+    toggleSubscribe() {
+      this.loading.subscribe = true
+      let _path = this.data.state.me_subscribed
+        ? `user/${this.data.username}/unsubscribe`
+        : `user/${this.data.username}/subscribe`
+      this.$api.post(_path)
+      .then(result => {
+        this.data.state.me_subscribed = (result.status == 'subscribed')
+        result.status == 'subscribed'
+          ? this.data.counters.subscribers += 1
+          : this.data.counters.subscribers -= 1
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
+      .then(_ => this.loading.subscribe = false)
     },
     // Переключалка уведомлений
     toggleNotify() {
@@ -184,6 +174,7 @@ export default {
     },
     // Переключалка закладок
     toggleBookmarks() {
+      this.loading.bookmarks = true
       this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
         object: 'user',
@@ -195,6 +186,7 @@ export default {
         this.$popover.close()
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
+      .then(_ => this.loading.bookmarks = false)
     },
     // Остальные действия
     copyLink() {
@@ -244,6 +236,8 @@ $avatar-size: 57px;
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
     flex: 1;
   }
 
@@ -268,9 +262,10 @@ $avatar-size: 57px;
 
   &__bio {
     font-size: 1.5rem;
-    font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
-    margin-bottom: 1.25rem;
+    word-break: break-word;
+    -webkit-font-smoothing: subpixel-antialiased;
+    margin-bottom: 1rem;
   }
 
   &__avatar {

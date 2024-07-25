@@ -1,13 +1,21 @@
 {
   "name": "vue-haje",
-  "version": "1.6.11",
+  "productName": "Futubra",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode local",
     "build": "vue-cli-service build --mode prod"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuriygr/vue-haje.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yuriygr/vue-haje/issues"
+  },
   "dependencies": {
-    "@vue-norma/ui": "^2.3.6",
+    "@vue-norma/ui": "^2.5.11",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "localforage": "^1.10.0",

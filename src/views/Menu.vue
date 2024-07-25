@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { NavigationSection, NavigationItem, Icon, Spacer } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
@@ -40,6 +40,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('auth', [ 'isAuth' ]),
     ...mapState('auth', {
       'session_data': state => state.data
     }),
@@ -49,12 +50,14 @@ export default {
           icon: 'communities-line',
           label: this.$t('menu.item.communities'),
           to: { name: 'communities' },
+          disabled: !this.isAuth,
           chevron: true
         },
         {
           icon: 'bookmarks-line',
           label: this.$t('menu.item.bookmarks'),
           to: { name: 'bookmarks' },
+          disabled: !this.isAuth,
           chevron: true
         },
         {

@@ -3,8 +3,9 @@
     <div class="entry__header">
       <user-item :data="data.user" :showSubscribeAction="false" />
       <buttons-group class="entry__options">
-        <icon-button v-if="showPinAction && data.state.is_pinned" name="ui-pushpin" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
-        <icon-button name="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+        <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
+        <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
+        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
       </buttons-group>
     </div>
     <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
@@ -15,21 +16,22 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { Icon, IconButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 let ReportEntryModal = defineAsyncComponent(() => import("@/components/modals/ReportEntry.vue"))
 let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/EntryHistory.vue"))
 let DeleteEntryModal = defineAsyncComponent(() => import("@/components/modals/DeleteEntry.vue"))
 
+import { ActionItem } from '@/components/actions'
 import { UserItem } from '@/components/user'
 import Attachments from '@/components/attachments'
 
 export default {
   name: 'entry-item',
   components: {
-    UserItem, Attachments,
-    Icon, IconButton, ButtonsGroup, MetaInfo
+    UserItem, Attachments, ActionItem,
+    Icon, NButton, ButtonsGroup, MetaInfo
   },
   props: {
     data: {
@@ -46,7 +48,11 @@ export default {
   },
   data() {
     return {
-      isPopoverActive: false
+      isPopoverActive: false,
+      loading: {
+        stars: false,
+        bookmarks: false
+      }
     }
   },
   computed: {
@@ -178,7 +184,14 @@ export default {
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
     },
+
+    toggleStar() {
+      this.loading.stars = true
+    },
+
     toggleBookmarks() {
+      this.loading.bookmarks = true
+
       this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
         object: 'entry',
@@ -186,10 +199,16 @@ export default {
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
+
+        result.status == 'added'
+          ? this.data.counters.bookmarks++
+          : this.data.counters.bookmarks--
+
         this.$alerts.success({ text: result.status })
         this.$popover.close()
       })
       .catch(error => this.$alerts.danger({ text: error.status }))
+      .then(_ =>  this.loading.bookmarks = false)
     },
     togglePin() {
       let path = this.data.state.is_pinned
@@ -245,12 +264,23 @@ export default {
   &__content {
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
-    margin-bottom: .75rem;
     word-break: break-word;
+    -webkit-font-smoothing: subpixel-antialiased;
+    margin-bottom: 1rem;
   }
 
   &__attachments {
     margin-bottom: 1rem;
   }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+  }
+}
+
+.action {
+
 }
 </style>

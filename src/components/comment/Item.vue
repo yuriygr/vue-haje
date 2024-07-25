@@ -16,15 +16,18 @@
 </template>
 
 <script>
-import { Icon, IconButton, MetaInfo } from '@vue-norma/ui'
+import { defineAsyncComponent } from 'vue'
+import { Icon, MetaInfo } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
+
+let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals/CommentHistory.vue"))
 
 export default {
   name: 'comment-item',
   components: {
     UserItem,
-    Icon, IconButton, MetaInfo
+    Icon, MetaInfo
   },
   props: {
     data: {
@@ -54,7 +57,7 @@ export default {
     },
     maxBranchesLevel: {
       type: Number,
-      default: 5
+      default: 6
     }
   },
   data() {
@@ -77,7 +80,7 @@ export default {
       this.replyButton == 'link' && _result.push({ label: this.$tc('comment.meta.reply'), to: this.commentLink })
 
       _result.push({ label: this.formatedDate, to: this.commentLink })
-      this.data.content.version > 1 && _result.push({ label: this.$t('comment.meta.edited') })
+      this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
 
       return _result
     },
@@ -140,7 +143,13 @@ export default {
       })
       this.$popover.close()
     },
-
+    // Modals
+    history() {
+      this.$modals.show(CommentHistoryModal, {
+        uuid: this.data.uuid
+      })
+      this.$popover.close()
+    },
     report() {
       this.$popover.close()
     },

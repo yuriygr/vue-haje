@@ -40,7 +40,7 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, Spacer, Tabs, TabsItem, Separator, NButton, LoadmoreTrigger, IconButton } from '@vue-norma/ui'
+import { Placeholder, PlaceholderLoading, Spacer, Tabs, TabsItem, Separator, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
 
@@ -50,7 +50,7 @@ export default {
   name: 'feed',
   components: {
     EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
-    Placeholder, PlaceholderLoading, Separator, NButton, LoadmoreTrigger, Spacer, Tabs, TabsItem, IconButton
+    Placeholder, PlaceholderLoading, Separator, NButton, LoadmoreTrigger, Spacer, Tabs, TabsItem
   },
   meta() { return this.meta },
   data() {

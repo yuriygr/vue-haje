@@ -2,7 +2,7 @@
   <modal size="small">
     <modal-header :title="$t('modals.search-filter.title')">
       <template #after>
-        <icon-button name="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
+         <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
@@ -20,12 +20,12 @@
 </template>
 
 <script>
-import { Modal, ModalHeader, ModalBody, NButton, IconButton, Placeholder } from '@vue-norma/ui'
+import { Modal, ModalHeader, ModalBody, NButton, Placeholder } from '@vue-norma/ui'
 
 export default {
   name: 'search-filter-modal',
   components: {
-    Modal, ModalHeader, ModalBody, NButton, IconButton, Placeholder
+    Modal, ModalHeader, ModalBody, NButton, Placeholder
   },
   props: {
     data: {

@@ -2,7 +2,7 @@
   <modal size="small">
     <modal-header :title="$t('modals.delete-entry.title')">
       <template #after>
-        <icon-button name="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
+         <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import { Modal, ModalHeader, ModalBody, NButton, IconButton } from '@vue-norma/ui'
+import { Modal, ModalHeader, ModalBody, NButton } from '@vue-norma/ui'
 
 export default {
   name: 'delete-entry-modal',
   components: {
-    Modal, ModalHeader, ModalBody, NButton, IconButton
+    Modal, ModalHeader, ModalBody, NButton
   },
   props: {
     data: {

@@ -9,7 +9,7 @@
 
       <div class="comment-form__actions">
         <buttons-group :withGap="true">
-          <icon-button @click="attachFiles" name="add-image-line" mode="tertiary" :title="$t('action.attach_image')" />
+          <n-button icon_before="add-image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
         </buttons-group>
         <buttons-group :withGap="true">
           <n-button v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
@@ -24,12 +24,12 @@
 <script>
 import { cancelEvent } from '@/app/services/utilities'
 
-import { NButton, ButtonsGroup, IconButton } from '@vue-norma/ui'
+import { NButton, ButtonsGroup } from '@vue-norma/ui'
 
 export default {
   name: 'comment-form',
   components: {
-    NButton, ButtonsGroup, IconButton
+    NButton, ButtonsGroup
   },
   props: {
     entry: {

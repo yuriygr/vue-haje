@@ -49,13 +49,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { IconButton, Tabs, TabsItem, Separator, Spacer, Placeholder } from '@vue-norma/ui'
+import { Tabs, TabsItem, Separator, Spacer, Placeholder } from '@vue-norma/ui'
 import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
 
 export default {
   name: 'communities',
   components: {
-    IconButton, Tabs, TabsItem, Separator, Spacer, Placeholder,
+    Tabs, TabsItem, Separator, Spacer, Placeholder,
     CommunitiesList, CommunityItem, CommunityItemWrapper
   },
   meta() { return this.meta },

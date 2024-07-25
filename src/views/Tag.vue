@@ -24,11 +24,6 @@
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder v-else
-      :icon="$t('errors.tag_not_found.icon')"
-      :header="$t('errors.tag_not_found.title')"
-      :text="$t('errors.tag_not_found.description')"
-    />
   </template>
 </template>
 
@@ -84,6 +79,10 @@ export default {
     'data'(to) {
       if (to)
         this.meta.title = `#${to.slug}`
+    },
+    'error'(to) {
+      if (to)
+        this.meta.title = this.$t(this.humanizeError.title)
     },
     '$route.params.slug'(to, from) {
       if (to != from) {
