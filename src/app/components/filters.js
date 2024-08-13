@@ -168,6 +168,9 @@ const contentFormat = (value) => {
     mentionsPatter = /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi
 
   return value
+    .replace(/&#39;/gi, "'") // Фикс      Кавычек
+    .replace(/&#34;/gi, '"') //     Ебучих
+
     .replace(tagsPatter, `<a href="/t/$2" target="_self">$1</a>`)
     .replace(mentionsPatter, `<a href="/u/$2" target="_self">$1</a>`)
     .replace(urlPattern, `<a target="_blank" rel="nofollow" href="$&">$&</a>`)

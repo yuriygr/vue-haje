@@ -136,7 +136,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 7px;
+  padding: 8px;
   margin: 0;
   cursor: pointer;
   transition: var(--x-transition);

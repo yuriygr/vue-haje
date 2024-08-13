@@ -5,18 +5,18 @@
     </template>
   </tabs>
 
-  <separator />
+  <spacer height="30" />
 
   <router-view />
 </template>
 
 <script>
-import { Tabs, TabsItem, Separator } from '@vue-norma/ui'
+import { Tabs, TabsItem, Spacer } from '@vue-norma/ui'
 
 export default {
   name: 'bookmarks',
   components: {
-    Tabs, TabsItem, Separator
+    Tabs, TabsItem, Spacer
   },
   meta() { return this.meta },
   data() {

@@ -76,11 +76,11 @@ export default {
         this.data.user.state.me_subscribed ? 
         {
           icon: 'user-unfollow-line',
-          label: this.$t('entry.action.unsubscribe'),
+          label: this.$t('action.unsubscribe'),
           action: this.unsubscribe
         } : {
           icon: 'user-add-line',
-          label: this.$t('entry.action.subscribe'),
+          label: this.$t('action.subscribe'),
           action: this.subscribe
         }
       ]

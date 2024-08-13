@@ -8,6 +8,9 @@
       <div class="user-item__content">
         <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
           {{ data.name }}
+          <span v-if="data.state.is_verified" class="user-item__verified">
+            <icon name="verify-fill" size="12" />
+          </span>
         </component>
         <component v-if="mode != 'small'" :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">@{{ data.username }}</component>
       </div>
@@ -27,14 +30,14 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { NButton, ButtonsGroup } from '@vue-norma/ui'
+import { Icon, NButton, ButtonsGroup } from '@vue-norma/ui'
 
 let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/ReportUser.vue"))
 
 export default {
   name: 'user-item',
   components: {
-    NButton, ButtonsGroup
+    Icon, NButton, ButtonsGroup
   },
   props: {
     data: false,
@@ -66,8 +69,8 @@ export default {
       },
       sizes: {
         'hero': 120,
-        'normal': 80,
-        'small': 50
+        'normal': 55,
+        'small': 40
       }
     }
   },
@@ -200,7 +203,7 @@ export default {
     --user-item__avatar--border-radius: 8px;
   }
   &--mode-normal {
-    --user-item__avatar--size: 38px;
+    --user-item__avatar--size: 36px;
     --user-item__avatar--border-radius: 8px;
   }
   &--mode-small {
@@ -219,8 +222,8 @@ export default {
     border-radius: var(--user-item__avatar--border-radius, 8px);
     position: relative;
     overflow: hidden;
-    width: var(--user-item__avatar--size, 38px);
-    height: var(--user-item__avatar--size, 38px);
+    width: var(--user-item__avatar--size, 34px);
+    height: var(--user-item__avatar--size, 34px);
     margin-right: .75rem;
     flex-shrink: 0;
     
@@ -243,10 +246,13 @@ export default {
   }
 
   &__name {
+    display: flex;
+    align-items: center;
     color: var(--user-item__name--color, #212529);
-    font-size: 1.3rem;
     font-weight: 500;
-    line-height: calc(1.4 * 1em);
+    font-size: 1.3rem;
+    line-height: calc(1.3 * 1em);
+    transition: var(--x-transition);
 
     @media(hover: hover) {
       &[href]:hover {
@@ -255,11 +261,20 @@ export default {
       }
     }
   }
+
+  &__verified {
+    color: var(--x-color-pink--shade30);
+    margin-left: .5rem;
+
+    svg { fill: currentColor; flex-shrink: 0; display: block; }
+  }
+
   &__username {
     color: var(--user-item__username--color, #666);
-    font-size: 1.3rem;
     font-weight: 400;
-    line-height: calc(1.4 * 1em);
+    font-size: 1.2rem;
+    line-height: calc(1.3 * 1em);
+    transition: var(--x-transition);
 
     @media(hover: hover) {
       &[href]:hover {

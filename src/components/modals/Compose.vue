@@ -199,7 +199,7 @@ export default {
       if (this.$refs.field.innerHTML == "<br>") {
         this.$refs.field.innerText = ''
       }
-      this.form.text = this.$refs.field.innerText
+      this.form.text = this.$refs.field.innerText // TODO: watch на изменение?
     },
     field_onKeyup(e) {
       
@@ -266,7 +266,7 @@ export default {
     if (this.data) {
       this.$refs.field.innerHTML = this.data.content.text
       this.form = {
-        text: this.data.content.text,
+        text: this.$refs.field.innerText, // TODO: watch на изменение?
         is_comments_enabled: this.data.state.is_comments_enabled,
         is_hidden_from_feed: this.data.state.is_hidden_from_feed,
       }

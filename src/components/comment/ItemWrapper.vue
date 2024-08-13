@@ -12,7 +12,7 @@ export default {
 
 <style lang="scss">
 .comment-item-wrapper:not(:last-child) {
-  border-bottom: 1px solid var(--x-divider-color);
+  //border-bottom: 1px solid var(--x-divider-color);
   position: relative;
   margin-bottom: .5rem;
   padding-bottom: .5rem;

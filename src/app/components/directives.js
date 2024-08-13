@@ -17,6 +17,20 @@ const clickOutside = {
   stopProp(event) { event.stopPropagation() }
 }
 
+const CropHighText = {
+  beforeMount(el, binding, vnode) {
+    let data = binding.value
+    if (data.on)
+      return
+    vnode.context.$nextTick(() => {
+      if (el.offsetHeight >= data.height) {
+        el.classList.add(data.class)
+        el.style.maxHeight = data.height + 'px'
+      }
+    })
+  }
+}
+
 const contentFormat = (value) => {
   let
     // http://, https://, ftp://
@@ -57,7 +71,7 @@ const markText = {
   }
 }
 
-let directives = { clickOutside, markText }
+let directives = { clickOutside, markText, CropHighText }
 
 export default new class {
   install(app) {
