@@ -48,6 +48,7 @@ export default {
         title: this.$t('home.title')
       },
       teasers: [
+        { code: 'brain',           icon: 'brain-line' },
         { code: 'recommendations', icon: 'sparkling-line' },
         { code: 'combine',         icon: 'function-line' },
         { code: 'friends',         icon: 'team-line' },
@@ -110,9 +111,9 @@ export default {
   --teaser-item__info-color: var(--x-color-black--tint40);
   
   html[data-theme="black"] & {
-    --icon-background: #f2f2f0;
+    --icon-background: var(--x-body--color);
     --icon-color: #1d1d1d;
-    --teaser-item__title-color: #f2f2f0;
+    --teaser-item__title-color: var(--x-body--color);
     --teaser-item__info-color: var(--x-color-black--tint50);
   }
 }

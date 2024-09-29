@@ -154,6 +154,7 @@
     "title": "Menu",
     "item": {
       "communities": "@:communities.title",
+      "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
@@ -169,6 +170,9 @@
       "subscribed": "All communities",
       "manage": "Manage"
     }
+  },
+  "feeds": {
+    "title": "Ленты"
   },
   "bookmarks": {
     "title": "Bookmarks",
@@ -193,7 +197,6 @@
     },
     "item": {
       "profile": "@:settings.profile.title",
-      "feed": "@:settings.feed.title",
       "notifications": "@:settings.notifications.title",
       "connections": "@:settings.connections.title",
       "appearance": "@:settings.appearance.title",
@@ -219,9 +222,6 @@
         "title": "Profile Avatar",
         "help": "You can change your avatar in the Gravatar service"
       }
-    },
-    "feed": {
-      "title": "Setting up news feeds"
     },
     "notifications": {
       "title": "Notifications setting",

@@ -9,8 +9,8 @@ export default [
 		redirect: { name: 'feed-timeline' },
 		children: [
 			{ path: '', name: 'feed-timeline', component: Feed, meta: { tab: 'timeline' } },
-			{ path: 'popular', name: 'feed-popular', component: Feed, meta: { tab: 'popular' } },
 			{ path: 'abyss', name: 'feed-abyss', component: Feed, meta: { tab: 'abyss' } },
+			{ path: 'collections', name: 'feed-collections', component: Feed, meta: { tab: 'collections' } },
 			{ path: ':uuid', name: 'feed-custom', component: Feed, props: true },
 		]
 	}

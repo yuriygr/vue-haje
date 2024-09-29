@@ -31,6 +31,7 @@
     },
     "teasers": {
       "item": {
+        "brain": { "title": "Никаких нейросетей", "info": "Мы отдаем предпочтения контенту созданными руками или ногами человека" }, 
         "recommendations": { "title": "Никаких рекомендаций", "info": "Новостная лента содержит только то, на что ты подписался и без рекомендаций добавить бывшую и ее нового парня в друзья" }, 
         "combine": { "title": "Никаких лишних функций", "info": "Ищешь доставку, гороскоп, прогноз погоды, музыку и маркетплейс? Ошибся вкладкой, приятель" },
         "friends": { "title": "Никаких друзей", "info": "Только подписки на контент пользователя что интересен тебе" },
@@ -48,7 +49,7 @@
     "title": "Лента",
     "tabs": {
       "timeline": "Моя лента",
-      "popular": "Популярное",
+      "collections": "Коллекции",
       "abyss": "Бездна"
     },
     "errors": {
@@ -151,6 +152,7 @@
     "title": "Меню",
     "item": {
       "communities": "@:communities.title",
+      "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
@@ -166,6 +168,9 @@
       "subscribed": "Все сообщества",
       "manage": "Управление"
     }
+  },
+  "feeds": {
+    "title": "Ленты"
   },
   "bookmarks": {
     "title": "Закладки",
@@ -190,7 +195,6 @@
     },
     "item": {
       "profile": "@:settings.profile.title",
-      "feed": "@:settings.feed.title",
       "notifications": "@:settings.notifications.title",
       "connections": "@:settings.connections.title",
       "appearance": "@:settings.appearance.title",
@@ -216,9 +220,6 @@
         "title": "Аватар профиля",
         "help": "Вы можете изменить свой аватар в сервисе Gravatar"
       }
-    },
-    "feed": {
-      "title": "Настройка новостных лент"
     },
     "notifications": {
       "title": "Настройка уведомлений",

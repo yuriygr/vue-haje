@@ -168,17 +168,17 @@ export default {
 
 <style lang="scss">
 .community-item {
-  --community-item__name--color: var(--x-color);
-  --community-item__name--color-hover: var(--x-color);
+  --community-item__name--color: var(--x-body--color);
+  --community-item__name--color-hover: var(--x-body--color);
   --community-item__description--color: #666;
-  --community-item__description--color-hover: var(--x-color);
+  --community-item__description--color-hover: var(--x-body--color);
   --community-item__avatar--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
-    --community-item__name--color: #fffcea;
-    --community-item__name--color-hover: #fffcea;
-    --community-item__description--color: #999;
-    --community-item__description--color-hover: #fffcea;
+    --community-item__name--color: var(--x-body--color);
+    --community-item__name--color-hover: var(--x-body--color);
+    --community-item__description--color: var(--x-color-white--shade40, #999);
+    --community-item__description--color-hover: var(--x-body--color);
     --community-item__avatar--background: rgba(255, 255, 255, 0.09);
   }
 }

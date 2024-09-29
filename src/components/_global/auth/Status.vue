@@ -33,10 +33,10 @@ export default {
 
 <style lang="scss">
 .form-status {
-  --form-status--background: var(--x-background);
+  --form-status--background: var(--x-body--background);
 
   html[data-theme="black"] & {
-    --form-status--background: var(--x-background);
+    --form-status--background: var(--x-body--background);
   }
 }
 

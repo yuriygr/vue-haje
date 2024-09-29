@@ -1,10 +1,11 @@
 // Main palette
 $x-color-palette: (
   // Инь-янь
-  'white':   #ffffff,
-  'black':   #21273c,
+  'white':   #f2f2f0,
+  'black':   #212529,
 
   // Чисто удобно
+  // TODO: Генерировать их как алиасы основной палитры
   'action':  #1C9BC5,
   'second':  #c63077,
   'success': #35966d,

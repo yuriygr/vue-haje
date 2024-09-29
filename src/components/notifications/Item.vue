@@ -87,16 +87,16 @@ export default {
 
 <style lang="scss">
 .notification-item {
-  --notification-item__name--color: #111;
-  --notification-item__name--color-hover: #111;
+  --notification-item__name--color: var(--x-body--color);
+  --notification-item__name--color-hover: var(--x-body--color);
   --notification-item__username--color: #666;
-  --notification-item__username--color-hover: #111;
+  --notification-item__username--color-hover: var(--x-body--color);
   
   html[data-theme="black"] & {
-    --notification-item__name--color: #fffcea;
-    --notification-item__name--color-hover: #fffcea;
-    --notification-item__username--color: #999;
-    --notification-item__username--color-hover: #fffcea;
+    --notification-item__name--color: var(--x-body--color);
+    --notification-item__name--color-hover: var(--x-body--color);
+    --notification-item__username--color: var(--x-color-white--shade40, #999);
+    --notification-item__username--color-hover: var(--x-body--color);
   }
 }
 

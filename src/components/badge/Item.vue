@@ -54,8 +54,8 @@ export default {
 .badge-item {
   --badge-item--background: transparent;
   --badge-item__icon--background: #f5f5f5;
-  --badge-item__icon--color: #333;
-  --badge-item__label--color: #111;
+  --badge-item__icon--color: var(--x-body--color);
+  --badge-item__label--color: var(--x-body--color);
   --badge-item__description--color: #495057;
 
   &--type-common {
@@ -84,9 +84,9 @@ export default {
 
   html[data-theme="black"] & {
     --badge-item--background: transparent;
-    --badge-item__icon--background: #999;
-    --badge-item__icon--color: #fff;
-    --badge-item__label--color: #fffcea;
+    --badge-item__icon--background: #161616;
+    --badge-item__icon--color: var(--x-body--color);
+    --badge-item__label--color: var(--x-body--color);
     --badge-item__description--color: #999;
 
     &--type-common {

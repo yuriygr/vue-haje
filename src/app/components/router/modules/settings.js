@@ -5,7 +5,6 @@ import {
   SettingsConnections,
   SettingsAppearance,
   SettingsAccount,
-  SettingsFeed,
   SettingsProfile,
   SettingsPassword,
   SettingsLoginActivity,
@@ -23,7 +22,6 @@ export default [
     redirect: { name: 'settings-menu' },
     children: [
       { path: '', name: 'settings-menu', component: SettingsMenu },
-      { path: 'feed', name: 'settings-feed', component: SettingsFeed },
       { path: 'profile', name: 'settings-profile', component: SettingsProfile },
       { path: 'notifications', name: 'settings-notifications', component: SettingsNotifications },
       { path: 'connections', name: 'settings-connections', component: SettingsConnections },

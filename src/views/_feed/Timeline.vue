@@ -1,17 +1,4 @@
 <template>
-  <tabs>
-    <template v-for="(item, index) in tabs" :key="`feed-tab-${item.key}-${index}`">
-      <tabs-item :to="item.to" size="s" :selected="item.key == $route.meta.tab">{{ item.label }}</tabs-item>
-    </template>
-  </tabs>
-
-  <spacer height="30" />
-
-  <template v-if="isAuth">
-    <entry-pseudo-form @click="openComposeModal" />
-    <spacer height="30" />
-  </template>
-
   <entries-list v-if="(!loading && !error) || data.length > 0">
     <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
       <entry-item :data="item" type="short" />
@@ -61,19 +48,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
     ...mapState('feed', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('feed', [ 'hasMoreItems' ]),
-    ...mapGetters('auth', [ 'isAuth' ]),
-    tabs() {
-      return [
-        { key: 'timeline', to: { name: 'feed-timeline' }, label: this.$t('feed.tabs.timeline') },
-        { key: 'abyss', to: { name: 'feed-abyss' }, label: this.$t('feed.tabs.abyss') },
-        { key: 'collections', to: { name: 'feed-collections' }, label: this.$t('feed.tabs.collections') },
-      ]
-    },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }

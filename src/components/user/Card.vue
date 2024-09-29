@@ -220,7 +220,7 @@ $avatar-size: 57px;
   --user-card__avatar--background: rgba(0, 0, 0, 0.09);
 
   html[data-theme="black"] & {
-    --user-card__username--color: #999;
+    --user-card__username--color: var(--x-color-white--shade40, #999);
     --user-card__avatar--background: rgba(255, 255, 255, 0.09);
   }
 }
@@ -255,7 +255,7 @@ $avatar-size: 57px;
     word-wrap: break-word;
     word-break: break-word;
     font-size: 1.5rem;
-    color: var(--user-card__username--color, #495057);
+    color: var(--user-card__username--color);
     font-weight: var(--x-font-weight--normal);
     line-height: calc(1.4 * 1em);
   }

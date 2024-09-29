@@ -1,5 +1,5 @@
 <template>
-  <div class="attachments" v-if="data">
+  <div :class="elClass" v-if="data">
     <picture v-for="item in data" :key="`file-${item.file.uuid}`">
       <img :data-src="`https://leonardo.osnova.io/${item.file.uuid}`" :src="`https://leonardo.osnova.io/${item.file.uuid}`">
     </picture>
@@ -23,20 +23,35 @@ export default {
     }
   },
   computed: {
-
+    elClass() {
+      return [
+        'attachments',
+        'attachments--mode-' + this.mode
+      ]
+    },
   }
 }
 </script>
 
 <style lang="scss">
 .attachments {
-  border-radius: 12px;
-  overflow: hidden;
 
-  img {
-    width: 100%;
-    height: auto;
+  picture {
     display: block;
+    overflow: hidden;
+    border-radius: 12px;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &--mode-compact {
+    picture {
+      max-width: 250px;
+    }
   }
 }
 </style>

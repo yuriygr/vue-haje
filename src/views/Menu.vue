@@ -53,6 +53,12 @@ export default {
           disabled: !this.isAuth,
           chevron: true
         },
+        //{
+        //  icon: 'feeds-line',
+        //  label: this.$t('menu.item.feeds'),
+        //  to: { name: 'feeds' },
+        //  disabled: !this.isAuth
+        //},
         {
           icon: 'bookmarks-line',
           label: this.$t('menu.item.bookmarks'),

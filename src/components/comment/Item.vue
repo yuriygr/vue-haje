@@ -7,6 +7,7 @@
         <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
       </div>
       <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
+      <attachments class="comment__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
       <meta-info class="comment__meta" :items="metaItems" />
     </div>
   </div>
@@ -18,6 +19,7 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Icon, MetaInfo } from '@vue-norma/ui'
+import Attachments from '@/components/attachments'
 
 import { UserItem } from '@/components/user'
 
@@ -26,7 +28,7 @@ let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals
 export default {
   name: 'comment-item',
   components: {
-    UserItem,
+    UserItem, Attachments,
     Icon, MetaInfo
   },
   props: {
@@ -220,10 +222,15 @@ export default {
   }
 
   &__content {
+    color: var(--x-body--color);
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
     margin-bottom: .75rem;
     word-break: break-word;
+  }
+
+  &__attachments {
+    margin-bottom: 1rem;
   }
 
 }

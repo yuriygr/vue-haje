@@ -40,12 +40,6 @@ export default {
           to: { name: 'settings-profile' },
           disabled: !this.isAuth
         },
-       {
-          icon: 'feeds-line',
-          label: this.$t('settings.item.feed'),
-          to: { name: 'settings-feed' },
-          disabled: !this.isAuth || true
-        },
         {
           icon: 'bell-line',
           label: this.$t('settings.item.notifications'),

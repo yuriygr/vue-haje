@@ -9,7 +9,7 @@
       </buttons-group>
     </div>
     <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
-    <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
+    <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="full" />
     <meta-info class="entry__meta" :items="metaItems" />
   </div>
 </template>
@@ -262,6 +262,7 @@ export default {
   }
 
   &__content {
+    color: var(--x-body--color);
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
     word-break: break-word;

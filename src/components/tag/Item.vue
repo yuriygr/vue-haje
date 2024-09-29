@@ -47,7 +47,7 @@ export default {
 
   html[data-theme='black'] & {
     --tag-item--background: #1f1f1f;
-    --tag-item__hash--color: #999;
+    --tag-item__hash--color: var(--x-color-white--shade40, #999);
     --tag-item__label--color: #f0f0f0;
 
     --tag-item--background-hover: #242424;

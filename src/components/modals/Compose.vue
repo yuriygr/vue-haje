@@ -1,7 +1,7 @@
 <template>
   <modal :class="$formClass" v-on="$formEvents">
-    <div v-if="session_data.user" class="compose__user">
-      <user-item :data="session_data.user" :clickable="false" :showSubscribeAction="false" />
+    <div v-if="entryUser" class="compose__user">
+      <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
     </div>
     <div class="compose__field"
       v-on="$fieldEvents"
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+// TODO: если идет изменение чужой записи - выводить снизу аватарку текущего пользователя, а сверху автора поста
+// Хотя, можно сразу при редактировании поста выводить инфу о юзере не из сессии  Хм  
 import { cancelEvent } from '@/app/services/utilities'
 import { UserItem } from '@/components/user'
 import { mapState } from 'vuex'
@@ -51,6 +53,8 @@ export default {
       error: false,
 
       acceptetFiles: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+
+      user: false,
 
       form: {
         text: '',
@@ -136,6 +140,10 @@ export default {
         ..._hidde_from_feed
       ]
     },
+    // Выбираем какого пользователя выводить как автора
+    entryUser() {
+      return this.user || this.session_data.user
+    }
   },
   methods: {
     closeModal() {
@@ -258,6 +266,9 @@ export default {
         .forEach(file => {
           console.log(file)
         })
+    },
+    _processLinkUpload(url) {
+
     }
   },
   mounted() {
@@ -265,6 +276,7 @@ export default {
 
     if (this.data) {
       this.$refs.field.innerHTML = this.data.content.text
+      this.user = this.data.user
       this.form = {
         text: this.$refs.field.innerText, // TODO: watch на изменение?
         is_comments_enabled: this.data.state.is_comments_enabled,

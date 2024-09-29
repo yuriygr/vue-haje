@@ -132,6 +132,7 @@
     "title": "Menu",
     "item": {
       "bookmarks": "@:bookmarks.title",
+      "feeds": "@:feeds.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
@@ -168,7 +169,6 @@
     },
     "item": {
       "profile": "@:settings.profile.title",
-      "feed": "@:settings.feed.title",
       "notifications": "@:settings.notifications.title",
       "connections": "@:settings.connections.title",
       "appearance": "@:settings.appearance.title",
@@ -194,9 +194,6 @@
         "title": "Avatar do perfil",
         "help": "Você pode alterar seu avatar no serviço Gravatar"
       }
-    },
-    "feed": {
-      "title": "Configurando feeds de notícias"
     },
     "notifications": {
       "title": "Configurando notificações",

@@ -76,10 +76,10 @@ export default {
 }
 
 .app-tabbar {
-  --tabbar--background: var(--x-background);
+  --tabbar--background: var(--x-body--background);
 
   html[data-theme="black"] & {
-    --tabbar--background: var(--x-background);
+    --tabbar--background: var(--x-body--background);
   }
 }
 

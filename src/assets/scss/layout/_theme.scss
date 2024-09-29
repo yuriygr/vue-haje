@@ -38,16 +38,16 @@
 
 
 html {
-  --x-background: #fff;
-  --x-color: #212529;
-
+  --x-body--background: #fff;
+  --x-body--color: var(--x-color-black);
+  --x-background: var(--x-body--background);
   --x-divider-color: #f1f3f5;
 }
 
 // Темная тема
 html[data-theme="black"] {
-  --x-background: #111111;
-  --x-color: #f2f2f0;
-
+  --x-body--background: #111111;
+  --x-body--color: var(--x-color-white);
+  --x-background: var(--x-body--background);
   --x-divider-color: #292B2E;
 }

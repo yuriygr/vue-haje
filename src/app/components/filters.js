@@ -148,35 +148,48 @@ const timeAgo = (timestamp, locale) => {
 
 // ochen' mnogo kostiley
 const contentFormat = (value) => {
-  let
+  let rules = {
     // http://, https://, ftp://
-    urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim,
-
+    url: {
+      pattern: /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim,
+      replacment: `<a target="_blank" rel="nofollow" href="$&">$&</a>`
+    },
     // www. sans http:// or https://
-    pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim,
-
+    pseudoUrl: {
+      pattern: /(^|[^\/])(www\.[\S]+(\b|$))/gim,
+      replacment: `$1<a target="_blank" rel="nofollow" href="https://$2">$2</a>`
+    },
     // e-mail addresses
-    emailAddressPattern = /[\w.+]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim,
-
+    email: {
+      pattern: /[\w.+]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim,
+      replacment: `<a href="mailto:$&">$&</a>`
+    },
+    // hashtags
+    tags: {
+      pattern: /\B(#([^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
+      replacment: `<a href="/t/$2" target="_self">$1</a>`
+    },
+    // mentions
+    mentions: {
+      pattern: /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
+      replacment: `<a href="/u/$2" target="_self">$1</a>`
+    },
     // new lines
-    newLinesPattern = /(?:\r\n|\r|\n)/g,
+    newLines: {
+      pattern: /(?:\r\n|\r|\n)/g,
+      replacment: `<br />`
+    }
+  }
 
-    // hashtags
-    tagsPatter = /\B(#([^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
+  // unescape some HTML
+  value = value.replace(/&#39;/gi, "'")
+               .replace(/&#34;/gi, '"')
 
-    // hashtags
-    mentionsPatter = /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi
+  Object.keys(rules).forEach(key => 
+    value = value.replace(rules[key].pattern, rules[key].replacment)
+  )
 
   return value
-    .replace(/&#39;/gi, "'") // Фикс      Кавычек
-    .replace(/&#34;/gi, '"') //     Ебучих
-
-    .replace(tagsPatter, `<a href="/t/$2" target="_self">$1</a>`)
-    .replace(mentionsPatter, `<a href="/u/$2" target="_self">$1</a>`)
-    .replace(urlPattern, `<a target="_blank" rel="nofollow" href="$&">$&</a>`)
-    .replace(pseudoUrlPattern, `$1<a target="_blank" rel="nofollow" href="https://$2">$2</a>`)
-    .replace(emailAddressPattern, `<a href="mailto:$&">$&</a>`)
-    .replace(newLinesPattern, `<br />`)
 }
 
 let filters = { contentFormat, humanizeError, formatBytes, formatDuration, timeFormat, timeFormatOnlyYear, timeAgo }

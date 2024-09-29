@@ -182,17 +182,17 @@ export default {
 
 <style lang="scss">
 .user-item {
-  --user-item__name--color: var(--x-color);
-  --user-item__name--color-hover: var(--x-color);
+  --user-item__name--color: var(--x-body--color);
+  --user-item__name--color-hover: var(--x-body--color);
   --user-item__username--color: #666;
-  --user-item__username--color-hover: var(--x-color);
+  --user-item__username--color-hover: var(--x-body--color);
   --user-item__avatar--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
-    --user-item__name--color: #fffcea;
-    --user-item__name--color-hover: #fffcea;
-    --user-item__username--color: #999;
-    --user-item__username--color-hover: #fffcea;
+    --user-item__name--color: var(--x-body--color);
+    --user-item__name--color-hover: var(--x-body--color);
+    --user-item__username--color: var(--x-color-white--shade40, #999);
+    --user-item__username--color-hover: var(--x-body--color);
     --user-item__avatar--background: rgba(255, 255, 255, 0.09);
   }
 }

@@ -22,7 +22,7 @@
 }
 
 @mixin generate-card() {
-  background: var(--x-color-white);
+  background: var(--x-body--color);
   box-shadow: var(--x-box-shadow--depth-4);
   border-radius: var(--x-border-radius--base);
   transition: all .1s var(--x-motion-timing--standard);
