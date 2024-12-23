@@ -1,24 +1,32 @@
 <template>
-  <div v-if="content" @click="handleClicks" v-mark-text>{{ content }}</div>
+  <div v-if="content" v-html="formated" />
 </template>
 
 <script>
 export default {
   name: 'dynamic-text',
+  emits: ['onToggle'],
   props: {
     content: {
       type: [ Boolean, String ],
       default: false
    }
   },
+  computed: {
+    formated() {
+      return this.$filters.contentFormat(content)
+    }
+  },
   methods: {
-    handleClicks(e) {
-      if (e.target.nodeName === 'A') {
-        e.preventDefault()
-
-        // Manually navigate to the route
-        this.$router.push(e.target.href)
-      }
+    truncate(maxLetters = 100, useWordBoundary = false) {
+      const LongstringHelper = str => {
+  const sliceBoundary = str => str.substr(0, str.lastIndexOf(" "));
+  const truncate = (n, useWordBoundary) => 
+        str.length <= n ? str : `${ useWordBoundary 
+          ? sliceBoundary(str.slice(0, n - 1))
+          : str.slice(0, n - 1)}&hellip;`;
+  return { full: str,  truncate };
+}; 
     }
   }
 }

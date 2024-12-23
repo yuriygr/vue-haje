@@ -114,7 +114,7 @@ export default {
     // Fetching
     fetchProfile() {
       this.loading.profile = true
-      return this.$api.get('my/settings/profile')
+      return this.$api.get('settings/profile')
       .then(result => {
         this.profile = result
       })
@@ -125,7 +125,7 @@ export default {
     },
     fetchTints() {
       this.loading.tint = true
-      return this.$api.get('my/settings/tint')
+      return this.$api.get('settings/tint')
       .then(result => {
         this.tints = result.items
       })
@@ -142,7 +142,7 @@ export default {
     // Submits
     submitProfile() {
       this.loading.profile = true
-      return this.$api.post('my/settings/profile', this.profile)
+      return this.$api.post('settings/profile', this.profile)
       .then(result => {
         this.$alerts.success({ text: result.status })
       })
@@ -153,7 +153,7 @@ export default {
     },
     submitTint() {
       this.loading.tint = true
-      return this.$api.post('my/settings/tint', this.profile.tint)
+      return this.$api.post('settings/tint', this.profile.tint)
       .then(result => {
         this.$alerts.success({ text: result.status })
       })

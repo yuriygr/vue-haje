@@ -1,14 +1,27 @@
 <template>
-  <div :class="elClass" v-if="data">
-    <picture v-for="item in data" :key="`file-${item.file.uuid}`">
-      <img :data-src="`https://leonardo.osnova.io/${item.file.uuid}`" :src="`https://leonardo.osnova.io/${item.file.uuid}`">
-    </picture>
+  <div :class="elClass" v-if="data.length > 0">
+    <div class="images-list">
+      <picture v-for="item in data" :key="`file-${item.file.uuid}`">
+        <img :data-src="`https://leonardo.osnova.io/${item.file.uuid}`" :src="`https://leonardo.osnova.io/${item.file.uuid}`">
+      </picture>
+    </div>
+
+    <links-list v-if="data.length > 0">
+      <link-item-wrapper v-for="item in data" :key="`link-${item.file.uuid}`">
+        <link-item :data="ex" />
+      </link-item-wrapper>
+    </links-list>
   </div>
 </template>
 
 <script>
+import {LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
+
 export default {
   name: 'attachments',
+  components: {
+   LinksList,LinkItem,LinkItemWrapper
+  },
   props: {
     data: {
       type: [ Array, Object, Boolean ],
@@ -23,6 +36,13 @@ export default {
     }
   },
   computed: {
+    ex() {
+      return {
+        icon: 'external-line',
+        label: 'МакSим - Дед Максим (AI Cover)',
+        url: 'https://www.youtube.com/watch?v=03-DjYDTbJA'
+      }
+    },
     elClass() {
       return [
         'attachments',
@@ -35,6 +55,10 @@ export default {
 
 <style lang="scss">
 .attachments {
+
+  & > * + * {
+    margin-top: .75rem;
+  }
 
   picture {
     display: block;

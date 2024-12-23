@@ -26,12 +26,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { NButton, NHeader, Group, Placeholder, LoadmoreTrigger } from '@vue-norma/ui'
+import { NButton, NHeader, Group, Placeholder, PlaceholderLoading, LoadmoreTrigger } from '@vue-norma/ui'
 
 export default {
   name: 'feed-collections',
   components: {
-    NButton, NHeader, Group, Placeholder, LoadmoreTrigger
+    NButton, NHeader, Group, Placeholder, PlaceholderLoading, LoadmoreTrigger
   },
   meta() { return this.meta },
   data() {

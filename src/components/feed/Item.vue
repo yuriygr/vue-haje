@@ -1,13 +1,13 @@
 <template>
-  <div :class="[ 'community-item', 'community-item--mode-' + mode ]">
-    <div class="community-item__content">
-      <component :is="clickable ? 'router-link' : 'div'" v-bind="communityLinkBinds" class="community-item__name">
+  <div :class="[ 'feed-item', 'feed-item--mode-' + mode ]">
+    <div class="feed-item__content">
+      <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
         {{ data.title }}
       </component>
-      <div v-if="mode != 'small'" class="community-item__description" v-html="$filters.contentFormat(data.description)" />
+      <div v-if="mode != 'small'" class="feed-item__description" v-html="$filters.contentFormat(data.description)" />
       <meta-info class="feed-item__meta" v-if="metaItems.length > 0" :items="metaItems" />
     </div>
-    <buttons-group :withGap="true" v-if="showSubscribeAction" class="community-item__actions">
+    <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
       <n-button
         :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
         mode="tertiary"
@@ -24,7 +24,7 @@
 import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
-  name: 'community-item',
+  name: 'feed-item',
   components: {
     NButton, ButtonsGroup, MetaInfo
   },
@@ -55,13 +55,13 @@ export default {
     }
   },
   computed: {
-    communityLink() {
-      return { name: 'community', params: { slug: this.data.slug } }
+    feedLink() {
+      return { name: 'feed-custom', params: { uuid: this.data.uuid } }
     },
-    communityLinkBinds() {
+    feedLinkBinds() {
       if (this.clickable)
         return {
-          to: this.communityLink,
+          to: this.feedLink,
           exactActiveClass: '',
           activeClass: ''
         }
@@ -72,8 +72,8 @@ export default {
       let _result = []
 
       //_result.push({ label: 'Category' })
-      this.data.state.is_official && _result.push({ label: this.$t('community.meta.official') })
-      _result.push({ label: this.$tc('community.meta.subscribers', this.data.counters.subscribers) })
+      this.data.state.is_official && _result.push({ label: this.$t('feed.meta.official') })
+      //_result.push({ label: this.$tc('feed.meta.subscribers', this.data.counters.subscribers) })
 
       return _result
     },
@@ -92,7 +92,7 @@ export default {
       ]
 
       return [
-        ...(this.data.state.is_me) ? [] : _bookmark,
+        _bookmark,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),
@@ -120,8 +120,8 @@ export default {
     toggleSubscribe() {
       this.loading.subscribe = true
       let _path = this.data.state.me_subscribed
-        ? `community/${this.data.slug}/unsubscribe`
-        : `community/${this.data.slug}/subscribe`
+        ? `feed/${this.data.uuid}/unsubscribe`
+        : `feed/${this.data.uuid}/subscribe`
       this.$api.post(_path)
       .then(result => {
         this.data.state.me_subscribed = (result.status == 'subscribed')
@@ -135,8 +135,8 @@ export default {
       this.loading.bookmarks = true
       this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
-        object: 'community',
-        community_id: this.data.community_id
+        object: 'feed',
+        feed_id: this.data.feed_id
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
@@ -148,14 +148,14 @@ export default {
     },
     // Остальные действия
     copyLink() {
-      let _url = this.$router.resolve(this.communityLink)
+      let _url = this.$router.resolve(this.feedLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
         this.$alerts.success({ text: this.$t('success.link_copied') })
       })
       this.$popover.close()
     },
     report() {
-      this.$modals.show(ReportCommunityModal, {
+      this.$modals.show(ReportfeedModal, {
         data: this.data
       })
       this.$popover.close()
@@ -165,49 +165,49 @@ export default {
 </script>
 
 <style lang="scss">
-.community-item {
-  --community-item__name--color: var(--x-body--color);
-  --community-item__name--color-hover: var(--x-body--color);
-  --community-item__description--color: #666;
-  --community-item__description--color-hover: var(--x-body--color);
-  --community-item__avatar--background: rgba(0, 0, 0, 0.09);
+.feed-item {
+  --feed-item__name--color: var(--x-body--color);
+  --feed-item__name--color-hover: var(--x-body--color);
+  --feed-item__description--color: #666;
+  --feed-item__description--color-hover: var(--x-body--color);
+  --feed-item__avatar--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
-    --community-item__name--color: var(--x-body--color);
-    --community-item__name--color-hover: var(--x-body--color);
-    --community-item__description--color: var(--x-color-white--shade40, #999);
-    --community-item__description--color-hover: var(--x-body--color);
-    --community-item__avatar--background: rgba(255, 255, 255, 0.09);
+    --feed-item__name--color: var(--x-body--color);
+    --feed-item__name--color-hover: var(--x-body--color);
+    --feed-item__description--color: var(--x-color-white--shade40, #999);
+    --feed-item__description--color-hover: var(--x-body--color);
+    --feed-item__avatar--background: rgba(255, 255, 255, 0.09);
   }
 }
 
-.community-item {
+.feed-item {
   &--mode-hero {
-    --community-item__avatar--size: 46px;
-    --community-item__avatar--border-radius: 8px;
+    --feed-item__avatar--size: 46px;
+    --feed-item__avatar--border-radius: 8px;
   }
   &--mode-normal {
-    --community-item__avatar--size: 38px;
-    --community-item__avatar--border-radius: 8px;
+    --feed-item__avatar--size: 38px;
+    --feed-item__avatar--border-radius: 8px;
   }
   &--mode-small {
-    --community-item__avatar--size: 18px;
-    --community-item__avatar--border-radius: 4px;
+    --feed-item__avatar--size: 18px;
+    --feed-item__avatar--border-radius: 4px;
   }
 }
 
-.community-item {
+.feed-item {
   display: flex;
   align-items: center;
   position: relative;
 
   &__avatar {
-    background: var(--community-item__avatar--background, rgba(0, 0, 0, 0.09));
-    border-radius: var(--community-item__avatar--border-radius, 8px);
+    background: var(--feed-item__avatar--background, rgba(0, 0, 0, 0.09));
+    border-radius: var(--feed-item__avatar--border-radius, 8px);
     position: relative;
     overflow: hidden;
-    width: var(--community-item__avatar--size, 38px);
-    height: var(--community-item__avatar--size, 38px);
+    width: var(--feed-item__avatar--size, 38px);
+    height: var(--feed-item__avatar--size, 38px);
     margin-right: .75rem;
     flex-shrink: 0;
     
@@ -230,19 +230,19 @@ export default {
   }
 
   &__name {
-    color: var(--community-item__name--color, #212529);
+    color: var(--feed-item__name--color, #212529);
     font-size: 1.3rem;
     font-weight: 500;
     line-height: calc(1.4 * 1em);
 
     @media(hover: hover) {
       &[href]:hover {
-        color: var(--community-item__name--color-hover, #212529);
+        color: var(--feed-item__name--color-hover, #212529);
       }
     }
   }
   &__description {
-    color: var(--community-item__description--color, #666);
+    color: var(--feed-item__description--color, #666);
     font-size: 1.3rem;
     font-weight: 400;
     line-height: calc(1.4 * 1em);

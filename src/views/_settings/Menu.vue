@@ -50,7 +50,7 @@ export default {
           icon: 'link-line',
           label: this.$t('settings.item.connections'),
           to: { name: 'settings-connections' },
-          disabled: !this.isAuth || true
+          disabled: !this.isAuth
         },
         {
           icon: 'palette-line',

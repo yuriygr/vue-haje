@@ -62,8 +62,9 @@ export default {
     // Fetching
     fetch() {
       this.loading = true
-      return this.$api.get('my/settings/notifications')
+      return this.$api.get('settings/notifications')
       .then(result => {
+        console.log(result)
         this.form = result
       })
       .catch(error => {
@@ -74,7 +75,7 @@ export default {
     // Submit
     submit() {
       this.loading = true
-      return this.$api.post('my/settings/notifications', this.form)
+      return this.$api.post('settings/notifications', this.form)
       .then(result => {
         this.$alerts.success({ text: result.status })
       })

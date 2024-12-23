@@ -9,13 +9,13 @@
   </template>
   
   <template v-if="Object.keys(data).length == 0">
+    <placeholder-loading v-if="loading" />
     <placeholder v-if="(!loading && !error)" :text="$t('entry.errors.empty')" />
     <placeholder v-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
-    <placeholder-loading v-if="loading" />
   </template>
 
 </template>

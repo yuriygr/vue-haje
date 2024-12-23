@@ -18,7 +18,7 @@
           <icon name="edit-line" size="20" />
         </tabbar-item>
 
-        <tabbar-item :to="{ name: 'notifications' }" :title="$t('header.nav.notifications')" :badge="session_data.notifications_count > 0">
+        <tabbar-item :to="{ name: 'notifications' }" :title="$t('header.nav.notifications')" :badge="hasNewNotifications">
           <icon name="bell-line" size="20" />
         </tabbar-item>
 
@@ -53,7 +53,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters('auth', [ 'isAuth' ]),
+    ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ]),
     ...mapState('auth', {
       'session_data': state => state.data
     })

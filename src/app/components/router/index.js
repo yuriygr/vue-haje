@@ -11,6 +11,7 @@ import TagRoutes from '@/app/components/router/modules/tag'
 import UserRoutes from '@/app/components/router/modules/user'
 import SearchRoutes from '@/app/components/router/modules/search'
 import BookmarksRoutes from '@/app/components/router/modules/bookmarks'
+import FeedsRoutes from '@/app/components/router/modules/feeds'
 import SettingsRoutes from '@/app/components/router/modules/settings'
 import HelpRoutes from '@/app/components/router/modules/help'
 import AuthRoutes from '@/app/components/router/modules/auth'
@@ -22,6 +23,7 @@ const routes = [
 	...UserRoutes,
 	...SettingsRoutes,
 	...BookmarksRoutes,
+	...FeedsRoutes,
 	...SearchRoutes,
 	...HelpRoutes,
 	...AuthRoutes,

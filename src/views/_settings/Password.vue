@@ -61,7 +61,7 @@ export default {
     },
     submit() {
       this.loading = true
-      return this.$api.post('my/settings/password', this.form)
+      return this.$api.post('settings/password', this.form)
       .then(result => {
         this.$alerts.success({ text: result.status })
       })

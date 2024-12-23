@@ -1,11 +1,11 @@
 <template>
-  <div class="external-links-list">
+  <div class="feeds-list">
     <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'external-links-list',
+  name: 'feeds-list',
 }
 </script>

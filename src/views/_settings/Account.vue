@@ -1,9 +1,13 @@
 <template>
 
   <group>
-    <n-header>{{ $t('settings.account.email') }}</n-header>
+    <n-header>{{ $t('settings.account.email.title') }}</n-header>
 
     <form-group @submit="submitEmail" :loading="loading.emailForm">
+      <form-text>
+        {{ $t('settings.account.email.help') }}
+      </form-text>
+      
       <form-block :label="$t('settings.field.email')">
         <text-field tabindex="1" type="email" name="email" v-model.trim="emailForm.email" :disabled="loading.emailForm" />
       </form-block>

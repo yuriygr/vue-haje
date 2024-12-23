@@ -1,24 +1,22 @@
 <template>
   <group>
     <n-header>{{ $t('settings.appearance.title') }}</n-header>
-    <form-group @submit="submit" :loading="loading">
 
-      <form-block :label="$t('settings.field.theme')">
-        <select-field tabindex="1" name="theme" v-model="theme" @change="change('theme', $event)">
-          <template v-for="key in themes" :key="`theme-${key}`">
-            <option :value="key" :selected="key == theme">{{ $t(`app.theme.${key}`) }}</option>
-          </template>
-        </select-field>
-      </form-block>
+    <form-block :label="$t('settings.field.theme')">
+      <select-field tabindex="1" name="theme" v-model="theme" @change="change('theme', $event)">
+        <template v-for="key in themes" :key="`theme-${key}`">
+          <option :value="key" :selected="key == theme">{{ $t(`app.theme.${key}`) }}</option>
+        </template>
+      </select-field>
+    </form-block>
 
-      <form-block :label="$t('settings.field.locale')">
-        <select-field tabindex="2" name="locale" v-model="locale" @change="change('locale', $event)">
-          <template v-for="key in locales" :key="`locale-${key}`">
-            <option :value="key" :selected="key == locale">{{ $t(`app.locale.${key}`) }}</option>
-          </template>
-        </select-field>
-      </form-block>
-    </form-group>
+    <form-block :label="$t('settings.field.locale')">
+      <select-field tabindex="2" name="locale" v-model="locale" @change="change('locale', $event)">
+        <template v-for="key in locales" :key="`locale-${key}`">
+          <option :value="key" :selected="key == locale">{{ $t(`app.locale.${key}`) }}</option>
+        </template>
+      </select-field>
+    </form-block>
   </group>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <tabs>
-    <template v-for="(item, index) in tabs" :key="`communities-tab-${item.key}-${index}`">
+    <template v-for="(item, index) in tabs" :key="`feeds-tab-${item.key}-${index}`">
       <tabs-item :to="item.to" :selected="item.key == filters.tab" :disabled="item.disabled">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -22,15 +22,15 @@
   
   <spacer height="15" />
 
-  <communities-list v-if="(!loading && !error) || data.length > 0">
-    <community-item-wrapper v-for="item in data" :key="`community-${item.community_id}`">
-      <community-item :data="item" type="short" />
-    </community-item-wrapper>
+  <feeds-list v-if="(!loading && !error) || data.length > 0">
+    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`">
+      <feed-item :data="item" type="short" />
+    </feed-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
     <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </communities-list>
+  </feeds-list>
 
   <template v-if="data.length == 0">
     <placeholder-loading v-if="loading" />
@@ -40,9 +40,9 @@
       :text="$t(humanizeError.description)"
     />
     <placeholder v-else
-      :icon="$t('errors.empty_communities.icon')"
-      :header="$t('errors.empty_communities.title')"
-      :text="$t('errors.empty_communities.description')"
+      :icon="$t('errors.empty_feeds.icon')"
+      :header="$t('errors.empty_feeds.title')"
+      :text="$t('errors.empty_feeds.description')"
     />
   </template>
 </template>
@@ -50,25 +50,25 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Tabs, TabsItem, Separator, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
-import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
+import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
-  name: 'communities',
+  name: 'feeds',
   components: {
     Tabs, TabsItem, Separator, Spacer, Placeholder, PlaceholderLoading,
-    CommunitiesList, CommunityItem, CommunityItemWrapper
+    FeedsList, FeedItem, FeedItemWrapper
   },
   meta() { return this.meta },
   data() {
     return {
       meta: {
-        title: this.$t('communities.title')
+        title: this.$t('feeds.title')
       }
     }
   },
   computed: {
-    ...mapState('communities', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('communities', [ 'hasMoreItems' ]),
+    ...mapState('feeds', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('feeds', [ 'hasMoreItems' ]),
     query() {
       return this.$route.query.q
     },
@@ -77,12 +77,12 @@ export default {
         {
           key: 'subscribed',
           to: this.formatLink(),
-          label: this.$t('communities.tabs.subscribed')
+          label: this.$t('feeds.tabs.subscribed')
         },
         {
           key: 'manage',
           to: this.formatLink('manage'),
-          label: this.$t('communities.tabs.manage')
+          label: this.$t('feeds.tabs.manage')
         }
       ]
     },
@@ -105,7 +105,7 @@ export default {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })
     },
     loadMore() {
-      this.$store.dispatch('communities/more')
+      this.$store.dispatch('feeds/more')
     },
     deleteTabQuery() {
       let query = Object.assign({}, this.$route.query)
@@ -114,22 +114,22 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('communities/setFilters', {
+    await this.$store.dispatch('feeds/setFilters', {
       tab: this.availableKeys.includes(this.$route.query.tab)
             ? this.$route.query.tab
             : ( this.deleteTabQuery(), 'subscribed' ), offset: undefined
     })
-    this.$store.dispatch('communities/fetch')
+    this.$store.dispatch('feeds/fetch')
   },
   unmounted() {
-    this.$store.dispatch('communities/clear')
+    this.$store.dispatch('feeds/clear')
   },
   watch: {
     async '$route.query.tab'(to) {
       await this.$store.dispatch('communities/setFilters', {
         tab: this.availableKeys.includes(to) ? to : 'subscribed', offset: undefined
       })
-      this.$store.dispatch('communities/fetch')
+      this.$store.dispatch('feeds/fetch')
     }
   }
 }

@@ -93,10 +93,19 @@ export default {
         return { name: this.$route.name }
       }
     },
+    seen() {
+      return this.$api.post('my/notifications/seen')
+      .then(_ => {
+        this.$store.dispatch('auth/notifications_seen')
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+    },
     readAll() {
       this.load_more_loading = true
 
-      this.$api.post('my/notifications/read_all')
+      this.$api.post('my/notifications/read', { mode: 'all' })
       .then(_ => {
         this.$alerts.success({ text: this.$t('notifications.alert.read_all_success') })
       })
@@ -120,7 +129,8 @@ export default {
             ? this.$route.query.tab
             : ( this.deleteTabQuery(), 'all' ), offset: undefined
     })
-    this.$store.dispatch('notifications/fetch')
+    await this.$store.dispatch('notifications/fetch')
+    await this.seen()
   },
   unmounted() {
     this.$store.dispatch('notifications/clear')
@@ -130,7 +140,7 @@ export default {
       await this.$store.dispatch('notifications/setFilters', {
         tab: this.availableKeys.includes(to) ? to : 'all', offset: undefined
       })
-      this.$store.dispatch('notifications/fetch')
+      await this.$store.dispatch('notifications/fetch')
     }
   }
 }

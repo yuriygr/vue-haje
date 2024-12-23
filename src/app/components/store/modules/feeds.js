@@ -4,8 +4,10 @@ export default {
     return {
       data: [],
       total_items: 0,
-  
-      filters: { },
+
+      filters: {
+        tab: ''
+      },
 
       loading: false,
       error: false
@@ -25,7 +27,7 @@ export default {
     'CLEAR_DATA'(state) {
       state.data = []
     },
-    // FILTERS
+    // FILTEST
     'SET_FILTERS'(state, payload) {
       state.filters = payload
     },
@@ -45,7 +47,7 @@ export default {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get('settings/logins', state.filters)
+      this.$api.get('my/feeds', state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -67,6 +69,13 @@ export default {
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
       commit('SET_TOTAL_ITEMS', 0)
+    },
+    // Filters
+    setFilters({ state, commit }, payload) {
+      commit('SET_FILTERS', { ...state.filters, ...payload })
+    },
+    clearFilters({ commit }) {
+      commit('CLEAR_FILTERS')
     }
   },
   getters: {

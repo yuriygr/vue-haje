@@ -4,7 +4,11 @@ export default {
     return {
       data: {
         is_auth: false,
-        notifications_count: 0
+        user: {
+          state: {
+            has_new_notifications: 0
+          }
+        }
       },
 
       loading: false,
@@ -20,6 +24,9 @@ export default {
     },
     'SET_ERROR'(state, payload) {
       state.error = payload
+    },
+    'RESET_NOTIFICATIONS'(state) {
+      state.data.user.state.has_new_notifications = false
     }
   },
   actions: {
@@ -41,11 +48,19 @@ export default {
     },
     set({ commit }, payload) {
       commit('SET_DATA', payload)
+    },
+    notifications_seen({ commit }) {
+      commit('RESET_NOTIFICATIONS')
     }
   },
   getters: {
     isAuth(state) {
       return state.data.is_auth
+    },
+    hasNewNotifications(state) {
+      return state.data.user
+        ? state.data.user.state.has_new_notifications
+        : false
     }
   }
 }
