@@ -10,7 +10,11 @@
   </users-list>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <users-list v-if="loading">
+      <user-item-wrapper v-for="item in skeletons">
+        <user-item />
+      </user-item-wrapper>
+    </users-list>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -26,16 +30,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, NHeader, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 
 export default {
   name: 'search-users',
   components: {
     UsersList, UserItem, UserItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
+    Placeholder, NHeader, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('search/users', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/users', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {

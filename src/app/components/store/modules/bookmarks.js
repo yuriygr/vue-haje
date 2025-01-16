@@ -5,7 +5,7 @@ let all = {
       data: {
         users: [],
         entries: [],
-        communities: []
+        feeds: []
       },
 
       filters: {},
@@ -23,7 +23,7 @@ let all = {
       state.data = {
         users: [],
         entries: [],
-        communities: [],
+        feeds: [],
       }
     },
     // FILTEST
@@ -70,7 +70,7 @@ let all = {
   getters: {
     emptyData(state) {
       return (
-        state.data.entries.length + state.data.users.length + state.data.communities.length
+        state.data.entries.length + state.data.users.length + state.data.feeds.length
       ) == 0
     }
   }
@@ -246,7 +246,7 @@ let entries = {
   }
 }
 
-let communities = {
+let feeds = {
   namespaced: true,
   state() {
     return {
@@ -293,7 +293,7 @@ let communities = {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get('my/bookmarks/communities', state.filters)
+      this.$api.get('my/bookmarks/feeds', state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -333,7 +333,7 @@ let communities = {
 
 export default {
   namespaced: true,
-  modules: { all, users, entries, communities },
+  modules: { all, users, entries, feeds },
   state() {
     return { }
   },

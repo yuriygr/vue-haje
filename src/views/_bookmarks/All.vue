@@ -28,18 +28,18 @@
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
     </group>
 
-    <group v-if="data.communities.length > 0">
-      <n-header>{{ $t('bookmarks.section.communities') }}</n-header>
+    <group v-if="data.feeds.length > 0">
+      <n-header>{{ $t('bookmarks.section.feeds') }}</n-header>
 
-      <communities-list>
-        <community-item-wrapper v-for="item in data.communities" :key="`community-${item.community_id}`">
-          <community-item :data="item" type="short" />
-        </community-item-wrapper>
-      </communities-list>
+      <feeds-list>
+        <feed-item-wrapper v-for="item in data.feeds" :key="`feed-${item.feed_id}`">
+          <feed-item :data="item" type="short" />
+        </feed-item-wrapper>
+      </feeds-list>
 
       <spacer height="20" />
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-communities' }">{{ $t('action.show_more') }}</n-button>
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-feeds' }">{{ $t('action.show_more') }}</n-button>
     </group>
   </template>
 
@@ -68,7 +68,7 @@ import {
 
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
-import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
+import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
   name: 'bookmarks-all',
@@ -78,7 +78,7 @@ export default {
     Group, NButton,
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
-    CommunitiesList, CommunityItem, CommunityItemWrapper
+    FeedsList, FeedItem, FeedItemWrapper
   },
   computed: {
     ...mapState('bookmarks/all', [ 'data', 'loading', 'error' ]),

@@ -45,14 +45,29 @@
       </form-text>
     </form-group>
   </group>
+  
+  <VueHcaptcha
+    ref="captcha"
+    size="invisible"
+    sitekey="b4328fc2-4178-4216-89e0-0694bbeeff18"
+    :theme="theme == 'black'?'dark':'light'"
+    @verify="onVerify" 
+    @expired="onExpire"
+    @closed="onClosed"
+    @challenge-expired="onExpire"
+  />
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 
 export default {
   name: 'auth-register',
   components: {
+    VueHcaptcha,
     NButton, NHeader, Group, Spacer
   },
   meta() { return this.meta },
@@ -68,15 +83,20 @@ export default {
         name: '',
         username: '',
         email: '',
-        password: ''
+        password: '',
+        'h-captcha-response': ''
       }
     }
   },
-  computed: {  },
+  computed: {
+    ...mapState('app', [ 'theme' ]),
+  },
   methods: {
-    submit() {
+    async submit() {
       this.loading = true
       this.error = false
+
+      await this.$refs.captcha.executeAsync()
 
       this.$api.post('auth/register', this.form)
       .then(result => {
@@ -85,11 +105,25 @@ export default {
       })
       .catch(error => {
         this.error = error
+        this.form['h-captcha-response'] = ''
+        this.$refs.captcha.reset()
       })
       .then(_ => this.loading = false)
     },
     cleanError(type) {
 
+    },
+    // captcha
+    onVerify(token, ekey) {
+      this.form['h-captcha-response'] = token
+    },
+    onExpire() {
+      this.form['h-captcha-response'] = ''
+    },
+    onClosed() {
+      this.loading = false
+      this.error = false
+      this.form['h-captcha-response'] = ''
     }
   },
   watch: {

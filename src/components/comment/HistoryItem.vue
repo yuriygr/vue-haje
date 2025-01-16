@@ -1,10 +1,10 @@
 <template>
-  <div class="entry-history">
-    <div class="entry-history__header">
+  <div class="comment-history">
+    <div class="comment-history__header">
       <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
-      <meta-info class="entry-history__meta" :items="metaItems" />
+      <meta-info class="comment-history__meta" :items="metaItems" />
     </div>
-    <div v-if="data.content" class="entry-history__content" v-html="$filters.contentFormat(data.content.text)" />
+    <div v-if="data.content" class="comment-history__content" v-html="$filters.contentFormat(data.content.text)" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ import { MetaInfo } from '@vue-norma/ui'
 import { UserItem } from '@/components/user'
 
 export default {
-  name: 'entry-history-item',
+  name: 'comment-history-item',
   components: {
     UserItem,
     MetaInfo
@@ -48,15 +48,15 @@ export default {
 </script>
 
 <style lang="scss">
-.entry-history {
-  --entry-history__content--background: #f5f5f5;
+.comment-history {
+  --comment-history__content--background: #f5f5f5;
   
   html[data-theme="black"] & {
-    --entry-history__content--background: #181818;
+    --comment-history__content--background: #181818;
   }
 }
 
-.entry-history {
+.comment-history {
   &__header {
     display: flex;
     flex-direction: column;
@@ -68,7 +68,7 @@ export default {
   }
 
   &__content {
-    background: var(--entry-history__content--background);
+    background: var(--comment-history__content--background);
     padding: 1rem 1rem;
     border-radius: 8px;
     font-size: 1.4rem;

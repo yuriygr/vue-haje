@@ -276,14 +276,16 @@ export default {
   --comment-form--border: 1px solid #f0f0f0;
   --comment-form--background-dragover: #f5f5f5;
   --comment-form--border-dragover: 1px dashed var(--x-color-pink--tint10);
+  
   --comment-form--background-hovered: #fff;
   --comment-form--border-hovered: 1px solid #f0f0f0;
 
   html[data-theme='black'] & {
     --comment-form--background: #181818;
-    --comment-form--border: 1px solid #1f1f1f;
+    --comment-form--border: 1px solid #1b1b1b;
     --comment-form--background-dragover: #151515;
     --comment-form--border-dragover: 1px dashed var(--x-color-pink--shade50);
+
     --comment-form--background-hovered: #181818;
     --comment-form--border-hovered: 1px solid #1f1f1f;
   }

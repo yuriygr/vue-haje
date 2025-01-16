@@ -1,5 +1,4 @@
 :root {
-  // Высота таб-бара
   --tabbar--height: 49px;
 
   // Размеры контейнеров на десктопе
@@ -13,4 +12,12 @@
   // Отступы на десктопе
   --desktop-page-vertical-padding: 2rem;
   --desktop-page-horizontal-padding: 24px;
+
+  --layout-tabbar-padding: var(--desktop-page-horizontal-padding);
+  --layout-content-padding: var(--desktop-page-vertical-padding) var(--desktop-page-horizontal-padding);
+
+  @include on-mobile-device {
+    --layout-tabbar-padding: var(--mobile-page-horizontal-padding);
+    --layout-content-padding: var(--mobile-page-vertical-padding) var(--mobile-page-horizontal-padding) calc(var(--tabbar--height) + var(--mobile-page-vertical-padding));
+  }
 }

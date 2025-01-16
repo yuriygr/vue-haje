@@ -1,31 +1,55 @@
 <template>
-  <div :class="[ 'user-item', 'user-item--mode-' + mode ]">
-    <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__avatar">
-      <img :src="avatarUrl" alt="" />
-    </component>
+  <template v-if="data">
+    <div :class="[ 'user-item', 'user-item--mode-' + mode ]">
+      <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__avatar">
+        <img :src="avatarUrl" alt="" />
+      </component>
 
-    <template v-if="!onlyAvatar">
-      <div class="user-item__content">
-        <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
-          {{ data.name }}
-          <span v-if="data.state.is_verified" class="user-item__verified">
-            <icon name="verify-fill" size="12" />
-          </span>
-        </component>
-        <component v-if="mode != 'small'" :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">@{{ data.username }}</component>
-      </div>
-      <buttons-group :withGap="true" v-if="showSubscribeAction && !data.state.is_me" class="user-item__actions">
-        <n-button
-          :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
-          mode="tertiary"
-          @click.exact="toggleSubscribe"
-          :disabled="loading.subscribe"
-          :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
-        />
-        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
-      </buttons-group>
-    </template>
-  </div>
+      <template v-if="!onlyAvatar">
+        <div class="user-item__content">
+          <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
+            {{ data.name }}
+            <span v-if="data.state.is_verified" class="user-item__verified">
+              <icon name="verify-fill" size="12" />
+            </span>
+          </component>
+          <component v-if="mode != 'small'" :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">
+            @{{ data.username }}
+          </component>
+        </div>
+        <buttons-group :withGap="true" v-if="showSubscribeAction && !data.state.is_me" class="user-item__actions">
+          <n-button
+            :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
+            mode="tertiary"
+            @click.exact="toggleSubscribe"
+            :disabled="loading.subscribe"
+            :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+          />
+          <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+        </buttons-group>
+      </template>
+    </div>
+  </template>
+
+  <template v-else>
+    <div :class="[ 'user-item', 'user-item--mode-' + mode ]">
+      <div class="user-item__avatar"></div>
+      <template v-if="!onlyAvatar">
+        <div class="user-item__content">
+          <div class="user-item__name">
+            <skeleton :width="80" :height="9" />
+          </div>
+          <div v-if="mode != 'small'" class="user-item__username">
+            <skeleton :width="60" :height="8" />
+          </div>
+        </div>
+        <buttons-group :withGap="true" v-if="showSubscribeAction" class="user-item__actions">
+          <n-button icon_before="user-add-line" mode="tertiary" :disabled="true" :title="$t('action.subscribe')" />
+          <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
+        </buttons-group>
+      </template>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -193,7 +217,7 @@ export default {
     --user-item__name--color-hover: var(--x-body--color);
     --user-item__username--color: var(--x-color-white--shade40, #999);
     --user-item__username--color-hover: var(--x-body--color);
-    --user-item__avatar--background: rgba(255, 255, 255, 0.09);
+    --user-item__avatar--background: rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -246,7 +270,7 @@ export default {
   }
 
   &__name {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     color: var(--user-item__name--color, #212529);
     font-weight: 500;

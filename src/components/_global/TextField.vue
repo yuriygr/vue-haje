@@ -161,23 +161,29 @@ export default {
 
 .text-field {
   --text-field--color: #212529;
-  --text-field--backgroud: #f1f3f5;
-  --text-field--border-color: #e9ecef;
+  --text-field--background: #f1f3f5;
+  --text-field--border-color: #f0f0f0;
   --text-field__icon--color: #868e96;
   --text-field__placeholder--color: #868e96;
 
-  --text-field--backgroud-focused: #f1f3f5;
+  --text-field--background-focused: #f1f3f5;
   --text-field--border-color-focused: #dee2e6;
+
+  --text-field--background-hovered: #f1f3f5;
+  --text-field--border-color-hovered: #e9ecef;
 
   html[data-theme="black"] & {
     --text-field--color: #fffcea;
-    --text-field--backgroud: #181818;
-    --text-field--border-color: #222;
+    --text-field--background: #181818;
+    --text-field--border-color: #1b1b1b;
     --text-field__icon--color: #999;
     --text-field__placeholder--color: #999;
 
-    --text-field--backgroud-focused: #181818;
+    --text-field--background-focused: #181818;
     --text-field--border-color-focused: #252525;
+
+    --text-field--background-hovered: #181818;
+    --text-field--border-color-hovered: #1f1f1f;
   }
 }
 
@@ -191,13 +197,20 @@ export default {
   width: 100%;
   cursor: text;
 
-  background: var(--text-field--backgroud);
+  background: var(--text-field--background);
   border-radius: 8px;
   border: 1px solid var(--text-field--border-color);
 
   &--focused {
-    background: var(--text-field--backgroud-focused);
+    background: var(--text-field--background-focused);
     border: 1px solid var(--text-field--border-color-focused);
+  }
+
+  @media(hover: hover) {
+    &:not(&--focused):hover {
+      background: var(--text-field--background-hovered);
+      border: 1px solid var(--text-field--border-color-hovered);
+    }
   }
   
   &__icon {

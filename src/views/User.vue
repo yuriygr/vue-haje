@@ -5,7 +5,7 @@
     <spacer height="15" />
 
     <tabs>
-      <template v-for="(item, index) in tabItems" :key="`user-tab-${item.key}-${index}`">
+      <template v-for="item in tabItems" :key="`user-tab-${item.key}`">
         <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
       </template>
     </tabs>

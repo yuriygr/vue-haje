@@ -1,13 +1,17 @@
 <template>
   <tabs>
-    <template v-for="(item, index) in tabs" :key="`bookmarks-tab-${item.key}-${index}`">
-      <tabs-item :to="item.to" :selected="item.active" :disabled="item.disabled">{{ item.label }}</tabs-item>
+    <template v-for="item in tabs" :key="`bookmarks-tab-${item.key}`">
+      <tabs-item :to="item.to" :selected="item.key == $route.meta.key">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 
   <spacer height="30" />
 
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script>
@@ -32,26 +36,22 @@ export default {
         {
           key: 'all',
           to: this.formatLink(),
-          label: this.$t('bookmarks.tabs.all'),
-          active: this.$route.meta.key == `all` 
+          label: this.$t('bookmarks.tabs.all')
         },
         {
           key: 'users',
           to: this.formatLink('users'),
-          label: this.$t('bookmarks.tabs.users'),
-          active: this.$route.meta.key == `users`
+          label: this.$t('bookmarks.tabs.users')
         },
         {
           key: 'entries',
           to: this.formatLink('entries'),
-          label: this.$t('bookmarks.tabs.entries'),
-          active: this.$route.meta.key == `entries`
+          label: this.$t('bookmarks.tabs.entries')
         },
         {
-          key: 'communities',
-          to: this.formatLink('communities'),
-          label: this.$t('bookmarks.tabs.communities'),
-          active: this.$route.meta.key == `communities`
+          key: 'feeds',
+          to: this.formatLink('feeds'),
+          label: this.$t('bookmarks.tabs.feeds')
         }
       ]
     },

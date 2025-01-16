@@ -14,6 +14,8 @@ export default {
       locale:   process.env.VUE_APP_I18N_LOCALE,
       version:  process.env.PACKAGE_VERSION,
 
+      skeletons: [...Array(15).keys()],
+
       loading: false,
       error: {}
     }

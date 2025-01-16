@@ -10,7 +10,11 @@
   </entries-list>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <entries-list v-if="loading">
+      <entry-item-wrapper v-for="item in skeletons">
+        <entry-item type="short" />
+      </entry-item-wrapper>
+    </entries-list>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -22,16 +26,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 
 export default {
   name: 'user-entries',
   components: {
     EntriesList, EntryItem, EntryItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
+    Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('user/entries', [ 'data', 'loading', 'error' ]),
     ...mapGetters('user/entries', [ 'hasMoreItems' ]),
     humanizeError() {

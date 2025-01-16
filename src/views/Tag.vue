@@ -95,12 +95,12 @@ export default {
 
 <style lang="scss">
 .tag-header {
-  --tag-header__hash-color: #868e96;
   --tag-header__label-color: var(--x-body--color);
+  --tag-header__hash-color: #868e96;
 
   html[data-theme='black'] & {
-    --tag-header__hash-color: var(--x-color-white--shade40, #999);
     --tag-header__label-color: var(--x-body--color);
+    --tag-header__hash-color: var(--x-color-white--shade40, #999);
   }
 }
 

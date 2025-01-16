@@ -1,4 +1,4 @@
-const Help = () => import('@/views/Help')
+import Help from '@/views/Help'
 
 import { HelpMenu } from '@/views/_help'
 
@@ -7,7 +7,7 @@ export default [
     path: '/help',
     name: 'helps',
     component: Help,
-    meta: { section: 'help' },
+    meta: { section: 'menu' },
     redirect: { name: 'help-menu' },
     children: [
       { path: '', name: 'help-menu', component: HelpMenu },

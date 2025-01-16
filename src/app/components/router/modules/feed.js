@@ -1,5 +1,9 @@
 import Feed from '@/views/Feed'
 
+import {
+  FeedTimeline, FeedFeed, FeedFeeds
+} from '@/views/_feed'
+
 export default [
 	{
 		path: '/feed',
@@ -8,10 +12,10 @@ export default [
     meta: { section: 'feed' },
 		redirect: { name: 'feed-timeline' },
 		children: [
-			{ path: '', name: 'feed-timeline', component: Feed, meta: { tab: 'timeline' } },
-			{ path: 'abyss', name: 'feed-abyss', component: Feed, meta: { tab: 'abyss' } },
-			{ path: 'collections', name: 'feed-collections', component: Feed, meta: { tab: 'collections' } },
-			{ path: ':uuid', name: 'feed-custom', component: Feed, props: true },
+			{ path: '', name: 'feed-timeline', component: FeedTimeline, meta: { tab: 'timeline' } },
+			{ path: 'abyss', name: 'feed-abyss', component: FeedTimeline, meta: { tab: 'abyss' } },
+			{ path: 'feeds', name: 'feed-feeds', component: FeedFeeds, meta: { tab: 'feeds' } },
+			{ path: ':uuid', name: 'feed-custom', component: FeedFeed, props: true, meta: { tab: 'feeds' } },
 		]
 	}
 ]

@@ -1,12 +1,4 @@
 <template>
-  <tabs>
-    <template v-for="(item, index) in tabs" :key="`feeds-tab-${item.key}-${index}`">
-      <tabs-item :to="item.to" :selected="item.key == filters.tab" :disabled="item.disabled">{{ item.label }}</tabs-item>
-    </template>
-  </tabs>
-
-  <spacer height="30" />
-
   <div class="search-form">
     <div class="search-form__field">
       <text-field
@@ -18,8 +10,11 @@
         @keyup.enter="changeInput($event.target.value)"
       />
     </div>
+    <div class="search-form__filter">
+      <n-button icon_before="add-line" mode="tertiary" size="l" :title="$t('action.create')" />
+    </div>
   </div>
-  
+
   <spacer height="15" />
 
   <feeds-list v-if="(!loading && !error) || data.length > 0">
@@ -40,22 +35,22 @@
       :text="$t(humanizeError.description)"
     />
     <placeholder v-else
-      :icon="$t('errors.empty_feeds.icon')"
-      :header="$t('errors.empty_feeds.title')"
-      :text="$t('errors.empty_feeds.description')"
+      :icon="$t('errors.feeds_not_created.icon')"
+      :header="$t('errors.feeds_not_created.title')"
+      :text="$t('errors.feeds_not_created.description')"
     />
   </template>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Tabs, TabsItem, Separator, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+import { NButton, Separator, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
 import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
   name: 'feeds',
   components: {
-    Tabs, TabsItem, Separator, Spacer, Placeholder, PlaceholderLoading,
+    NButton, Separator, Spacer, Placeholder, PlaceholderLoading,
     FeedsList, FeedItem, FeedItemWrapper
   },
   meta() { return this.meta },
@@ -72,52 +67,21 @@ export default {
     query() {
       return this.$route.query.q
     },
-    tabs() {
-      return [
-        {
-          key: 'subscribed',
-          to: this.formatLink(),
-          label: this.$t('feeds.tabs.subscribed')
-        },
-        {
-          key: 'manage',
-          to: this.formatLink('manage'),
-          label: this.$t('feeds.tabs.manage')
-        }
-      ]
-    },
-    availableKeys() {
-      return this.tabs.flatMap(el => el.key)
-    },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
   methods: {
-    formatLink(tab = false) {
-      if (tab) {
-        return { name: this.$route.name, query: { tab }}
-      } else {
-        return { name: this.$route.name }
-      }
-    },
     changeInput(query) {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })
     },
     loadMore() {
       this.$store.dispatch('feeds/more')
-    },
-    deleteTabQuery() {
-      let query = Object.assign({}, this.$route.query)
-      delete query.tab
-      this.$router.replace({ name: this.$route.name, query })
-    },
+    }
   },
   async mounted() {
     await this.$store.dispatch('feeds/setFilters', {
-      tab: this.availableKeys.includes(this.$route.query.tab)
-            ? this.$route.query.tab
-            : ( this.deleteTabQuery(), 'subscribed' ), offset: undefined
+      query: this.$route.query.q, offset: undefined
     })
     this.$store.dispatch('feeds/fetch')
   },
@@ -125,10 +89,8 @@ export default {
     this.$store.dispatch('feeds/clear')
   },
   watch: {
-    async '$route.query.tab'(to) {
-      await this.$store.dispatch('communities/setFilters', {
-        tab: this.availableKeys.includes(to) ? to : 'subscribed', offset: undefined
-      })
+    async '$route.query.q'(to) {
+      await this.$store.dispatch('feeds/setFilters', { query: to, offset: undefined })
       this.$store.dispatch('feeds/fetch')
     }
   }
@@ -136,5 +98,18 @@ export default {
 </script>
 
 <style lang="scss">
+.search-form {
+  display: flex;
+  justify-content: space-between;
 
+  &__field {
+    display: flex;
+    width: 100%;
+  }
+
+  &__filter {
+    display: flex;
+    margin-left: 5px;
+  }
+}
 </style>

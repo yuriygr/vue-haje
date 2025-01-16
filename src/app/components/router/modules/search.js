@@ -1,5 +1,6 @@
-import Search from '@/views/Search'
-import { SearchAll, SearchUsers, SearchTags, SearchEntries, SearchComments, SearchCommunities } from '@/views/_search'
+const Search = () => import('@/views/Search')
+
+import { SearchAll, SearchUsers, SearchTags, SearchEntries, SearchComments, SearchFeeds } from '@/views/_search'
 
 export default [
   {
@@ -12,7 +13,7 @@ export default [
       { path: 'tags', name: 'search-tags', component: SearchTags, meta: { key: 'tags' }},
       { path: 'entries', name: 'search-entries', component: SearchEntries, meta: { key: 'entries' }},
       { path: 'comments', name: 'search-comments', component: SearchComments, meta: { key: 'comments' }},
-      { path: 'communities', name: 'search-communities', component: SearchCommunities, meta: { key: 'communities' }},
+      { path: 'feeds', name: 'search-feeds', component: SearchFeeds, meta: { key: 'feeds' }},
 	    { path: ':pathMatch(.*)*', redirect: { name: 'search' } }
     ]
   }

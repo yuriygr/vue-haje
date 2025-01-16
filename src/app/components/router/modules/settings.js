@@ -1,4 +1,4 @@
-const Settings = () => import('@/views/Settings')
+import Settings from '@/views/Settings'
 
 import {
   SettingsMenu,
@@ -18,7 +18,7 @@ export default [
     path: '/settings',
     name: 'settings',
     component: Settings,
-    meta: { section: 'settings' },
+    meta: { section: 'menu' },
     redirect: { name: 'settings-menu' },
     children: [
       { path: '', name: 'settings-menu', component: SettingsMenu },

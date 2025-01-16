@@ -10,7 +10,11 @@
   </div>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <div class="comments-list" v-if="loading">
+      <comment-item-wrapper v-for="item in skeletons">
+        <comment-item />
+      </comment-item-wrapper>
+    </div>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -26,16 +30,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { CommentItem, CommentItemWrapper } from '@/components/comment'
 
 export default {
   name: 'search-comments',
   components: {
     CommentItem, CommentItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
+    Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('search/comments', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/comments', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {

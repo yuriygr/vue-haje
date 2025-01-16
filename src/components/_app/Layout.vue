@@ -9,7 +9,3 @@ export default {
   name: 'app-layout',
 }
 </script>
-
-<style lang="scss">
-
-</style>

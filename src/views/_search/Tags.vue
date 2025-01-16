@@ -30,7 +30,7 @@ import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-
 import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
 
 export default {
-  name: 'search-users',
+  name: 'search-tags',
   components: {
     TagsList, TagItem, TagItemWrapper,
     Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger

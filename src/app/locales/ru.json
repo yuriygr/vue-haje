@@ -16,7 +16,7 @@
   "header": {
     "nav": {
       "feed": "@:feed.title",
-      "search": "@:search.title",
+      "search": "@:search.title.all",
       "compose": "Написать",
       "notifications": "@:notifications.title",
       "menu": "@:menu.title",
@@ -49,8 +49,11 @@
     "title": "Лента",
     "tabs": {
       "timeline": "Моя лента",
-      "collections": "Коллекции",
+      "feeds": "Ленты",
       "abyss": "Бездна"
+    },
+    "meta": {
+      "author": "Лента от {author}"
     },
     "errors": {
       "entries_empty": "Постов пока-что нет"
@@ -94,7 +97,7 @@
       "users": "Поиск пользователей",
       "entries": "Поиск постов",
       "comments": "Поиск комментариев",
-      "communities": "Поиск сообществ",
+      "feeds": "Поиск лент",
       "tags": "Поиск тегов"
     },
     "search-field": {
@@ -106,7 +109,7 @@
       "users": "Пользователи",
       "entries": "Посты",
       "comments": "Комментарии",
-      "communities": "Сообщества",
+      "feeds": "Ленты",
       "tags": "Теги"
     },
     "section": {
@@ -114,7 +117,7 @@
       "entries": "@:search.tabs.entries",
       "comments": "@:search.tabs.comments",
       "tags": "@:search.tabs.tags",
-      "communities": "@:search.tabs.communities"
+      "feeds": "@:search.tabs.feeds"
     }
   },
   "notifications": {
@@ -130,14 +133,16 @@
       "all": "Все",
       "subscriptions": "Подписки",
       "replies": "Ответы",
+      "comments": "Комментарии",
       "mentions": "Упоминания",
       "new_post": "Новые посты",
       "system": "Системные"
     },
     "user": {
       "subscriptions": "{0} подписалось на вас",
-      "new_post": "{0} опубликовало новый пост",
-      "replies": "{0} ответило на вашу запись",
+      "new_post": "{0} опубликовало новую {1}",
+      "replies": "{0} ответило на ваш {1}",
+      "comments": "{0} прокомментировало вашу {1}",
       "mentions": "{0} упомянуло вас"
     },
     "system": {
@@ -146,12 +151,15 @@
     },
     "support": {
       "replies": "Поступил ответ на ваше обращение"
+    },
+    "const": {
+      "entry": "запись",
+      "comment": "комментарий"
     }
   },
   "menu": {
     "title": "Меню",
     "item": {
-      "communities": "@:communities.title",
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
@@ -160,13 +168,6 @@
       "donate": "@:donate.title",
       "login": "Войти",
       "logout": "Выйти"
-    }
-  },
-  "communities": {
-    "title": "Сообщества",
-    "tabs": {
-      "subscribed": "Мои сообщества",
-      "manage": "Управление"
     }
   },
   "feeds": {
@@ -182,12 +183,12 @@
       "all": "Все",
       "entries": "Посты",
       "users": "Пользователи",
-      "communities": "Сообщества"
+      "feeds": "Ленты"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
       "entries": "@:bookmarks.tabs.entries",
-      "communities": "@:bookmarks.tabs.communities"
+      "feeds": "@:bookmarks.tabs.feeds"
     }
   },
   "settings": {
@@ -232,7 +233,8 @@
       "others": "Другое",
       "field": {
         "subscriptions": "Подписчики",
-        "replies": "Ответы",
+        "replies": "Ответы на комментарии",
+        "comments": "Комментарии к записям",
         "mentions": "Упоминания",
         "new_post": "Новые посты",
         "badges": "Значки"
@@ -359,18 +361,10 @@
       "placeholder": "Ответьте что-нибудь..."
     },
     "errors": {
-      "empty": "Пусто"
+      "empty": "Пусто",
+      "empty_edit_history": "История изменений пуста"
     },
     "action": {}
-  },
-  "community": {
-    "title": "Сообщество",
-    "action": {},
-    "meta": {
-      "subscribers": "Нет подписчиков | {n} подписчик | {n} подписчика | {n} подписчиков",
-      "official": "Официальный",
-      "from_date":"Существует с {date}"
-    }
   },
   "auth": {
     "login": {
@@ -444,10 +438,10 @@
       "title": "Пользователь не найден",
       "description": "Попробуйте поискать других, существующих, пользователей"
     },
-    "community_not_found": {
-      "icon": "communities-line",
-      "title": "Сообщество не найдено",
-      "description": "Попробуйте поискать другие, существующие, сообщества"
+    "feed_not_found": {
+      "icon": "feeds-line",
+      "title": "Лента не найдена",
+      "description": "Попробуйте поискать другие, существующие, ленты"
     },
     "user_suspended": {
       "icon": "ghost-line",
@@ -519,16 +513,22 @@
       "title": "Уведомлений нет",
       "description": "Скорее всего, они скоро появятся"
     },
-    "empty_communities": {
-      "icon": "communities-line",
-      "title": "Сообществ нет",
+    "empty_feeds": {
+      "icon": "feeds-line",
+      "title": "Лент нет",
       "description": "Может, стоит поискать подходящие и подписаться на них, как считаешь?"
+    },
+    "feeds_not_created": {
+      "icon": "feeds-line",
+      "title": "Лент нет",
+      "description": "Вы еще не создали ни одной ленты. Может, пора это исправить?"
     }
   },
   "action": {
     "options": "Еще",
     "subscribe": "Подписаться",
     "unsubscribe": "Отписаться",
+    "create": "Создать",
     "apply": "Применить",
     "save": "Сохранить",
     "go_away": "Перейти",
@@ -581,15 +581,28 @@
     "entry-history": {
       "title": "История версий"
     },
-    "report-entry": {
+    "entry-delete": {
+      "title": "Удалить запись",
+      "help": "По каким-то причинам вы собираетесь удалить пост, вы уверены, что это действительно нужно?"
+    },
+    "entry-report": {
       "title": "Жалоба на пост"
+    },
+    "comment-history": {
+      "title": "История версий"
+    },
+    "comment-edit": {
+      "title": "Редактировать комментарий"
+    },
+    "comment-report": {
+      "title": "Жалоба на комментарий"
+    },
+    "comment-delete": {
+      "title": "Удалить комментарий",
+      "help": "По каким-то причинам вы собираетесь удалить комментарий, вы уверены, что это действительно нужно?"
     },
     "report-user": {
       "title": "Жалоба на пользователя"
-    },
-    "delete-entry": {
-      "title": "Удалить запись",
-      "help": "По каким-то причинам вы собираетесь удалить пост, вы уверены, что это действительно нужно?"
     }
   }
 }

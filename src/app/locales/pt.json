@@ -16,7 +16,7 @@
   "header": {
     "nav": {
       "feed": "@:feed.title",
-      "search": "@:search.title",
+      "search": "@:search.title.all",
       "compose": "Escrever",
       "notifications": "@:notifications.title",
       "menu": "@:menu.title",
@@ -27,7 +27,7 @@
     "title": "Notícias",
     "tabs": {
       "timeline": "Meu feed",
-      "popular": "Popular",
+      "feeds": "Feeds",
       "abyss": "O abismo"
     },
     "errors": {
@@ -75,7 +75,7 @@
       "users": "Pesquisar usuários",
       "entries": "Pesquisar postagens",
       "comments": "Pesquisar comentários",
-      "communities": "Pesquisar comunidades",
+      "feeds": "Pesquisar notícias",
       "tags": "Tags de pesquisa"
     },
     "search-field": {
@@ -87,13 +87,14 @@
       "users": "Usuários",
       "entries": "Postagens",
       "comments": "Comentários",
-      "communities": "Comunidades",
+      "feeds": "Notícias",
       "tags": "Tag"
     },
     "section": {
       "users": "@:search.tabs.users",
       "entries": "@:search.tabs.entries",
       "comments": "@:search.tabs.comments",
+      "feeds": "@:search.tabs.feeds",
       "tags": "@:search.tabs.tags"
     }
   },
@@ -141,13 +142,6 @@
       "logout": "Sair"
     }
   },
-  "communities": {
-    "title": "Comunidades",
-    "tabs": {
-      "subscribed": "Todas as comunidades",
-      "manage": "Gerenciamento"
-    }
-  }, 
   "bookmarks": {
     "title": "Favoritos",
     "tabs": {
@@ -316,15 +310,6 @@
     },
     "action": {}
   },
-  "community": {
-    "title": "Comunidades",
-    "action": {},
-    "meta": {
-      "subscribers": "Nenhum assinante | {n} assinante | {n} assinantes | {n} assinantes",
-      "official": "Official",
-      "from_date":"Existe desde {date}"
-    }
-  },
   "auth": {
     "login": {
       "title": "Entrada",
@@ -397,8 +382,8 @@
       "title": "O usuário não foi encontrado",
       "description": "Tente pesquisar outros usuários existentes"
     },
-    "community_not_found": {
-      "icon": "communities-line",
+    "feed_not_found": {
+      "icon": "feeds-line",
       "title": "Comunidade não encontrada",
       "description": "Tente procurar outras comunidades existentes"
     },
@@ -472,8 +457,8 @@
       "title": "Nenhuma notificação",
       "description": "Muito provavelmente eles aparecerão em breve"
     },
-    "empty_communities": {
-      "icon": "communities-line",
+    "empty_feeds": {
+      "icon": "feeds-line",
       "title": "Nenhuma comunidade",
       "description": "Talvez valha a pena procurar os adequados e assiná-los, o que você acha?"
     }
@@ -527,20 +512,33 @@
   },
   "modals": {
     "search-filter": {
-      "title": "Filtro de pesquisa"
+      "title": "Search filter"
     },
     "entry-history": {
-      "title": "Histórico de versões"
+      "title": "Version history"
     },
-    "report-entry": {
-      "title": "Reclamação sobre a postagem"
+    "entry-delete": {
+      "title": "Delete entry",
+      "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
+    },
+    "entry-report": {
+      "title": "Complaint about the post"
+    },
+    "comment-history": {
+      "title": "Version history"
+    },
+    "comment-edit": {
+      "title": "Edit comment"
+    },
+    "comment-report": {
+      "title": "Complaint about the comment"
+    },
+    "comment-delete": {
+      "title": "Delete comment",
+      "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
     },
     "report-user": {
-      "title": "Reclamação do usuário"
-    },
-    "delete-entry": {
-      "title": "Excluir entrada",
-      "help": "Por algum motivo você vai deletar a postagem, tem certeza que isso é realmente necessário?"
+      "title": "Complaint about an user"
     }
   }
 }

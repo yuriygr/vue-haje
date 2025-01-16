@@ -11,21 +11,25 @@
     </div>
 
     <template v-if="data.length == 0">
-      <placeholder-loading v-if="loading" />
+      <div class="comments-list" v-if="loading">
+        <comment-item-wrapper v-for="item in skeletons">
+          <comment-item />
+        </comment-item-wrapper>
+      </div>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
+import { Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
 
 import { CommentItem, CommentItemWrapper, CommentForm } from '@/components/comment'
 
 export default {
   name: 'entry-comments',
   components: {
-    Group, Placeholder, PlaceholderLoading, Separator, NButton, ButtonsGroup, Spacer, NHeader,
+    Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader,
     CommentItem, CommentItemWrapper, CommentForm
   },
   props: {
@@ -35,6 +39,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('entry/comments', [ 'data', 'loading', 'error' ]),
     ...mapGetters('entry/comments', [ 'tree' ]),
     ...mapState('auth', {

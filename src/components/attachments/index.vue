@@ -6,7 +6,7 @@
       </picture>
     </div>
 
-    <links-list v-if="data.length > 0">
+    <links-list v-if="(data.length > 0) && false">
       <link-item-wrapper v-for="item in data" :key="`link-${item.file.uuid}`">
         <link-item :data="ex" />
       </link-item-wrapper>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
+import { LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
 
 export default {
   name: 'attachments',

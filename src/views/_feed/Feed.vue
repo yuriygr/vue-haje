@@ -1,9 +1,4 @@
 <template>
-  <template v-if="isAuth">
-    <entry-pseudo-form @click="openComposeModal" />
-    <spacer height="30" />
-  </template>
-
   <entries-list v-if="(!loading && !error) || data.length > 0">
     <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
       <entry-item :data="item" type="short" />
@@ -43,16 +38,22 @@ import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/com
 let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 
 export default {
-  name: 'feed-timeline',
+  name: 'feed-feed',
+  props: {
+    uuid: {
+      type: [ Boolean, String ],
+      defalult: false
+    }
+  },
   components: {
     EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
-    Placeholder, Spacer, NButton, LoadmoreTrigger,
+    Placeholder, Spacer, NButton, LoadmoreTrigger
   },
   meta() { return this.meta },
   data() {
     return {
       meta: {
-        title: this.$t(`feed.tabs.${this.$route.meta.tab}`)
+        title: this.$t('feed.tabs.feeds')
       }
     }
   },
@@ -72,29 +73,17 @@ export default {
         return
       }
       this.$modals.show(ComposeModal)
-    },
-    loadMore() {
-      this.$store.dispatch('feed/more')
     }
   },
   async mounted() {
-      this.meta.title = this.$t(`feed.tabs.${this.$route.meta.tab}`)
-    await this.$store.dispatch('feed/clear')
-    await this.$store.dispatch('feed/setTab', this.$route.meta.tab)
-    this.$store.dispatch('feed/fetch')
+    await this.$store.dispatch('feed/feed/fetch', this.uuid)
   },
   unmounted() {
     this.$store.dispatch('feed/clear')
   },
   watch: {
-    async '$route.meta.tab'(to) {
-      if (!['timeline', 'abyss'].includes(to)) {
-        return; // Ебучий костыль
-      }
-      this.meta.title = this.$t(`feed.tabs.${to}`)
-      await this.$store.dispatch('feed/clear')
-      await this.$store.dispatch('feed/setTab', to)
-      this.$store.dispatch('feed/fetch')
+    async '$route'(to) {
+      await this.$store.dispatch('feed/feed/fetch', to.params.uuid)
     }
   }
 }

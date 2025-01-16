@@ -163,23 +163,29 @@ export default {
 
 .select-field {
   --select-field--color: #212529;
-  --select-field--backgroud: #f1f3f5;
-  --select-field--border-color: #e9ecef;
+  --select-field--background: #f1f3f5;
+  --select-field--border-color: #f0f0f0;
   --select-field__icon--color: #868e96;
   --select-field__placeholder--color: #868e96;
 
-  --select-field--backgroud-focused: #f1f3f5;
+  --select-field--background-focused: #f1f3f5;
   --select-field--border-color-focused: #dee2e6;
+
+  --select-field--background-hovered: #f1f3f5;
+  --select-field--border-color-hovered: #e9ecef;
 
   html[data-theme="black"] & {
     --select-field--color: #fffcea;
-    --select-field--backgroud: #181818;
-    --select-field--border-color: #222;
+    --select-field--background: #181818;
+    --select-field--border-color: #1b1b1b;
     --select-field__icon--color: #999;
     --select-field__placeholder--color: #999;
 
-    --select-field--backgroud-focused: #181818;
+    --select-field--background-focused: #181818;
     --select-field--border-color-focused: #252525;
+
+    --select-field--background-hovered: #181818;
+    --select-field--border-color-hovered: #1f1f1f;
   }
 }
 
@@ -193,13 +199,20 @@ export default {
   width: 100%;
   cursor: text;
 
-  background: var(--select-field--backgroud);
+  background: var(--select-field--background);
   border-radius: 8px;
   border: 1px solid var(--select-field--border-color);
 
   &--focused {
-    background: var(--select-field--backgroud-focused);
+    background: var(--select-field--background-focused);
     border: 1px solid var(--select-field--border-color-focused);
+  }
+
+  @media(hover: hover) {
+    &:not(&--focused):hover {
+      background: var(--select-field--background-hovered);
+      border: 1px solid var(--select-field--border-color-hovered);
+    }
   }
   
   &__icon {

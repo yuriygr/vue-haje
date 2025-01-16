@@ -12,28 +12,21 @@ export default {
 
 <style lang="scss">
 .app-content {
-  // Mobile first
-  --layout-padding: var(--mobile-page-vertical-padding) var(--mobile-page-horizontal-padding) calc(var(--tabbar--height) + var(--mobile-page-vertical-padding));
+ // --layout-max-width: var(--large-screen-max-width);
 
-  // Desktop last
-  @media (min-width: 768px) {
-    & { --layout-padding: var(--desktop-page-vertical-padding) var(--desktop-page-horizontal-padding); }
-  }
-
-  --layout-max-width: var(--large-screen-max-width);
-
-  html[data-layout="wide"] & {
-    --layout-max-width: var(--wide-large-screen-max-width);
-  }
+ // html[data-layout="wide"] & {
+ //   --layout-max-width: var(--wide-large-screen-max-width);
+ // }
 }
 
 
 .app-content {
-  padding: var(--layout-padding);
+  max-width: var(--large-screen-max-width); 
+  padding: var(--layout-content-padding);
   margin: 0 auto;
 
-  @media (min-width: 768px) {
-    & { max-width: var(--layout-max-width); }
-  }
+  // @media (min-width: 768px) {
+  //   & { }
+  // }
 }
 </style>

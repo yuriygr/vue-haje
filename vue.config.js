@@ -45,5 +45,16 @@ module.exports = defineConfig({
       maskIcon: 'icons/safari-pinned-tab.svg',
       msTileImage: 'icons/mstile-144x144.png'
     }
+  },
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `
+          @use "/src/assets/scss/utilities/_functions.scss" as *;
+          @use "/src/assets/scss/utilities/_mixins.scss" as *;
+          @use "/src/assets/scss/utilities/_variables.scss" as *;
+        `,
+      },
+    },
   }
 })

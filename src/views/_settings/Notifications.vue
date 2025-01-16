@@ -20,6 +20,11 @@
       <n-checkbox :label="$t('settings.notifications.field.replies')" v-model="form.replies" disabled="true" />
     </form-block>
 
+    <form-block>
+      <n-checkbox :label="$t('settings.notifications.field.comments')" v-model="form.comments" disabled="true" />
+    </form-block>
+
+
     <n-header>{{ $t('settings.notifications.others') }}</n-header>
 
     <form-block>
@@ -52,6 +57,7 @@ export default {
         subscriptions: true,
         new_post: true,
         replies: true,
+        comments: true,
         badges: false
       },
 

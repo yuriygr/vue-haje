@@ -123,7 +123,7 @@ let history = {
     }
   },
   actions: {
-    fetch({ commit, state, rootState }, { initial = true, uuid = '' }) {
+    fetch({ commit, state }, { initial = true, uuid = '' }) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 

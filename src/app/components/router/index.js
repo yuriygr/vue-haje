@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Entry from '@/views/Entry'
 const Home = () => import('@/views/Home')
-const Notifications = () => import('@/views/Notifications')
 import Menu from '@/views/Menu'
 import About from '@/views/About'
 
@@ -14,8 +13,8 @@ import BookmarksRoutes from '@/app/components/router/modules/bookmarks'
 import FeedsRoutes from '@/app/components/router/modules/feeds'
 import SettingsRoutes from '@/app/components/router/modules/settings'
 import HelpRoutes from '@/app/components/router/modules/help'
+import NotificationsRoutes from '@/app/components/router/modules/notifications'
 import AuthRoutes from '@/app/components/router/modules/auth'
-import CommunitiesRoutes from '@/app/components/router/modules/communities'
 
 const routes = [
 	...FeedRoutes,
@@ -26,18 +25,16 @@ const routes = [
 	...FeedsRoutes,
 	...SearchRoutes,
 	...HelpRoutes,
+	...NotificationsRoutes,
 	...AuthRoutes,
-	...CommunitiesRoutes,
 	
 	{ path: '/', name: 'home', component: Home },
 	
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
 
-	{ path: '/notifications', name: 'notifications', component: Notifications },
-	
-	{ path: '/menu', name: 'menu', component: Menu },
-	{ path: '/donate', name: 'donate', component: About },
-	{ path: '/about', name: 'about', component: About },
+	{ path: '/menu', name: 'menu', component: Menu, meta: { section: 'menu' } },
+	{ path: '/donate', name: 'donate', component: About, meta: { section: 'menu' } },
+	{ path: '/about', name: 'about', component: About, meta: { section: 'menu' } },
 
 	{ path: '/:pathMatch(.*)*', redirect: { name: 'feed' } }
 ]
@@ -56,4 +53,16 @@ const router = createRouter({
 	}
 })
 
-export default router
+export default  {
+	install(app, options) {
+		router.install(app)
+
+		router.beforeEach((to, from, next) => {
+			app.config.globalProperties.$modals.close()
+			app.config.globalProperties.$popover.close()
+			app.config.globalProperties.$alerts.close()
+		
+			next()
+		})
+	}
+}

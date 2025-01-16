@@ -56,19 +56,6 @@
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('comments')">{{ $t('action.show_more') }}</n-button>
     </group>
 
-    <group v-if="data.communities.length > 0">
-      <n-header>{{ $t('search.section.communities') }}</n-header>
-
-      <communities-list>
-        <community-item-wrapper v-for="item in data.communities" :key="`community-${item.community_id}`">
-          <community-item :data="item" type="short" />
-        </community-item-wrapper>
-      </communities-list>
-
-      <spacer height="20" />
-
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class=""  :to="formatLink('communities')">{{ $t('action.show_more') }}</n-button>
-    </group>
   </template>
 
   <template v-if="emptyData">
@@ -98,7 +85,6 @@ import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 import { CommentItem, CommentItemWrapper } from '@/components/comment'
 import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
-import { CommunitiesList, CommunityItem, CommunityItemWrapper } from '@/components/community'
 
 export default {
   name: 'search-all',
@@ -109,8 +95,7 @@ export default {
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
     CommentItem, CommentItemWrapper,
-    TagsList, TagItem, TagItemWrapper,
-    CommunitiesList, CommunityItem, CommunityItemWrapper
+    TagsList, TagItem, TagItemWrapper
   },
   computed: {
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),

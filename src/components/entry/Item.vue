@@ -1,17 +1,41 @@
 <template>
-  <div :class="[ 'entry' ]">
-    <div class="entry__header">
-      <user-item :data="data.user" :showSubscribeAction="false" />
-      <buttons-group class="entry__options">
-        <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
-        <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
-        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
-      </buttons-group>
+  <template v-if="data">
+    <div :class="[ 'entry' ]">
+      <div class="entry__header">
+        <user-item :data="data.user" :showSubscribeAction="false" />
+        <buttons-group class="entry__options">
+          <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
+          <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
+          <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+        </buttons-group>
+      </div>
+      <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
+      <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="full" />
+      <meta-info class="entry__meta" :items="metaItems" />
     </div>
-    <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
-    <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="full" />
-    <meta-info class="entry__meta" :items="metaItems" />
-  </div>
+  </template>
+  
+  <template v-else>
+    <div :class="[ 'entry' ]">
+      <div class="entry__header">
+        <user-item :showSubscribeAction="false" />
+        <buttons-group class="entry__options">
+          <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
+        </buttons-group>
+      </div>
+      <div class="entry__content">
+        <skeleton :width="240" :height="9" />
+        <br />
+        <skeleton :width="310" :height="9" />
+        <br />
+        <skeleton :width="80" :height="9" />
+        <br />
+        <skeleton :width="190" :height="9" />
+        <br />
+        <skeleton :width="55" :height="8" /> <skeleton :width="70" :height="8" />
+      </div>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -267,21 +291,11 @@ export default {
     line-height: calc(1.4 * 1em);
     word-break: break-word;
     -webkit-font-smoothing: subpixel-antialiased;
-    margin-bottom: 1rem;
+    margin-bottom: .75rem;
   }
 
   &__attachments {
     margin-bottom: 1rem;
   }
-
-  &__actions {
-    display: flex;
-    flex-direction: row;
-    margin-top: 1rem;
-  }
-}
-
-.action {
-
 }
 </style>

@@ -35,6 +35,10 @@ export default new class {
     this.add({ ...payload, type: 'danger' })
   }
 
+  close() {
+    this.bus.emit('alerts:close')
+  }
+
   add(payload) {
     if (!payload.timeout)
       payload = { ...payload, timeout: this.options.defaultTimeout }

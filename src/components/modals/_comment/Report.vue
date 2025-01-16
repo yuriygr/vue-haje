@@ -1,6 +1,6 @@
 <template>
   <modal size="small">
-    <modal-header :title="$t('modals.report-entry.title')">
+    <modal-header :title="$t('modals.comment-report.title')">
       <template #after>
          <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
@@ -26,7 +26,7 @@
 import { Modal, ModalHeader, ModalChecklist, NButton } from '@vue-norma/ui'
 
 export default {
-  name: 'report-entry-modal',
+  name: 'comment-report-modal',
   components: {
     Modal, ModalHeader, ModalChecklist, NButton
   },
@@ -59,7 +59,7 @@ export default {
       this.current = 0
     },
     sendReport() {
-      this.$api.post(`entry/${this.data.uuid}/report`, { reason: this.current || 0 })
+      this.$api.post(`comment/${this.data.comment_id}/report`, { reason: this.current || 0 })
       .then(_ => {
         this.$alerts.success({ text: 'Жалоба отправлена в спортлото' })
         this.$modals.close()

@@ -47,13 +47,6 @@ export default {
     sections() {
       let sections = [
         {
-          icon: 'communities-line',
-          label: this.$t('menu.item.communities'),
-          to: { name: 'communities' },
-          disabled: !this.isAuth,
-          chevron: true
-        },
-        {
           icon: 'feeds-line',
           label: this.$t('menu.item.feeds'),
           to: { name: 'feeds' },

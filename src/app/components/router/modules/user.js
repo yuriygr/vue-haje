@@ -1,5 +1,6 @@
 import User from '@/views/User'
-import { UserEntries, UserSubscribers, UserSubscriptions, UserBadges, UserTags, UserLinks } from '@/views/_user'
+
+import { UserEntries, UserSubscribers, UserSubscriptions, UserBadges } from '@/views/_user'
 
 export default [
   {

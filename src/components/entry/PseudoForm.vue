@@ -27,15 +27,21 @@ export default {
 <style lang="scss">
 .entry-pseudo-form {
   --entry-pseudo-form--background: #fff;
-  --entry-pseudo-form--border: 1px solid #f0f0f0;
+  --entry-pseudo-form--border-color: #f0f0f0;
   --entry-pseudo-form__icon--color: #868e96;
   --entry-pseudo-form__placeholder--color: #868e96;
+
+  --entry-pseudo-form--background-hovered: #fff;
+  --entry-pseudo-form--border-color-hovered: #e9ecef;
   
   html[data-theme="black"] & {
     --entry-pseudo-form--background: #181818;
-    --entry-pseudo-form--border: 1px solid #1f1f1f;
-    --entry-pseudo-form__icon--color: #aaa;
-    --entry-pseudo-form__placeholder--color: #999;
+    --entry-pseudo-form--border-color: #1b1b1b;
+    --entry-pseudo-form__icon--color: #666;
+    --entry-pseudo-form__placeholder--color: #666;
+
+    --entry-pseudo-form--background-hovered: #181818;
+    --entry-pseudo-form--border-color-hovered: #1f1f1f;
   }
 }
 
@@ -49,10 +55,17 @@ export default {
   cursor: text;
 
   background: var(--entry-pseudo-form--background);
-  border: var(--entry-pseudo-form--border);
+  border: 1px solid  var(--entry-pseudo-form--border-color);
   border-radius: 8px;
   transition: var(--x-transition);
   box-shadow: var(--x-box-shadow--elevation-2);
+
+  @media(hover: hover) {
+    &:hover {
+      background: var(--entry-pseudo-form--background-hovered);
+      border: 1px solid var(--entry-pseudo-form--border-color-hovered);
+    }
+  }
 
   &__icon {
     color: var(--entry-pseudo-form__icon--color);

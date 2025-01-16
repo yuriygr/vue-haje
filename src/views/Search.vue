@@ -19,7 +19,7 @@
   <spacer height="15" />
 
   <tabs>
-    <template v-for="(item, index) in tabs" :key="`search-tab-${item.key}-${index}`">
+    <template v-for="item in tabs" :key="`search-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.active" :disabled="item.disabled">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -79,12 +79,6 @@ export default {
           to: this.formatLink('comments'),
           label: this.$t('search.tabs.comments'),
           active: this.$route.meta.key == `comments`
-        },
-        {
-          key: 'communities',
-          to: this.formatLink('communities'),
-          label: this.$t('search.tabs.communities'),
-          active: this.$route.meta.key == `communities`
         },
         {
           key: 'tags',

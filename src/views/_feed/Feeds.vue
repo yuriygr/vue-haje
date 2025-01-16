@@ -1,13 +1,13 @@
 <template>
-  <template v-if="(!loading && !error) || data.length > 0">
-    <div v-for="item in data" :key="`feed-${item.feed_id}`">
-      <div>{{ item }}</div>
-    </div>
+  <feeds-list v-if="(!loading && !error) || data.length > 0">
+    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`">
+      <feed-item :data="item" type="short" />
+    </feed-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
     <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </template>
+  </feeds-list>
 
   <template v-if="data.length == 0">
     <placeholder-loading v-if="loading" />
@@ -28,36 +28,39 @@
 import { mapState, mapGetters } from 'vuex'
 import { NButton, NHeader, Group, Placeholder, PlaceholderLoading, LoadmoreTrigger } from '@vue-norma/ui'
 
+import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
+
 export default {
-  name: 'feed-collections',
+  name: 'feed-feeds',
   components: {
+    FeedsList, FeedItem, FeedItemWrapper,
     NButton, NHeader, Group, Placeholder, PlaceholderLoading, LoadmoreTrigger
   },
   meta() { return this.meta },
   data() {
     return {
       meta: {
-        title: this.$t('feed.collections.title')
+        title: this.$t('feed.tabs.feeds')
       }
     }
   },
   computed: {
-    ...mapState('feed/collections', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feed/collections', [ 'hasMoreItems' ]),
+    ...mapState('feed/feeds', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('feed/feeds', [ 'hasMoreItems' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('feed/collections/more')
+      this.$store.dispatch('feed/feeds/more')
     },
   },
   async mounted() {
-    this.$store.dispatch('feed/collections/fetch')
+    this.$store.dispatch('feed/feeds/fetch')
   },
   unmounted() {
-    this.$store.dispatch('feed/collections/clear')
+    this.$store.dispatch('feed/feeds/clear')
   },
 }
 </script>

@@ -24,9 +24,6 @@ export default {
     },
     'SET_ERROR'(state, payload) {
       state.error = payload
-    },
-    'RESET_NOTIFICATIONS'(state) {
-      state.data.user.state.has_new_notifications = false
     }
   },
   actions: {
@@ -49,8 +46,10 @@ export default {
     set({ commit }, payload) {
       commit('SET_DATA', payload)
     },
-    notifications_seen({ commit }) {
-      commit('RESET_NOTIFICATIONS')
+    seen_notifications({ state, commit }) {
+      let result = { ...state.data }
+      result.user.state.has_new_notifications = 0
+      commit('SET_DATA', result)
     }
   },
   getters: {

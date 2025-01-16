@@ -5,9 +5,7 @@ export default {
       data: [],
       total_items: 0,
 
-      filters: {
-        tab: ''
-      },
+      filters: { },
 
       loading: false,
       error: false
@@ -32,7 +30,7 @@ export default {
       state.filters = payload
     },
     'CLEAR_FILTERS'(state) {
-      state.filters = {}
+      state.filters = { }
     },
     // OTHER
     'SET_LOADING'(state, payload) {

@@ -1,33 +1,23 @@
-/**
- * Generate button style
- * @param {String} - $name - required
- * @param {String} - $background - required - format accepted: hsla, rgb, #
- * @param {Strong} - $color - optionnal - format accepted: hsla, rgb, #
- * If no $color specify, the 'set-text-color' function is called
- * go check the _function.scss
- */
-@mixin generate-button($name, $background, $color: '') {
-  .button-#{$name} {
-    background: $background;
-    @if ($color == '') {
-      color: set-text-color($background);
-    } @else {
-      color: $color;
-    }
-
-    &:hover {
-      background: lighten($background, 10%);
-    }
+@mixin supports-safe-area-insets {
+  @supports (padding-top: env(safe-area-inset-top)) {
+    @content;
   }
 }
 
-@mixin generate-card() {
-  background: var(--x-body--color);
-  box-shadow: var(--x-box-shadow--depth-4);
-  border-radius: var(--x-border-radius--base);
-  transition: all .1s var(--x-motion-timing--standard);
+@mixin on-desktop-device {
+  @media all and (min-width: 1069px) {
+    @content;
+  }
+}
 
-  &:hover {
-    box-shadow: var(--x-box-shadow--depth-8);
+@mixin on-tablet-device {
+  @media (min-width: 769px) and (max-width: 1070px) {
+    @content;
+  }
+}
+
+@mixin on-mobile-device {
+  @media (max-width: 768px) {
+    @content;
   }
 }

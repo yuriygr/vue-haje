@@ -16,7 +16,7 @@
   "header": {
     "nav": {
       "feed": "@:feed.title",
-      "search": "@:search.title",
+      "search": "@:search.title.all",
       "compose": "Compose",
       "notifications": "@:notifications.title",
       "menu": "@:menu.title",
@@ -48,7 +48,7 @@
     "title": "Feed",
     "tabs": {
       "timeline": "Timeline",
-      "popular": "Popular",
+      "feeds": "Feeds",
       "abyss": "The abyss"
     },
     "errors": {
@@ -96,7 +96,7 @@
       "users": "Search for users",
       "entries": "Search posts",
       "comments": "Search comments",
-      "communities": "Search for communities",
+      "feeds": "Search for feeds",
       "tags": "Search tags"
     },
     "search-field": {
@@ -108,7 +108,7 @@
       "users": "Users",
       "entries": "Posts",
       "comments": "Comments",
-      "communities": "Communities",
+      "feeds": "Feeds",
       "tags": "Tags"
     },
     "section": {
@@ -116,7 +116,7 @@
       "entries": "@:search.tabs.entries",
       "comments": "@:search.tabs.comments",
       "tags": "@:search.tabs.tags",
-      "communities": "@:search.tabs.communities"
+      "feeds": "@:search.tabs.feeds"
     }
   },
   "notifications": {
@@ -132,6 +132,7 @@
       "all": "All",
       "subscriptions": "Subscriptions",
       "replies": "Answers",
+      "comments": "Comments",
       "mentions": "Mentions",
       "new_post": "New posts",
       "system": "System"
@@ -153,7 +154,6 @@
   "menu": {
     "title": "Menu",
     "item": {
-      "communities": "@:communities.title",
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
@@ -164,15 +164,8 @@
       "logout": "Go out"
     }
   },
-  "communities": {
-    "title": "Communities",
-    "tabs": {
-      "subscribed": "All communities",
-      "manage": "Manage"
-    }
-  },
   "feeds": {
-    "title": "Ленты"
+    "title": "Feeds"
   },
   "bookmarks": {
     "title": "Bookmarks",
@@ -180,12 +173,12 @@
       "all": "All",
       "entries": "Posts",
       "users": "Users",
-      "communities": "Communities"
+      "feeds": "Feeds"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
       "entries": "@:bookmarks.tabs.entries",
-      "communities": "@:bookmarks.tabs.communities"
+      "feeds": "@:bookmarks.tabs.feeds"
     }
   },
   "settings": {
@@ -353,15 +346,6 @@
     },
     "action": {}
   },
-  "community": {
-    "title": "Community",
-    "action": {},
-    "meta": {
-      "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
-      "official": "Official",
-      "from_date":"Exists since {date}"
-    }
-  },
   "auth": {
     "login": {
       "title": "Log in",
@@ -434,10 +418,10 @@
       "title": "User is not found",
       "description": "Try searching for other existing users"
     },
-    "community_not_found": {
-      "icon": "communities-line",
-      "title": "Community not found",
-      "description": "Try looking for other existing communities"
+    "feed_not_found": {
+      "icon": "feeds-line",
+      "title": "Feeds not found",
+      "description": "Try looking for other existing feeds"
     },
     "user_suspended": {
       "icon": "ghost-line",
@@ -509,9 +493,9 @@
       "title": "No notifications",
       "description": "Most likely they will appear soon"
     },
-    "empty_communities": {
-      "icon": "communities-line",
-      "title": "No communities",
+    "empty_feeds": {
+      "icon": "feeds-line",
+      "title": "No feeds",
       "description": "Maybe it’s worth looking for suitable ones and subscribing to them, what do you think?"
     }
   },
@@ -569,15 +553,28 @@
     "entry-history": {
       "title": "Version history"
     },
-    "report-entry": {
-      "title": "Complaint about the post"
-    },
-    "report-user": {
-      "title": "User complaint"
-    },
-    "delete-entry": {
+    "entry-delete": {
       "title": "Delete entry",
       "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
+    },
+    "entry-report": {
+      "title": "Complaint about the post"
+    },
+    "comment-history": {
+      "title": "Version history"
+    },
+    "comment-edit": {
+      "title": "Edit comment"
+    },
+    "comment-report": {
+      "title": "Complaint about the comment"
+    },
+    "comment-delete": {
+      "title": "Delete comment",
+      "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
+    },
+    "report-user": {
+      "title": "Complaint about an user"
     }
   }
 }

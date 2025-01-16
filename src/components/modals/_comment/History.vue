@@ -1,14 +1,14 @@
 <template>
   <modal size="small">
-    <modal-header :title="$t('modals.entry-history.title')">
+    <modal-header :title="$t('modals.comment-history.title')">
       <template #after>
         <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
     <modal-body v-if="(!loading && !error) || data.length > 0">
-      <template v-for="(item, index) in data" :key="`entry-${item.entry_id}-content-${item.content_id}`">
-        <entry-history-item :data="item" />
+      <template v-for="(item, index) in data" :key="`comment-${item.comment_id}-content-${item.content_id}`">
+        <comment-history-item :data="item" />
         <separator v-if="data.length > index + 1" />
       </template>
 
@@ -24,7 +24,7 @@
         :header="$t(humanizeError.title)"
         :text="$t(humanizeError.description)"
       />
-      <placeholder v-else :text="$t('entry.errors.empty_entry_history')" />
+      <placeholder v-else :text="$t('comment.errors.empty_comment_history')" />
     </template>
 
     <footer class="modal__footer">
@@ -37,17 +37,17 @@
 import { mapState, mapGetters } from 'vuex'
 import { Modal, ModalHeader, ModalBody, NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
-import { EntryHistoryItem } from '@/components/entry'
+import { CommentHistoryItem } from '@/components/comment'
 
 export default {
-  name: 'entry-history-modal',
+  name: 'comment-history-modal',
   components: {
     Modal, ModalHeader, ModalBody,
     NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator,
-    EntryHistoryItem
+    CommentHistoryItem
   },
   props: {
-    uuid: {
+    id: {
       type: [ Boolean, String ],
       default: false
     }
@@ -56,8 +56,8 @@ export default {
     return { }
   },
   computed: {
-    ...mapState('entry/history', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('entry/history', [ 'hasMoreItems' ]),
+    ...mapState('comment/history', [ 'data', 'loading', 'error' ]),
+    ...mapGetters('comment/history', [ 'hasMoreItems' ]),
 
     humanizeError() {
       return this.$filters.humanizeError(this.error)
@@ -68,14 +68,14 @@ export default {
       this.$modals.close()
     },
     loadMore() {
-      this.$store.dispatch('entry/history/more', this.uuid)
+      this.$store.dispatch('comment/history/more', this.id)
     },
   },
   mounted() {
-    this.$store.dispatch('entry/history/fetch', { initial: true, uuid: this.uuid })
+    this.$store.dispatch('comment/history/fetch', { initial: true, id: this.id })
   },
   unmounted() {
-    this.$store.dispatch('entry/history/clear')
+    this.$store.dispatch('comment/history/clear')
   },
 }
 </script>

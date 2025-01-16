@@ -10,7 +10,11 @@
   </entries-list>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <entries-list v-if="loading">
+      <entry-item-wrapper v-for="item in skeletons">
+        <entry-item type="short" />
+      </entry-item-wrapper>
+    </entries-list>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -32,6 +36,7 @@ export default {
     Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('tag/entries', [ 'data', 'loading', 'error' ]),
     ...mapGetters('tag/entries', [ 'hasMoreItems' ]),
     humanizeError() {

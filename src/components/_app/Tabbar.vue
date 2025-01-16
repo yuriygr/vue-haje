@@ -10,7 +10,7 @@
           <icon name="home-line" size="20" />
         </tabbar-item>
       
-        <tabbar-item :to="{ name: 'search' }" :title="$t('header.nav.search')">
+        <tabbar-item :to="{ name: 'search' }" :title="$t('header.nav.search')" :preActive="$route.meta.section == 'search'">
           <icon name="search-line" size="20" />
         </tabbar-item>
 
@@ -23,7 +23,7 @@
         </tabbar-item>
 
         <template v-if="session_data.is_auth">
-          <tabbar-item :to="{ name: 'menu' }" :title="$t('header.nav.menu')">
+          <tabbar-item :to="{ name: 'menu' }" :title="$t('header.nav.menu')" :preActive="$route.meta.section == 'menu'">
             <icon name="menu-line" size="20" />
           </tabbar-item>
         </template>
@@ -102,33 +102,21 @@ export default {
     justify-content: space-between;
     width: 100vw;
 
-    padding-right: var(--mobile-page-horizontal-padding);
-    padding-left: var(--mobile-page-horizontal-padding);
-
-    @media (min-width: 768px) {
-      & {
-        margin-right: auto;
-        margin-left: auto;
-
-        max-width: var(--large-screen-max-width);
-        padding-right: var(--desktop-page-horizontal-padding);
-        padding-left: var(--desktop-page-horizontal-padding);
-      }
-    }
+    margin-right: auto;
+    margin-left: auto;
+    max-width: var(--large-screen-max-width);
+    padding-right: var(--layout-tabbar-padding);
+    padding-left: var(--layout-tabbar-padding);
   }
 
-  @media (max-width: 768px) {
-    & { 
-      position: fixed;
-      bottom: 0;
-    }
+  @include on-mobile-device {
+    position: fixed;
+    bottom: 0;
   }
 
-  @media (min-width: 768px) {
-    & { 
-      position: sticky;
-      top: 0;
-    }
+  @include on-desktop-device {
+    position: sticky;
+    top: 0;
   }
 
   &--loading {

@@ -1,35 +1,55 @@
 <template>
-  <div :class="elClass" :id="`comment-${data.comment_id}`">
-    <branches :count="level - 1" :key="data.comment_id" />
-    <div class="comment__body">
-      <div class="comment__header">
-        <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
-        <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
+  <template v-if="data">
+    <div :class="elClass" :id="`comment-${data.comment_id}`">
+      <branches :count="level - 1" :key="data.comment_id" />
+      <div class="comment__body">
+        <div class="comment__header">
+          <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
+          <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
+        </div>
+        <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
+        <attachments class="comment__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
+        <meta-info class="comment__meta" :items="metaItems" />
       </div>
-      <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
-      <attachments class="comment__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
-      <meta-info class="comment__meta" :items="metaItems" />
     </div>
-  </div>
-  <template v-for="item in data.replies" :key="`comment-${item.comment_id}`">
-    <comment-item :data="item" :level="level >= maxBranchesLevel ? level : level + 1" :entryAuthorID="entryAuthorID" />
+    <template v-for="item in data.replies" :key="`comment-${item.comment_id}`">
+      <comment-item :data="item" :level="level >= maxBranchesLevel ? level : level + 1" :entryAuthorID="entryAuthorID" />
+    </template>
+  </template>
+
+  <template v-else>
+    <div :class="elClass">
+      <div class="comment__body">
+        <div class="comment__header">
+          <user-item :showSubscribeAction="false" mode="small" />
+        </div>
+        <div class="comment__content">
+          <skeleton :width="240" :height="9" />
+          <br />
+          <skeleton :width="55" :height="8" /> <skeleton :width="70" :height="8" />
+        </div>
+      </div>
+    </div>
   </template>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { Icon, MetaInfo } from '@vue-norma/ui'
+import { Icon, NButton } from '@vue-norma/ui'
 import Attachments from '@/components/attachments'
 
 import { UserItem } from '@/components/user'
 
-let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals/CommentHistory.vue"))
+let CommentEditModal = defineAsyncComponent(() => import("@/components/modals/_comment/Edit.vue"))
+let CommentReportModal = defineAsyncComponent(() => import("@/components/modals/_comment/Report.vue"))
+let CommentDeleteModal = defineAsyncComponent(() => import("@/components/modals/_comment/Delete.vue"))
+let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals/_comment/History.vue"))
 
 export default {
   name: 'comment-item',
   components: {
     UserItem, Attachments,
-    Icon, MetaInfo
+    Icon, NButton
   },
   props: {
     data: {
@@ -82,6 +102,8 @@ export default {
       this.replyButton == 'link' && _result.push({ label: this.$tc('comment.meta.reply'), to: this.commentLink })
 
       _result.push({ label: this.formatedDate, to: this.commentLink })
+      _result.push({ label: '⋯', action: this.toggleOptions, title: this.$t('action.options') })
+      
       this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
 
       return _result
@@ -135,7 +157,7 @@ export default {
       this.$popover.open({
         items: this.optionsItems,
         target: target,
-        align: 'right'
+        align: 'left'
       })
     },
     copyLink() {
@@ -146,19 +168,29 @@ export default {
       this.$popover.close()
     },
     // Modals
-    history() {
-      this.$modals.show(CommentHistoryModal, {
-        uuid: this.data.uuid
+    report() {
+      this.$modals.show(CommentReportModal, {
+        data: this.data
       })
       this.$popover.close()
     },
-    report() {
+    history() {
+      this.$modals.show(CommentHistoryModal, {
+        id: this.data.comment_id
+      })
       this.$popover.close()
     },
     edit() {
+      this.$modals.show(CommentEditModal, {
+        data: this.data,
+        mode: 'edit'
+      })
       this.$popover.close()
     },
     delete() {
+      this.$modals.show(CommentDeleteModal, {
+        data: this.data
+      })
       this.$popover.close()
     }
   }

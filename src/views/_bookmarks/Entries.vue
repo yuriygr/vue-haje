@@ -1,16 +1,22 @@
 <template>
-  <entries-list v-if="(!loading && !error) || data.length > 0">
-    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
-      <entry-item :data="item" type="short" />
-    </entry-item-wrapper>
+  <group v-if="(!loading && !error) || data.length > 0">
+    <entries-list>
+      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
+        <entry-item :data="item" type="short" />
+      </entry-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </entries-list>
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </entries-list>
+  </group>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <entries-list v-if="loading">
+      <entry-item-wrapper v-for="item in skeletons">
+        <entry-item type="short" />
+      </entry-item-wrapper>
+    </entries-list>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -26,16 +32,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Group, Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
 
 export default {
   name: 'bookmarks-entries',
   components: {
     EntriesList, EntryItem, EntryItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
+    Group, Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('bookmarks/entries', [ 'data', 'loading', 'error' ]),
     ...mapGetters('bookmarks/entries', [ 'hasMoreItems' ]),
     humanizeError() {

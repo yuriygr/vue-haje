@@ -84,7 +84,7 @@ let subscribers = {
       total_items: 0,
   
       filters: { },
-
+      
       loading: false,
       error: false
     }

@@ -231,6 +231,7 @@ $avatar-size: 57px;
   &__content-wrapper {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     position: relative;
     margin-bottom: var(--user-card--padding);
   }

@@ -4,13 +4,34 @@
 
       <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.subscriptions'">
         <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
-          <router-link :to="{ name: 'user', params: { username: payload.user.username } }">{{ payload.user.name }}</router-link>
+          <router-link :to="userLink">{{ payload.user.name }}</router-link>
         </i18n-t>
       </div>
 
       <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.mentions'">
         <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
-          <router-link :to="{ name: 'user', params: { username: payload.user.username } }">{{ payload.user.name }}</router-link>
+          <router-link :to="userLink">{{ payload.user.name }}</router-link>
+        </i18n-t>
+      </div>
+
+      <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.replies'">
+        <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
+          <router-link :to="userLink">{{ payload.user.name }}</router-link>
+          <router-link :to="commentLink">{{ $t('notifications.const.comment') }}</router-link>
+        </i18n-t>
+      </div>
+
+      <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.comments'">
+        <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
+          <router-link :to="userLink">{{ payload.user.name }}</router-link>
+          <router-link :to="entryLink">{{ $t('notifications.const.entry') }}</router-link>
+        </i18n-t>
+      </div>
+
+      <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.new_post'">
+        <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
+          <router-link :to="userLink">{{ payload.user.name }}</router-link>
+          <router-link :to="entryLink">{{ $t('notifications.const.entry') }}</router-link>
         </i18n-t>
       </div>
 
@@ -45,25 +66,28 @@ export default {
     optionsItems() {
       return [
         {
-          label: `${this.data.actor_type}.${this.data.type}`,
-          disabled: true
-        },
-        {
           icon: 'ui-eye-off',
           label: this.$t('notifications.action.hide'),
           action: this.hideNotify
-        },
-        {
-          icon: 'ui-notification-off',
-          label: this.$t('notifications.action.dont'),
-          action: this.dontNotify
         }
       ]
     },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$filters.timeAgo(this.data.date_added, this.$i18n.locale) })
+      _result.push({ label: this.formatedDate })
       return _result
+    },
+    userLink() {
+      return { name: 'user', params: { username: this.payload.user.username } }
+    },
+    entryLink() {
+      return { name: 'entry', params: { uuid: this.payload.entry.uuid } }
+    },
+    commentLink() {
+      return { name: 'entry', params: { uuid: this.payload.entry.uuid }, query: { comment: this.payload.comment.comment_id } }
+    },
+    formatedDate() {
+      return this.$filters.timeAgo(this.data.date_added, this.$i18n.locale)
     }
   },
   methods: {
@@ -76,10 +100,13 @@ export default {
       })
     },
     hideNotify() {
-      alert("@TODO")
-    },
-    dontNotify() {
-      alert("@TODO")
+      this.$api.post(`my/notifications/${this.data.notify_id}/hide`)
+      .then(_ => {
+        this.$alerts.success({ text: 'Уведомление скрыто' })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
     }
   }
 }

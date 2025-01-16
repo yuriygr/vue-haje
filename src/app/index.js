@@ -36,7 +36,7 @@ export default new class {
     // probrasivaem-s
     store.$api = api
     
-    app.use(router)
+    app.use(router, app)
     app.use(directives)
     app.use(filters)
     app.use(store)

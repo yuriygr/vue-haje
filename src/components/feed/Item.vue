@@ -1,31 +1,40 @@
 <template>
-  <div :class="[ 'feed-item', 'feed-item--mode-' + mode ]">
-    <div class="feed-item__content">
-      <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
-        {{ data.title }}
-      </component>
-      <div v-if="mode != 'small'" class="feed-item__description" v-html="$filters.contentFormat(data.description)" />
-      <meta-info class="feed-item__meta" v-if="metaItems.length > 0" :items="metaItems" />
+  <div :class="[ 'feed-item' ]">
+    <div class="feed-item__header">
+      <div class="feed-item__icon">
+        {{ data.emoji }}
+      </div>
+      <div class="feed-item__content">
+        <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
+          {{ data.title }}
+        </component>
+        <router-link class="feed-item__author" :to="authorLink">{{ $tc('feed.meta.author', { author: this.data.author.name }) }}</router-link>
+      </div>
+      <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
+        <n-button
+          :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
+          mode="tertiary"
+          @click.exact="toggleSubscribe"
+          :disabled="loading.subscribe"
+          :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+        />
+        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+      </buttons-group>
     </div>
-    <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
-      <n-button
-        :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
-        mode="tertiary"
-        @click.exact="toggleSubscribe"
-        :disabled="loading.subscribe"
-        :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
-      />
-      <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
-    </buttons-group>
+    <div class="feed-item__description" v-html="$filters.contentFormat(data.description)" />
+
   </div>
 </template>
 
 <script>
 import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
+import { UserItem } from '@/components/user'
+
 export default {
   name: 'feed-item',
   components: {
+    UserItem,
     NButton, ButtonsGroup, MetaInfo
   },
   props: {
@@ -33,13 +42,6 @@ export default {
     clickable: {
       type: Boolean,
       default: true
-    },
-    mode: {
-      type: String,
-      default: 'normal',
-      validator(value) {
-        return ['small', 'normal'].includes(value)
-      }
     },
     showSubscribeAction: {
       type: Boolean,
@@ -68,14 +70,8 @@ export default {
       else 
         return { }
     },
-    metaItems() {
-      let _result = []
-
-      //_result.push({ label: 'Category' })
-      this.data.state.is_official && _result.push({ label: this.$t('feed.meta.official') })
-      //_result.push({ label: this.$tc('feed.meta.subscribers', this.data.counters.subscribers) })
-
-      return _result
+    authorLink() {
+      return { name: 'user', params: { username: this.data.author.username } }
     },
     optionsItems() {
       let _bookmark = [
@@ -92,7 +88,7 @@ export default {
       ]
 
       return [
-        _bookmark,
+        ..._bookmark,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),
@@ -168,58 +164,54 @@ export default {
 .feed-item {
   --feed-item__name--color: var(--x-body--color);
   --feed-item__name--color-hover: var(--x-body--color);
-  --feed-item__description--color: #666;
+
+  --feed-item__author--color: #666;
+  --feed-item__author--color-hover: var(--x-body--color);
+
+  --feed-item__description--color: var(--x-body--color);
   --feed-item__description--color-hover: var(--x-body--color);
-  --feed-item__avatar--background: rgba(0, 0, 0, 0.09);
+  --feed-item__icon--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
     --feed-item__name--color: var(--x-body--color);
     --feed-item__name--color-hover: var(--x-body--color);
-    --feed-item__description--color: var(--x-color-white--shade40, #999);
+    
+    --feed-item__author--color: var(--x-color-white--shade40);
+    --feed-item__author--color-hover: var(--x-body--color);
+
+    --feed-item__description--color: var(--x-color-white);
     --feed-item__description--color-hover: var(--x-body--color);
-    --feed-item__avatar--background: rgba(255, 255, 255, 0.09);
+    --feed-item__icon--background: rgba(255, 255, 255, 0.09);
   }
 }
 
 .feed-item {
-  &--mode-hero {
-    --feed-item__avatar--size: 46px;
-    --feed-item__avatar--border-radius: 8px;
-  }
-  &--mode-normal {
-    --feed-item__avatar--size: 38px;
-    --feed-item__avatar--border-radius: 8px;
-  }
-  &--mode-small {
-    --feed-item__avatar--size: 18px;
-    --feed-item__avatar--border-radius: 4px;
-  }
+  --feed-item__icon--size: 40px;
+  --feed-item__icon--border-radius: 8px;
 }
 
 .feed-item {
   display: flex;
-  align-items: center;
-  position: relative;
+  flex-direction: column;
 
-  &__avatar {
-    background: var(--feed-item__avatar--background, rgba(0, 0, 0, 0.09));
-    border-radius: var(--feed-item__avatar--border-radius, 8px);
+  &__header {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__icon {
+    background: var(--feed-item__icon--background, rgba(0, 0, 0, 0.09));
+    border-radius: var(--feed-item__icon--border-radius, 8px);
     position: relative;
     overflow: hidden;
-    width: var(--feed-item__avatar--size, 38px);
-    height: var(--feed-item__avatar--size, 38px);
+    width: var(--feed-item__icon--size, 38px);
+    height: var(--feed-item__icon--size, 38px);
     margin-right: .75rem;
     flex-shrink: 0;
-    
-    @media(hover: hover) {
-      &:hover { color: inherit; text-decoration: none; }
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   &__content {
@@ -230,25 +222,41 @@ export default {
   }
 
   &__name {
-    color: var(--feed-item__name--color, #212529);
-    font-size: 1.3rem;
+    color: var(--feed-item__name--color);
     font-weight: 500;
-    line-height: calc(1.4 * 1em);
+    font-size: 1.3rem;
+    line-height: calc(1.3 * 1em);
+    transition: var(--x-transition);
 
     @media(hover: hover) {
       &[href]:hover {
-        color: var(--feed-item__name--color-hover, #212529);
+        text-decoration: none;
+        color: var(--feed-item__name--color-hover);
       }
     }
   }
-  &__description {
-    color: var(--feed-item__description--color, #666);
-    font-size: 1.3rem;
+
+  &__author {
+    color: var( --feed-item__author--color);
     font-weight: 400;
-    line-height: calc(1.4 * 1em);
+    font-size: 1.2rem;
+    line-height: calc(1.3 * 1em);
+    transition: var(--x-transition);
+
+    @media(hover: hover) {
+      &[href]:hover {
+        text-decoration: none;
+        color: var(--feed-item__author--color-hover);
+      }
+    }
   }
 
-  &__meta {
+  &__description {
+    color: var(--x-body--color);
+    font-size: 1.5rem;
+    line-height: calc(1.4 * 1em);
+    word-break: break-word;
+    -webkit-font-smoothing: subpixel-antialiased;
     margin-top: .75rem;
   }
 

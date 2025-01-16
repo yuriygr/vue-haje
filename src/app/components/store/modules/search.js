@@ -7,7 +7,7 @@ let all = {
         entries: [],
         comments: [],
         tags: [],
-        communities: []
+        feeds: []
       },
 
       filters: {
@@ -29,7 +29,7 @@ let all = {
         entries: [],
         comments: [],
         tags: [],
-        communities: []
+        feeds: []
       }
     },
     // FILTEST
@@ -79,7 +79,7 @@ let all = {
     },
     emptyData(state) {
       return (
-        state.data.entries.length + state.data.users.length + state.data.comments.length + state.data.tags.length + state.data.communities.length
+        state.data.entries.length + state.data.users.length + state.data.comments.length + state.data.tags.length + state.data.feeds.length
       ) == 0
     },
     emptyQuery(state) {
@@ -475,7 +475,7 @@ let comments = {
   }
 }
 
-let communities = {
+let feeds = {
   namespaced: true,
   state() {
     return {
@@ -524,7 +524,7 @@ let communities = {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get('search/communities', state.filters)
+      this.$api.get('search/feeds', state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -574,7 +574,7 @@ let communities = {
 
 export default {
   namespaced: true,
-  modules: { all, users, tags, entries, comments, communities },
+  modules: { all, users, tags, entries, comments, feeds },
   state() {
     return { }
   },
