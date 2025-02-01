@@ -75,9 +75,6 @@
     "action": {
       "settings": "Profile settings",
       "logout": "Logout",
-      "options": "More",
-      "subscribe": "Subscribe",
-      "unsubscribe": "Unsubscribe",
       "notify_new_posts": "Notify about new posts",
       "dont_notify_new_posts": "Don't notify about new posts"
     }
@@ -286,6 +283,9 @@
       "all-questions": "Knowledge base",
       "my-questions": "My questions",
       "add-question": "Ask a Question"
+    },
+    "meta": {
+      "edited": "Edited at {date}"
     }
   },
   "donate": {
@@ -323,8 +323,6 @@
       "empty_entry_history": "Change history is empty"
     },
     "action": {
-      "subscribe": "@:user.action.subscribe",
-      "unsubscribe": "@:user.action.unsubscribe",
       "history": "Version history",
       "pin": "Pin",
       "unpin": "Unpin",
@@ -393,6 +391,11 @@
     "date": "Received {date}"
   },
   "errors": {
+    "user_cant_delete_entries": "You can't delete posts",
+    "user_cant_edit_entries": "You can't edit posts",
+    "user_cant_delete_comments": "You can't delete comments",
+    "user_cant_edit_comments": "You can't edit comments",
+
     "todo": {
       "icon": "ghost-line",
       "title": "Under development",
@@ -500,6 +503,9 @@
     }
   },
   "action": {
+    "options": "More",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe",
     "apply": "Apply",
     "save": "Save",
     "go_away": "Go",
@@ -513,12 +519,12 @@
     "edit": "Edit",
     "delete": "Delete",
     "refresh": "Update",
-    "options": "Options",
     "attach_image": "Attach an image",
     "copy_link": "Copy link",
     "report": "Complain",
     "remove-bookmark": "Remove from bookmarks",
-    "add-bookmark": "Add to bookmarks"
+    "add-bookmark": "Add to bookmarks",
+    "confirm": "Leave without saving?"
   },
   "brands": {
     "grustnogram": {

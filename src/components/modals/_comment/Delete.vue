@@ -33,23 +33,26 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      error: false
     }
   },
   methods: {
     deleteComment() {
       this.loading = true
+      this.error = false
+
       this.$api.delete(`comment/${this.data.comment_id}`)
       .then(_ => {
-        this.$alerts.success({ text: 'Комментарий успешно удален' })
+        this.$alerts.success({ text: this.$t(`errors.comment_deleted`) })
         this.$modals.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.message })
+        this.error = error
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$modals.close()
       })
-      .then(_ => {
-        this.loading = false
-      })
+      .then(_ => this.loading = false)
     },
     closeModal() {
       this.$modals.close()

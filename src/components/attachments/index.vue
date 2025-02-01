@@ -1,14 +1,14 @@
 <template>
-  <div :class="elClass" v-if="data.length > 0">
-    <div class="images-list">
-      <picture v-for="item in data" :key="`file-${item.file.uuid}`">
+  <div :class="elClass" v-if="hasAttachments">
+    <div class="images-list" v-if="files">
+      <picture v-for="item in files" :key="`file-${item.file.uuid}`">
         <img :data-src="`https://leonardo.osnova.io/${item.file.uuid}`" :src="`https://leonardo.osnova.io/${item.file.uuid}`">
       </picture>
     </div>
 
-    <links-list v-if="(data.length > 0) && false">
-      <link-item-wrapper v-for="item in data" :key="`link-${item.file.uuid}`">
-        <link-item :data="ex" />
+    <links-list v-if="link">
+      <link-item-wrapper>
+        <link-item :data="link" />
       </link-item-wrapper>
     </links-list>
   </div>
@@ -23,7 +23,11 @@ export default {
    LinksList,LinkItem,LinkItemWrapper
   },
   props: {
-    data: {
+    files: {
+      type: [ Array, Object, Boolean ],
+      default: false
+    },
+    link: {
       type: [ Array, Object, Boolean ],
       default: false
     },
@@ -36,13 +40,10 @@ export default {
     }
   },
   computed: {
-    ex() {
-      return {
-        icon: 'external-line',
-        label: 'МакSим - Дед Максим (AI Cover)',
-        url: 'https://www.youtube.com/watch?v=03-DjYDTbJA'
-      }
+    hasAttachments() {
+      return this.files || this.link
     },
+
     elClass() {
       return [
         'attachments',

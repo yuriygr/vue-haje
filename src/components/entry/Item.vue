@@ -10,7 +10,7 @@
         </buttons-group>
       </div>
       <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
-      <attachments class="entry__attachments" v-if="data.attachments" :data="data.attachments" mode="full" />
+      <attachments class="entry__attachments" v-if="data.files || data.link" :files="data.files" :link="data.link" mode="full" />
       <meta-info class="entry__meta" :items="metaItems" />
     </div>
   </template>
@@ -43,9 +43,10 @@ import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
-let ReportEntryModal = defineAsyncComponent(() => import("@/components/modals/ReportEntry.vue"))
-let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/EntryHistory.vue"))
-let DeleteEntryModal = defineAsyncComponent(() => import("@/components/modals/DeleteEntry.vue"))
+
+let EntryReportModal = defineAsyncComponent(() => import("@/components/modals/_entry/Report.vue"))
+let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/_entry/History.vue"))
+let EntryDeleteModal = defineAsyncComponent(() => import("@/components/modals/_entry/Delete.vue"))
 
 import { ActionItem } from '@/components/actions'
 import { UserItem } from '@/components/user'
@@ -248,7 +249,7 @@ export default {
     },
     // Modals
     report() {
-      this.$modals.show(ReportEntryModal, {
+      this.$modals.show(EntryReportModal, {
         data: this.data
       })
       this.$popover.close()
@@ -267,7 +268,7 @@ export default {
       this.$popover.close()
     },
     delete() {
-      this.$modals.show(DeleteEntryModal, {
+      this.$modals.show(EntryDeleteModal, {
         data: this.data
       })
       this.$popover.close()

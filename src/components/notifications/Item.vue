@@ -11,6 +11,8 @@
       <div class="notification-item__label" v-if="`${data.actor_type}.${data.type}` == 'user.mentions'">
         <i18n-t :keypath="`notifications.${data.actor_type}.${data.type}`">
           <router-link :to="userLink">{{ payload.user.name }}</router-link>
+          <router-link v-if="payload.entry" :to="entryLink">{{ $t('notifications.const.entry') }}</router-link>
+          <router-link v-else-if="payload.comment" :to="commentLink">{{ $t('notifications.const.comment') }}</router-link>
         </i18n-t>
       </div>
 

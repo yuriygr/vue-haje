@@ -53,7 +53,6 @@ export default {
     onSuccessAddingComment(result) {
       this.entry.counters.comments += 1
       this.$store.dispatch('entry/comments/add', result.payload)
-      this.$alerts.success({ text: result.status })
       this.$nextTick(_ => {
         document.getElementById(`comment-${result.payload.comment_id}`).scrollIntoView();
       })

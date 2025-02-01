@@ -1,13 +1,13 @@
 <template>
   <modal size="small">
-    <modal-header :title="$t('modals.delete-entry.title')">
+    <modal-header :title="$t('modals.entry-delete.title')">
       <template #after>
          <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
     <modal-body>
-      {{ $t('modals.delete-entry.help') }}
+      {{ $t('modals.entry-delete.help') }}
     </modal-body>
 
     <footer class="modal__footer">
@@ -21,7 +21,7 @@
 import { Modal, ModalHeader, ModalBody, NButton } from '@vue-norma/ui'
 
 export default {
-  name: 'delete-entry-modal',
+  name: 'entry-delete-modal',
   components: {
     Modal, ModalHeader, ModalBody, NButton
   },
@@ -33,23 +33,26 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      error: false
     }
   },
   methods: {
     deleteEntry() {
       this.loading = true
+      this.error = false
+
       this.$api.delete(`entry/${this.data.uuid}`)
       .then(_ => {
-        this.$alerts.success({ text: 'Запись успешно удалена' })
+        this.$alerts.success({ text: this.$t(`errors.entry_deleted`) })
         this.$modals.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.message })
+        this.error = error
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$modals.close()
       })
-      .then(_ => {
-        this.loading = false
-      })
+      .then(_ => this.loading = false)
     },
     closeModal() {
       this.$modals.close()

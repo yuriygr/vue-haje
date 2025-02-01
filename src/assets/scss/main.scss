@@ -67,3 +67,35 @@ a {
 }
 
 *[hidden] { display:none; }
+
+
+.quote {
+	--quote--offset-x: 10px;
+	--quote--offset-y: 2px;
+	--quote--line-width: 4px;
+	--quote--line-color: var(--x-color-pink--tint10);
+
+  html[data-theme="black"] & {
+		--quote--line-color: var(--x-color-pink--shade50);
+	}
+}
+
+.quote {
+	display: inline-block;
+	position: relative;
+	padding: var(--quote--offset-y) 0;
+	padding-left: calc(var(--quote--line-width) + var(--quote--offset-x));
+	margin: 5px 0;
+
+	&:before {
+		content: "";
+		flex-shrink: 0;
+		width: var(--quote--line-width);
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+		left: 0;
+		background-color: var(--quote--line-color);
+		border-radius: var(--quote--line-width);
+	}
+}

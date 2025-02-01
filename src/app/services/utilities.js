@@ -12,6 +12,15 @@ export const cancelEvent = (event) => {
   return false
 }
 
+export const createThumb = (file) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.onerror = (e) => reject(e.target.error)
+    reader.readAsDataURL(file)
+  })
+}
+
 export const isObject = (value) => {
   if (value === null) { return false }
   return ( (typeof value === 'function') || (typeof value === 'object') )

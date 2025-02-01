@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Entry from '@/views/Entry'
 const Home = () => import('@/views/Home')
+const Donate = () => import('@/views/Donate')
 import Menu from '@/views/Menu'
-import About from '@/views/About'
+const About = () => import('@/views/About')
 
 import FeedRoutes from '@/app/components/router/modules/feed'
 import TagRoutes from '@/app/components/router/modules/tag'
@@ -33,7 +34,7 @@ const routes = [
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
 
 	{ path: '/menu', name: 'menu', component: Menu, meta: { section: 'menu' } },
-	{ path: '/donate', name: 'donate', component: About, meta: { section: 'menu' } },
+	{ path: '/donate', name: 'donate', component: Donate, meta: { section: 'menu' } },
 	{ path: '/about', name: 'about', component: About, meta: { section: 'menu' } },
 
 	{ path: '/:pathMatch(.*)*', redirect: { name: 'feed' } }

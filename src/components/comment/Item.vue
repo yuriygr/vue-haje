@@ -8,7 +8,7 @@
           <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
         </div>
         <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
-        <attachments class="comment__attachments" v-if="data.attachments" :data="data.attachments" mode="compact" />
+        <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
         <meta-info class="comment__meta" :items="metaItems" />
       </div>
     </div>
@@ -42,8 +42,8 @@ import { UserItem } from '@/components/user'
 
 let CommentEditModal = defineAsyncComponent(() => import("@/components/modals/_comment/Edit.vue"))
 let CommentReportModal = defineAsyncComponent(() => import("@/components/modals/_comment/Report.vue"))
-let CommentDeleteModal = defineAsyncComponent(() => import("@/components/modals/_comment/Delete.vue"))
 let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals/_comment/History.vue"))
+let CommentDeleteModal = defineAsyncComponent(() => import("@/components/modals/_comment/Delete.vue"))
 
 export default {
   name: 'comment-item',
@@ -102,9 +102,10 @@ export default {
       this.replyButton == 'link' && _result.push({ label: this.$tc('comment.meta.reply'), to: this.commentLink })
 
       _result.push({ label: this.formatedDate, to: this.commentLink })
-      _result.push({ label: '⋯', action: this.toggleOptions, title: this.$t('action.options') })
       
       this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
+
+      _result.push({ label: '⋯', action: this.toggleOptions, title: this.$t('action.options') })
 
       return _result
     },

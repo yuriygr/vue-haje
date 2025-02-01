@@ -8,6 +8,12 @@
       v-bind="$fieldBinds"
     ></div>
 
+    <div class="compose__files" v-if="hasFiles">
+			<div class="thumb" v-for="(file, index) in thumbsFiles" :key="index" :style="{ '--thumb': `url(${file.thumb})` }">
+        {{ file }}
+      </div>
+    </div>
+
     <div class="compose__actions">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
       <buttons-group :withGap="true">
@@ -24,7 +30,7 @@
 <script>
 // TODO: если идет изменение чужой записи - выводить снизу аватарку текущего пользователя, а сверху автора поста
 // Хотя, можно сразу при редактировании поста выводить инфу о юзере не из сессии  Хм  
-import { cancelEvent } from '@/app/services/utilities'
+import { cancelEvent, createThumb } from '@/app/services/utilities'
 import { UserItem } from '@/components/user'
 import { mapState } from 'vuex'
 
@@ -58,10 +64,12 @@ export default {
 
       form: {
         text: '',
+        link: false,
         is_comments_enabled: true,
         is_hidden_from_feed: false
       },
-      attachedFiles: []
+      attachedFiles: [],
+      thumbsFiles: [],
     }
   },
   computed: {
@@ -103,7 +111,7 @@ export default {
       }
     },
     canSubmit() {
-      return (this.form.text != '' || this.hasFiles) && !this.loading
+      return (this.form.text.trim() != '' || this.hasFiles) && !this.loading
     },
     hasFiles() {
       return this.attachedFiles.length != 0
@@ -147,6 +155,10 @@ export default {
   },
   methods: {
     closeModal() {
+      if (this.canSubmit) {
+        confirm(this.$t('action.confirm')) && this.$modals.close()
+        return
+      }
       this.$modals.close()
     },
 
@@ -158,7 +170,7 @@ export default {
 
       this.$api.post('entry', this.form)
       .then(result => {
-        this.closeModal()
+        this.$modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
       .catch(error => {
@@ -175,12 +187,12 @@ export default {
 
       this.$api.post('entry/' + this.data.uuid, this.form)
       .then(result => {
-        this.closeModal()
+        this.$modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -263,13 +275,27 @@ export default {
     _processFilesUpload(filesList) {
       [...filesList]
         .filter(file => this.acceptetFiles.includes(file.type))
-        .forEach(file => {
-          console.log(file)
-        })
+        .forEach(this.addFile)
     },
     _processLinkUpload(url) {
 
-    }
+    },
+    async addFile(file) {
+      let thumb = { name: file.name, size: file.size, thumb: '', type: file.type }
+
+      this.loading = true
+      await createThumb(file)
+      .then(data => thumb.thumb = data)
+      .catch(console.log)
+      .finally(_ => this.loading = false)
+
+      this.thumbsFiles.push(thumb)
+      this.attachedFiles.push(file)
+    },
+    removeFile(index) {
+      this.thumbsFiles.splice(index, 1)
+      this.attachedFiles.splice(index, 1)
+    },
   },
   mounted() {
     this.$field.focus()
@@ -343,6 +369,10 @@ export default {
     }
   }
 
+  &__files {
+    padding: var(--modal--padding) var(--modal--padding);
+  }
+
   &__actions {
     display: flex;
     justify-content: space-between;
@@ -351,5 +381,17 @@ export default {
     border-bottom-right-radius: inherit;
     padding: var(--modal--padding) var(--modal--padding);
   }
+}
+
+.thumb {
+  background-image: var(--thumb);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0px 0px 2px #d4d4d4, 1px 1px 1px #e4e4e4;
+  margin-right: .5rem;
+  border-radius: 8px;
 }
 </style>

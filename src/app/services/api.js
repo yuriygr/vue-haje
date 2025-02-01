@@ -118,4 +118,8 @@ export default new class {
     let [formData, headers] = this.preparePostData(params)
     return this.instance.post(path, formData, headers)
   }
+
+	delete(path, params = {}) {
+		return this.instance.delete(path, { params })
+	}
 } 

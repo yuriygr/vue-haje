@@ -143,7 +143,7 @@
       "new_post": "{0} опубликовало новую {1}",
       "replies": "{0} ответило на ваш {1}",
       "comments": "{0} прокомментировало вашу {1}",
-      "mentions": "{0} упомянуло вас"
+      "mentions": "{0} упомянуло вас в {1}"
     },
     "system": {
       "reports": "Получена жалоба на вас",
@@ -302,10 +302,14 @@
       "all-questions": "База знаний",
       "my-questions": "Мои вопросы",
       "add-question": "Задать вопрос"
+    },
+    "meta": {
+      "edited": "Изменено {date}"
     }
   },
   "donate": {
-    "title": "Поддержать"
+    "title": "Поддержать",
+    "intro": ""
   },
   "about": {
     "title": "О приложении",
@@ -343,8 +347,6 @@
       "empty_entry_history": "История изменений пуста"
     },
     "action": {
-      "subscribe": "@:user.action.subscribe",
-      "unsubscribe": "@:user.action.unsubscribe",
       "history": "История версий",
       "pin": "Закрепить",
       "unpin": "Открепить"
@@ -412,7 +414,16 @@
     },
     "date": "Получен {date}"
   },
+  "success": {
+    "entry_deleted": "Запись успешно удалена",
+    "comment_deleted": "Комментарий успешно удален"
+  },
   "errors": {
+    "user_cant_delete_entries": "Вы не можете удалять записи",
+    "user_cant_edit_entries": "Вы не можете редактировать записи",
+    "user_cant_delete_comments": "Вы не можете удалять комментарии",
+    "user_cant_edit_comments": "Вы не можете редактировать комментарии",
+
     "todo": {
       "icon": "ghost-line",
       "title": "На стадии разработки",
@@ -522,6 +533,11 @@
       "icon": "feeds-line",
       "title": "Лент нет",
       "description": "Вы еще не создали ни одной ленты. Может, пора это исправить?"
+    },
+    "help_page_not_found": {
+      "icon": "ghost-line",
+      "title": "Страница не найдена",
+      "description": "Вероятнее всего, ее тут никогда и небыло. Но кто знает наверняка, правда?"
     }
   },
   "action": {
@@ -546,7 +562,8 @@
     "copy_link": "Скопировать ссылку",
     "report": "Пожаловаться",
     "remove-bookmark": "Убрать из закладок",
-    "add-bookmark": "Добавить в закладки"
+    "add-bookmark": "Добавить в закладки",
+    "confirm": "Выйти без сохранения?"
   },
   "brands": {
     "grustnogram": {

@@ -1,11 +1,11 @@
 <template>
   <a class="link" :href="data.url" target="_blank">
     <div class="link__icon">
-      <icon :name="data.icon" size="16" />
+      <icon :name="data.icon || 'external-line'" size="16" />
     </div>
     <div class="link__content">
-      <div class="link__label">
-        {{ data.label }}
+      <div class="link__title">
+        {{ data.title }}
       </div>
       <div class="link__url">
         {{ data.url }}
@@ -42,14 +42,14 @@ export default {
   --link__icon--background: #f1f3f5;
   --link__icon--color: #212529;
   
-  --link__label--color: #212529;
+  --link__title--color: #212529;
   --link__url--color: #495057;
 
   html[data-theme='black'] & {
     --link__icon--background: #1f1f1f;
     --link__icon--color: #f0f0f0;
 
-    --link__label--color: #f0f0f0;
+    --link__title--color: #f0f0f0;
     --link__url--color: #999;
   }
 }
@@ -80,8 +80,8 @@ export default {
     align-items: baseline;
   }
 
-  &__label {
-    color: var(--link__label--color);
+  &__title {
+    color: var(--link__title--color);
     font-size: 1.4rem;
     font-weight: 500;
     line-height: calc(1.4 * 1em);

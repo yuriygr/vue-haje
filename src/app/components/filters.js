@@ -169,15 +169,20 @@ const contentFormat = (value) => {
       pattern: /\B(#([^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
       replacment: `<a href="/t/$2" target="_self">$1</a>`
     },
-    // mentions
+    // Упоминание
     mentions: {
       pattern: /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
       replacment: `<a href="/u/$2" target="_self">$1</a>`
     },
+    // Цитата
+    quote: {
+      pattern: /&gt;\s*([\s\S]*?)(?=<br\b|$)/gi, // /^&gt;\s*(\S[\s\S]*?)<br>/g
+      replacment: `<span class="quote">$1</span>`
+    },
     // new lines
     newLines: {
       pattern: /(?:\r\n|\r|\n)/g,
-      replacment: `<br />`
+      replacment: `<br>`
     }
   }
 
