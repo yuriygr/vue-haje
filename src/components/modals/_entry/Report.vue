@@ -60,12 +60,13 @@ export default {
     },
     sendReport() {
       this.$api.post(`entry/${this.data.uuid}/report`, { reason: this.current || 0 })
-      .then(_ => {
-        this.$alerts.success({ text: 'Жалоба отправлена в спортлото' })
+      .then(response => {
+        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
         this.$modals.close()
       })
       .catch(error => {
         this.$alerts.danger({ text: error.message })
+        this.$modals.close()
       })
     },
     closeModal() {

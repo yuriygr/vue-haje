@@ -65,7 +65,13 @@ export default {
           label: this.$t('menu.item.settings'),
           to: { name: 'settings' },
           chevron: true
-        }
+        },
+        {
+          icon: 'plus-line',
+          label: this.$t('menu.item.plus'),
+          to: { name: 'plus' },
+          chevron: true
+        },
       ]
 
       let main = [

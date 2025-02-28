@@ -56,7 +56,7 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup } from '@vue-norma/ui'
 
-let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/ReportUser.vue"))
+let UserReportModal = defineAsyncComponent(() => import("@/components/modals/_user/Report.vue"))
 
 export default {
   name: 'user-item',
@@ -195,7 +195,7 @@ export default {
       this.$popover.close()
     },
     report() {
-      this.$modals.show(ReportUserModal, {
+      this.$modals.show(UserReportModal, {
         data: this.data
       })
       this.$popover.close()
@@ -266,7 +266,7 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
-    align-items: start;
+    align-items: flex-start;
   }
 
   &__name {

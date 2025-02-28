@@ -155,6 +155,7 @@
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
+      "plus": "@:plus.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "To come in",
@@ -579,8 +580,14 @@
       "title": "Delete comment",
       "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
     },
-    "report-user": {
+    "user-report": {
       "title": "Complaint about an user"
+    },
+    "feed-create": {
+      "title": "Create feed"
+    },
+    "feed-report": {
+      "title": "Complaint about the feed"
     }
   }
 }

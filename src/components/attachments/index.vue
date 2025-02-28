@@ -66,6 +66,10 @@ export default {
     overflow: hidden;
     border-radius: 12px;
 
+    &:not(:last-child) {
+      margin-bottom: .75rem;
+    }
+
     img {
       width: 100%;
       height: auto;

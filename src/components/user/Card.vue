@@ -42,8 +42,8 @@
 import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
-let UserAvatarView = defineAsyncComponent(() => import("@/components/modals/UserAvatarView.vue"))
-let ReportUserModal = defineAsyncComponent(() => import("@/components/modals/ReportUser.vue"))
+let UserAvatarView = defineAsyncComponent(() => import("@/components/modals/_user/AvatarView.vue"))
+let UserReportModal = defineAsyncComponent(() => import("@/components/modals/_user/Report.vue"))
 
 export default {
   name: 'user-card',
@@ -197,7 +197,7 @@ export default {
       this.$popover.close()
     },
     report() {
-      this.$modals.show(ReportUserModal, {
+      this.$modals.show(UserReportModal, {
         data: this.data
       })
       this.$popover.close()

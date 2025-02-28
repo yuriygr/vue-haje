@@ -11,7 +11,7 @@
       />
     </div>
     <div class="search-form__filter">
-      <n-button icon_before="add-line" mode="tertiary" size="l" :title="$t('action.create')" />
+      <n-button icon_before="add-line" mode="tertiary" size="l" @click="openCreateModal" :title="$t('action.create')" />
     </div>
   </div>
 
@@ -43,8 +43,12 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { NButton, Separator, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+
+let FeedCreateModal = defineAsyncComponent(() => import("@/components/modals/_feed/Create.vue"))
+
 import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
@@ -72,6 +76,11 @@ export default {
     }
   },
   methods: {
+    openCreateModal() {
+      this.$modals.show(FeedCreateModal, {
+        data: this.$route.meta.key
+      })
+    },
     changeInput(query) {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })
     },

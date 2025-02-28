@@ -1,0 +1,184 @@
+{
+  "app": {
+    "title": "Futubra",
+    "description": "非社交的な人々のためのソーシャルネットワーク",
+    "version": "バージョン {version}",
+    "locale": {
+      "jp": "日本語",
+      "pt": "ポルトガル語",
+      "en": "英語",
+      "ru": "ロシア語"
+    },
+    "theme": {
+      "white": "ライトモード",
+      "black": "ダークモード"
+    }
+  },
+  "header": {
+    "nav": {
+      "feed": "@:feed.title",
+      "search": "@:search.title.all",
+      "compose": "投稿する",
+      "notifications": "@:notifications.title",
+      "menu": "@:menu.title",
+      "auth": "認証"
+    }
+  },
+  "home": {
+    "title": "ようこそ",
+    "hero": {
+      "title": "こちらが<span>フツブラ</span>です！",
+      "description": "ロシアのソーシャルネットワークがたった1人の手に握られているのは不公平だと思いませんか？"
+    },
+    "teasers": {
+      "item": {
+        "brain": { "title": "AI禁止", "info": "人間が手や足で作成したコンテンツを優先します" }, 
+        "recommendations": { "title": "レコメンド機能なし", "info": "ニュースフィードにはあなたがフォローしたものだけが表示されます" }, 
+        "combine": { "title": "余計な機能なし", "info": "デリバリーや占い、天気予報をお探しですか？ここは違います" },
+        "friends": { "title": "友達機能なし", "info": "興味のあるユーザーのコンテンツをフォローするだけ" },
+        "likes": { "title": "いいね機能なし", "info": "ランキングのために猫の動画を投稿する必要はありません" },
+        "blacklist": { "title": "ブラックリストなし", "info": "気に入らないユーザーは読まないだけでOK" },
+        "ads": { "title": "ブランド広告なし", "info": "ネットやメールの広告で十分です" }
+      }
+    },
+    "action": {
+      "login": "ログイン",
+      "create_account": "@:auth.create_account.title"
+    }
+  },
+  "feed": {
+    "title": "フィード",
+    "tabs": {
+      "timeline": "マイフィード",
+      "feeds": "フィード一覧",
+      "abyss": "深淵"
+    },
+    "meta": {
+      "author": "{author}のフィード"
+    },
+    "errors": {
+      "entries_empty": "投稿がありません"
+    }
+  },
+  "user": {
+    "title": "プロフィール",
+    "tabs": {
+      "entries": "投稿なし | {n}件の投稿",
+      "subscribers": "フォロワーなし | {n}フォロワー",
+      "subscriptions": "フォロー中なし | {n}フォロー中",
+      "badges": "バッジなし | {n}個のバッジ"
+    },
+    "meta": {
+      "from_date": "{date}から利用中"
+    },
+    "errors": {
+      "entries_empty": "投稿がありません",
+      "subscribers_empty": "フォロワーがいません",
+      "subscriptions_empty": "フォロー中のユーザーがいません",
+      "badges_empty": "バッジがありません"
+    },
+    "action": {
+      "settings": "プロフィール編集",
+      "logout": "ログアウト",
+      "notify_new_posts": "新着通知を受け取る",
+      "dont_notify_new_posts": "通知を受け取らない"
+    }
+  },
+  "tag": {
+    "title": "タグ",
+    "meta": {
+      "official": "公式",
+      "nsfw": "NSFW",
+      "from_date": "{date}に作成"
+    }
+  },
+  "search": {
+    "title": {
+      "all": "検索",
+      "users": "ユーザー検索",
+      "entries": "投稿検索",
+      "comments": "コメント検索",
+      "feeds": "フィード検索",
+      "tags": "タグ検索"
+    },
+    "search-field": {
+      "placeholder": "検索"
+    },
+    "filter": "フィルター",
+    "tabs": {
+      "all": "すべて",
+      "users": "ユーザー",
+      "entries": "投稿",
+      "comments": "コメント",
+      "feeds": "フィード",
+      "tags": "タグ"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "action": {
+      "read_all": "全て既読にする",
+      "settings": "通知設定",
+      "options": "その他",
+      "hide": "非表示",
+      "dont": "通知しない"
+    },
+    "tabs": {
+      "all": "すべて",
+      "subscriptions": "フォロー",
+      "replies": "返信",
+      "comments": "コメント",
+      "mentions": "メンション",
+      "new_post": "新規投稿",
+      "system": "システム"
+    }
+  },
+  "menu": {
+    "title": "メニュー",
+    "item": {
+      "feeds": "@:feeds.title",
+      "bookmarks": "@:bookmarks.title",
+      "settings": "@:settings.title",
+      "plus": "@:plus.title",
+      "help": "@:help.title",
+      "about": "@:about.title",
+      "donate": "@:donate.title",
+      "login": "ログイン",
+      "logout": "ログアウト"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "section": {
+      "base": "基本",
+      "secure": "セキュリティ",
+      "danger": "危険ゾーン"
+    },
+    "sex": {
+      "male": "男性",
+      "female": "女性",
+      "none": "アパッチ攻撃ヘリコプター"
+    }
+  },
+  "errors": {
+    "network_error": {
+      "icon": "cloud-off-line",
+      "title": "接続エラー",
+      "description": "サーバーが応答しません"
+    },
+    "empty_search": {
+      "icon": "search-line",
+      "title": "検索結果なし",
+      "description": "検索条件を変更してください"
+    }
+  },
+  "action": {
+    "subscribe": "フォロー",
+    "unsubscribe": "フォロー解除",
+    "create": "作成",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "report": "報告"
+  }
+}

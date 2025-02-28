@@ -4,6 +4,7 @@
     "description": "Социальная сеть для не социальных людей",
     "version": "Версия {version}",
     "locale": {
+      "jp": "Японский",
       "pt": "Португальский",
       "en": "Английский",
       "ru": "Русский"
@@ -164,6 +165,7 @@
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
+      "plus": "@:plus.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "Войти",
@@ -310,6 +312,11 @@
   "donate": {
     "title": "Поддержать",
     "intro": ""
+  },
+  "plus": {
+    "title": "Подписки",
+    "intro": "Не платите за то чем не пользуетесь",
+    "total": "Платить {total} рублей в месяц "
   },
   "about": {
     "title": "О приложении",
@@ -618,8 +625,14 @@
       "title": "Удалить комментарий",
       "help": "По каким-то причинам вы собираетесь удалить комментарий, вы уверены, что это действительно нужно?"
     },
-    "report-user": {
+    "user-report": {
       "title": "Жалоба на пользователя"
+    },
+    "feed-create": {
+      "title": "Создать ленту"
+    },
+    "feed-report": {
+      "title": "Жалоба на ленту"
     }
   }
 }

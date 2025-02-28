@@ -4,6 +4,7 @@
     "description": "Rede social para pessoas não sociais",
     "version": "Versão {version}",
     "locale": {
+      "jp": "Японский",
       "pt": "Português",
       "en": "Inglês",
       "ru": "Russo"
@@ -137,6 +138,7 @@
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
+      "plus": "@:plus.title",
       "donate": "@:donate.title",
       "login": "Entrar",
       "logout": "Sair"
@@ -537,7 +539,7 @@
       "title": "Delete comment",
       "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
     },
-    "report-user": {
+    "user-report": {
       "title": "Complaint about an user"
     }
   }

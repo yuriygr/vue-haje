@@ -33,22 +33,19 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      error: false
+      loading: false
     }
   },
   methods: {
     deleteEntry() {
       this.loading = true
-      this.error = false
 
       this.$api.delete(`entry/${this.data.uuid}`)
       .then(_ => {
-        this.$alerts.success({ text: this.$t(`errors.entry_deleted`) })
+        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
         this.$modals.close()
       })
       .catch(error => {
-        this.error = error
         this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
         this.$modals.close()
       })

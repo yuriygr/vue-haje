@@ -1,8 +1,8 @@
 <template>
   <modal size="small">
-    <modal-header :title="$t('modals.comment-report.title')">
+    <modal-header :title="$t('modals.user-report.title')">
       <template #after>
-         <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
+        <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 
@@ -26,7 +26,7 @@
 import { Modal, ModalHeader, ModalChecklist, NButton } from '@vue-norma/ui'
 
 export default {
-  name: 'comment-report-modal',
+  name: 'user-report-modal',
   components: {
     Modal, ModalHeader, ModalChecklist, NButton
   },
@@ -59,7 +59,7 @@ export default {
       this.current = 0
     },
     sendReport() {
-      this.$api.post(`comment/${this.data.comment_id}/report`, { reason: this.current || 0 })
+      this.$api.post(`user/${this.data.username}/report`, { reason: this.current || 0 })
       .then(response => {
         this.$alerts.success({ text: this.$t(`success.${response.status}`) })
         this.$modals.close()

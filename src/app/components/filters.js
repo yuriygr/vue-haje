@@ -176,8 +176,8 @@ const contentFormat = (value) => {
     },
     // Цитата
     quote: {
-      pattern: /&gt;\s*([\s\S]*?)(?=<br\b|$)/gi, // /^&gt;\s*(\S[\s\S]*?)<br>/g
-      replacment: `<span class="quote">$1</span>`
+      pattern: /(<br>|^)&gt;\s*(?!\s)([\s\S]*?)(?=<br|$)/gmi, // /^&gt;\s*(\S[\s\S]*?)<br>/g
+      replacment: `$1<span class="quote">$2</span>`
     },
     // new lines
     newLines: {
