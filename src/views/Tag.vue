@@ -84,8 +84,8 @@ export default {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    '$route.params.slug'(to, from) {
-      if (to != from) {
+    '$route.params.slug'(to) {
+      if (to) {
         this.$store.dispatch('tag/fetch', to)
       }
     }

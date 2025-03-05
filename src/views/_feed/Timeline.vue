@@ -16,7 +16,7 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="item in skeletons">
+      <entry-item-wrapper v-for="_ in skeletons">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>

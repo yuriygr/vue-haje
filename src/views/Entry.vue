@@ -9,13 +9,15 @@
   </template>
   
   <template v-if="Object.keys(data).length == 0">
-    <placeholder-loading v-if="loading" />
-    <placeholder v-if="(!loading && !error)" :text="$t('entry.errors.empty')" />
-    <placeholder v-if="error"
+    <entry-item-wrapper v-if="loading">
+      <entry-item type="full" />
+    </entry-item-wrapper>
+    <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
       :text="$t(humanizeError.description)"
     />
+    <placeholder v-else :text="$t('entry.errors.empty')" />
   </template>
 
 </template>
@@ -67,8 +69,8 @@ export default {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    '$route.params.uuid'(to, from) {
-      if (to != from) {
+    '$route.params.uuid'(to) {
+      if (to) {
         this.$store.dispatch('entry/fetch', to)
       }
     }

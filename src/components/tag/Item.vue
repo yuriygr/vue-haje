@@ -1,10 +1,21 @@
 <template>
-  <router-link :to="tagLink" :class="[ 'tag-item' ]" active-class="" exact-active-class="">
-    <div class="tag-item__content">
-      <div class="tag-item__hash">#</div>
-      <div class="tag-item__label">{{ data.label }}</div>
+  <template v-if="data">
+    <router-link :to="tagLink" :class="[ 'tag-item' ]" active-class="" exact-active-class="">
+      <div class="tag-item__content">
+        <div class="tag-item__hash">#</div>
+        <div class="tag-item__label">{{ data.label }}</div>
+      </div>
+    </router-link>
+  </template>
+
+  <template v-else>
+    <div :class="[ 'tag-item' ]">
+      <div class="tag-item__content">
+        <div class="tag-item__hash">#</div>
+        <div class="tag-item__label"><skeleton :width="randomWidth" :height="7" /></div>
+      </div>
     </div>
-  </router-link>
+  </template>
 </template>
 
 <script>
@@ -29,6 +40,9 @@ export default {
   computed: {
     tagLink() {
       return { name: 'tag', params: { slug: this.data.slug } }
+    },
+    randomWidth() {
+      return Math.floor(Math.random() * 100) + 60;
     }
   },
   methods: {
@@ -81,6 +95,8 @@ export default {
   }
 
   &__label {
+    display: flex;
+    justify-content: center;
     color: var(--tag-item__label--color);
     font-size: 1.4rem;
     font-weight: var(--x-font-weight--normal);

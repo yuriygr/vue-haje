@@ -50,6 +50,9 @@ export default {
     setLayout(state = false) {
       this.changeDataset('layout', state ?? false)
     }, 
+    setSSEHandlers() {
+
+    }
   },
   mounted() {
     this.$store.dispatch('initApplication')
@@ -61,8 +64,18 @@ export default {
     this.setLayout(this.$route.meta.layout)
   },
   created() {
+    this.$sse.on('has_notice', (e) => {
+      this.$store.dispatch('auth/has_notice', e)
+    })
+
     this.$modals.on('show', _ => this.modal = true)
     this.$modals.on('close', _ => this.modal = false)
+  },
+  beforeDestroy() {
+    this.$sse.off('has_notice')
+
+    this.$modals.off('show')
+    this.$modals.off('close')
   },
   watch: {
     modal(to) {

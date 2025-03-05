@@ -44,7 +44,24 @@
   </template>
 
   <template v-if="emptyData">
-    <placeholder-loading v-if="loading" />
+    <template v-if="loading">
+      <group>
+        <n-header><skeleton :width="80" :height="12" /></n-header>
+        <users-list>
+          <user-item-wrapper v-for="_ in skeletons_min">
+            <user-item />
+          </user-item-wrapper>
+        </users-list>
+      </group>
+      <group>
+        <n-header><skeleton :width="91" :height="12" /></n-header>
+        <entries-list>
+          <entry-item-wrapper v-for="_ in skeletons_min">
+            <entry-item />
+          </entry-item-wrapper>
+        </entries-list>
+      </group>
+    </template>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -81,6 +98,7 @@ export default {
     FeedsList, FeedItem, FeedItemWrapper
   },
   computed: {
+    ...mapState('app', [ 'skeletons_min' ]),
     ...mapState('bookmarks/all', [ 'data', 'loading', 'error' ]),
     ...mapGetters('bookmarks/all', [ 'emptyData' ]),
     humanizeError() {

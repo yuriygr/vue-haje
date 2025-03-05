@@ -205,6 +205,8 @@ export default {
   &--level-3 { --level: 3 }
   &--level-4 { --level: 4 }
   &--level-5 { --level: 5 }
+  &--level-6 { --level: 6 }
+  &--level-7 { --level: 7 }
 
   --gap-branch: 2rem;
   --avatar-size: 18px;

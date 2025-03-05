@@ -107,8 +107,8 @@ export default {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    '$route.params.username'(to, from) {
-      if (to != from) {
+    '$route.params.username'(to) {
+      if (to) {
         this.$store.dispatch('user/fetch', to)
       }
     }

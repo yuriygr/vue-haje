@@ -2,7 +2,7 @@ import VueGtag from 'vue-gtag'
 
 // app components & services
 import { router, directives, filters, store, global_ui, i18n } from '@/app/components'
-import { api, alerts, meta, modals, popover, bus } from '@/app/services'
+import { api, sse, alerts, meta, modals, popover, bus } from '@/app/services'
 
 /**
  * Потому что мне так удобно.
@@ -25,6 +25,10 @@ export default new class {
       baseURL: process.env.VUE_APP_API_ENDPOINT,
       version: process.env.VUE_APP_API_VERSION
     },
+    sse: {
+      baseURL: process.env.VUE_APP_SSE_ENDPOINT,
+      enabled: true
+    },
     meta: {
       defaultTitle: process.env.VUE_APP_TITLE
     }
@@ -35,6 +39,7 @@ export default new class {
 
     // probrasivaem-s
     store.$api = api
+    store.$sse = sse
     
     app.use(router, app)
     app.use(directives)
@@ -46,6 +51,7 @@ export default new class {
     app.use(VueGtag, this.options.gtag)
   
     app.use(api, this.options.api)
+    app.use(sse, this.options.sse)
     app.use(alerts)
     app.use(meta, this.options.meta)
     app.use(modals)

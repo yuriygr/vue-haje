@@ -15,6 +15,7 @@ export default {
       version:  process.env.PACKAGE_VERSION,
 
       skeletons: [...Array(15).keys()],
+      skeletons_min: [...Array(5).keys()],
 
       loading: false,
       error: {}

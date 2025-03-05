@@ -14,20 +14,6 @@
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('users')">{{ $t('action.show_more') }}</n-button>
     </group>
 
-    <group v-if="data.tags.length > 0">
-      <n-header>{{ $t('search.section.tags') }}</n-header>
-
-      <tags-list>
-        <tag-item-wrapper v-for="item in data.tags" :key="`tag-item-${item.tag_id}`">
-          <tag-item :data="item" />
-        </tag-item-wrapper>
-      </tags-list>
-
-      <spacer height="20" />
-
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('tags')">{{ $t('action.show_more') }}</n-button>
-    </group>
-
     <group v-if="data.entries.length > 0">
       <n-header>{{ $t('search.section.entries') }}</n-header>
 
@@ -40,6 +26,20 @@
       <spacer height="20" />
 
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('entries')">{{ $t('action.show_more') }}</n-button>
+    </group>
+
+    <group v-if="data.tags.length > 0">
+      <n-header>{{ $t('search.section.tags') }}</n-header>
+
+      <tags-list>
+        <tag-item-wrapper v-for="item in data.tags" :key="`tag-item-${item.tag_id}`">
+          <tag-item :data="item" />
+        </tag-item-wrapper>
+      </tags-list>
+
+      <spacer height="20" />
+
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('tags')">{{ $t('action.show_more') }}</n-button>
     </group>
 
     <group v-if="data.comments.length > 0">
@@ -59,7 +59,40 @@
   </template>
 
   <template v-if="emptyData">
-    <placeholder-loading v-if="loading" />
+    <template v-if="loading">
+      <group>
+        <n-header><skeleton :width="80" :height="12" /></n-header>
+        <users-list>
+          <user-item-wrapper v-for="_ in skeletons_min">
+            <user-item />
+          </user-item-wrapper>
+        </users-list>
+      </group>
+      <group>
+        <n-header><skeleton :width="91" :height="12" /></n-header>
+        <entries-list>
+          <entry-item-wrapper v-for="_ in skeletons_min">
+            <entry-item />
+          </entry-item-wrapper>
+        </entries-list>
+      </group>
+      <group>
+        <n-header><skeleton :width="30" :height="12" /></n-header>
+        <tags-list>
+          <tag-item-wrapper v-for="_ in skeletons_min">
+            <tag-item />
+          </tag-item-wrapper>
+        </tags-list>
+      </group>
+      <group>
+        <n-header><skeleton :width="60" :height="12" /></n-header>
+        <div class="comments-list">
+          <comment-item-wrapper v-for="_ in skeletons_min">
+            <comment-item />
+          </comment-item-wrapper>
+        </div>
+      </group>
+    </template>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -77,7 +110,7 @@
 import { mapState, mapGetters } from 'vuex'
 import {
   NHeader,
-  Placeholder, PlaceholderLoading, Separator, Spacer,
+  Placeholder, Separator, Spacer,
   Group, NButton
 } from '@vue-norma/ui'
 
@@ -90,7 +123,7 @@ export default {
   name: 'search-all',
   components: {
     NHeader,
-    Placeholder, PlaceholderLoading, Separator, Spacer,
+    Placeholder, Separator, Spacer,
     Group, NButton,
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
@@ -98,6 +131,7 @@ export default {
     TagsList, TagItem, TagItemWrapper
   },
   computed: {
+    ...mapState('app', [ 'skeletons_min' ]),
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ]),
     humanizeError() {

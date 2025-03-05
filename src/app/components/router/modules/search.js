@@ -1,4 +1,4 @@
-const Search = () => import('@/views/Search')
+import Search from '@/views/Search'
 
 import { SearchAll, SearchUsers, SearchTags, SearchEntries, SearchComments, SearchFeeds } from '@/views/_search'
 

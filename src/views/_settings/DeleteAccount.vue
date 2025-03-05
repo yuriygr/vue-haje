@@ -12,11 +12,11 @@
       </form-block>
 
       <form-block>
-        <n-checkbox :label="$t('settings.delete-account.apply')" v-model="form.apply"  />
+        <n-checkbox :label="$t('settings.delete-account.apply')" v-model="form.apply" :disabled="loading" />
       </form-block>
 
       <form-block>
-        <n-button tabindex="2" size="l" :disabled="loading">{{ $t('settings.action.delete_account') }}</n-button>
+        <n-button tabindex="2" size="l" :disabled="loading || !canSubmit">{{ $t('settings.action.delete_account') }}</n-button>
       </form-block>
     </form-group>
   </group>
@@ -36,16 +36,31 @@ export default {
       meta: {
         title: this.$t('settings.delete-account.title')
       },
-      loading: false,
+
       form: {
         password: '',
-        apply: true
-      }
+        apply: false
+      },
+
+      loading: false
+    }
+  },
+  computed: {
+    canSubmit() {
+      return (this.form.password != '') && (this.form.apply)
     }
   },
   methods: {
     submit() {
-      alert('@TODO')
+      this.loading = true
+      return this.$api.post('settings/delete-account', this.form)
+      .then(result => {
+        this.$alerts.success({ text: result.status })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: error.status })
+      })
+      .then(_ => this.loading = false)
     }
   }
 }

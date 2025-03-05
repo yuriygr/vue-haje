@@ -165,7 +165,6 @@
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
-      "plus": "@:plus.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "Войти",
@@ -238,7 +237,7 @@
         "replies": "Ответы на комментарии",
         "comments": "Комментарии к записям",
         "mentions": "Упоминания",
-        "new_post": "Новые посты",
+        "new_post": "Новые записи",
         "badges": "Значки"
       }
     },
@@ -312,11 +311,6 @@
   "donate": {
     "title": "Поддержать",
     "intro": ""
-  },
-  "plus": {
-    "title": "Подписки",
-    "intro": "Не платите за то чем не пользуетесь",
-    "total": "Платить {total} рублей в месяц "
   },
   "about": {
     "title": "О приложении",

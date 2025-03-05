@@ -153,7 +153,7 @@ export default {
     },
     submitTint() {
       this.loading.tint = true
-      return this.$api.post('settings/tint', this.profile.tint)
+      return this.$api.post('settings/tint', { code: this.profile.tint })
       .then(result => {
         this.$alerts.success({ text: result.status })
       })

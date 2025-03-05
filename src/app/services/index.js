@@ -1,4 +1,5 @@
 export { default as api } from '@/app/services/api'
+export { default as sse } from '@/app/services/sse'
 export { default as bus } from '@/app/services/bus'
 export { default as alerts } from '@/app/services/alerts'
 export { default as popover } from '@/app/services/popover'

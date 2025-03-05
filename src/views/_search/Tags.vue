@@ -10,7 +10,12 @@
   </tags-list>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <tags-list v-if="loading">
+      <tag-item-wrapper v-for="_ in skeletons">
+        <tag-item />
+      </tag-item-wrapper>
+    </tags-list>
+
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -26,16 +31,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
 
 export default {
   name: 'search-tags',
   components: {
     TagsList, TagItem, TagItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
+    Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('search/tags', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/tags', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {

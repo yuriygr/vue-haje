@@ -1,5 +1,5 @@
 <template>
-  <div class="entry-comments">
+  <div class="entry-comments" id="comments">
     <comment-form :entry="entry.uuid" @success="onSuccessAddingComment" @error="onErrorAddingComment" />
 
     <div class="comments-tree" v-if="(!loading && !error) || data.length > 0">
@@ -12,7 +12,7 @@
 
     <template v-if="data.length == 0">
       <div class="comments-list" v-if="loading">
-        <comment-item-wrapper v-for="item in skeletons">
+        <comment-item-wrapper v-for="_ in skeletons">
           <comment-item />
         </comment-item-wrapper>
       </div>
@@ -64,13 +64,42 @@ export default {
     loadMore() {
       this.$store.dispatch('entry/comments/more')
     },
+    scrollToComment() {
+      const commentId = this.$route.query.comment
+
+      if (commentId) {
+        this.$nextTick(() => {
+          const element = document.getElementById(`comment-${commentId}`)
+          if (element) {
+            const yOffset = -50 
+            const y = element.getBoundingClientRect().top + window.scrollY + yOffset
+            
+            window.scrollTo({
+              top: y,
+              behavior: 'instant'
+            })
+          }
+        })
+      }
+    }
   },
   mounted() {
     this.$store.dispatch('entry/comments/fetch')
+    .then(_ => {
+      this.scrollToComment()
+    })
   },
   unmounted() {
     this.$store.dispatch('entry/comments/clear')
   },
+  watch: {
+    '$route.query.comment': {
+      handler(newVal) {
+        if(newVal) this.scrollToComment()
+      },
+      immediate: true
+    }
+  }
 }
 </script>
 

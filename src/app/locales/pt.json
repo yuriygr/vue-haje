@@ -138,7 +138,6 @@
       "settings": "@:settings.title",
       "help": "@:help.title",
       "about": "@:about.title",
-      "plus": "@:plus.title",
       "donate": "@:donate.title",
       "login": "Entrar",
       "logout": "Sair"

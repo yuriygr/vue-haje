@@ -139,7 +139,6 @@
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
-      "plus": "@:plus.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",

@@ -41,7 +41,7 @@ let comments = {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get(`entry/${rootState.entry.data.uuid}/comments`, state.filters)
+      return this.$api.get(`entry/${rootState.entry.data.uuid}/comments`, state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result)
       })
@@ -127,7 +127,7 @@ let history = {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get(`entry/${uuid}/history`, state.filters)
+      return this.$api.get(`entry/${uuid}/history`, state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)

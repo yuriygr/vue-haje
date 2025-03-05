@@ -155,7 +155,6 @@
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
       "help": "@:help.title",
-      "plus": "@:plus.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "To come in",

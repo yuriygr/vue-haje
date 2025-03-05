@@ -3,32 +3,32 @@
     <n-header>{{ $t('settings.notifications.events') }}</n-header>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.mentions')" v-model="form.mentions" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.mentions')" v-model="form.mentions" :disabled="loading" />
     </form-block>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.subscriptions')" v-model="form.subscriptions" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.subscriptions')" v-model="form.subscriptions" :disabled="loading" />
     </form-block>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.new_post')" v-model="form.new_post" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.new_post')" v-model="form.new_post" :disabled="loading" />
     </form-block>
 
     <n-header>{{ $t('settings.notifications.feedback') }}</n-header>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.replies')" v-model="form.replies" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.replies')" v-model="form.replies" :disabled="loading" />
     </form-block>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.comments')" v-model="form.comments" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.comments')" v-model="form.comments" :disabled="loading" />
     </form-block>
 
 
     <n-header>{{ $t('settings.notifications.others') }}</n-header>
 
     <form-block>
-      <n-checkbox :label="$t('settings.notifications.field.badges')" v-model="form.badges" disabled="true" />
+      <n-checkbox :label="$t('settings.notifications.field.badges')" v-model="form.badges" :disabled="loading" />
     </form-block>
 
     <form-block>
@@ -53,11 +53,11 @@ export default {
       },
 
       form: {
-        mentions: true,
-        subscriptions: true,
-        new_post: true,
-        replies: true,
-        comments: true,
+        mentions: false,
+        subscriptions: false,
+        new_post: false,
+        replies: false,
+        comments: false,
         badges: false
       },
 
@@ -70,8 +70,7 @@ export default {
       this.loading = true
       return this.$api.get('settings/notifications')
       .then(result => {
-        console.log(result)
-        this.form = result
+        this.form = result.notifications
       })
       .catch(error => {
         this.$alerts.danger({ text: error.status })
@@ -81,7 +80,7 @@ export default {
     // Submit
     submit() {
       this.loading = true
-      return this.$api.post('settings/notifications', this.form)
+      return this.$api.postJSON('settings/notifications', this.form)
       .then(result => {
         this.$alerts.success({ text: result.status })
       })

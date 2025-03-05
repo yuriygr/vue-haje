@@ -86,10 +86,7 @@ export default new class {
       formData.append(item, params[item])
     })
 
-    let headers = {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    }
-    return [formData, headers]
+    return formData
   }
 
   /**
@@ -115,9 +112,21 @@ export default new class {
 	}
 
   post(path, params = {}) {
-    let [formData, headers] = this.preparePostData(params)
-    return this.instance.post(path, formData, headers)
+    let formData = this.preparePostData(params)
+    return this.instance.post(path, formData, {
+      headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
   }
+
+  postJSON(path, json = {}) {
+    return this.instance.post(path, json, {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+	}
 
 	delete(path, params = {}) {
 		return this.instance.delete(path, { params })

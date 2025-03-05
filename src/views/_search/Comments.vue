@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <div class="comments-list" v-if="loading">
-      <comment-item-wrapper v-for="item in skeletons">
+      <comment-item-wrapper v-for="_ in skeletons">
         <comment-item />
       </comment-item-wrapper>
     </div>

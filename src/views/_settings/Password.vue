@@ -16,11 +16,11 @@
       </form-block>
 
       <form-block>
-        <n-checkbox :label="$t('settings.password.apply')" v-model="form.apply"  />
+        <n-checkbox :label="$t('settings.password.apply')" v-model="form.apply" :disabled="loading" />
       </form-block>
 
       <form-block>
-        <n-button tabindex="3" size="l" :disabled="loading">{{ $t('settings.action.change_password') }}</n-button>
+        <n-button tabindex="3" size="l" :disabled="loading || !canSubmit">{{ $t('settings.action.change_password') }}</n-button>
       </form-block>
     </form-group>
   </group>
@@ -44,7 +44,7 @@ export default {
       form: {
         current_password: '',
         new_password: '',
-        apply: true
+        apply: false
       },
 
       loading: false
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     canSubmit() {
-      return (this.form.current_password != '') && (this.form.new_password != '')
+      return (this.form.current_password != '') && (this.form.new_password != '') && (this.form.apply)
     }
   },
   methods: {
