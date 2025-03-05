@@ -64,7 +64,7 @@ export default {
     ...mapState('notifications', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('notifications', [ 'hasMoreItems' ]),
     tabs() {
-      return [
+      return Object.freeze([
         { key: 'all', to: this.formatLink(), label: this.$t('notifications.tabs.all') },
         { key: 'subscriptions', to: this.formatLink('subscriptions'), label: this.$t('notifications.tabs.subscriptions') },
         { key: 'comments', to: this.formatLink('comments'), label: this.$t('notifications.tabs.comments') },
@@ -72,25 +72,20 @@ export default {
         { key: 'mentions', to: this.formatLink('mentions'), label: this.$t('notifications.tabs.mentions') },
         { key: 'new_post', to: this.formatLink('new_post'), label: this.$t('notifications.tabs.new_post') },
         { key: 'system', to: this.formatLink('system'), label: this.$t('notifications.tabs.system') }
-      ]
+      ])
     },
     availableKeys() {
-      return this.tabs.flatMap(el => el.key)
+      return this.tabs.map(el => el.key)
     },
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
   methods: {
-    onRefresh() {
-      console.log('ssss')
-    },
     formatLink(tab = false) {
-      if (tab) {
-        return { name: this.$route.name, query: { tab }}
-      } else {
-        return { name: this.$route.name }
-      }
+      return tab 
+        ? { name: this.$route.name, query: { tab } }
+        : { name: this.$route.name }
     },
     seen() {
       return this.$api.post('my/notifications/seen')
@@ -123,23 +118,34 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('notifications/setFilters', {
-      tab: this.availableKeys.includes(this.$route.query.tab)
-            ? this.$route.query.tab
-            : ( this.deleteTabQuery(), 'all' ), offset: undefined
-    })
-    await this.$store.dispatch('notifications/fetch')
-    await this.seen()
+    const tab = this.availableKeys.includes(this.$route.query.tab) 
+      ? this.$route.query.tab 
+      : 'all'
+    
+    if (tab !== this.$route.query.tab) this.deleteTabQuery()
+    
+    await Promise.all([
+      this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
+      this.$store.dispatch('notifications/fetch'),
+      this.seen()
+    ])
   },
   unmounted() {
     this.$store.dispatch('notifications/clear')
   },
   watch: {
-    async '$route.query.tab'(to) {
-      await this.$store.dispatch('notifications/setFilters', {
-        tab: this.availableKeys.includes(to) ? to : 'all', offset: undefined
-      })
-      await this.$store.dispatch('notifications/fetch')
+    '$route.query.tab': {
+      async handler(to) {
+        const tab = this.availableKeys.includes(to) ? to : 'all'
+        if (tab === this.filters.tab) return // Проверка на дубликаты
+        
+        await Promise.all([
+          this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
+          this.$store.dispatch('notifications/fetch')
+        ])
+      },
+      // @TODO: Перенести логику инициализации сюда
+      immediate: false 
     }
   }
 }

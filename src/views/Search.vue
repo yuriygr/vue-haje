@@ -55,41 +55,42 @@ export default {
       return this.$store.getters[`search/${key}/hasFilters`]
     },
     tabs() {
-      return [
+      const currentKey = this.$route.meta.key
+      return Object.freeze([
         {
           key: 'all',
           to: this.formatLink(),
           label: this.$t('search.tabs.all'),
-          active: this.$route.meta.key == `all` 
+          active: currentKey == `all` 
         },
         {
           key: 'users',
           to: this.formatLink('users'),
           label: this.$t('search.tabs.users'),
-          active: this.$route.meta.key == `users`
+          active: currentKey == `users`
         },
         {
           key: 'entries',
           to: this.formatLink('entries'),
           label: this.$t('search.tabs.entries'),
-          active: this.$route.meta.key == `entries`
+          active: currentKey == `entries`
         },
         {
           key: 'comments',
           to: this.formatLink('comments'),
           label: this.$t('search.tabs.comments'),
-          active: this.$route.meta.key == `comments`
+          active: currentKey == `comments`
         },
         {
           key: 'tags',
           to: this.formatLink('tags'),
           label: this.$t('search.tabs.tags'),
-          active: this.$route.meta.key == `tags`
+          active: currentKey == `tags`
         }
-      ]
+      ])
     },
     availableKeys() {
-      return this.tabs.flatMap(el => el.key)
+      return this.tabs.map(el => el.key)
     }
   },
   methods: {
@@ -102,11 +103,9 @@ export default {
       let query = Object.assign({}, this.$route.query),
           q = query.q
 
-      if (tab) {
-        return { name: `search-${tab}`, query: { q }}
-      } else {
-        return { name: `search`, query: { q }}
-      }
+      return tab 
+        ? { name: `search-${tab}`, query: { q }}
+        : { name: `search`, query: { q }}
     },
     changeInput(query) {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })

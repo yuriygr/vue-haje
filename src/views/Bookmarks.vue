@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     tabs() {
-      return [
+      return Object.freeze([
         {
           key: 'all',
           to: this.formatLink(),
@@ -53,10 +53,10 @@ export default {
           to: this.formatLink('feeds'),
           label: this.$t('bookmarks.tabs.feeds')
         }
-      ]
+      ])
     },
     availableKeys() {
-      return this.tabs.flatMap(el => el.key)
+      return this.tabs.map(el => el.key)
     }
   },
   methods: {

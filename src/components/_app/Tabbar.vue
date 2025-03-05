@@ -14,7 +14,7 @@
           <icon name="search-line" size="20" />
         </tabbar-item>
 
-        <tabbar-item @tap="openComposeModal" :title="$t('header.nav.compose')">
+        <tabbar-item @click="openComposeModal" :title="$t('header.nav.compose')">
           <icon name="edit-line" size="20" />
         </tabbar-item>
 
