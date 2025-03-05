@@ -6,28 +6,16 @@ const Donate = () => import('@/views/Donate')
 import Menu from '@/views/Menu'
 const About = () => import('@/views/About')
 
-import FeedRoutes from '@/app/components/router/modules/feed'
-import TagRoutes from '@/app/components/router/modules/tag'
-import UserRoutes from '@/app/components/router/modules/user'
-import SearchRoutes from '@/app/components/router/modules/search'
-import BookmarksRoutes from '@/app/components/router/modules/bookmarks'
-import FeedsRoutes from '@/app/components/router/modules/feeds'
-import SettingsRoutes from '@/app/components/router/modules/settings'
-import HelpRoutes from '@/app/components/router/modules/help'
-import NotificationsRoutes from '@/app/components/router/modules/notifications'
-import AuthRoutes from '@/app/components/router/modules/auth'
+// Load modules from folder
+const modules = {}
+const requireModule = require.context('./modules', false,  /\.js$/)
+requireModule.keys().forEach(filename => {
+  const moduleName = filename.replace(/(\.\/|\.js)/g, '').replace(/^\w/, c => c.toLowerCase())
+  modules[moduleName] = requireModule(filename).default || requireModule(filename)
+})
 
 const routes = [
-	...FeedRoutes,
-	...TagRoutes,
-	...UserRoutes,
-	...SettingsRoutes,
-	...BookmarksRoutes,
-	...FeedsRoutes,
-	...SearchRoutes,
-	...HelpRoutes,
-	...NotificationsRoutes,
-	...AuthRoutes,
+	...Object.values(modules).flat(),
 	
 	{ path: '/', name: 'home', component: Home },
 	
@@ -40,6 +28,7 @@ const routes = [
 	{ path: '/:pathMatch(.*)*', redirect: { name: 'feed' } }
 ]
 
+// Create router
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
 	routes,

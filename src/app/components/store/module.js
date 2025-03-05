@@ -115,6 +115,9 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
     clear({ commit }) {
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
+    },
+    setFilters({ commit }, payload) {
+      commit('SET_FILTERS', payload)
     }
   },
   getters: {
