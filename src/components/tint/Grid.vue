@@ -12,12 +12,12 @@ export default {
 
 <style lang="scss" scoped>
 .tints-grid {
-  --thumb-width: 150px;
+  --item-size: 4.4rem;
 }
 
 .tints-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--thumb-width), 1fr));
+  grid-template-columns: repeat(auto-fill, var(--item-size));
   grid-gap: 1rem;
 }
 </style>

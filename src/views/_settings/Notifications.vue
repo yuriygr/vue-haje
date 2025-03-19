@@ -90,8 +90,8 @@ export default {
       .then(_ => this.loading = false)
     }
   },
-  async mounted() {
-    await this.fetch()
+  mounted() {
+    this.fetch()
   }
 }
 </script>

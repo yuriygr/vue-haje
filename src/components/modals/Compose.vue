@@ -3,16 +3,13 @@
     <div v-if="entryUser" class="compose__user">
       <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
     </div>
+    
     <div class="compose__field"
       v-on="$fieldEvents"
       v-bind="$fieldBinds"
     ></div>
 
-    <div class="compose__files" v-if="hasFiles">
-			<div class="thumb" v-for="(file, index) in thumbsFiles" :key="index" :style="{ '--thumb': `url(${file.thumb})` }">
-        {{ file }}
-      </div>
-    </div>
+    <attachments-form class="compose__attachments" v-model="form.files" :allowedFormats="allowedFormats" :max-files="2" ref="file" />
 
     <div class="compose__actions">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
@@ -23,14 +20,12 @@
         <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
       </buttons-group>
     </div>
-    <input type="file" ref="file" @change="_handleFilesAttach" :accept="acceptetFiles" multiple hidden>
   </modal>
 </template>
 
 <script>
-// TODO: если идет изменение чужой записи - выводить снизу аватарку текущего пользователя, а сверху автора поста
-// Хотя, можно сразу при редактировании поста выводить инфу о юзере не из сессии  Хм  
-import { cancelEvent, createThumb } from '@/app/services/utilities'
+import { cancelEvent } from '@/app/services/utilities'
+import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 import { mapState } from 'vuex'
 
@@ -40,7 +35,7 @@ export default {
   name: 'compose-modal',
   components: {
     UserItem,
-    Modal, NButton, ButtonsGroup
+    Modal, NButton, ButtonsGroup, AttachmentsForm
   },
   props: {
     data: {
@@ -58,18 +53,17 @@ export default {
       loading: false,
       error: false,
 
-      acceptetFiles: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
 
       user: false,
 
       form: {
         text: '',
+        files: [],
         link: false,
         is_comments_enabled: true,
         is_hidden_from_feed: false
       },
-      attachedFiles: [],
-      thumbsFiles: [],
     }
   },
   computed: {
@@ -90,6 +84,7 @@ export default {
         dragover:  this.form_onDragOver
       }
     },
+
     $field() {
       return this.$refs.field
     },
@@ -114,7 +109,7 @@ export default {
       return (this.form.text.trim() != '' || this.hasFiles) && !this.loading
     },
     hasFiles() {
-      return this.attachedFiles.length != 0
+      return this.form.files.length != 0
     },
     optionsItems() {
       let _comments = [
@@ -162,20 +157,24 @@ export default {
       this.$modals.close()
     },
 
+    sendForm() {
+      return this.mode == 'add' ? this.addEntry() : this.updateEntry()
+    },
+
     addEntry() {
       if (!this.canSubmit) return
 
       this.loading = true
       this.error = false
 
-      this.$api.post('entry', this.form)
+      this.$api.postJSON('entry', this.form)
       .then(result => {
         this.$modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -185,14 +184,14 @@ export default {
       this.loading = true
       this.error = false
 
-      this.$api.post('entry/' + this.data.uuid, this.form)
+      this.$api.postJSON('entry/' + this.data.uuid, this.form)
       .then(result => {
         this.$modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -212,9 +211,9 @@ export default {
     },
 
     attachFiles() {
-      this.$refs.file.value = ''
-      this.$refs.file.click()
+      this.$refs.file.attachFiles()
     },
+    
     field_onInput(e) {
       if (this.$refs.field.innerHTML == "<br>") {
         this.$refs.field.innerText = ''
@@ -238,20 +237,40 @@ export default {
         switch(e.keyCode) {
           case 13: // Enter
             e.preventDefault()
-            //this.sendPost()
+            this.sendForm()
           break;
         }
       }
     },
     field_onPaste(e) {
-      document.execCommand('insertText', false, (e.originalEvent || e).clipboardData.getData('text/plain'))
+      let cData = (e.originalEvent || e).clipboardData,
+      items = cData && cData.items || []
+
+      // Загружаем картинки
+      const files = []
+      for (const item of items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const file = item.getAsFile()
+          if (file) files.push(file)
+        }
+      }
+
+      if (files.length > 0)
+        this.$refs.file.handleFileSelect({ target: { files: files } })
+
+      // Копируем текстик
+      let itemsText = cData.getData('text/plain')
+      if (itemsText.length > 0) {
+        document.execCommand('insertText', false, itemsText)
+      }
+
       return cancelEvent(e)
     },
     // form events
     form_onDrop(e) {
       e.preventDefault()
       this.dragover = false
-      this._handleFilesAttach(e)
+      this.$refs.file.handleFileSelect(e)
     },
     form_onDragEnter(e) {
       e.preventDefault()
@@ -264,38 +283,7 @@ export default {
     form_onDragOver(e) {
       e.preventDefault()
       this.dragover = true
-    },
-    // Грузилки
-    _handleFilesAttach(e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-
-      this._processFilesUpload(files)
-    },
-    _processFilesUpload(filesList) {
-      [...filesList]
-        .filter(file => this.acceptetFiles.includes(file.type))
-        .forEach(this.addFile)
-    },
-    _processLinkUpload(url) {
-
-    },
-    async addFile(file) {
-      let thumb = { name: file.name, size: file.size, thumb: '', type: file.type }
-
-      this.loading = true
-      await createThumb(file)
-      .then(data => thumb.thumb = data)
-      .catch(console.log)
-      .finally(_ => this.loading = false)
-
-      this.thumbsFiles.push(thumb)
-      this.attachedFiles.push(file)
-    },
-    removeFile(index) {
-      this.thumbsFiles.splice(index, 1)
-      this.attachedFiles.splice(index, 1)
-    },
+    }
   },
   mounted() {
     this.$field.focus()
@@ -313,7 +301,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .compose {
   --compose--background-dragover: #f5f5f5;
   --compose--border-dragover: var(--x-color-pink--tint10);
@@ -369,8 +357,8 @@ export default {
     }
   }
 
-  &__files {
-    padding: var(--modal--padding) var(--modal--padding);
+  &__attachments {
+    padding: 0 var(--modal--padding);
   }
 
   &__actions {
@@ -381,17 +369,5 @@ export default {
     border-bottom-right-radius: inherit;
     padding: var(--modal--padding) var(--modal--padding);
   }
-}
-
-.thumb {
-  background-image: var(--thumb);
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  width: 100px;
-  height: 100px;
-  box-shadow: 0px 0px 2px #d4d4d4, 1px 1px 1px #e4e4e4;
-  margin-right: .5rem;
-  border-radius: 8px;
 }
 </style>

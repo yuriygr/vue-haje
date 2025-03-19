@@ -1,33 +1,96 @@
 <template>
-  <div v-if="content" v-html="formated" />
+  <div class="dynamic-content">
+    <div 
+      ref="content"
+      class="content"
+      :class="{ collapsed: !isExpanded && showToggle }"
+      :style="{ maxHeight: isExpanded ? maxExpandedHeight : collapsedHeight }"
+    >
+      <slot />
+    </div>
+    
+    <a v-if="showToggle"
+      @click.prevent="toggle"
+      class="dynamic-content__toggle"
+      href="#"
+    >
+      {{ isExpanded ? collapseText : expandText }}
+    </a>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'dynamic-text',
-  emits: ['onToggle'],
+  name: "dynamic-text",
   props: {
-    content: {
-      type: [ Boolean, String ],
-      default: false
-   }
-  },
-  computed: {
-    formated() {
-      return this.$filters.contentFormat(content)
+    collapsedHeight: {
+      type: String,
+      default: '250px' // Высота в свернутом состоянии
+    },
+    expandText: {
+      type: String,
+      default: 'Показать ещё'
+    },
+    collapseText: {
+      type: String,
+      default: 'Свернуть'
     }
   },
+  data() {
+    return {
+      isExpanded: false,
+      showToggle: false,
+      maxExpandedHeight: 'auto'
+    }
+  },
+  mounted() {
+    this.checkContentHeight();
+  },
+  updated() {
+    this.checkContentHeight();
+  },
   methods: {
-    truncate(maxLetters = 100, useWordBoundary = false) {
-      const LongstringHelper = str => {
-  const sliceBoundary = str => str.substr(0, str.lastIndexOf(" "));
-  const truncate = (n, useWordBoundary) => 
-        str.length <= n ? str : `${ useWordBoundary 
-          ? sliceBoundary(str.slice(0, n - 1))
-          : str.slice(0, n - 1)}&hellip;`;
-  return { full: str,  truncate };
-}; 
+    toggle() {
+      this.isExpanded = !this.isExpanded;
+    },
+    checkContentHeight() {
+      const contentHeight = this.$refs.content.scrollHeight;
+      const collapsedHeight = parseInt(this.collapsedHeight, 10);
+      
+      this.showToggle = contentHeight > collapsedHeight;
+      
+      if (this.isExpanded) {
+        this.maxExpandedHeight = `${contentHeight}px`;
+      }
     }
   }
 }
 </script>
+
+<style lang="scss">
+.dynamic-content {
+  position: relative;
+
+  &__toggle {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+}
+
+.content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+.collapsed {
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+
+.toggle-button:hover {
+  text-decoration: underline;
+}
+
+.toggle-button:focus {
+  outline: none;
+}
+</style>

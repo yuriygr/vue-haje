@@ -37,11 +37,11 @@ let comments = {
     }
   },
   actions: {
-    fetch({ commit, state, rootState }, initial = true) {
+    fetch({ commit, state }, { initial = true, uuid  = 'nope' }) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      return this.$api.get(`entry/${rootState.entry.data.uuid}/comments`, state.filters)
+      return this.$api.get(`entry/${uuid}/comments`, state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result)
       })
@@ -57,10 +57,11 @@ let comments = {
     add({ commit }, payload) {
       commit('ADD_DATA', [payload])
     },
-    async more({ state, commit, dispatch }) {
+    async more({ state, commit, dispatch }, { uuid  = 'nope' }) {
       let last_id = (state.data.length > 0) ? state.data[state.data.length - 1].comment_id : 0
       await commit('SET_FILTERS', { ...state.filters, last_id: last_id })
-      dispatch('fetch', false)
+
+      return dispatch('fetch', { initial: false, uuid })
     },
   },
   getters: {
@@ -180,6 +181,9 @@ export default {
     }
   },
   actions: {
+    pre_fetch({ commit }, payload) {
+      commit('SET_DATA', payload)
+    },
     fetch({ commit }, uuid = 'nope') {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)

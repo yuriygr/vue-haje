@@ -73,9 +73,15 @@ export default {
           disabled: !this.isAuth
         },
         {
-          icon: 'history-line',
+          icon: 'user-history-line',
           label: this.$t('settings.item.login-activity'),
           to: { name: 'settings-login-activity' },
+          disabled: !this.isAuth
+        },
+        {
+          icon: 'user-permissions-line',
+          label: this.$t('settings.item.permissions'),
+          to: { name: 'settings-permissions' },
           disabled: !this.isAuth
         }
       ]

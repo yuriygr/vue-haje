@@ -1,4 +1,4 @@
-const Notifications = () => import('@/views/Notifications')
+import Notifications from '@/views/Notifications'
 
 export default [
 	{

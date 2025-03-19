@@ -4,6 +4,7 @@
     "description": "Social network for non-social people",
     "version": "Version {version}",
     "locale": {
+      "jp": "日本語",
       "pt": "Portuguese",
       "en": "English",
       "ru": "Russian"

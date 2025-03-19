@@ -11,14 +11,6 @@ requireModule.keys().forEach(filename => {
 // Create store
 const store = createStore({
   modules,
-  state () {
-    return {
-      
-    }
-  },
-  mutations: {
-
-  },
   actions: {
     initApplication({ dispatch }) {
       Object.keys(modules).forEach(moduleName => {
@@ -26,13 +18,9 @@ const store = createStore({
         this._actions[action] && dispatch(action)
       })
     }
-  },
-  getters: {
-    
   }
 })
 
-/** Подписка на изменения */
 store.subscribe((mutation, state) => {
   mutation.type == "auth/SET_DATA" && localStorage.setItem('auth', JSON.stringify(mutation.payload))
   mutation.type == "app/SET_THEME" && localStorage.setItem('theme', mutation.payload)

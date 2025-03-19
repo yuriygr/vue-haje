@@ -2,50 +2,43 @@
   <group>
     <n-header>{{ $t('settings.login-activity.title') }}</n-header>
 
-    <template v-if="(!loading && !error) || data.length > 0">
-      <table class="table">
-        <thead>
-          <tr>
-            <td>IP</td>
-            <td>Устройство</td>
-            <td>Версия приложения</td>
-            <td>Дата</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in data" :key="'login-' + index">
-            <td>{{ item.IP }}</td>
-            <td>{{ item.Useragent }}</td>
-            <td>{{ item.Date }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <logins-list v-if="(!loading && !error) && data.length > 0">
+      <login-item-wrapper v-for="item in data" :key="`login-item-${item.login_id}`">
+        <login-item :data="item" />
+      </login-item-wrapper>
 
       <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
       <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-    </template>
+    </logins-list>
 
     <template v-if="data.length == 0">
-      <placeholder v-if="(!loading && !error)" :text="$t('settings.login-activity.empty')" />
-      <placeholder v-if="error"
+      <logins-list v-if="loading">
+        <login-item-wrapper v-for="_ in skeletons">
+          <login-item  />
+        </login-item-wrapper>
+      </logins-list>
+
+      <placeholder v-else-if="error"
         :icon="$t(humanizeError.icon)"
         :header="$t(humanizeError.title)"
         :text="$t(humanizeError.description)"
       />
-      <placeholder-loading v-if="loading" />
+      <placeholder v-else :text="$t('settings.login-activity.empty')" />
     </template>
   </group>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { NButton, LoadmoreTrigger, Group, NHeader, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+import { NButton, LoadmoreTrigger, Group, NHeader, Placeholder } from '@vue-norma/ui'
+import { LoginsList, LoginItem, LoginItemWrapper } from '@/components/login'
 
 export default {
   name: 'settings-login-activity',
   components: {
-    NButton, LoadmoreTrigger, Group, NHeader, Placeholder, PlaceholderLoading
+    NButton, LoadmoreTrigger, Group, NHeader, Placeholder,
+    LoginsList, LoginItem, LoginItemWrapper
   },
   meta() { return this.meta },
   data() {
@@ -56,6 +49,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('logins', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('logins', [ 'hasMoreItems' ]),
     humanizeError() {

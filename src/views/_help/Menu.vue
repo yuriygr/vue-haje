@@ -48,7 +48,7 @@ export default {
           disabled: true
         },
         {
-          icon: 'add-line',
+          icon: 'square-add-line',
           label: this.$t('help.item.add-question'),
           to: { name: 'help-add-question' },
           disabled: true

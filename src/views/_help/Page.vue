@@ -17,7 +17,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Placeholder, PlaceholderLoading, NHeader } from '@vue-norma/ui'
+import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'help-page',
@@ -28,7 +28,7 @@ export default {
     }
   },
   components: {
-    Placeholder, PlaceholderLoading, NHeader
+    Placeholder, PlaceholderLoading, NHeader, MetaInfo
   },
   meta() { return this.meta },
   data() {

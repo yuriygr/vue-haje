@@ -84,8 +84,8 @@ export default {
     metaItems() {
       let _result = []
 
-      this.data.state.is_comments_enabled && _result.push({ label: this.$tc('entry.meta.comments', this.data.counters.comments), to: this.commentsLink })
-      _result.push({ label: this.formatedDate, to: this.entryLink })
+      this.data.state.is_comments_enabled && _result.push({ label: this.$tc('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
+      _result.push({ label: this.formatedDate, to: this.entryLink, action: this.prefetchEntry })
       this.data.state.is_edited && _result.push({ label: this.$t('entry.meta.edited'), action: this.history })
 
       return _result
@@ -177,6 +177,9 @@ export default {
     }
   },
   methods: {
+    prefetchEntry(e) {
+      this.$store.dispatch('entry/pre_fetch', this.data)
+    },
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
       this.$popover.open({

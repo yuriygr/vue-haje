@@ -63,16 +63,18 @@ export default new class {
 	handleResponseError(error) {
 		let hasResponse = error.response != undefined
 
+		console.log(error)
+
 		return Promise.reject({
 			code: hasResponse
 						? error.response.data.code || error.response.code
-						: 0,
+						: error.code,
 			status: hasResponse
 							? error.response.data.status || error.response.statusText
-							: error.message,
+							: error.code,
 			message: hasResponse
 							? error.response.data.error
-							: error
+							: error.message
 		})
 	}
 
@@ -119,6 +121,10 @@ export default new class {
 			}
 		})
   }
+
+	upload(path, formdata, opt) {
+		return this.instance.post(path, formdata, opt)
+	}
 
   postJSON(path, json = {}) {
     return this.instance.post(path, json, {

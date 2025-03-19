@@ -62,6 +62,7 @@ export default {
     ...mapGetters('feed', [ 'hasMoreItems' ]),
     ...mapGetters('auth', [ 'isAuth' ]),
     humanizeError() {
+      console.log(this.error)
       return this.$filters.humanizeError(this.error)
     }
   },

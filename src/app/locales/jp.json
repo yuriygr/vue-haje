@@ -5,20 +5,20 @@
     "version": "バージョン {version}",
     "locale": {
       "jp": "日本語",
-      "pt": "ポルトガル語",
-      "en": "英語",
-      "ru": "ロシア語"
+      "pt": "Português",
+      "en": "English",
+      "ru": "Русский"
     },
     "theme": {
-      "white": "ライトモード",
-      "black": "ダークモード"
+      "white": "ライトテーマ",
+      "black": "ダークテーマ"
     }
   },
   "header": {
     "nav": {
       "feed": "@:feed.title",
       "search": "@:search.title.all",
-      "compose": "投稿する",
+      "compose": "作成する",
       "notifications": "@:notifications.title",
       "menu": "@:menu.title",
       "auth": "認証"
@@ -27,18 +27,18 @@
   "home": {
     "title": "ようこそ",
     "hero": {
-      "title": "こちらが<span>フツブラ</span>です！",
-      "description": "ロシアのソーシャルネットワークがたった1人の手に握られているのは不公平だと思いませんか？"
+      "title": "ご紹介します、<span>フトゥブラ！</span>",
+      "description": "ロシアのすべてのソーシャルネットワークが一人の手に握られているのは不公平だと思いませんか？"
     },
     "teasers": {
       "item": {
-        "brain": { "title": "AI禁止", "info": "人間が手や足で作成したコンテンツを優先します" }, 
-        "recommendations": { "title": "レコメンド機能なし", "info": "ニュースフィードにはあなたがフォローしたものだけが表示されます" }, 
-        "combine": { "title": "余計な機能なし", "info": "デリバリーや占い、天気予報をお探しですか？ここは違います" },
-        "friends": { "title": "友達機能なし", "info": "興味のあるユーザーのコンテンツをフォローするだけ" },
-        "likes": { "title": "いいね機能なし", "info": "ランキングのために猫の動画を投稿する必要はありません" },
-        "blacklist": { "title": "ブラックリストなし", "info": "気に入らないユーザーは読まないだけでOK" },
-        "ads": { "title": "ブランド広告なし", "info": "ネットやメールの広告で十分です" }
+        "brain": { "title": "ニューラルネットワークなし", "info": "人間の手や足で作成されたコンテンツを優先します" }, 
+        "recommendations": { "title": "おすすめなし", "info": "ニュースフィードにはあなたが登録したコンテンツのみが表示され、元カノやその新しい彼氏を友達に追加するような提案はありません" }, 
+        "combine": { "title": "余計な機能なし", "info": "デリバリー、占い、天気予報、音楽、マーケットプレイスを探していますか？ タブを間違えていますよ" },
+        "friends": { "title": "友達機能なし", "info": "興味のあるユーザーのコンテンツをフォローするだけです" },
+        "likes": { "title": "いいね機能なし", "info": "ランキングを上げるために子猫の投稿を常に見たいですか？" },
+        "blacklist": { "title": "ブラックリストなし", "info": "他の人の投稿が気に入らない？ 読まなければいいだけです" },
+        "ads": { "title": "ブランド広告なし", "info": "インターネットやメールボックスにある広告で十分です" }
       }
     },
     "action": {
@@ -57,7 +57,7 @@
       "author": "{author}のフィード"
     },
     "errors": {
-      "entries_empty": "投稿がありません"
+      "entries_empty": "投稿がまだありません"
     }
   },
   "user": {
@@ -66,22 +66,22 @@
       "entries": "投稿なし | {n}件の投稿",
       "subscribers": "フォロワーなし | {n}フォロワー",
       "subscriptions": "フォロー中なし | {n}フォロー中",
-      "badges": "バッジなし | {n}個のバッジ"
+      "badges": "バッジなし | {n}バッジ"
     },
     "meta": {
       "from_date": "{date}から利用中"
     },
     "errors": {
-      "entries_empty": "投稿がありません",
-      "subscribers_empty": "フォロワーがいません",
+      "entries_empty": "投稿がまだありません",
+      "subscribers_empty": "フォロワーがまだいません",
       "subscriptions_empty": "フォロー中のユーザーがいません",
-      "badges_empty": "バッジがありません"
+      "badges_empty": "バッジがまだありません"
     },
     "action": {
       "settings": "プロフィール編集",
       "logout": "ログアウト",
-      "notify_new_posts": "新着通知を受け取る",
-      "dont_notify_new_posts": "通知を受け取らない"
+      "notify_new_posts": "新着投稿を通知する",
+      "dont_notify_new_posts": "新着投稿を通知しない"
     }
   },
   "tag": {
@@ -112,6 +112,13 @@
       "comments": "コメント",
       "feeds": "フィード",
       "tags": "タグ"
+    },
+    "section": {
+      "users": "@:search.tabs.users",
+      "entries": "@:search.tabs.entries",
+      "comments": "@:search.tabs.comments",
+      "tags": "@:search.tabs.tags",
+      "feeds": "@:search.tabs.feeds"
     }
   },
   "notifications": {
@@ -120,17 +127,31 @@
       "read_all": "全て既読にする",
       "settings": "通知設定",
       "options": "その他",
+      "read": "既読",
       "hide": "非表示",
       "dont": "通知しない"
     },
     "tabs": {
       "all": "すべて",
-      "subscriptions": "フォロー",
-      "replies": "返信",
-      "comments": "コメント",
-      "mentions": "メンション",
-      "new_post": "新規投稿",
+      "subscription": "フォロー",
+      "reply": "返信",
+      "comment": "コメント",
+      "mention": "メンション",
+      "new_post": "新着投稿",
       "system": "システム"
+    },
+    "type": {
+      "subscription": "{0}があなたをフォローしました",
+      "new_post": "{0}が新しい{1}を投稿しました",
+      "reply": "{0}が{2}への{1}に返信しました",
+      "comment": "{0}があなたの{1}にコメントしました",
+      "mention": "{0}が{1}であなたに言及しました",
+      "reports": "報告を受け取りました",
+      "login": "ログインされました"
+    },
+    "const": {
+      "entry": ["投稿", "投稿"],
+      "comment": ["コメント", "コメント"]
     }
   },
   "menu": {
@@ -146,6 +167,27 @@
       "logout": "ログアウト"
     }
   },
+  "feeds": {
+    "title": "フィード",
+    "tabs": {
+      "subscribed": "登録済みフィード",
+      "manage": "管理"
+    }
+  },
+  "bookmarks": {
+    "title": "ブックマーク",
+    "tabs": {
+      "all": "すべて",
+      "entries": "投稿",
+      "users": "ユーザー",
+      "feeds": "フィード"
+    },
+    "section": {
+      "users": "@:bookmarks.tabs.users",
+      "entries": "@:bookmarks.tabs.entries",
+      "feeds": "@:bookmarks.tabs.feeds"
+    }
+  },
   "settings": {
     "title": "設定",
     "section": {
@@ -153,31 +195,408 @@
       "secure": "セキュリティ",
       "danger": "危険ゾーン"
     },
+    "item": {
+      "profile": "@:settings.profile.title",
+      "notifications": "@:settings.notifications.title",
+      "connections": "@:settings.connections.title",
+      "appearance": "@:settings.appearance.title",
+      "account": "@:settings.account.title",
+      "password": "@:settings.password.title",
+      "login-activity": "@:settings.login-activity.title",
+      "gdpr": "@:settings.gdpr.title",
+      "delete-account": "@:settings.delete-account.title"
+    },
+    "action": {
+      "change_password": "パスワード変更",
+      "delete_account": "確認",
+      "request_data": "データをリクエスト"
+    },
+    "profile": {
+      "title": "プロフィール編集",
+      "data": "プロフィールデータ",
+      "tint": {
+        "title": "プロフィールカラー",
+        "help": "自己表現のためにプロフィールの色を選択できます。何の意味があるか？ 私にもわかりません！"
+      },
+      "avatar": {
+        "title": "プロフィール画像",
+        "help": "Gravatarサービスで画像を変更できます"
+      }
+    },
+    "notifications": {
+      "title": "通知設定",
+      "events": "イベント",
+      "feedback": "フィードバック",
+      "others": "その他",
+      "field": {
+        "subscriptions": "フォロワー",
+        "replies": "返信通知",
+        "comments": "コメント通知",
+        "mentions": "メンション通知",
+        "new_post": "新着投稿通知",
+        "badges": "バッジ通知"
+      }
+    },
+    "password": {
+      "title": "パスワード変更",
+      "help": "パスワードは6文字以上で、誕生日やペットの名前は使用できません",
+      "apply": "私は他人のアカウントを盗むつもりはなく、自らの意思でパスワードを変更します"
+    },
+    "appearance": {
+      "title": "外観"
+    },
+    "connections": {
+      "title": "連携アカウント"
+    },
+    "account": {
+      "title": "アカウント設定",
+      "email": {
+        "title": "メールアドレス変更",
+        "help": "アカウントアクセスとセキュリティ通知用のメールアドレスを入力してください"
+      },
+      "verification": {
+        "title": "アカウント認証",
+        "help": "本人確認のためにプロフィールの所有権を確認します"
+      }
+    },
+    "login-activity": {
+      "title": "アクティビティ履歴"
+    },
+    "gdpr": {
+      "title": "GDPR",
+      "help": "私たちはあなたのデータを慎重に扱い、第三者に提供したり悪用したりしません"
+    },
+    "delete-account": {
+      "title": "アカウント削除",
+      "help": "アカウントを削除するにはパスワードを入力してください",
+      "apply": "開発者が非常に怠惰なため、アカウントの復元は不可能であることを理解しています"
+    },
+    "field": {
+      "name": "名前",
+      "bio": "自己紹介",
+      "email": "メールアドレス",
+      "sex": "性別",
+      "current_password": "現在のパスワード",
+      "new_password": "新しいパスワード",
+      "password": "パスワード",
+      "username": "ユーザー名",
+      "locale": "言語",
+      "theme": "テーマ"
+    },
     "sex": {
       "male": "男性",
       "female": "女性",
       "none": "アパッチ攻撃ヘリコプター"
     }
   },
+  "help": {
+    "title": "ヘルプ",
+    "section": {
+      "base": "基本",
+      "my": "マイヘルプ"
+    },
+    "item": {
+      "all-questions": "ナレッジベース",
+      "my-questions": "自分の質問",
+      "add-question": "質問する"
+    },
+    "meta": {
+      "edited": "{date}に編集"
+    }
+  },
+  "donate": {
+    "title": "寄付",
+    "intro": ""
+  },
+  "about": {
+    "title": "アプリについて",
+    "item": {
+      "user-agreement": "利用規約",
+      "privacy": "プライバシーポリシー",
+      "legal": "法的情報",
+      "data-security": "データ保護"
+    },
+    "refresh": "更新"
+  },
+  "entry": {
+    "title": "投稿",
+    "meta": {
+      "comments": "0件のコメント | {n}件のコメント",
+      "stars": "0スター | {n}スター",
+      "bookmarks": "0ブックマーク | {n}ブックマーク",
+      "edited": "編集済み",
+      "pinned": "固定済み",
+      "hidden_from_feed": "フィードから非表示"
+    },
+    "history": {
+      "edit-content": "内容を編集"
+    },
+    "pseudo-form": {
+      "placeholder": "何か書いてください...",
+      "comments-on": "コメント有効",
+      "comments-off": "コメント無効",
+      "hidden_from_feed-on": "フィードに表示されません",
+      "hidden_from_feed-off": "フィードに表示されます"
+    },
+    "errors": {
+      "empty": "空です",
+      "comments_disabled": "コメントは無効です",
+      "empty_entry_history": "編集履歴がありません"
+    },
+    "action": {
+      "history": "編集履歴",
+      "pin": "固定する",
+      "unpin": "固定解除"
+    }
+  },
+  "comment": {
+    "meta": {
+      "author": "投稿者",
+      "reply": "返信",
+      "replies": "0件の返信 | {n}件の返信",
+      "edited": "編集済み"
+    },
+    "form": {
+      "placeholder": "返信を入力..."
+    },
+    "errors": {
+      "empty": "空です",
+      "empty_edit_history": "編集履歴がありません"
+    },
+    "action": {}
+  },
+  "auth": {
+    "login": {
+      "title": "ログイン",
+      "create_account": "アカウントをお持ちでないですか？ {0}"
+    },
+    "forgot": {
+      "title": "パスワードリセット",
+      "suggest": "パスワードリセット用のリンクをメールで送信します",
+      "contact_us": "お問い合わせ",
+      "help": "{0}、メールにアクセスできない場合はこちら",
+      "remember": "パスワードを思い出しましたか？"
+    },
+    "create_account": {
+      "title": "アカウント作成",
+      "already": "既に登録済みですか？",
+      "agreement": "続行することで、{0}と{1}に同意します",
+      "terms": "利用規約",
+      "privacy": "プライバシーポリシー"
+    },
+    "reset-password": {
+      "title": "パスワード変更",
+      "suggest": "パスワードは6文字以上で、誕生日は使用できません",
+      "contact_us": "お問い合わせ",
+      "help": "{0}、コードが届かない場合や問題がある場合はこちら",
+      "remember": "パスワードを思い出しましたか？"
+    },
+    "button": {
+      "login": "ログイン",
+      "continue": "続ける"
+    },
+    "field": {
+      "name": "名前",
+      "username": "ユーザー名",
+      "email": "メールアドレス",
+      "password": "パスワード"
+    }
+  },
+  "badge": {
+    "type": {
+      "common": "一般",
+      "rare": "レア",
+      "epic": "エピック",
+      "legendary": "レジェンダリー"
+    },
+    "date": "{date}に取得"
+  },
+  "success": {
+    "entry_deleted": "投稿を削除しました",
+    "comment_deleted": "コメントを削除しました"
+  },
   "errors": {
+    "user_cant_delete_entries": "投稿を削除できません",
+    "user_cant_edit_entries": "投稿を編集できません",
+    "user_cant_delete_comments": "コメントを削除できません",
+    "user_cant_edit_comments": "コメントを編集できません",
+
+    "todo": {
+      "icon": "ghost-line",
+      "title": "開発中",
+      "description": "この機能はまだ利用できません。開発者が怠けているのかもしれません"
+    },
+    "method_not_allowed": {
+      "icon": "cloud-off-line",
+      "title": "メソッドが許可されていません",
+      "description": "開発者がミスをしたようです"
+    },
+    "unauthorized": {
+      "icon": "spy-line",
+      "title": "アクセス拒否",
+      "description": "閲覧するにはログインが必要です"
+    },
+    "tag_not_found": {
+      "icon": "ghost-line",
+      "title": "タグが見つかりません",
+      "description": "そんなタグは存在しないかもしれません"
+    },
+    "user_not_found": {
+      "icon": "user-line",
+      "title": "ユーザーが見つかりません",
+      "description": "他のユーザーを探してみてください"
+    },
+    "feed_not_found": {
+      "icon": "feeds-line",
+      "title": "フィードが見つかりません",
+      "description": "他のフィードを探してみてください"
+    },
+    "user_suspended": {
+      "icon": "ghost-line",
+      "title": "ユーザー停止中",
+      "description": "何か面白いことをしたようです"
+    },
+    "user_blocked": {
+      "icon": "ghost-line",
+      "title": "ユーザーがブロックされました",
+      "description": "不適切な行動があったためブロックされました。同じ行動を続けるとあなたも同じ運命をたどりますよ"
+    },
+    "user_deleted": {
+      "icon": "ghost-line",
+      "title": "ユーザーが削除されました",
+      "description": "そもそも、そのユーザーが本当に存在していたかどうか確信がありますか？"
+    },
+    "user_not_activated": {
+      "icon": "ghost-line",
+      "title": "ユーザーが未アクティベートです",
+      "description": "メールアドレスを確認すると、ここに表示されます"
+    },
+    "entry_not_found": {
+      "icon": "ghost-line",
+      "title": "投稿が見つかりません",
+      "description": "おそらく、最初から存在していなかったのでしょう。でも、確かなことは誰にもわかりませんね"
+    },
+    "entry_hidden": {
+      "icon": "user-unfollow-line",
+      "title": "投稿が非表示です",
+      "description": "自由な表現の場でも、時にはこういうことがあります"
+    },
+    "bad_request": {
+      "icon": "cloud-off-line",
+      "title": "不正なリクエスト",
+      "description": "リクエスト形式が正しくない可能性があります"
+    },
     "network_error": {
       "icon": "cloud-off-line",
       "title": "接続エラー",
-      "description": "サーバーが応答しません"
+      "description": "サーバーが応答しないか、通信を拒否しています"
+    },
+    "invalid_connection": {
+      "icon": "cloud-off-line",
+      "title": "無効な接続",
+      "description": "サーバーとの接続に問題が発生しました"
+    },
+    "timeout_exceeded": {
+      "icon": "cloud-off-line",
+      "title": "タイムアウトしました",
+      "description": "サーバーの応答がありません。しばらく待ってから再試行してください"
+    },
+    "empty_feed": {
+      "icon": "timeline-line",
+      "title": "フィードが空です",
+      "description": "誰かをフォローしてみてはいかがですか？"
+    },
+    "empty_bookmarks": {
+      "icon": "bookmarks-line",
+      "title": "ブックマークがありません",
+      "description": "ブックマークを追加するとここに表示されます"
     },
     "empty_search": {
       "icon": "search-line",
       "title": "検索結果なし",
-      "description": "検索条件を変更してください"
+      "description": "検索条件を変えてみてください"
+    },
+    "empty_notifications": {
+      "icon": "bell-line",
+      "title": "通知はありません",
+      "description": "すぐに新しい通知が届くかもしれません"
+    },
+    "empty_feeds": {
+      "icon": "feeds-line",
+      "title": "フィードがありません",
+      "description": "興味のあるフィードを探して登録してみませんか？"
+    },
+    "feeds_not_created": {
+      "icon": "feeds-line",
+      "title": "フィードがありません",
+      "description": "まだフィードを作成していません。今すぐ始めましょう！"
+    },
+    "help_page_not_found": {
+      "icon": "ghost-line",
+      "title": "ページが見つかりません",
+      "description": "もともと存在しなかったのかもしれません。確かなことは誰にも..."
     }
   },
   "action": {
-    "subscribe": "フォロー",
+    "options": "その他",
+    "subscribe": "フォローする",
     "unsubscribe": "フォロー解除",
     "create": "作成",
+    "apply": "適用",
     "save": "保存",
-    "delete": "削除",
+    "go_away": "移動",
+    "create_entry": "投稿する",
+    "save_entry": "保存する",
+    "send_report": "報告を送信",
+    "load_more": "さらに読み込む",
+    "show_more": "すべて表示",
+    "cancel": "キャンセル",
+    "close": "閉じる",
     "edit": "編集",
-    "report": "報告"
+    "delete": "削除",
+    "refresh": "更新",
+    "attach_image": "画像を添付",
+    "copy_link": "リンクをコピー",
+    "report": "報告する",
+    "remove-bookmark": "ブックマークから削除",
+    "add-bookmark": "ブックマークに追加",
+    "confirm": "保存せずに終了しますか？"
+  },
+  "modals": {
+    "search-filter": {
+      "title": "検索フィルター"
+    },
+    "entry-history": {
+      "title": "編集履歴"
+    },
+    "entry-delete": {
+      "title": "投稿を削除",
+      "help": "この投稿を削除しようとしています。本当に必要ですか？"
+    },
+    "entry-report": {
+      "title": "投稿の報告"
+    },
+    "comment-history": {
+      "title": "コメントの編集履歴"
+    },
+    "comment-edit": {
+      "title": "コメントを編集"
+    },
+    "comment-report": {
+      "title": "コメントの報告"
+    },
+    "comment-delete": {
+      "title": "コメントを削除",
+      "help": "このコメントを削除しようとしています。本当に必要ですか？"
+    },
+    "user-report": {
+      "title": "ユーザーの報告"
+    },
+    "feed-create": {
+      "title": "フィードを作成"
+    },
+    "feed-report": {
+      "title": "フィードの報告"
+    }
   }
 }

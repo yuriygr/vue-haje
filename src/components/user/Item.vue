@@ -37,10 +37,10 @@
       <template v-if="!onlyAvatar">
         <div class="user-item__content">
           <div class="user-item__name">
-            <skeleton :width="80" :height="9" />
+            <skeleton :width="randomWidth(60)" :height="9" />
           </div>
           <div v-if="mode != 'small'" class="user-item__username">
-            <skeleton :width="60" :height="8" />
+            <skeleton :width="randomWidth(50)" :height="8" />
           </div>
         </div>
         <buttons-group :withGap="true" v-if="showSubscribeAction" class="user-item__actions">
@@ -199,6 +199,9 @@ export default {
         data: this.data
       })
       this.$popover.close()
+    },
+    randomWidth(size) {
+      return Math.floor(Math.random() * 100) + size;
     }
   }
 }

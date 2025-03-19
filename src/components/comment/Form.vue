@@ -2,10 +2,18 @@
   <div :class="elClass">
     <branches :count="level - 1" key="comment-form" />
     <div :class="$formClass" v-on="$formEvents">
+
       <div class="comment-form__field"
         v-on="$fieldEvents"
         v-bind="$fieldBinds"
       ></div>
+
+      <attachments-form class="comment-form__attachments"
+        v-model="form.files"
+        :allowedFormats="allowedFormats"
+        :max-files="1"
+        ref="file"
+        />
 
       <div class="comment-form__actions">
         <buttons-group :withGap="true">
@@ -16,20 +24,20 @@
           <n-button :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
         </buttons-group>
       </div>
-      <input type="file" ref="file" @change="_handleFilesAttach" :accept="acceptetFiles" multiple hidden>
     </div>
   </div>
 </template>
 
 <script>
 import { cancelEvent } from '@/app/services/utilities'
+import AttachmentsForm from '@/components/attachments/form'
 
 import { NButton, ButtonsGroup } from '@vue-norma/ui'
 
 export default {
   name: 'comment-form',
   components: {
-    NButton, ButtonsGroup
+    NButton, ButtonsGroup, AttachmentsForm
   },
   props: {
     entry: {
@@ -48,7 +56,7 @@ export default {
       loading: false,
       error: false,
 
-      acceptetFiles: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
 
       originalParentNode: false,
       level: 1,
@@ -56,9 +64,9 @@ export default {
       form: {
         parent_id: 0,
         root_id: 0,
-        text: ''
-      },
-      attachedFiles: []
+        text: '',
+        files: []
+      }
     }
   },
   computed: {
@@ -107,10 +115,10 @@ export default {
     },
 
     canSubmit() {
-      return (this.form.text != '' || this.hasFiles) && !this.loading
+      return (this.form.text.trim() != '' || this.hasFiles) && !this.loading
     },
     hasFiles() {
-      return this.attachedFiles.length != 0
+      return this.form.files.length != 0
     },
     isReply() {
       return this.form.parent_id != 0
@@ -123,7 +131,7 @@ export default {
       this.loading = true
       this.error = false
 
-      this.$api.post(`entry/${this.entry}/comments`, this.form)
+      this.$api.postJSON(`entry/${this.entry}/comments`, this.form)
       .then(result => {
         this.resetForm()
         this.$emit('success', result)
@@ -139,14 +147,15 @@ export default {
       }
       
       this.level = 1
+      this.form.files = []
       this.form.text = ""
       this.form.parent_id = 0
       this.$refs.field.innerText = ""
-      this.attachedFiles = []
+      this.$refs.file.reset()
     },
+
     attachFiles() {
-      this.$refs.file.value = ''
-      this.$refs.file.click()
+      this.$refs.file.attachFiles()
     },
 
     field_onInput(e) {
@@ -178,15 +187,20 @@ export default {
       }
     },
     field_onPaste(e) {
-      let cData = (e.originalEvent || e).clipboardData
-      
-      // Загружаем файлики
-      let items = cData && cData.items || []
+      let cData = (e.originalEvent || e).clipboardData,
+      items = cData && cData.items || []
+
+      // Загружаем картинки
+      const files = []
       for (const item of items) {
-        if (item.type.startsWith('image/')) {
-          this._processFilesUpload([item.getAsFile()])
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const file = item.getAsFile()
+          if (file) files.push(file)
         }
       }
+
+      if (files.length > 0)
+        this.$refs.file.handleFileSelect({ target: { files: files } })
 
       // Копируем текстик
       let itemsText = cData.getData('text/plain')
@@ -206,7 +220,7 @@ export default {
     form_onDrop(e) {
       e.preventDefault()
       this.dragover = false
-      this._handleFilesAttach(e)
+      this.$refs.file.handleFileSelect(e)
     },
     form_onDragEnter(e) {
       e.preventDefault()
@@ -219,20 +233,6 @@ export default {
     form_onDragOver(e) {
       e.preventDefault()
       this.dragover = true
-    },
-    // Грузилки
-    _handleFilesAttach(e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-
-      this._processFilesUpload(files)
-    },
-    _processFilesUpload(filesList) {
-      [...filesList]
-        .filter(file => this.acceptetFiles.includes(file.type))
-        .forEach(file => {
-          console.log(file)
-        })
     }
   },
   mounted() {
@@ -307,7 +307,7 @@ export default {
     border: var(--comment-form--border-dragover);
   }
 
-  &--hovered {
+  &--hovered:not(&--dragover) {
     background: var(--comment-form--background-hovered);
     border: var(--comment-form--border-hovered);
   }
@@ -340,6 +340,10 @@ export default {
     &:empty:focus::before {
       opacity: .3;
     }
+  }
+
+  &__attachments {
+    padding: 0 .5rem;
   }
 
   &__actions {

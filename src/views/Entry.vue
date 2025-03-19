@@ -1,5 +1,5 @@
 <template>
-  <template v-if="(!loading && !error) && Object.keys(data).length > 0">
+  <template v-if="Object.keys(data).length > 0">
     <entry-item-wrapper :key="`entry-${data.uuid}`">
       <entry-item :data="data" type="full" />
     </entry-item-wrapper>
@@ -12,6 +12,7 @@
     <entry-item-wrapper v-if="loading">
       <entry-item type="full" />
     </entry-item-wrapper>
+    
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -69,8 +70,10 @@ export default {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    '$route.params.uuid'(to) {
-      if (to) {
+    async '$route.params.uuid'(to) {
+      if (to != undefined) {
+        await this.$store.dispatch('entry/clear')
+        await this.$store.dispatch('entry/comments/clear')
         this.$store.dispatch('entry/fetch', to)
       }
     }

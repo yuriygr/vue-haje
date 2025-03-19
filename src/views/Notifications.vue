@@ -25,7 +25,11 @@
   </template>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <div class="notifications-list" v-if="loading">
+      <notification-item-wrapper v-for="_ in skeletons">
+        <notification-item />
+      </notification-item-wrapper>
+    </div>
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -41,7 +45,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
+import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
 
 import { NotificationItem, NotificationItemWrapper } from '@/components/notifications'
 
@@ -49,7 +53,7 @@ export default {
   name: 'notifications',
   components: {
     NotificationItem, NotificationItemWrapper,
-    Tabs, TabsItem, Placeholder, PlaceholderLoading, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup
+    Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup
   },
   meta() { return this.meta },
   data() {
@@ -61,15 +65,16 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', [ 'skeletons' ]),
     ...mapState('notifications', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('notifications', [ 'hasMoreItems' ]),
     tabs() {
       return Object.freeze([
         { key: 'all', to: this.formatLink(), label: this.$t('notifications.tabs.all') },
-        { key: 'subscriptions', to: this.formatLink('subscriptions'), label: this.$t('notifications.tabs.subscriptions') },
-        { key: 'comments', to: this.formatLink('comments'), label: this.$t('notifications.tabs.comments') },
-        { key: 'replies', to: this.formatLink('replies'), label: this.$t('notifications.tabs.replies') },
-        { key: 'mentions', to: this.formatLink('mentions'), label: this.$t('notifications.tabs.mentions') },
+        { key: 'subscription', to: this.formatLink('subscription'), label: this.$t('notifications.tabs.subscription') },
+        { key: 'comment', to: this.formatLink('comment'), label: this.$t('notifications.tabs.comment') },
+        { key: 'reply', to: this.formatLink('reply'), label: this.$t('notifications.tabs.reply') },
+        { key: 'mention', to: this.formatLink('mention'), label: this.$t('notifications.tabs.mention') },
         { key: 'new_post', to: this.formatLink('new_post'), label: this.$t('notifications.tabs.new_post') },
         { key: 'system', to: this.formatLink('system'), label: this.$t('notifications.tabs.system') }
       ])
@@ -88,7 +93,7 @@ export default {
         : { name: this.$route.name }
     },
     seen() {
-      return this.$api.post('my/notifications/seen')
+      this.$api.post('my/notifications/seen')
       .then(_ => {
         this.$store.dispatch('auth/seen_notifications')
       })

@@ -1,18 +1,18 @@
 <template>
-  <div class="feed-item-wrapper">
+  <div class="login-item-wrapper">
     <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'feed-item-wrapper'
+  name: 'login-item-wrapper'
 }
 </script>
 
 <style lang="scss">
-.feed-item-wrapper:not(:last-child) {
+.login-item-wrapper:not(:last-child) {
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: .5rem;
 }
 </style>

@@ -1,6 +1,12 @@
 <template>
   <group>
-    <n-header>{{ $t('settings.connections.title') }}</n-header>
+    <n-header>{{ $t('settings.connections.connected') }}</n-header>
+    <placeholder
+      :icon="$t('errors.todo.icon')"
+      :header="$t('errors.todo.title')"
+      :text="$t('errors.todo.description')"
+    />
+    <n-header>{{ $t('settings.connections.available') }}</n-header>
     <placeholder
       :icon="$t('errors.todo.icon')"
       :header="$t('errors.todo.title')"

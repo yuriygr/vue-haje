@@ -71,7 +71,7 @@ export default {
 
 <style lang="scss">
 .meta-info {
-  --meta-info__item--color: #495057;
+  --meta-info__item--color: #666;
   --meta-info__item--color-hover: #212529;
   --meta-info__item--color-active: #212529;
 
@@ -91,7 +91,6 @@ export default {
   &__item {
     position: relative;
     color: var(--meta-info__item--color);
-    font-weight: 500;
     font-size: 1.2rem;
     line-height: calc(1.2 * 1em);
     transition: var(--x-transition);

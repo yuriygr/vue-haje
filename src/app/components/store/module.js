@@ -21,25 +21,26 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
     SET_ERROR: (state, payload) => state.error = payload
   },
   actions: {
-    async fetch({ state, commit, rootState }, initial = true) {
+    fetch({ state, commit, rootState }, initial = true) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', null)
       
-      try {
-        // Какой же костыль...
-        const endpoint =  (typeof endpointBuilder == 'function')
-          ? endpointBuilder(rootState)
-          : endpointBuilder
+      // Какой же костыль...
+      const endpoint =  (typeof endpointBuilder == 'function')
+        ? endpointBuilder(rootState)
+        : endpointBuilder
 
-        const { items, total_items } = await this.$api.get(endpoint, state.filters)
-        commit(initial ? 'SET_DATA' : 'ADD_DATA', items)
-        commit('SET_TOTAL_ITEMS', total_items)
-      } catch (error) {
+
+      return this.$api.get(endpoint, state.filters)
+      .then(result => {
+        commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
+        commit('SET_TOTAL_ITEMS', result.total_items)
+      })
+      .catch(error => {
         commit('SET_ERROR', error)
-        throw error
-      } finally {
-        commit('SET_LOADING', false)
-      }
+      })
+      .then(_ => commit('SET_LOADING', false))
+      
     },
 
     async refresh({ dispatch, commit }) {
@@ -89,28 +90,30 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
     SET_ERROR: (state, payload) => state.error = payload
   },
   actions: {
-    async fetch({ state, commit }, initial = true) {
+    fetch({ state, commit }, initial = true) {
       commit('SET_LOADING', true)
-      try {
-        const { items, total_items } = await this.$api.get(endpoint, state.filters)
-        commit(initial ? 'SET_DATA' : 'ADD_DATA', items)
-        commit('SET_TOTAL_ITEMS', total_items)
-      } catch (error) {
+      commit('SET_ERROR', false)
+
+      return this.$api.get(endpoint, state.filters)
+      .then(result => {
+        commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
+        commit('SET_TOTAL_ITEMS', result.total_items)
+      })
+      .catch(error => {
         commit('SET_ERROR', error)
-      } finally {
-        commit('SET_LOADING', false)
-      }
+      })
+      .then(_ => commit('SET_LOADING', false))
     },
     async refresh({ commit, dispatch }) {
-      commit('SET_FILTERS', { ...initialFilters, offset: 0 })
-      await dispatch('fetch', true)
+      await commit('SET_FILTERS', { ...initialFilters, offset: 0 })
+      dispatch('fetch', true)
     },
     async more({ state, commit, dispatch }) {
-      commit('SET_FILTERS', { 
+      await commit('SET_FILTERS', { 
         ...state.filters, 
         offset: state.data.length 
       })
-      await dispatch('fetch', false)
+      dispatch('fetch', false)
     },
     clear({ commit }) {
       commit('CLEAR_DATA')

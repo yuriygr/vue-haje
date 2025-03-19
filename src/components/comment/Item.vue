@@ -35,9 +35,9 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { Icon, NButton } from '@vue-norma/ui'
-import Attachments from '@/components/attachments'
+import { Icon, NButton, MetaInfo } from '@vue-norma/ui'
 
+import Attachments from '@/components/attachments'
 import { UserItem } from '@/components/user'
 
 let CommentEditModal = defineAsyncComponent(() => import("@/components/modals/_comment/Edit.vue"))
@@ -49,7 +49,7 @@ export default {
   name: 'comment-item',
   components: {
     UserItem, Attachments,
-    Icon, NButton
+    Icon, NButton, MetaInfo
   },
   props: {
     data: {
@@ -240,7 +240,7 @@ export default {
 
   &__header {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: .75rem;
   }

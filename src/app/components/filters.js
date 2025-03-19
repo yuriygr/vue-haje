@@ -3,7 +3,7 @@ const humanizeError = (error) => {
     return string.replace(/\W+/g, " ")
       .split(/ |\B(?=[A-Z])/)
       .map(word => word.toLowerCase())
-      .join('_');
+      .join('');
   }
 
   let _code = snakeCase(error.status)
@@ -124,9 +124,6 @@ const timeAgo = (timestamp, locale) => {
   const isYesterday = yesterday.toDateString() === date.toDateString()
   const isThisYear = today.getFullYear() === date.getFullYear()
 
-  const _today = _localizedToday(locale)
-  const _yesterday = _localizedYesterday(locale)
-
   if (seconds < 5) {
     return 'now';
   } else if (seconds < 60) {
@@ -136,9 +133,9 @@ const timeAgo = (timestamp, locale) => {
   } else if (minutes < 60) {
     return `${ minutes } minutes ago`;
   } else if (isToday) {
-    return timeFormat(date, _today, false, locale);
+    return timeFormat(date, _localizedToday(locale), false, locale);
   } else if (isYesterday) {
-    return timeFormat(date, _yesterday, false, locale);
+    return timeFormat(date, _localizedYesterday(locale), false, locale);
   } else if (isThisYear) {
     return timeFormat(date, false, true, locale);
   }

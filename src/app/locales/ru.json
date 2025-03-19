@@ -4,9 +4,9 @@
     "description": "Социальная сеть для не социальных людей",
     "version": "Версия {version}",
     "locale": {
-      "jp": "Японский",
-      "pt": "Португальский",
-      "en": "Английский",
+      "jp": "日本語",
+      "pt": "Português",
+      "en": "English",
       "ru": "Русский"
     },
     "theme": {
@@ -127,35 +127,31 @@
       "read_all": "Отметить все как прочитанное",
       "settings": "Настроить уведомления",
       "options": "Еще",
+      "read": "Прочитано",
       "hide": "Скрыть",
       "dont": "Не уведомлять"
     },
     "tabs": {
       "all": "Все",
-      "subscriptions": "Подписки",
-      "replies": "Ответы",
-      "comments": "Комментарии",
-      "mentions": "Упоминания",
+      "subscription": "Подписки",
+      "reply": "Ответы",
+      "comment": "Комментарии",
+      "mention": "Упоминания",
       "new_post": "Новые посты",
       "system": "Системные"
     },
-    "user": {
-      "subscriptions": "{0} подписалось на вас",
-      "new_post": "{0} опубликовало новую {1}",
-      "replies": "{0} ответило на ваш {1}",
-      "comments": "{0} прокомментировало вашу {1}",
-      "mentions": "{0} упомянуло вас в {1}"
-    },
-    "system": {
+    "type": {
+      "subscription": "{0} подписался на вас",
+      "new_post": "{0} опубликовал новую запись",
+      "reply": "{0} ответил на ваш комментарий к записи",
+      "comment": "{0} прокомментировал вашу запись",
+      "mention": "{0} упомянул вас в {1}",
       "reports": "Получена жалоба на вас",
       "login": "Произведен вход"
     },
-    "support": {
-      "replies": "Поступил ответ на ваше обращение"
-    },
     "const": {
-      "entry": "запись",
-      "comment": "комментарий"
+      "entry": ["запись", "записи"],
+      "comment": ["комментарий", "комментарии"]
     }
   },
   "menu": {
@@ -206,6 +202,7 @@
       "appearance": "@:settings.appearance.title",
       "account": "@:settings.account.title",
       "password": "@:settings.password.title",
+      "permissions": "@:settings.permissions.title",
       "login-activity": "@:settings.login-activity.title",
       "gdpr": "@:settings.gdpr.title",
       "delete-account": "@:settings.delete-account.title"
@@ -250,7 +247,9 @@
       "title": "Внешний вид"
     },
     "connections": {
-      "title": "Связанные аккаунты"
+      "title": "Связанные аккаунты",
+      "connected": "Подключенные аккаунты",
+      "available": "Доступные к подключению"
     },
     "account": {
       "title": "Настройки аккаунта",
@@ -263,8 +262,23 @@
         "help": "Верификация — это процесс подтверждения того, что профиль действительно принадлежит известной персоне"
       }
     },
+    "permissions": {
+      "title": "Разрешения и доступы",
+      "items": {
+        "create_entries": "Создание записей",
+        "edit_entries": "Редактирование записей",
+        "delete_entries": "Удаление записей",
+        "create_comments": "Создание комментариев",
+        "edit_comments": "Редактирование комментариев",
+        "delete_comments": "Удаление комментариев",
+        "subscribe_to_users": "Подписываться на пользователей",
+        "attach_images": "Прикреплять изобажения"
+      },
+      "empty": "Разрешений нет"
+    },
     "login-activity": {
-      "title": "История активности"
+      "title": "История входов",
+      "empty": "Пусто"
     },
     "gdpr": {
       "title": "GDPR",
@@ -375,8 +389,8 @@
       "create_account": "У вас ещё нет аккаунта? {0}"
     },
     "forgot": {
-      "title": "Восстановление пароля",
-      "suggest": "Мы отправим ссылку и код для восстановления пароля на вашу почту",
+      "title": "Забыли пароль?",
+      "suggest": "Мы отправим код подтверждения на этот адрес эл. почты, если он соответствует существующей учетной записи",
       "contact_us": "Свяжитесь с нами",
       "help": "{0}, если Вы не помните свою электронную почту или не имеете доступа к ней",
       "remember": "Вспомнили пароль?"
@@ -565,32 +579,6 @@
     "remove-bookmark": "Убрать из закладок",
     "add-bookmark": "Добавить в закладки",
     "confirm": "Выйти без сохранения?"
-  },
-  "brands": {
-    "grustnogram": {
-      "label": "Грустнограм",
-      "icon": "grustnogram-line"
-    },
-    "lichess": {
-      "label": "Lichess",
-      "icon": "lichess-fill"
-    },
-    "github": {
-      "label": "Github",
-      "icon": "github-fill"
-    },
-    "telegram": {
-      "label": "Телеграм",
-      "icon": "telegram-fill"
-    },
-    "donationalerts": {
-      "label": "Donation Alerts",
-      "icon": "donationalerts-fill"
-    },
-    "vk": {
-      "label": "Вконтакте",
-      "icon": "vk-fill"
-    }
   },
   "modals": {
     "search-filter": {

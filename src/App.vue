@@ -49,10 +49,7 @@ export default {
     }, 
     setLayout(state = false) {
       this.changeDataset('layout', state ?? false)
-    }, 
-    setSSEHandlers() {
-
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('initApplication')

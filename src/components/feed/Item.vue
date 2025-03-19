@@ -1,28 +1,25 @@
 <template>
   <div :class="[ 'feed-item' ]">
-    <div class="feed-item__header">
-      <div class="feed-item__icon">
-        {{ data.emoji }}
-      </div>
-      <div class="feed-item__content">
-        <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
-          {{ data.title }}
-        </component>
-        <router-link class="feed-item__author" :to="authorLink">{{ $tc('feed.meta.author', { author: this.data.author.name }) }}</router-link>
-      </div>
-      <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
-        <n-button
-          :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
-          mode="tertiary"
-          @click.exact="toggleSubscribe"
-          :disabled="loading.subscribe"
-          :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
-        />
-        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
-      </buttons-group>
+    <div class="feed-item__icon">
+      {{ data.emoji }}
     </div>
-    <div class="feed-item__description" v-html="$filters.contentFormat(data.description)" />
-
+    <div class="feed-item__content">
+      <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
+        {{ data.title }}
+      </component>
+  
+      <meta-info class="feed-item__meta" :items="metaItems" />
+    </div>
+    <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
+      <n-button
+        :icon_before="data.state.me_subscribed ? 'check-line' : 'add-line'"
+        mode="tertiary"
+        @click.exact="toggleSubscribe"
+        :disabled="loading.subscribe"
+        :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+      />
+      <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+    </buttons-group>
   </div>
 </template>
 
@@ -71,7 +68,12 @@ export default {
         return { }
     },
     authorLink() {
-      return { name: 'user', params: { username: this.data.author.username } }
+      return 
+    },
+    metaItems() {
+      let _result = []
+      _result.push({ label: this.$tc('feed.meta.author', { author: this.data.author.name }), to: { name: 'user', params: { username: this.data.author.username } } })
+      return _result
     },
     optionsItems() {
       let _bookmark = [
@@ -162,52 +164,36 @@ export default {
 
 <style lang="scss">
 .feed-item {
+  --feed-item__icon--background: #fafafa;
   --feed-item__name--color: var(--x-body--color);
   --feed-item__name--color-hover: var(--x-body--color);
-
-  --feed-item__author--color: #666;
-  --feed-item__author--color-hover: var(--x-body--color);
-
-  --feed-item__description--color: var(--x-body--color);
-  --feed-item__description--color-hover: var(--x-body--color);
-  --feed-item__icon--background: rgba(0, 0, 0, 0.09);
   
   html[data-theme="black"] & {
+    --feed-item__icon--background: #171717;
     --feed-item__name--color: var(--x-body--color);
     --feed-item__name--color-hover: var(--x-body--color);
-    
-    --feed-item__author--color: var(--x-color-white--shade40);
-    --feed-item__author--color-hover: var(--x-body--color);
-
-    --feed-item__description--color: var(--x-color-white);
-    --feed-item__description--color-hover: var(--x-body--color);
-    --feed-item__icon--background: rgba(255, 255, 255, 0.09);
   }
 }
 
 .feed-item {
   --feed-item__icon--size: 40px;
-  --feed-item__icon--border-radius: 8px;
 }
 
 .feed-item {
   display: flex;
-  flex-direction: column;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
+  flex-direction: row;
+  align-items: center;
+  position: relative;
 
   &__icon {
     background: var(--feed-item__icon--background, rgba(0, 0, 0, 0.09));
-    border-radius: var(--feed-item__icon--border-radius, 8px);
+    margin-right: .75rem;
     position: relative;
     overflow: hidden;
-    width: var(--feed-item__icon--size, 38px);
-    height: var(--feed-item__icon--size, 38px);
-    margin-right: .75rem;
+    width: var(--feed-item__icon--size);
+    height: var(--feed-item__icon--size);
+    border-radius: 8px;
+    
     flex-shrink: 0;
     display: flex;
     justify-content: center;
@@ -218,15 +204,17 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
-    align-items: start;
+    align-items: flex-start;
+    flex: 1;
   }
 
   &__name {
     color: var(--feed-item__name--color);
-    font-weight: 500;
-    font-size: 1.3rem;
-    line-height: calc(1.3 * 1em);
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: calc(1.4 * 1em);
     transition: var(--x-transition);
+    margin-bottom: 0.25rem;
 
     @media(hover: hover) {
       &[href]:hover {
@@ -250,16 +238,7 @@ export default {
       }
     }
   }
-
-  &__description {
-    color: var(--x-body--color);
-    font-size: 1.5rem;
-    line-height: calc(1.4 * 1em);
-    word-break: break-word;
-    -webkit-font-smoothing: subpixel-antialiased;
-    margin-top: .75rem;
-  }
-
+  
   &__actions {
     margin-left: auto;
   }

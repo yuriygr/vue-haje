@@ -1,7 +1,5 @@
 <template>
-  <div :class="elClass" @click="onClick">
-    {{ data.code }}
-  </div>
+  <div :class="elClass" @click="onClick"></div>
 </template>
 
 <script>
@@ -40,10 +38,15 @@ export default {
 .tint-item {
   background: var(--tint-color);
   position: relative;
-  border: 2px solid #999;
+  border: 2px solid var(--tint-color);
+  border-radius: 8px;
+  display: block;
+  height: var(--item-size);
+  width: var(--item-size);
+  cursor: pointer;
 
   &--selected {
-    border-color: #fff;
+    box-shadow: inset var(--x-body--background) 0px 0px 0px 3px;
   }
 
   &--code-rgb { --tint-color: rgb }
@@ -60,7 +63,7 @@ export default {
   &--code-violet { --tint-color: violet }
   &--code-pink { --tint-color: pink }
   &--code-indigo { --tint-color: indigo }
-  &--code-grape { --tint-color: grape }
+  &--code-grape { --tint-color: #421C52; }
   &--code-gray { --tint-color: gray }
 }
 </style>

@@ -229,7 +229,7 @@ export default {
     align-items: center;
     background: transparent;
     border: 0;
-    border-radius: 0;
+    border-radius: 7px;
     padding: 0;
     height: 100%;
     width: 100%;

@@ -50,43 +50,37 @@ export default {
     }
   },
   methods: {
-    onSuccessAddingComment(result) {
-      this.entry.counters.comments += 1
-      this.$store.dispatch('entry/comments/add', result.payload)
-      this.$nextTick(_ => {
-        document.getElementById(`comment-${result.payload.comment_id}`).scrollIntoView();
-      })
+    async onSuccessAddingComment(result) {
+      await this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })
+      this.scrollToComment(result.payload.comment_id)
     },
     onErrorAddingComment(error) {
-      console.log(error)
-      this.$alerts.danger({ text: error.status })
+      this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
     },
     loadMore() {
-      this.$store.dispatch('entry/comments/more')
+      this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })
     },
-    scrollToComment() {
-      const commentId = this.$route.query.comment
+    scrollToComment(commentId = false) {
+      if (!commentId) return
 
-      if (commentId) {
-        this.$nextTick(() => {
-          const element = document.getElementById(`comment-${commentId}`)
-          if (element) {
-            const yOffset = -50 
-            const y = element.getBoundingClientRect().top + window.scrollY + yOffset
-            
-            window.scrollTo({
-              top: y,
-              behavior: 'instant'
-            })
-          }
-        })
-      }
+      this.$nextTick(() => {
+        const element = document.getElementById(`comment-${commentId}`)
+        if (element) {
+          const yOffset = -50 
+          const y = element.getBoundingClientRect().top + window.scrollY + yOffset
+          
+          window.scrollTo({
+            top: y,
+            behavior: 'instant'
+          })
+        }
+      })
     }
   },
   mounted() {
-    this.$store.dispatch('entry/comments/fetch')
+    this.$store.dispatch('entry/comments/fetch', { uuid: this.entry.uuid })
     .then(_ => {
-      this.scrollToComment()
+      this.scrollToComment(this.$route.query.comment)
     })
   },
   unmounted() {
@@ -95,7 +89,7 @@ export default {
   watch: {
     '$route.query.comment': {
       handler(newVal) {
-        if(newVal) this.scrollToComment()
+        if(newVal) this.scrollToComment(newVal)
       },
       immediate: true
     }
