@@ -26,15 +26,16 @@ export default {
 
 <style lang="scss">
 .form-text {
-  color: #8b8b8b;
-  font-size: 1.5rem;
-  line-height: calc(1.25 * 1em);
-  margin-bottom: 1.5rem;
+  color: #919190;
+  font-size: 1.4rem;
+  line-height: calc(1.4 * 1em);
+  margin-bottom: 2rem;
   position: relative;
 
   &--align-center {
     text-align: center;
     font-size: 1.3rem;
+    line-height: calc(1.3 * 1em);
   }
 
   &--align-right {

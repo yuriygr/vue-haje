@@ -1,5 +1,6 @@
 export { default as AuthLogin } from '@/views/_auth/Login'
 export { default as AuthForgot } from '@/views/_auth/Forgot'
+export { default as AuthForgotCode } from '@/views/_auth/ForgotCode'
+export { default as AuthForgotChange } from '@/views/_auth/ForgotChange'
 export { default as AuthRegister } from '@/views/_auth/Register'
 export { default as AuthLogout } from '@/views/_auth/Logout'
-export { default as AuthResetPassword } from '@/views/_auth/ResetPassword'

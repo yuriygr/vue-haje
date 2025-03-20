@@ -3,14 +3,6 @@
     <n-header>{{ $t('auth.create_account.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
-      <form-status v-if="error"
-        mode="error"
-        icon="ui-error-warning"
-        :header="error.status"
-      >
-        {{ error.message }}
-      </form-status>
-
       <form-block :label="$t('auth.field.name')">
         <text-field tabindex="1" type="text" name="name" v-model.trim="form.name" :disabled="loading" autocomplete="name" />
       </form-block>
@@ -35,7 +27,7 @@
         <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.create_account.already') }}</n-button>
       </form-block>
 
-      <spacer heigth="50" />
+      <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.create_account.agreement">
@@ -105,6 +97,7 @@ export default {
       })
       .catch(error => {
         this.error = error
+        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })

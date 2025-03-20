@@ -3,14 +3,6 @@
     <n-header>{{ $t('auth.login.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
-      <form-status v-if="error"
-        mode="error"
-        icon="ui-error-warning"
-        :header="error.status"
-      >
-        {{ error.message }}
-      </form-status>
-
       <form-block :label="$t('auth.field.email')">
         <text-field tabindex="1" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
@@ -24,10 +16,10 @@
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ $t('auth.forgot.title') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ $t('auth.login.forgot') }}</n-button>
       </form-block>
 
-      <spacer heigth="50" />
+      <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.login.create_account">
@@ -79,6 +71,7 @@ export default {
       })
       .catch(error => {
         this.error = error
+        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },

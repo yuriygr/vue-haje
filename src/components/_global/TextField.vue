@@ -10,6 +10,7 @@
       @keyup="onKeyup"
       @keydown="onKeydown"
       @update="onUpdate"
+      @focus="onFocus"
       @blur="onBlur"
 
       v-bind="$elBinds"
@@ -118,6 +119,10 @@ export default {
     }
   },
   methods: {
+    focus() {
+      this.$refs.input.focus()
+    },
+    // Events
     onClick(e) {
       this.$refs.input.focus()
       this.focused = true
@@ -131,6 +136,9 @@ export default {
     },
     onUpdate(e) {
       this.$emit('update', e)
+    },
+    onFocus(e) {
+      this.focused = true
     },
     onBlur(e) {
       this.focused = false
@@ -167,7 +175,7 @@ export default {
   --text-field__placeholder--color: #868e96;
 
   --text-field--background-focused: #f1f3f5;
-  --text-field--border-color-focused: #dee2e6;
+  --text-field--border-color-focused: #d76ea0;
 
   --text-field--background-hovered: #f1f3f5;
   --text-field--border-color-hovered: #e9ecef;
@@ -180,7 +188,7 @@ export default {
     --text-field__placeholder--color: #999;
 
     --text-field--background-focused: #181818;
-    --text-field--border-color-focused: #252525;
+    --text-field--border-color-focused: #771d47;
 
     --text-field--background-hovered: #181818;
     --text-field--border-color-hovered: #1f1f1f;
@@ -203,13 +211,13 @@ export default {
 
   &--focused {
     background: var(--text-field--background-focused);
-    border: 1px solid var(--text-field--border-color-focused);
+    border-color: var(--text-field--border-color-focused);
   }
 
   @media(hover: hover) {
     &:not(&--focused):hover {
       background: var(--text-field--background-hovered);
-      border: 1px solid var(--text-field--border-color-hovered);
+      border-color: var(--text-field--border-color-hovered);
     }
   }
   
@@ -229,7 +237,7 @@ export default {
     align-items: center;
     background: transparent;
     border: 0;
-    border-radius: 7px;
+    border-radius: 0;
     padding: 0;
     height: 100%;
     width: 100%;
@@ -237,7 +245,8 @@ export default {
     appearance: textfield;
     color: var(--text-field--color, #111);
     font-size: var(--text-field--font-size);
-    font-family: inherit;
+    font-weight: 500;
+    font-family: var(--x-font-family);
     line-height: calc(1.5 * 1em);
 
     &:last-child {
@@ -258,6 +267,23 @@ export default {
     &::-webkit-search-results-button,
     &::-webkit-search-results-decoration {
       appearance: none;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover, 
+    &:-webkit-autofill:focus, 
+    &:-webkit-autofill:active  {
+      -webkit-text-fill-color: var(--text-field--color, #111);
+      transition: background-color 0s 0s, color 0s 0s;
+      transition-delay: calc(infinity * 1s);
+    }
+
+    &:-webkit-autofill::first-line {
+      -webkit-text-fill-color: var(--text-field--color, #111);
+      font-size: var(--text-field--font-size);
+      font-weight: 500;
+      font-family: var(--x-font-family);
+      line-height: calc(1.5 * 1em);
     }
   }
 

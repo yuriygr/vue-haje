@@ -55,7 +55,7 @@ export default {
       this.scrollToComment(result.payload.comment_id)
     },
     onErrorAddingComment(error) {
-      this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
+      this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
     },
     loadMore() {
       this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })

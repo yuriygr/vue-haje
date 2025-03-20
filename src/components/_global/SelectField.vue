@@ -10,6 +10,7 @@
       @keyup="onKeyup"
       @keydown="onKeydown"
       @update="onUpdate"
+      @focus="onFocus"
       @blur="onBlur"
 
       v-bind="$elBinds"
@@ -120,6 +121,10 @@ export default {
     }
   },
   methods: {
+    focus() {
+      this.$refs.input.focus()
+    },
+    // Events
     onClick(e) {
       this.$refs.input.focus()
       this.focused = true
@@ -133,6 +138,9 @@ export default {
     },
     onUpdate(e) {
       this.$emit('update', e)
+    },
+    onFocus(e) {
+      this.focused = true
     },
     onBlur(e) {
       this.focused = false
@@ -169,7 +177,7 @@ export default {
   --select-field__placeholder--color: #868e96;
 
   --select-field--background-focused: #f1f3f5;
-  --select-field--border-color-focused: #dee2e6;
+  --select-field--border-color-focused: #d76ea0;
 
   --select-field--background-hovered: #f1f3f5;
   --select-field--border-color-hovered: #e9ecef;
@@ -182,7 +190,7 @@ export default {
     --select-field__placeholder--color: #999;
 
     --select-field--background-focused: #181818;
-    --select-field--border-color-focused: #252525;
+    --select-field--border-color-focused: #771d47;
 
     --select-field--background-hovered: #181818;
     --select-field--border-color-hovered: #1f1f1f;
@@ -205,13 +213,13 @@ export default {
 
   &--focused {
     background: var(--select-field--background-focused);
-    border: 1px solid var(--select-field--border-color-focused);
+    border-color: var(--select-field--border-color-focused);
   }
 
   @media(hover: hover) {
     &:not(&--focused):hover {
       background: var(--select-field--background-hovered);
-      border: 1px solid var(--select-field--border-color-hovered);
+      border-color: var(--select-field--border-color-hovered);
     }
   }
   

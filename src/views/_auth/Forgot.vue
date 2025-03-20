@@ -3,14 +3,6 @@
     <n-header>{{ $t('auth.forgot.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
-      <form-status v-if="error"
-        mode="error"
-        icon="ui-error-warning"
-        :header="error.status"
-      >
-        {{ error.message }}
-      </form-status>
-
       <form-text>
         {{ $t('auth.forgot.suggest') }}
       </form-text>
@@ -24,10 +16,10 @@
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.forgot.remember') }}</n-button>
+        <n-button size="l" component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
       </form-block>
 
-      <spacer heigth="50" />
+      <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.forgot.help">
@@ -66,11 +58,12 @@ export default {
       
       this.$api.post('auth/forgot', this.form)
       .then(result => {
-        this.$alerts.success({ text: result.status })
-        this.$router.push({ name: 'auth-reset-password' })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$router.push({ name: 'auth-forgot-code', params: { token: result.payload } })
       })
       .catch(error => {
         this.error = error
+        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },

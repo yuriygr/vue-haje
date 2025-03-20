@@ -19,7 +19,7 @@ export default {
 
 <style lang="scss">
 .form-block {
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
   position: relative;
 
   &:last-of-type { margin-bottom: 0; }
