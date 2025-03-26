@@ -1,11 +1,11 @@
 <template>
   <template v-if="data">
     <div :class="[ 'notification-item', `notification-item--type-${data.type}` ]">
-      <router-link :to="link" :class="[ 'notification-item__icon']" active-class="" exact-active-class="">
+      <router-link @click="onClick" @click.middle.exact="onClick" :to="link" :class="[ 'notification-item__icon']" active-class="" exact-active-class="">
         <span v-if="data.is_readed" class="notification-item__badge"></span>
         <icon :name="noticeIcon" size="18" />
       </router-link>
-      <router-link :to="link" class="notification-item__content" active-class="" exact-active-class="">
+      <router-link @click="onClick" @click.middle.exact="onClick" :to="link" class="notification-item__content" active-class="" exact-active-class="">
         <div class="notification-item__label" v-if="data.type == 'subscription'">
           <i18n-t :keypath="`notifications.type.${data.type}`">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
@@ -68,6 +68,7 @@ import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'notification-item',
+  emits: [ 'click' ],
   components: {
     Icon, NButton, ButtonsGroup, MetaInfo
   },
@@ -113,20 +114,20 @@ export default {
         case 'mention':
           return 'at-line'
         case 'reply':
-          return 'reply-line'
+          return 'reply' + (this.data.state.is_readed ? '-line' : '-fill')
         case 'comment':
-          return 'comments-line'
+          return 'comments' + (this.data.state.is_readed ? '-line' : '-fill')
         case 'new_post':
           return ''
       }
     },
     optionsItems() {
       return [
-        {
+        ...!this.data.state.is_readed ? [{
           icon: 'ui-check-double',
           label: this.$t('notifications.action.read'),
           action: this.readNotify
-        },
+        }] : [],
         {
           icon: 'ui-eye-off',
           label: this.$t('notifications.action.hide'),
@@ -160,6 +161,9 @@ export default {
         target: target,
         align: 'right'
       })
+    },
+    onClick() {
+      this.$emit('click', this.data)
     },
     readNotify() {
       this.$api.post(`my/notifications/${this.data.notify_id}/read`)

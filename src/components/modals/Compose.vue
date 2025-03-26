@@ -1,6 +1,6 @@
 <template>
   <modal :class="$formClass" v-on="$formEvents">
-    <div v-if="entryUser" class="compose__user">
+    <div v-if="entryUser" class="compose__header">
       <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
     </div>
     
@@ -9,13 +9,19 @@
       v-bind="$fieldBinds"
     ></div>
 
-    <attachments-form class="compose__attachments" v-model="form.files" :allowedFormats="allowedFormats" :max-files="2" ref="file" />
+    <attachments-form class="compose__attachments"
+      v-model="form.files"
+      :allowedFormats="allowedFormats"
+      :max-files="1"
+      ref="file"
+    />
 
     <div class="compose__actions">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
       <buttons-group :withGap="true">
         <n-button icon_before="settings-line" @click="toggleOptions" mode="tertiary" ref="options" :title="$t('action.options')" />
-        <n-button icon_before="add-image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
+        <n-button icon_before="gif-line" disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
+        <n-button icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
         <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
         <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
       </buttons-group>
@@ -324,8 +330,11 @@ export default {
     border-color: var(--compose--border-dragover);
   }
 
-  &__user {
-    padding: var(--modal--padding) var(--modal--padding);
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--modal--padding) var(--modal--padding) .75rem var(--modal--padding);
   }
 
   &__field {

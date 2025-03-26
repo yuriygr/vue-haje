@@ -15,6 +15,10 @@
         <n-button size="l" ref="submit" :stretched="true" tabindex="2" :disabled="!canSubmit">{{ $t('auth.button.continue') }}</n-button>
       </form-block>
 
+      <form-block>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
+      </form-block>
+
       <spacer heigth="40" />
 
       <form-text align="center">

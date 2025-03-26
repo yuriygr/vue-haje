@@ -2,7 +2,7 @@
   <group>
     <n-header>{{ $t('settings.login-activity.title') }}</n-header>
 
-    <logins-list v-if="(!loading && !error) && data.length > 0">
+    <logins-list v-if="(!loading && !error) || data.length > 0">
       <login-item-wrapper v-for="item in data" :key="`login-item-${item.login_id}`">
         <login-item :data="item" />
       </login-item-wrapper>

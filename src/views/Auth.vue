@@ -17,7 +17,7 @@ export default {
   --auth-form--box-shadow: 0 11px 34px 0 rgba(0, 0, 0, 0.24);
 
   html[data-theme="black"] & {
-    --auth-form--box-shadow: 0 11px 34px 0 rgba(0, 0, 0, 0.65);
+    --auth-form--box-shadow: 0 11px 34px 0 rgba(0, 0, 0, 0.4);
   }
 }
 

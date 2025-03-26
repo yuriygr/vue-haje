@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [ 'locale', 'theme', 'loading' ]),
+    ...mapState('app', [ 'locale', 'theme', 'density', 'loading' ]),
     ...mapState('auth', [ 'data' ]),
     ...mapGetters('app', [ 'themeStatusBar' ])
   },
@@ -47,6 +47,9 @@ export default {
       this.changeDataset('theme', state)
       this.changeMeta('theme-color', this.themeStatusBar)
     }, 
+    setDensity(state = false) {
+      this.changeDataset('density', state)
+    }, 
     setLayout(state = false) {
       this.changeDataset('layout', state ?? false)
     },
@@ -58,6 +61,7 @@ export default {
     this.setModal(this.modal)
     this.setLocale(this.locale)
     this.setTheme(this.theme)
+    this.setDensity(this.density)
     this.setLayout(this.$route.meta.layout)
   },
   created() {
@@ -83,6 +87,9 @@ export default {
     },
     theme(to) {
       this.setTheme(to)
+    },
+    density(to) {
+      this.setDensity(to)
     },
     '$route.meta.layout'(to) {
       this.setLayout(to)

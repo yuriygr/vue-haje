@@ -11,6 +11,7 @@ export default {
       title:    process.env.VUE_APP_TITLE,
       basePath: process.env.VUE_APP_BASE_URL,
       theme:    process.env.VUE_APP_DEFAULT_THEME,
+      density:  process.env.VUE_APP_DEFAULT_DENSITY,
       locale:   process.env.VUE_APP_I18N_LOCALE,
       version:  process.env.PACKAGE_VERSION,
 
@@ -27,7 +28,10 @@ export default {
     },
     'SET_LOCALE'(state, payload) {
       state.locale = payload
-    }, 
+    },
+    'SET_DENSITY'(state, payload) {
+      state.density = payload
+    },
     'SET_LOADING'(state, payload) {
       state.loading = payload
     },
@@ -42,8 +46,9 @@ export default {
   },
   actions: {
     init({ commit, state }) {
-      commit('SET_THEME', localStorage.getItem('theme') || state.theme)
-      commit('SET_LOCALE', localStorage.getItem('locale') || state.locale)
+      commit('SET_LOCALE',  localStorage.getItem('locale')  || state.locale)
+      commit('SET_THEME',   localStorage.getItem('theme')   || state.theme)
+      commit('SET_DENSITY', localStorage.getItem('density') || state.density)
     }
   },
   getters: {
@@ -52,6 +57,16 @@ export default {
       colors['black'] = '#111111'
       colors['white'] = '#ffffff'
       return colors[state.theme]
+    },
+    themes() {
+      return [
+        'white', 'black'
+      ]
+    },
+    densities() {
+      return [
+        'compact', 'default', 'spacious'
+      ]
     },
     getLoading() {
 

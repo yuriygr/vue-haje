@@ -3,7 +3,7 @@
     <div class="entry-pseudo-form__icon">
       <icon name="edit-line" size="18" />
     </div>
-    <div class="entry-pseudo-form__placeholder">{{ $t('entry.pseudo-form.placeholder') }}</div>
+    <div class="entry-pseudo-form__placeholder">{{ placeholder }}</div>
   </div>
 </template>
 
@@ -19,6 +19,14 @@ export default {
     user: {
       type: Object,
       default: false
+    }
+  },
+  computed: {
+    placeholder() {
+      const d = new Date();
+      return d.getDay() == 3
+      ? this.$t('entry.pseudo-form.placeholder-froggy')
+      : this.$t('entry.pseudo-form.placeholder')
     }
   }
 }

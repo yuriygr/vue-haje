@@ -137,7 +137,7 @@ export default {
 }
 
 .otp-input-wrapper {
-  width: 46px;
+  width: 42px;
   height: 50px;
 }
 

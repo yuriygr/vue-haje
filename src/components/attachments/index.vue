@@ -2,7 +2,12 @@
   <div :class="elClass" v-if="hasAttachments">
     <div class="images-list" v-if="files">
       <picture v-for="item in files" :key="`file-${item.file.uuid}`">
-        <img :data-src="`https://leonardo.osnova.io/${item.file.uuid}`" :src="`https://leonardo.osnova.io/${item.file.uuid}`">
+        <img
+          :data-src="`https://leonardo.osnova.io/${item.file.uuid}`"
+          :src="`https://leonardo.osnova.io/${item.file.uuid}`"
+          :width="item.file.width"
+          :height="item.file.height"
+        >
       </picture>
     </div>
 

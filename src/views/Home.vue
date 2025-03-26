@@ -48,6 +48,7 @@ export default {
         title: this.$t('home.title')
       },
       teasers: [
+        { code: 'stories',         icon: 'stories-line' },
         { code: 'brain',           icon: 'brain-line' },
         { code: 'recommendations', icon: 'sparkling-line' },
         { code: 'combine',         icon: 'function-line' },

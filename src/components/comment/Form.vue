@@ -13,15 +13,16 @@
         :allowedFormats="allowedFormats"
         :max-files="1"
         ref="file"
-        />
+      />
 
       <div class="comment-form__actions">
         <buttons-group :withGap="true">
-          <n-button icon_before="add-image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
+          <n-button size="s" icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
+          <n-button size="s" icon_before="gif-line" disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
         </buttons-group>
         <buttons-group :withGap="true">
-          <n-button v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
-          <n-button :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
+          <n-button size="s" v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
+          <n-button size="s" :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
         </buttons-group>
       </div>
     </div>

@@ -16,7 +16,7 @@
       </form-block>
 
       <form-block>
-        <n-button size="l" component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
       </form-block>
 
       <spacer heigth="40" />

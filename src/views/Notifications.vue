@@ -16,7 +16,7 @@
 
   <template v-if="(!loading && !error) || data.length > 0">
     <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`">
-      <notification-item :data="item" />
+      <notification-item :data="item" @click="readNotify" />
     </notification-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
@@ -101,12 +101,16 @@ export default {
         this.$alerts.danger({ text: error.status })
       })
     },
+    readNotify(data) {
+      if (!data.state.is_readed)
+        this.$api.post(`my/notifications/${data.notify_id}/read`)
+    },
     readAll() {
       this.load_more_loading = true
 
       this.$api.post('my/notifications/read', { mode: 'all' })
       .then(_ => {
-        this.$alerts.success({ text: this.$t('notifications.alert.read_all_success') })
+        this.$alerts.success({ text: this.$t('success.notifications_readed') })
       })
       .catch(error => {
         this.$alerts.danger({ text: error.status })

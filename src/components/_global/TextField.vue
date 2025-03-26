@@ -273,13 +273,14 @@ export default {
     &:-webkit-autofill:hover, 
     &:-webkit-autofill:focus, 
     &:-webkit-autofill:active  {
-      -webkit-text-fill-color: var(--text-field--color, #111);
+      font-family: var(--x-font-family);
+      -webkit-text-fill-color: var(--text-field--color);
       transition: background-color 0s 0s, color 0s 0s;
       transition-delay: calc(infinity * 1s);
     }
 
     &:-webkit-autofill::first-line {
-      -webkit-text-fill-color: var(--text-field--color, #111);
+      -webkit-text-fill-color: var(--text-field--color);
       font-size: var(--text-field--font-size);
       font-weight: 500;
       font-family: var(--x-font-family);
