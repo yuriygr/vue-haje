@@ -7,7 +7,11 @@
 
   <spacer height="30" />
 
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <keep-alive :include="[ 'FeedTimeline' ]">
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script>

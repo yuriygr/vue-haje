@@ -11,6 +11,7 @@
       </div>
       <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
       <attachments class="entry__attachments" v-if="data.files || data.link" :files="data.files" :link="data.link" mode="full" />
+      <reactions v-if="data.reactions" class="entry__reactions" :reactions="data.reactions" @react="react" />
       <meta-info class="entry__meta" :items="metaItems" />
     </div>
   </template>
@@ -44,6 +45,7 @@ import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 
+let EntryPinModal = defineAsyncComponent(() => import("@/components/modals/_entry/Pin.vue"))
 let EntryReportModal = defineAsyncComponent(() => import("@/components/modals/_entry/Report.vue"))
 let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/_entry/History.vue"))
 let EntryDeleteModal = defineAsyncComponent(() => import("@/components/modals/_entry/Delete.vue"))
@@ -145,7 +147,7 @@ export default {
         } : {
           icon: 'ui-pushpin',
           label: this.$t('entry.action.pin'),
-          action: this.togglePin
+          action: this.pin
         }
       ]
 
@@ -177,6 +179,20 @@ export default {
     }
   },
   methods: {
+    react(react) {
+      this.$api.post(`entry/${this.data.uuid}/react`, { react })
+      .then(result => {
+        this.data.reactions = result.payload
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
+    },
+    removeReaction() {
+      this.$api.delete(`entry/${this.data.uuid}/react`)
+      .then(result => {
+        this.data.reactions = result.payload
+      })
+      .catch(error => this.$alerts.danger({ text: error.status }))
+    },
     prefetchEntry(e) {
       this.$store.dispatch('entry/pre_fetch', this.data)
     },
@@ -213,10 +229,6 @@ export default {
       .catch(error => this.$alerts.danger({ text: error.status }))
     },
 
-    toggleStar() {
-      this.loading.stars = true
-    },
-
     toggleBookmarks() {
       this.loading.bookmarks = true
 
@@ -232,28 +244,60 @@ export default {
           ? this.data.counters.bookmarks++
           : this.data.counters.bookmarks--
 
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
       .then(_ =>  this.loading.bookmarks = false)
     },
+
     togglePin() {
       let path = this.data.state.is_pinned
         ? `entry/${this.data.uuid}/unpin`
         : `entry/${this.data.uuid}/pin`
-      this.$api.post(path)
+      return this.$api.post(path)
       .then(result => {
         this.data.state.is_pinned = (result.status == 'pinned')
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
     },
+
+    reportEntry(reason = 0) {
+      return this.$api.post(`entry/${this.data.uuid}/report`, { reason })
+      .then(response => {
+        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
+    deleteEntry() {
+      return this.$api.delete(`entry/${this.data.uuid}`)
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
     // Modals
+    pin() {
+      this.$modals.show(EntryPinModal, {
+        pinEntry: this.togglePin
+      })
+      this.$popover.close()
+    },
     report() {
       this.$modals.show(EntryReportModal, {
-        data: this.data
+        reportEntry: this.reportEntry
       })
       this.$popover.close()
     },
@@ -272,7 +316,7 @@ export default {
     },
     delete() {
       this.$modals.show(EntryDeleteModal, {
-        data: this.data
+        deleteEntry: this.deleteEntry
       })
       this.$popover.close()
     }
@@ -296,6 +340,11 @@ export default {
     word-break: break-word;
     -webkit-font-smoothing: subpixel-antialiased;
     margin-bottom: .75rem;
+  }
+
+  &__reactions {
+    justify-content: flex-start !important;
+    margin: 1rem 0;
   }
 
   &__attachments {

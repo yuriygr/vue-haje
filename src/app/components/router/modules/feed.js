@@ -9,7 +9,7 @@ export default [
 		path: '/feed',
 		name: 'feed',
 		component: Feed,
-    meta: { section: 'feed' },
+    meta: { section: 'feed', keepAlive: true },
 		redirect: { name: 'feed-timeline' },
 		children: [
 			{ path: '', name: 'feed-timeline', component: FeedTimeline, meta: { tab: 'timeline' } },

@@ -26,13 +26,14 @@ export default {
   },
   data() {
     return {
-      modal: false,
+      modal: false
     }
   },
   computed: {
     ...mapState('app', [ 'locale', 'theme', 'density', 'loading' ]),
     ...mapState('auth', [ 'data' ]),
-    ...mapGetters('app', [ 'themeStatusBar' ])
+    ...mapGetters('app', [ 'themeStatusBar' ]),
+    ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ])
   },
   methods: {
     setModal(state = false) {
@@ -53,16 +54,16 @@ export default {
     setLayout(state = false) {
       this.changeDataset('layout', state ?? false)
     },
+    updateFavicon(state) {
+      const favicon = document.querySelector('link[rel="icon"]')
+      favicon.href = state 
+        ? '/icons/favicon-alert.ico'
+        : '/icons/favicon.ico'
+    }
   },
   mounted() {
     this.$store.dispatch('initApplication')
     this.$store.dispatch('auth/fetch')
-
-    this.setModal(this.modal)
-    this.setLocale(this.locale)
-    this.setTheme(this.theme)
-    this.setDensity(this.density)
-    this.setLayout(this.$route.meta.layout)
   },
   created() {
     this.$sse.on('has_notice', (e) => {
@@ -79,20 +80,41 @@ export default {
     this.$modals.off('close')
   },
   watch: {
-    modal(to) {
-      this.setModal(to)
+    modal: {
+      handler(to) {
+        this.setModal(to)
+      },
+      immediate: true
     },
-    locale(to) {
-      this.setLocale(to)
+    locale: {
+      handler(to) {
+        this.setLocale(to)
+      },
+      immediate: true
     },
-    theme(to) {
-      this.setTheme(to)
+    theme: {
+      handler(to) {
+        this.setTheme(to)
+      },
+      immediate: true
     },
-    density(to) {
-      this.setDensity(to)
+    density: {
+      handler(to) {
+        this.setDensity(to)
+      },
+      immediate: true
     },
-    '$route.meta.layout'(to) {
-      this.setLayout(to)
+    '$route.meta.layout': {
+      handler(to) {
+        this.setLayout(to)
+      },
+      immediate: true
+    },
+    hasNewNotifications: {
+      handler(to) {
+        this.updateFavicon(to)
+      },
+      immediate: false
     }
   }
 }

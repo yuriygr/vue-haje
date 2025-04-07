@@ -20,7 +20,8 @@
       </ul>
       <h3>Как поддержать проект?</h3>
       <ul>
-        <li>Поддержать по <a href="https://www.donationalerts.com/r/yuriygr" target="_blank">ссылке</a></li>
+        <li>Поддержать на <a href="https://www.donationalerts.com/r/yuriygr" target="_blank">Donation Alerts</a></li>
+        <li>Поддержать на <a href="https://boosty.to/futubra" target="_blank">Boosty</a></li>
         <li>Привлечение аудитории — чем больше нас станет, тем интереснее мне будет.</li>
         <li>Помощь навыками — программирование, дизайн, тестирование. Напишите мне код!</li>
       </ul>

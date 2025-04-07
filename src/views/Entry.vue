@@ -66,7 +66,14 @@ export default {
     this.$store.dispatch('entry/clear')
   },
   watch: {
-    'error'(to) {
+    data: {
+      handler(to) {
+        if (to.content)
+          this.meta.title = this.$filters.truncateText(to.content.text)
+      },
+      immediate: true
+    },
+    error(to) {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },

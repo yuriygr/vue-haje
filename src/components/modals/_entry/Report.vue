@@ -17,7 +17,7 @@
 
     <footer class="modal__footer">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
-      <n-button :disabled="current == 0" @click.exact="sendReport">{{ $t('action.send_report') }}</n-button>
+      <n-button :disabled="current == 0" @click.exact="submit">{{ $t('action.send_report') }}</n-button>
     </footer>
   </modal>
 </template>
@@ -34,6 +34,10 @@ export default {
     data: {
       type: Object,
       default: false
+    },
+    reportEntry: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -58,14 +62,12 @@ export default {
     resetReason(e) {
       this.current = 0
     },
-    sendReport() {
-      this.$api.post(`entry/${this.data.uuid}/report`, { reason: this.current || 0 })
-      .then(response => {
-        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
-        this.$modals.close()
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: error.message })
+    submit() {
+      this.loading = true
+      
+      this.reportEntry(this.current)
+      .then(_ => {
+        this.loading = false
         this.$modals.close()
       })
     },

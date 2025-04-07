@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       isReply: false,
+      isEdit: false
     }
   },
   computed: {
@@ -105,12 +106,19 @@ export default {
       
       this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
 
+      if (this.replyButton == 'action' && this.data.parent_id != 0) {
+         _result.push({ label: '↑', to: this.parentLink, title: this.$t('comment.meta.parent') })
+      }
+
       _result.push({ label: '⋯', action: this.toggleOptions, title: this.$t('action.options') })
 
       return _result
     },
     commentLink() {
       return { name: 'entry', params: { uuid: this.data.entry.uuid }, query: { comment: this.data.comment_id } }
+    },
+    parentLink() {
+      return { name: 'entry', params: { uuid: this.data.entry.uuid }, query: { comment: this.data.parent_id } }
     },
     optionsItems() {
       let _edit = [
@@ -183,8 +191,7 @@ export default {
     },
     edit() {
       this.$modals.show(CommentEditModal, {
-        data: this.data,
-        mode: 'edit'
+        id: this.data.comment_id
       })
       this.$popover.close()
     },

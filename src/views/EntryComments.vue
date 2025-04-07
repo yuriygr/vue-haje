@@ -7,7 +7,9 @@
         <comment-item :data="item" :entryAuthorID="entry.user.user_id" />
       </template>
 
-      <n-button mode="tertiary" @click.exact="loadMore" size="m" :stretched="true" :disabled="loading">{{ $t('action.refresh') }}</n-button>
+      <div class="comments-tree__refresh-button">
+        <n-button mode="secondary" @click.exact="loadMore" size="m" :disabled="loading">{{ $t('action.refresh') }}</n-button>
+      </div>
     </div>
 
     <template v-if="data.length == 0">
@@ -66,7 +68,7 @@ export default {
       this.$nextTick(() => {
         const element = document.getElementById(`comment-${commentId}`)
         if (element) {
-          const yOffset = -50 
+          const yOffset = -90 
           const y = element.getBoundingClientRect().top + window.scrollY + yOffset
           
           window.scrollTo({
@@ -87,11 +89,8 @@ export default {
     this.$store.dispatch('entry/comments/clear')
   },
   watch: {
-    '$route.query.comment': {
-      handler(newVal) {
-        if(newVal) this.scrollToComment(newVal)
-      },
-      immediate: true
+    '$route.query.comment'(to) {
+      if (to) this.scrollToComment(to)
     }
   }
 }
@@ -99,6 +98,27 @@ export default {
 
 <style lang="scss">
 .comments-tree {
-  margin-top: 2rem;
+  margin: 2rem 0 0;
+
+  &__refresh-button {
+    height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: sticky;
+    margin: 5rem 10px 0;
+    z-index: 1;
+
+    @include on-mobile-device {
+      bottom: calc(var(--tabbar--height) + 8px);
+    }
+
+    @include on-desktop-device {
+      bottom: 8px;
+    }
+
+    .button {
+    }
+  }
 }
 </style>

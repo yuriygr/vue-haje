@@ -3,10 +3,11 @@
     <div class="images-list" v-if="files">
       <picture v-for="item in files" :key="`file-${item.file.uuid}`">
         <img
-          :data-src="`https://leonardo.osnova.io/${item.file.uuid}`"
-          :src="`https://leonardo.osnova.io/${item.file.uuid}`"
+          :data-src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
           :width="item.file.width"
           :height="item.file.height"
+          @click="viewImage(item.file)"
         >
       </picture>
     </div>
@@ -20,7 +21,10 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
+
+let ImageViewer = defineAsyncComponent(() => import("@/components/modals/ImageViewer.vue"))
 
 export default {
   name: 'attachments',
@@ -55,6 +59,13 @@ export default {
         'attachments--mode-' + this.mode
       ]
     },
+  },
+  methods: {
+    viewImage(data) {
+      this.$modals.show(ImageViewer, {
+        data: data
+      })
+    }
   }
 }
 </script>

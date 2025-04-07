@@ -42,12 +42,12 @@ export default {
   },
   props: {
     entry: {
+      type: String
+    },
+    data: {
       type: [ Object, Boolean ],
       default: false
     },
-    entry: {
-      type: String
-    }
   },
   emits: [ 'success', 'error' ],
   data() {
@@ -248,9 +248,24 @@ export default {
       this.level = payload.level
       this.form.parent_id = payload.comment_id
     })
+    this.$bus.on('comment-form.edit', (payload) => {
+      if (!this.originalParentNode) {
+        this.originalParentNode = this.$el.parentNode
+      }
+
+      let target_comment = document.getElementById(`comment-body-${payload.comment_id}`)
+      target_comment.append(this.$el, target_comment.nextSibling)
+      
+      this.$refs.field.innerHTML = payload.data.content.text
+      this.form = {
+        text: this.$refs.field.innerText, // TODO: watch на изменение?
+        files: payload.data.files ? payload.data.files.flatMap(i => i.file) : []
+      }
+    })
   },
   unmounted() {
     this.$bus.off('comment-form.reply')
+    this.$bus.off('comment-form.edit')
   }
 }
 </script>

@@ -34,16 +34,16 @@ module.exports = defineConfig({
       ],
       background_color: "#111111",
       icons: [
-        { 'src': 'icons/android-chrome-192x192.png', 'sizes': '192x192', 'type': 'image/png' },
-        { 'src': 'icons/android-chrome-512x512.png', 'sizes': '512x512', 'type': 'image/png' }
+        { 'src': 'icons/web-app-manifest-192x192.png', 'sizes': '192x192', 'type': 'image/png', 'purpose': "maskable any" },
+        { 'src': 'icons/web-app-manifest-512x512.png', 'sizes': '512x512', 'type': 'image/png', 'purpose': "maskable any" },
+        { 'src': 'icons/monochrome-icon.png', 'sizes': '512x512', 'type': 'image/png', 'purpose': "monochrome", 'monet': true }
       ],
     },
     iconPaths: {
-      favicon32: 'icons/favicon-32x32.png',
-      favicon16: 'icons/favicon-16x16.png',
+      favicon32: 'icons/favicon.ico',
+      favicon16: 'icons/favicon.ico',
       appleTouchIcon: 'icons/apple-touch-icon.png',
-      maskIcon: 'icons/safari-pinned-tab.svg',
-      msTileImage: 'icons/mstile-144x144.png'
+      maskIcon: 'icons/web-app-manifest-512x512.png'
     }
   },
   css: {

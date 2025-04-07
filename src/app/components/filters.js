@@ -194,7 +194,17 @@ const contentFormat = (value) => {
   return value
 }
 
-let filters = { contentFormat, humanizeError, formatBytes, formatDuration, timeFormat, timeFormatOnlyYear, timeAgo }
+const truncateText = (value, length = 50) => {
+  // unescape some HTML
+  value = value.replace(/(?:\r\n|\r|\n)/g, ` `)
+  value = value.replace(/<br>/g, ` `)
+               .replace(/&#39;/gi, `'`)
+               .replace(/&#34;/gi, `"`)
+
+  return value.length > length ? value.substring(0, length) + '...' : value
+}
+
+let filters = { contentFormat, humanizeError, formatBytes, formatDuration, timeFormat, timeFormatOnlyYear, timeAgo, truncateText }
 
 export default new class {
   install(app) {

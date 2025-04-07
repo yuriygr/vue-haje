@@ -71,6 +71,11 @@ export default {
           label: this.$t('about.item.data-security'),
           to: { name: 'help-page', params: { uuid: 'data-security' } },
           chevron: true
+        },
+        {
+          label: this.$t('about.item.architecture'),
+          to: { name: 'help-page', params: { uuid: 'architecture' } },
+          chevron: true
         }
       ]
     }

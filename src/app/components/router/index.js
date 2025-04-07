@@ -37,7 +37,7 @@ const router = createRouter({
     if (savedPosition)
 			return savedPosition
 		else if (to.query.comment)
-      return { el: `#comment-${to.query.comment}` }
+      return { el: `#comment-${to.query.comment}`, top: 90 }
     else if (to.hash)
 			return { el: to.hash }
 		else

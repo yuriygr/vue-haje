@@ -3,7 +3,13 @@
     <div class="thumb-grid" v-if="images.length > 0">
       <div  v-for="(image, index) in images" :key="image.id" :class="[ 'thumb' ]">
         <div :class="[ 'thumb__preview' , `thumb__preview--status-${image.status}` ]">
-          <img :src="image.preview" alt="Preview" @dragstart.prevent />
+          <img
+            :src="image.preview"
+            :width="100"
+            :height="100"
+            alt="Preview"
+            @dragstart.prevent
+          />
         </div>
         <div class="thumb__cancel" @click.stop.prevent="image.status === 'uploading' ? cancelUpload(index) : removeImage(index)">
           <icon name="ui-close" size="16" />
@@ -54,9 +60,25 @@ export default {
   data() {
     return {
       images: [],
+      localUniqueId: 0
     }
   },
   watch: {
+    modelValue: {
+      handler(newVal) {
+        // Обновление существующих файлов при изменении modelValue
+        const currentSuccess = this.images.filter(img => img.status === 'success');
+        const newSuccess = newVal.filter(file => 
+          !currentSuccess.some(img => img.uuid === file.uuid)
+        )
+        
+        newSuccess.forEach(file => {
+          this.images.push(this.createExistingFileObject(file))
+        })
+      },
+      deep: true,
+      immediate: true
+    },
     uploadedFiles: {
       handler(newVal) {
         this.$emit('update:modelValue', newVal)
@@ -71,7 +93,7 @@ export default {
         .map(img => img.payload)
     },
     remainingSlots() {
-      return this.maxFiles - this.images.length
+      return Math.max(0, this.maxFiles - this.images.length)
     },
   },
   methods: {
@@ -81,57 +103,81 @@ export default {
         this.$refs.input.click()
       }
     },
+
+    // Генерация уникальных ID
+    generateUniqueId() {
+      return this.localUniqueId++
+    },
+    // Удаляем превью (если оно blob)
+    revokePreview(image) {
+      if (image.preview.startsWith('blob:')) {
+        URL.revokeObjectURL(image.preview)
+      }
+    },
+    // Создаем объект существующего файла
+    createExistingFileObject(file) {
+      return {
+        id: this.generateUniqueId(),
+        file: null,
+        preview: `https://leonardo.osnova.io/${file.uuid}/-/scale_crop/640x/`,
+        status: 'success',
+        payload: file,
+        uuid: file.uuid,
+        progress: 100,
+        controller: null
+      }
+    },
+    // Создаем объект файла
+    createFileObject(file) {
+      return {
+        id: this.generateUniqueId(),
+        file,
+        preview: URL.createObjectURL(file),
+        status: 'uploading',
+        payload: null,
+        uuid: null,
+        progress: 0,
+        controller: new AbortController()
+      }
+    },
+
+    // Паралельно загружаем файлы
     async handleFileSelect(event) {
       const files = Array.from(event.target.files || event.dataTransfer.files)
       if (!files.length) return
 
-      const filteredFiles = this.filterFiles(files)
+      const uploadPromises = this.filterFiles(files)
+        .map(file => this.createFileObject(file))
+        .map(object => this.uploadFile(object))
 
-      if (filteredFiles.length === 0) {
-        return
-      }
+      await Promise.all(uploadPromises)
+    },
 
-      for (const file of filteredFiles) {
-        const id = uniqueId++
-        const controller = new AbortController()
-        
-        this.images.push({
-          id,
-          file,
-          preview: URL.createObjectURL(file),
-          status: 'uploading',
-          payload: null,
-          uuid: null,
-          progress: 0,
-          controller
-        })
-        
-        const formData = new FormData()
-        formData.append('file', file)
+    async uploadFile(object) {
+      this.images.push(object)
 
-        this.$api.upload('/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          signal: controller.signal,
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            )
-            this.updateImageProgress(id, progress)
-          }
-        })
-        .then(result => {
-          this.updateImageStatus(id, 'success', result.payload)
-        })
-        .catch(error => {
-          if (!axios.isCancel(error)) {
-            this.$alerts.danger({ text: error.status })
-            console.error('Upload error:', error)
-            this.updateImageStatus(id, 'error')
-          }
-        })
-      }
+      const formData = new FormData()
+      formData.append('file', object.file)
+
+      return await this.$api.upload('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        signal: object.controller.signal,
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          )
+          this.updateImageProgress(object.id, progress)
+        }
+      })
+      .then(result => {
+        this.updateImageStatus(object.id, 'success', result.payload)
+      })
+      .catch(error => {
+        if (!axios.isCancel(error)) {
+          this.$alerts.danger({ text: error.status })
+          this.updateImageStatus(object.id, 'error')
+        }
+      })
     },
 
     filterFiles(files) {
@@ -154,11 +200,16 @@ export default {
     },
 
     isDuplicate(file) {
-      return this.images.some(img => 
-        img.file.name === file.name && 
-        img.file.size === file.size && 
-        img.file.type === file.type
-      )
+      return this.images.some(img => {
+        if (img.payload && img.payload.uuid) {
+          return img.payload.name === file.name &&
+            img.payload.size === file.size &&
+            img.payload.type === file.type
+        }
+        return img.file.name === file.name &&
+          img.file.size === file.size &&
+          img.file.type === file.type
+      })
     },
 
     updateImageProgress(id, progress) {
@@ -181,33 +232,37 @@ export default {
 
     // Отменяем загрузку файла
     cancelUpload(index) {
-     const image = this.images[index]
-    if (image.controller) {
+      const image = this.images[index]
       image.controller.abort()
-     }
-     URL.revokeObjectURL(image.preview)
-     this.images.splice(index, 1)
+      this.removeImageById(image.id)
     },
 
     // Удаляем файл
     removeImage(index) {
-      URL.revokeObjectURL(this.images[index].preview)
+      this.removeImageById(this.images[index].id)
+    },
+
+    // Удаление по ID
+    removeImageById(id) {
+      const index = this.images.findIndex(img => img.id === id)
+      if (index === -1) return
+      
+      const image = this.images[index]
+      this.revokePreview(image)
       this.images.splice(index, 1)
     },
 
     // Сбрасываем
     reset() {
-      this.images.forEach(img => {
-        URL.revokeObjectURL(img.preview)
-      })
+      this.images.forEach(this.revokePreview)
       this.images = []
-    }
+    },
   },
   beforeUnmount() {
-    this.images.forEach(img => {
-      URL.revokeObjectURL(img.preview)
-      if (img.controller) {
-        img.controller.abort()
+    this.images.forEach(image => {
+      this.revokePreview(image)
+      if (image.controller) {
+        image.controller.abort()
       }
     })
   }
