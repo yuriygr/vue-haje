@@ -54,7 +54,7 @@ export default {
   mounted() {
     this.$store.dispatch('tag/entries/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('tag/entries/clear')
   }
 }

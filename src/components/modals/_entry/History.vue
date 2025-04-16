@@ -74,7 +74,7 @@ export default {
   mounted() {
     this.$store.dispatch('entry/history/fetch', { initial: true, uuid: this.uuid })
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('entry/history/clear')
   },
 }

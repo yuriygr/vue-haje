@@ -56,7 +56,7 @@
     "title": "Лента",
     "tabs": {
       "timeline": "Моя лента",
-      "feeds": "Ленты",
+      "list": "Ленты",
       "abyss": "Бездна"
     },
     "meta": {
@@ -186,11 +186,13 @@
       "all": "Все",
       "entries": "Посты",
       "users": "Пользователи",
+      "comments": "Комментарии",
       "feeds": "Ленты"
     },
     "section": {
       "users": "@:bookmarks.tabs.users",
       "entries": "@:bookmarks.tabs.entries",
+      "comments": "@:bookmarks.tabs.comments",
       "feeds": "@:bookmarks.tabs.feeds"
     }
   },
@@ -577,6 +579,7 @@
   "action": {
     "pin": "Закрепить",
     "unpin": "Открепить",
+    "back": "Назад",
     "options": "Еще",
     "subscribe": "Подписаться",
     "unsubscribe": "Отписаться",
@@ -595,8 +598,7 @@
     "delete": "Удалить",
     "refresh": "Обновить",
     "attach_image": "Прикрепить изображение",
-    "select_emoji": "Выбрать emoji",
-    "select_gif": "Выбрать GIF",
+    "select_gif": "Прикрепить GIF",
     "copy_link": "Скопировать ссылку",
     "report": "Пожаловаться",
     "remove-bookmark": "Убрать из закладок",
@@ -604,6 +606,14 @@
     "confirm": "Выйти без сохранения?"
   },
   "modals": {
+    "compose": {
+      "drafts": "Черновики",
+      "gifs": "Прикрепить GIF",
+      "action": {
+        "view_drafts": "Посмотреть черновики",
+        "delete_drafts": "Удалить черновики"
+      }
+    },
     "search-filter": {
       "title": "Фильтр поиска"
     },

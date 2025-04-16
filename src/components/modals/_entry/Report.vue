@@ -31,10 +31,6 @@ export default {
     Modal, ModalHeader, ModalChecklist, NButton
   },
   props: {
-    data: {
-      type: Object,
-      default: false
-    },
     reportEntry: {
       type: Function,
       default: () => {}
@@ -42,6 +38,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+
       reasons: [
         { id: 1, label: this.$t('report.reason.gore') },
         { id: 2, label: this.$t('report.reason.harassment') },

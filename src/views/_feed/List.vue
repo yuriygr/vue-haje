@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       meta: {
-        title: this.$t('feed.tabs.feeds')
+        title: this.$t('feed.tabs.list')
       }
     }
   },
@@ -59,7 +59,7 @@ export default {
   async mounted() {
     this.$store.dispatch('feed/feeds/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('feed/feeds/clear')
   },
 }

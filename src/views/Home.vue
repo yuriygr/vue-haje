@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapGetters('auth', [ 'isAuth' ]),
   },
-  created() {
+  mounted() {
     if (this.isAuth) {
       this.$router.push({ name: 'feed' })
       return

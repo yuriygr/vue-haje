@@ -1,31 +1,68 @@
 <template>
   <modal :class="$formClass" v-on="$formEvents">
-    <div v-if="entryUser" class="compose__header">
-      <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
-    </div>
-    
-    <div class="compose__field"
-      v-on="$fieldEvents"
-      v-bind="$fieldBinds"
-    ></div>
+    <template v-if="currentView == 'form'">
 
-    <attachments-form class="compose__attachments"
-      v-model="form.files"
-      :allowedFormats="allowedFormats"
-      :max-files="1"
-      ref="file"
-    />
+      <div v-if="entryUser" class="compose__header">
+        <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
+        <buttons-group :withGap="true">
+          <n-button v-if="mode == 'add'" icon_before="drafts-line" @click="openView('drafts')" mode="tertiary" :title="$t('modals.compose.action.view_drafts')" />
+        </buttons-group>
+      </div>
 
-    <div class="compose__actions">
-      <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
-      <buttons-group :withGap="true">
-        <n-button icon_before="settings-line" @click="toggleOptions" mode="tertiary" ref="options" :title="$t('action.options')" />
-        <n-button icon_before="gif-line" disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
-        <n-button icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
-        <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
-        <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
-      </buttons-group>
-    </div>
+      <div class="compose__field"
+        v-on="$fieldEvents"
+        v-bind="$fieldBinds"
+      ></div>
+
+      <attachments-form class="compose__attachments"
+        v-model="form.files"
+        :allowedFormats="allowedFormats"
+        :max-files="1"
+        ref="file"
+      />
+
+      <div class="compose__actions">
+        <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
+        <buttons-group :withGap="true">
+          <n-button icon_before="settings-line" @click="toggleOptions" mode="tertiary" ref="options" :title="$t('action.options')" />
+          <n-button icon_before="gif-line" @click="openView('gifs')" mode="tertiary" :title="$t('action.select_gif')" />
+          <n-button icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
+          <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
+          <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
+        </buttons-group>
+      </div>
+    </template>
+
+    <template v-else-if="currentView == 'drafts'">
+      <modal-header :title="$t('modals.compose.drafts')">
+        <template #before>
+          <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
+        </template>
+        <template #after>
+          <n-button icon_before="delete-bin-line" mode="tertiary" @click.exact="deleteAllDrafts" :title="$t('modals.compose.action.delete_drafts')" />
+        </template>
+      </modal-header>
+
+      <placeholder
+        :icon="$t('errors.todo.icon')"
+        :header="$t('errors.todo.title')"
+        :text="$t('errors.todo.description')"
+      />
+    </template>
+
+    <template v-else-if="currentView == 'gifs'">
+      <modal-header :title="$t('modals.compose.gifs')">
+        <template #before>
+          <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
+        </template>
+      </modal-header>
+
+      <placeholder
+        :icon="$t('errors.todo.icon')"
+        :header="$t('errors.todo.title')"
+        :text="$t('errors.todo.description')"
+      />
+    </template>
   </modal>
 </template>
 
@@ -35,13 +72,13 @@ import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 import { mapState } from 'vuex'
 
-import { Modal, NButton, ButtonsGroup } from '@vue-norma/ui'
+import { Modal, ModalHeader, NButton, ButtonsGroup, Placeholder } from '@vue-norma/ui'
 
 export default {
   name: 'compose-modal',
   components: {
     UserItem,
-    Modal, NButton, ButtonsGroup, AttachmentsForm
+    Modal, ModalHeader, NButton, ButtonsGroup, AttachmentsForm, Placeholder
   },
   props: {
     data: {
@@ -51,7 +88,11 @@ export default {
     mode: {
       type: String,
       default: 'add'
-    }
+    },
+    draggedFiles: {
+      type: Array,
+      default: []
+    },
   },
   data() {
     return {
@@ -70,6 +111,9 @@ export default {
         is_comments_enabled: true,
         is_hidden_from_feed: false
       },
+
+      currentView: 'form',
+      availableViews: [ 'form', 'drafts', 'gifs' ]
     }
   },
   computed: {
@@ -155,6 +199,11 @@ export default {
     }
   },
   methods: {
+    openView(view) {
+      this.currentView = this.availableViews.includes(view) 
+                        ? view 
+                        : this.availableViews[0] ?? 'form'
+    },
     closeModal() {
       if (this.canSubmit) {
         confirm(this.$t('action.confirm')) && this.$modals.close()
@@ -180,7 +229,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -197,7 +246,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`errors.${error.message}`) })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -219,12 +268,24 @@ export default {
     attachFiles() {
       this.$refs.file.attachFiles()
     },
+
+    deleteAllDrafts() {
+      this.$api.delete('my/drafts')
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
+    // Field
     
     field_onInput(e) {
       if (this.$refs.field.innerHTML == "<br>") {
         this.$refs.field.innerText = ''
       }
-      this.form.text = this.$refs.field.innerText // TODO: watch на изменение?
+      this.form.text = this.$refs.field.innerText
     },
     field_onKeyup(e) {
       
@@ -298,12 +359,18 @@ export default {
       this.$refs.field.innerHTML = this.data.content.text
       this.user = this.data.user
       this.form = {
-        text: this.$refs.field.innerText, // TODO: watch на изменение?
+        text: this.$refs.field.innerText,
         is_comments_enabled: this.data.state.is_comments_enabled,
         is_hidden_from_feed: this.data.state.is_hidden_from_feed,
         files: this.data.files ? this.data.files.flatMap(i => i.file) : []
       }
     }
+
+    this.$nextTick(_ => {
+      if (this.draggedFiles.length > 0) {
+        this.$refs.file.handleFileSelect({ target: { files: this.draggedFiles }})
+      }
+    })
   }
 }
 </script>

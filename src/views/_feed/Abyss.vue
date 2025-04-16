@@ -43,7 +43,7 @@ import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/com
 let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
 
 export default {
-  name: 'feed-timeline',
+  name: 'feed-abyss',
   components: {
     EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
     Placeholder, Spacer, NButton, LoadmoreTrigger,
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       meta: {
-        title: this.$t(`feed.tabs.timeline`)
+        title: this.$t(`feed.tabs.abyss`)
       }
     }
   },

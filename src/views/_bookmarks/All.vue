@@ -28,6 +28,20 @@
       <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
     </group>
 
+    <group v-if="data.comments.length > 0">
+      <n-header>{{ $t('bookmarks.section.comments') }}</n-header>
+
+      <div class="comments-list">
+        <comment-item-wrapper v-for="item in data.comments" :key="`comment-${item.comment_id}`">
+          <comment-item :data="item" replyButton="link" />
+        </comment-item-wrapper>
+      </div>
+
+      <spacer height="20" />
+
+      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-comments' }">{{ $t('action.show_more') }}</n-button>
+    </group>
+
     <group v-if="data.feeds.length > 0">
       <n-header>{{ $t('bookmarks.section.feeds') }}</n-header>
 
@@ -85,6 +99,7 @@ import {
 
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { CommentItem, CommentItemWrapper } from '@/components/comment'
 import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
@@ -95,6 +110,7 @@ export default {
     Group, NButton,
     UsersList, UserItem, UserItemWrapper,
     EntriesList, EntryItem, EntryItemWrapper,
+    CommentItem, CommentItemWrapper,
     FeedsList, FeedItem, FeedItemWrapper
   },
   computed: {
@@ -116,7 +132,7 @@ export default {
   mounted() {
     this.$store.dispatch('bookmarks/all/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('bookmarks/all/clear')
   },
   watch: {}

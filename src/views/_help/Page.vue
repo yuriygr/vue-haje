@@ -59,7 +59,7 @@ export default {
   mounted() {
     this.$store.dispatch('help/fetch', this.uuid)
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('help/clear')
   },
   watch: {

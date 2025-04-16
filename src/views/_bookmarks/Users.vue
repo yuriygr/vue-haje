@@ -60,7 +60,7 @@ export default {
   mounted() {
     this.$store.dispatch('bookmarks/users/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('bookmarks/users/clear')
   },
   watch: {

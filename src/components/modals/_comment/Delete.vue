@@ -12,7 +12,7 @@
 
     <footer class="modal__footer">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
-      <n-button :disabled="loading" @click.exact="deleteComment">{{ $t('action.delete') }}</n-button>
+      <n-button :disabled="loading" @click.exact="submit">{{ $t('action.delete') }}</n-button>
     </footer>
   </modal>
 </template>
@@ -26,9 +26,9 @@ export default {
     Modal, ModalHeader, ModalBody, NButton
   },
   props: {
-    data: {
-      type: Object,
-      default: false
+    deleteComment: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -37,19 +37,14 @@ export default {
     }
   },
   methods: {
-    deleteComment() {
+    submit() {
       this.loading = true
 
-      this.$api.delete(`comment/${this.data.comment_id}`)
+      this.deleteComment()
       .then(_ => {
-        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
+        this.loading = false
         this.$modals.close()
       })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
-        this.$modals.close()
-      })
-      .then(_ => this.loading = false)
     },
     closeModal() {
       this.$modals.close()

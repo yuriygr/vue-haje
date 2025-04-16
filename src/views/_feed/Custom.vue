@@ -1,20 +1,12 @@
 <template>
   <template v-if="(!loading && !error) && Object.keys(data).length > 0">
-    <div class="tag-header">
-      <div class="tag-header__content">
-        <div class="tag-header__hash">#</div>
-        <div class="tag-header__label">{{ data.label }}</div>
-      </div>
-      <meta-info class="tag-header__meta" :items="metaItems" />
-    </div>
+    <feed-item-wrapper :key="`feed-${data.feed_id}`">
+      <feed-item :data="data" type="short" />
+    </feed-item-wrapper>
 
     <separator />
 
-    <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" />
-      </keep-alive>
-    </router-view>
+    <router-view :key="$route.fullPath" />
   </template>
 
   <template v-if="Object.keys(data).length == 0">
@@ -31,62 +23,55 @@
 import { mapState } from 'vuex'
 import { Placeholder, PlaceholderLoading, Separator, MetaInfo } from '@vue-norma/ui'
 
+import { FeedItem, FeedItemWrapper } from '@/components/feed'
+
 export default {
-  name: 'tag',
+  name: 'feed-custom',
   props: {
-    slug: {
+    uuid: {
       type: [ Boolean, String ],
       defalult: false
     }
   },
-  components: { Placeholder, PlaceholderLoading, Separator, MetaInfo },
+  components: {
+    Placeholder, PlaceholderLoading, Separator, MetaInfo,
+    FeedItem, FeedItemWrapper
+  },
   meta() { return this.meta },
   data() {
     return {
       meta: {
-        title: this.$t('tag.title'),
+        title: this.$t('feed.title'),
       },
     }
   },
   computed: {
-    ...mapState('tag', [ 'data', 'loading', 'error' ]),
-    metaItems() {
-      let _result = []
-
-      this.data.state.is_official && _result.push({ label: this.$t('tag.meta.official') })
-      this.data.state.is_nsfw && _result.push({ label: this.$t('tag.meta.nsfw') })
-      _result.push({ label: this.$t('tag.meta.from_date', { date: this.formatedDate }) })
-
-      return _result
-    },
+    ...mapState('feed/custom', [ 'data', 'loading', 'error' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
-    },
-    formatedDate() {
-      return this.$filters.timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
     }
   },
   methods: {
 
   },
   mounted() {
-    this.$store.dispatch('tag/fetch', this.slug)
+    this.$store.dispatch('feed/custom/fetch', this.uuid)
   },
   beforeUnmount() {
-    this.$store.dispatch('tag/clear')
+    this.$store.dispatch('feed/custom/clear')
   },
   watch: {
     'data'(to) {
       if (to)
-        this.meta.title = `#${to.slug}`
+        this.meta.title = to.title
     },
     'error'(to) {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    '$route.params.slug'(to) {
+    '$route.params.uuid'(to) {
       if (to) {
-        this.$store.dispatch('tag/fetch', to)
+        this.$store.dispatch('feed/custom/fetch', to)
       }
     }
   }

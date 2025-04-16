@@ -85,7 +85,6 @@ export default {
 
 .app-tabbar {
   background: var(--tabbar--background);
-  height: var(--tabbar--height);
   z-index: 500;
   width: 100%;
 
@@ -101,6 +100,7 @@ export default {
     display: flex;
     justify-content: space-between;
     width: 100vw;
+    height: var(--tabbar--height);
 
     margin-right: auto;
     margin-left: auto;
@@ -112,6 +112,7 @@ export default {
   @include on-mobile-device {
     position: fixed;
     bottom: 0;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) - env(safe-area-max-inset-bottom, 0px));
   }
 
   @include on-desktop-device {

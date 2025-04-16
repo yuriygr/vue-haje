@@ -24,14 +24,15 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
-import { UserItem } from '@/components/user'
+let FeedReportModal = defineAsyncComponent(() => import("@/components/modals/_feed/Report.vue"))
+
 
 export default {
   name: 'feed-item',
   components: {
-    UserItem,
     NButton, ButtonsGroup, MetaInfo
   },
   props: {
@@ -123,12 +124,14 @@ export default {
       this.$api.post(_path)
       .then(result => {
         this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
       .then(_ => this.loading.subscribe = false)
     },
-    // Переключалка закладок
+
     toggleBookmarks() {
       this.loading.bookmarks = true
       this.$api.post('my/bookmarks', {
@@ -138,12 +141,25 @@ export default {
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
       .then(_ => this.loading.bookmarks = false)
     },
+
+    reportFeed(reason = 0) {
+      return this.$api.post(`feed/${this.data.uuid}/report`, { reason })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
     // Остальные действия
     copyLink() {
       let _url = this.$router.resolve(this.feedLink)
@@ -153,8 +169,8 @@ export default {
       this.$popover.close()
     },
     report() {
-      this.$modals.show(ReportfeedModal, {
-        data: this.data
+      this.$modals.show(FeedReportModal, {
+        reportFeed: this.reportFeed
       })
       this.$popover.close()
     }

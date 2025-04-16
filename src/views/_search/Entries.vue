@@ -66,7 +66,7 @@ export default {
     })
     this.$store.dispatch('search/entries/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('search/entries/clear')
   },
   watch: {

@@ -165,11 +165,15 @@ export default {
       this.$api.post(_path)
       .then(result => {
         this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
       .then(_ => this.loading.subscribe = false)
     },
+    
     // Переключалка закладок
     toggleBookmarks() {
       this.loading.bookmarks = true
@@ -180,12 +184,26 @@ export default {
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
       .then(_ => this.loading.bookmarks = false)
     },
+
+    reportUser(reason = 0) {
+      return this.$api.post(`user/${this.data.username}/report`, { reason })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
     // Остальные действия
     copyLink() {
       let _url = this.$router.resolve(this.userLink)
@@ -196,7 +214,7 @@ export default {
     },
     report() {
       this.$modals.show(UserReportModal, {
-        data: this.data
+        reportUser: this.reportUser
       })
       this.$popover.close()
     },

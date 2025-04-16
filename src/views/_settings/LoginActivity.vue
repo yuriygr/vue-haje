@@ -64,7 +64,7 @@ export default {
   mounted() {
     this.$store.dispatch('logins/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('logins/clear')
   },
 }

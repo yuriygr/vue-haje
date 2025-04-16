@@ -66,7 +66,7 @@ export default {
     })
     this.$store.dispatch('search/users/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('search/users/clear')
   },
   watch: {

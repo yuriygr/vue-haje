@@ -67,7 +67,7 @@ export default {
     })
     this.$store.dispatch('search/tags/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('search/tags/clear')
   },
   watch: {

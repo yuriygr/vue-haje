@@ -1,6 +1,6 @@
 <template>
   <router-link v-if="session_data.user" :to="{ name: 'user', params: { username: session_data.user.username } }" class="user-item-button">
-    <user-item :data="session_data.user"  :clickable="false" :showSubscribeAction="false" />
+    <user-item :data="session_data.user" :clickable="false" :showSubscribeAction="false" />
     <div class="user-item-button__chevron">
       <icon name="chevron-line" size="18" />
     </div>

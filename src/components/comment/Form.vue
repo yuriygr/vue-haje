@@ -1,6 +1,6 @@
 <template>
   <div :class="elClass">
-    <branches :count="level - 1" key="comment-form" />
+    <branches :count="level - 1" />
     <div :class="$formClass" v-on="$formEvents">
 
       <div class="comment-form__field"
@@ -18,7 +18,7 @@
       <div class="comment-form__actions">
         <buttons-group :withGap="true">
           <n-button size="s" icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
-          <n-button size="s" icon_before="gif-line" disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
+          <n-button size="s" icon_before="gif-line" :disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
         </buttons-group>
         <buttons-group :withGap="true">
           <n-button size="s" v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
@@ -126,7 +126,7 @@ export default {
     }
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       if (!this.canSubmit) return
 
       this.loading = true
@@ -263,7 +263,7 @@ export default {
       }
     })
   },
-  unmounted() {
+  beforeUnmount() {
     this.$bus.off('comment-form.reply')
     this.$bus.off('comment-form.edit')
   }

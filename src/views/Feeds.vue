@@ -94,7 +94,7 @@ export default {
     })
     this.$store.dispatch('feeds/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('feeds/clear')
   },
   watch: {

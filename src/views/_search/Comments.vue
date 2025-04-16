@@ -1,7 +1,7 @@
 <template>
   <div class="comments-list" v-if="(!loading && !error) || data.length > 0">
     <comment-item-wrapper v-for="item in data" :key="`comment-${item.comment_id}`">
-      <comment-item :data="item" replyButton="link" :index="1" />
+      <comment-item :data="item" replyButton="link" />
     </comment-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
@@ -66,7 +66,7 @@ export default {
     })
     this.$store.dispatch('search/comments/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('search/comments/clear')
   },
   watch: {

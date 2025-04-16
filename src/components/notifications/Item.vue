@@ -7,13 +7,13 @@
       </router-link>
       <router-link @click="onClick" @click.middle.exact="onClick" :to="link" class="notification-item__content" active-class="" exact-active-class="">
         <div class="notification-item__label" v-if="data.type == 'subscription'">
-          <i18n-t :keypath="`notifications.type.${data.type}`">
+          <i18n-t :keypath="`notifications.type.${data.type}`" scope="global">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
           </i18n-t>
         </div>
 
         <div class="notification-item__label" v-if="data.type == 'mention'">
-          <i18n-t :keypath="`notifications.type.${data.type}`">
+          <i18n-t :keypath="`notifications.type.${data.type}`" scope="global">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
             <template v-if="data.comment_id">{{ $t('notifications.const.comment[1]') }}</template>
             <template v-else>{{ $t('notifications.const.entry[1]') }}</template>
@@ -21,19 +21,19 @@
         </div>
 
         <div class="notification-item__label" v-if="data.type == 'reply'">
-          <i18n-t :keypath="`notifications.type.${data.type}`">
+          <i18n-t :keypath="`notifications.type.${data.type}`" scope="global">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
           </i18n-t>
         </div>
 
         <div class="notification-item__label" v-if="data.type == 'comment'">
-          <i18n-t :keypath="`notifications.type.${data.type}`">
+          <i18n-t :keypath="`notifications.type.${data.type}`" scope="global">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
           </i18n-t>
         </div>
 
         <div class="notification-item__label" v-if="data.type == 'new_post'">
-          <i18n-t :keypath="`notifications.type.${data.type}`">
+          <i18n-t :keypath="`notifications.type.${data.type}`" scope="global">
             <router-link :to="senderLink">{{ data.sender_name }}</router-link>
           </i18n-t>
         </div>
@@ -57,7 +57,7 @@
       </div>
 
       <buttons-group :withGap="true" class="notification-item__actions">
-        <n-button icon_before="ui-more" mode="tertiary" disabled="true" :title="$t('action.options')" />
+        <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
       </buttons-group>
     </div>
   </template>
@@ -168,20 +168,20 @@ export default {
     readNotify() {
       this.$api.post(`my/notifications/${this.data.notify_id}/read`)
       .then(_ => {
-        this.$alerts.success({ text: 'Уведомление прочитано' })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.$popover.close())
     },
     hideNotify() {
       this.$api.post(`my/notifications/${this.data.notify_id}/hide`)
       .then(_ => {
-        this.$alerts.success({ text: 'Уведомление скрыто' })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.$popover.close())
     }

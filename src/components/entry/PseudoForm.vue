@@ -14,15 +14,9 @@ import { Icon } from '@vue-norma/ui'
 
 export default {
   name: 'entry-pseudo-form',
-  emits: [ 'drop' ],
+  emits: [ 'dropFile' ],
   components: {
     Icon
-  },
-  props: {
-    user: {
-      type: Object,
-      default: false
-    }
   },
   data() {
     return {
@@ -56,7 +50,7 @@ export default {
     form_onDrop(e) {
       e.preventDefault()
       this.dragover = false
-      this.$emit('drop', e)
+      this.$emit('dropFile', e)
     },
     form_onDragEnter(e) {
       e.preventDefault()

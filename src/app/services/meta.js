@@ -56,7 +56,7 @@ export default new class {
           if (meta.description) this.changeMeta('description', meta.description)
         }
       },
-      created() {
+      mounted() {
         this._createMetatags()
       },
       watch: {

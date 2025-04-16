@@ -29,16 +29,13 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Placeholder, Spacer, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
 
-let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
-
 export default {
-  name: 'feed-feed',
+  name: 'feed-custom-entries',
   props: {
     uuid: {
       type: [ Boolean, String ],
@@ -49,41 +46,33 @@ export default {
     EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
     Placeholder, Spacer, NButton, LoadmoreTrigger
   },
-  meta() { return this.meta },
   data() {
-    return {
-      meta: {
-        title: this.$t('feed.tabs.feeds')
-      }
-    }
+    return { }
   },
   computed: {
     ...mapState('app', [ 'skeletons' ]),
-    ...mapState('feed', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feed', [ 'hasMoreItems' ]),
-    ...mapGetters('auth', [ 'isAuth' ]),
+    ...mapState('feed/custom/entries', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('feed/custom/entries', [ 'hasMoreItems' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)
     }
   },
   methods: {
-    openComposeModal() {
-      if (!this.isAuth) {
-        this.$router.push({ name: 'auth' })
-        return
-      }
-      this.$modals.show(ComposeModal)
+    loadMore() {
+      this.$store.dispatch('feed/custom/entries/more')
     }
   },
-  async mounted() {
-    await this.$store.dispatch('feed/feed/fetch', this.uuid)
+  mounted() {
+    this.$store.dispatch('feed/custom/entries/fetch')
   },
-  unmounted() {
-    this.$store.dispatch('feed/clear')
+  beforeUnmount() {
+    this.$store.dispatch('feed/custom/entries/clear')
   },
   watch: {
-    async '$route'(to) {
-      await this.$store.dispatch('feed/feed/fetch', to.params.uuid)
+    '$route.params.uuid'(to) {
+      if (to) {
+        this.$store.dispatch('feed/custom/entries/fetch')
+      }
     }
   }
 }

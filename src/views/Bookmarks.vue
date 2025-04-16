@@ -49,6 +49,11 @@ export default {
           label: this.$t('bookmarks.tabs.entries')
         },
         {
+          key: 'comments',
+          to: this.formatLink('comments'),
+          label: this.$t('bookmarks.tabs.comments')
+        },
+        {
           key: 'feeds',
           to: this.formatLink('feeds'),
           label: this.$t('bookmarks.tabs.feeds')

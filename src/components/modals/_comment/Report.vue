@@ -17,7 +17,7 @@
 
     <footer class="modal__footer">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
-      <n-button :disabled="current == 0" @click.exact="sendReport">{{ $t('action.send_report') }}</n-button>
+      <n-button :disabled="current == 0" @click.exact="submit">{{ $t('action.send_report') }}</n-button>
     </footer>
   </modal>
 </template>
@@ -31,13 +31,15 @@ export default {
     Modal, ModalHeader, ModalChecklist, NButton
   },
   props: {
-    data: {
-      type: Object,
-      default: false
+    reportComment: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
     return {
+      loading: false,
+      
       reasons: [
         { id: 1, label: this.$t('report.reason.gore') },
         { id: 2, label: this.$t('report.reason.harassment') },
@@ -58,14 +60,12 @@ export default {
     resetReason(e) {
       this.current = 0
     },
-    sendReport() {
-      this.$api.post(`comment/${this.data.comment_id}/report`, { reason: this.current || 0 })
-      .then(response => {
-        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
-        this.$modals.close()
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: error.message })
+    submit() {
+      this.loading = true
+      
+      this.reportComment(this.current)
+      .then(_ => {
+        this.loading = false
         this.$modals.close()
       })
     },

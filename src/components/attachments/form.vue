@@ -53,7 +53,7 @@ export default {
       validator: value => value > 0
     },
     checkDuplicates: {
-      type: Number,
+      type: Boolean,
       default: false
     }
   },

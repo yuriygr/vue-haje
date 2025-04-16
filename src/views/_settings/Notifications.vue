@@ -82,10 +82,11 @@ export default {
       this.loading = true
       return this.$api.postJSON('settings/notifications', this.form)
       .then(result => {
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading = false)
     }

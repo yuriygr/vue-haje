@@ -59,7 +59,8 @@ export default {
         password: this.password
       })
       .then(result => {
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
       })
       .catch(error => {
         this.$alerts.danger({ text: this.$t(`error.${error.status}`) })

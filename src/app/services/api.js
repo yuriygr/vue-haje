@@ -40,7 +40,7 @@ export default new class {
 						authorization: `Bearer ${this.token}`,
 					}
 				}
-		
+
 				return config;
 			},
 			(error) => Promise.reject(error)
@@ -62,8 +62,6 @@ export default new class {
 	// Преобразует ошибочный ответ в что-то более приятное моему глазу
 	handleResponseError(error) {
 		let hasResponse = error.response != undefined
-
-		console.log(error)
 
 		return Promise.reject({
 			code: hasResponse
@@ -109,8 +107,8 @@ export default new class {
     return new URLSearchParams(_params).toString()
   }
 
-	get(path, params = {}) {
-		return this.instance.get(path, { params })
+	get(path, params = {}, signal = false) {
+		return this.instance.get(path, { params, signal })
 	}
 
   post(path, params = {}) {
@@ -126,11 +124,9 @@ export default new class {
 		return this.instance.post(path, formdata, opt)
 	}
 
-  postJSON(path, json = {}) {
+  postJSON(path, json = {}, headers = {}) {
     return this.instance.post(path, json, {
-			headers: {
-				'Content-Type': 'application/json'
-			}
+			headers
 		})
 	}
 

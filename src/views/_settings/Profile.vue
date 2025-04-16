@@ -144,10 +144,11 @@ export default {
       this.loading.profile = true
       return this.$api.post('settings/profile', this.profile)
       .then(result => {
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading.profile = false)
     },
@@ -155,10 +156,11 @@ export default {
       this.loading.tint = true
       return this.$api.post('settings/tint', { code: this.profile.tint })
       .then(result => {
-        this.$alerts.success({ text: result.status })
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.loading.tint = false)
     }

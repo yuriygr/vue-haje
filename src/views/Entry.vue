@@ -59,13 +59,20 @@ export default {
       return this.$filters.humanizeError(this.error)
     }
   },
-  mounted() {
+  created() {
     this.$store.dispatch('entry/fetch', this.uuid)
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('entry/clear')
   },
   watch: {
+    async uuid(to) {
+      if (to != undefined) {
+        await this.$store.dispatch('entry/clear')
+        await this.$store.dispatch('entry/comments/clear')
+        this.$store.dispatch('entry/fetch', to)
+      }
+    },
     data: {
       handler(to) {
         if (to.content)
@@ -77,13 +84,6 @@ export default {
       if (to)
         this.meta.title = this.$t(this.humanizeError.title)
     },
-    async '$route.params.uuid'(to) {
-      if (to != undefined) {
-        await this.$store.dispatch('entry/clear')
-        await this.$store.dispatch('entry/comments/clear')
-        this.$store.dispatch('entry/fetch', to)
-      }
-    }
   }
 }
 </script>

@@ -97,7 +97,7 @@ export default {
   mounted() {
     this.fetch()
   },
-  unmounted() {
+  beforeUnmount() {
     this.data = {}
   },
 }

@@ -74,7 +74,7 @@ export default {
   mounted() {
     this.$store.dispatch('comment/history/fetch', { initial: true, id: this.id })
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('comment/history/clear')
   },
 }

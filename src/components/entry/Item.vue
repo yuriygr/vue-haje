@@ -4,8 +4,8 @@
       <div class="entry__header">
         <user-item :data="data.user" :showSubscribeAction="false" />
         <buttons-group class="entry__options">
-          <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
-          <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" disabled="true" :title="$t('entry.meta.pinned')" />
+          <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" :disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
+          <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" :disabled="true" :title="$t('entry.meta.pinned')" />
           <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
         </buttons-group>
       </div>
@@ -270,8 +270,8 @@ export default {
 
     reportEntry(reason = 0) {
       return this.$api.post(`entry/${this.data.uuid}/report`, { reason })
-      .then(response => {
-        this.$alerts.success({ text: this.$t(`success.${response.status}`) })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
       })
       .catch(error => {
         this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })

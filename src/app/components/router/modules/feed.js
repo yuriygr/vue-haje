@@ -1,7 +1,7 @@
 import Feed from '@/views/Feed'
 
 import {
-  FeedTimeline, FeedFeed, FeedFeeds
+  FeedTimeline, FeedAbyss, FeedCustom, FeedsList, FeedCustomEntries
 } from '@/views/_feed'
 
 export default [
@@ -9,13 +9,16 @@ export default [
 		path: '/feed',
 		name: 'feed',
 		component: Feed,
-    meta: { section: 'feed', keepAlive: true },
+    meta: { section: 'feed' },
 		redirect: { name: 'feed-timeline' },
 		children: [
 			{ path: '', name: 'feed-timeline', component: FeedTimeline, meta: { tab: 'timeline' } },
-			{ path: 'abyss', name: 'feed-abyss', component: FeedTimeline, meta: { tab: 'abyss' } },
-			{ path: 'feeds', name: 'feed-feeds', component: FeedFeeds, meta: { tab: 'feeds' } },
-			{ path: ':uuid', name: 'feed-custom', component: FeedFeed, props: true, meta: { tab: 'feeds' } },
+			{ path: 'abyss', name: 'feed-abyss', component: FeedAbyss, meta: { tab: 'abyss' } },
+			{ path: 'list', name: 'feed-list', component: FeedsList, meta: { tab: 'list' } },
+			{ path: ':uuid', component: FeedCustom, props: true, meta: { tab: 'list' }, children: [
+				{ path: '', name: 'feed-custom', component: FeedCustomEntries },
+				{ path: ':pathMatch(.*)*', redirect: { name: 'feed-custom' } }
+			] },
 		]
 	}
 ]

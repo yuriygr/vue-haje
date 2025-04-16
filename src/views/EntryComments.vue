@@ -85,7 +85,7 @@ export default {
       this.scrollToComment(this.$route.query.comment)
     })
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('entry/comments/clear')
   },
   watch: {

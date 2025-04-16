@@ -7,11 +7,7 @@
 
   <spacer height="30" />
 
-  <router-view v-slot="{ Component }">
-    <keep-alive :include="[ 'FeedTimeline' ]">
-      <component :is="Component" />
-    </keep-alive>
-  </router-view>
+  <router-view />
 </template>
 
 <script>
@@ -35,9 +31,9 @@ export default {
           icon: false
         },
         {
-          key: 'feeds',
-          to: { name: 'feed-feeds' },
-          label: this.$t('feed.tabs.feeds'),
+          key: 'list',
+          to: { name: 'feed-list' },
+          label: this.$t('feed.tabs.list'),
           icon: 'spark-line'
         },
         {

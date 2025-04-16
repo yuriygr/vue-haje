@@ -3,7 +3,10 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
   state: () => ({
     data: [],
     total_items: 0,
+
     filters: { ...initialFilters },
+
+    controller: false,
     loading: false,
     error: null
   }),
@@ -15,10 +18,12 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
       state.data = []
       state.total_items = 0
     },
-    SET_FILTERS: (state, payload) => state.filters = payload,
+    SET_FILTERS: (state, payload) => state.filters = { ...payload },
     CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
     SET_LOADING: (state, payload) => state.loading = payload,
-    SET_ERROR: (state, payload) => state.error = payload
+    SET_ERROR: (state, payload) => state.error = payload,
+    ADD_CONTROLLER: (state, payload) => state.controller = payload,
+    REMOVE_CONTROLLER: (state) => state.controller = false
   },
   actions: {
     fetch({ state, commit, rootState }, initial = true) {
@@ -30,8 +35,10 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
         ? endpointBuilder(rootState)
         : endpointBuilder
 
+      const controller = new AbortController()
+      commit('ADD_CONTROLLER', controller)
 
-      return this.$api.get(endpoint, state.filters)
+      return this.$api.get(endpoint, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -39,21 +46,26 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
       .catch(error => {
         commit('SET_ERROR', error)
       })
-      .then(_ => commit('SET_LOADING', false))
-      
+      .then(_ => {
+        commit('REMOVE_CONTROLLER')
+        commit('SET_LOADING', false)
+      })
     },
 
     async refresh({ dispatch, commit }) {
-      commit('SET_FILTERS', { offset: 0 })
-      await dispatch('fetch', true)
+      await commit('SET_FILTERS', { offset: 0 })
+      dispatch('fetch', true)
     },
 
     async more({ state, dispatch, commit }) {
-      commit('SET_FILTERS', { offset: state.data.length })
-      await dispatch('fetch', false)
+      await commit('SET_FILTERS', { offset: state.data.length })
+      dispatch('fetch', false)
     },
 
-    clear({ commit }) {
+    clear({ commit, state }) {
+      if (state.controller)
+        state.controller.abort()
+      commit('REMOVE_CONTROLLER')
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
     },
@@ -72,7 +84,10 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
   state: () => ({
     data: [],
     total_items: 0,
+
     filters: { ...initialFilters },
+
+    controller: false,
     loading: false,
     error: null
   }),
@@ -87,14 +102,19 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
     SET_FILTERS: (state, payload) => state.filters = { ...payload },
     CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
     SET_LOADING: (state, payload) => state.loading = payload,
-    SET_ERROR: (state, payload) => state.error = payload
+    SET_ERROR: (state, payload) => state.error = payload,
+    ADD_CONTROLLER: (state, payload) => state.controller = payload,
+    REMOVE_CONTROLLER: (state) => state.controller = false
   },
   actions: {
     fetch({ state, commit }, initial = true) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      return this.$api.get(endpoint, state.filters)
+      const controller = new AbortController()
+      commit('ADD_CONTROLLER', controller)
+
+      return this.$api.get(endpoint, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -102,7 +122,10 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
       .catch(error => {
         commit('SET_ERROR', error)
       })
-      .then(_ => commit('SET_LOADING', false))
+      .then(_ => {
+        commit('REMOVE_CONTROLLER')
+        commit('SET_LOADING', false)
+      })
     },
     async refresh({ commit, dispatch }) {
       await commit('SET_FILTERS', { ...initialFilters, offset: 0 })
@@ -115,7 +138,10 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }) => ({
       })
       dispatch('fetch', false)
     },
-    clear({ commit }) {
+    clear({ commit, state }) {
+      if (state.controller)
+        state.controller.abort()
+      commit('REMOVE_CONTROLLER')
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
     },

@@ -1,7 +1,7 @@
 <template>
   <template v-if="data">
     <div :class="elClass" :id="`comment-${data.comment_id}`">
-      <branches :count="level - 1" :key="data.comment_id" />
+      <branches :count="level - 1" />
       <div class="comment__body">
         <div class="comment__header">
           <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
@@ -85,7 +85,12 @@ export default {
   data() {
     return {
       isReply: false,
-      isEdit: false
+      isEdit: false,
+
+      loading: {
+        stars: false,
+        bookmarks: false
+      }
     }
   },
   computed: {
@@ -134,12 +139,26 @@ export default {
         }
       ]
 
+      let _bookmark = [
+        this.data.state.is_bookmarked ?
+        {
+          icon: 'ui-bookmark-remove',
+          label: this.$t('action.remove-bookmark'),
+          action: this.toggleBookmarks
+        } : {
+          icon: 'ui-bookmark-add',
+          label: this.$t('action.add-bookmark'),
+          action: this.toggleBookmarks
+        }
+      ]
+
       return [
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),
           action: this.copyLink
         },
+        ..._bookmark,
         ...(this.data.user.state.is_me) ? _edit : [
           {
             icon: 'ui-error-warning',
@@ -161,6 +180,25 @@ export default {
         comment_id: this.data.comment_id
       })
     },
+    toggleBookmarks() {
+      this.loading.bookmarks = true
+
+      this.$api.post('my/bookmarks', {
+        type: this.data.state.is_bookmarked ? 'remove' : 'add',
+        object: 'comment',
+        comment_id: this.data.comment_id
+      })
+      .then(result => {
+        this.data.state.is_bookmarked = (result.status == 'added')
+
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$popover.close()
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+      .then(_ =>  this.loading.bookmarks = false)
+    },
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
       this.$popover.open({
@@ -176,10 +214,31 @@ export default {
       })
       this.$popover.close()
     },
+
+    deleteComment() {
+      return this.$api.delete(`comment/${this.data.comment_id}`)
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
+    reportComment(reason = 0) {
+      return this.$api.post(`comment/${this.data.comment_id}/report`, { reason })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      })
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      })
+    },
+
     // Modals
     report() {
       this.$modals.show(CommentReportModal, {
-        data: this.data
+        reportComment: this.reportComment
       })
       this.$popover.close()
     },
@@ -191,13 +250,13 @@ export default {
     },
     edit() {
       this.$modals.show(CommentEditModal, {
-        id: this.data.comment_id
+        data: this.data
       })
       this.$popover.close()
     },
     delete() {
       this.$modals.show(CommentDeleteModal, {
-        data: this.data
+        deleteComment: this.deleteComment
       })
       this.$popover.close()
     }

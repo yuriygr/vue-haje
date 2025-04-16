@@ -95,22 +95,24 @@ export default {
   mounted() {
     this.$store.dispatch('user/fetch', this.username)
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('user/clear')
   },
   watch: {
-    'data'(to) {
-      if (to)
-        this.meta.title = `${to.profile?.name} (@${to.username})`
-    },
-    'error'(to) {
-      if (to)
-        this.meta.title = this.$t(this.humanizeError.title)
-    },
-    '$route.params.username'(to) {
+    username(to) {
       if (to) {
         this.$store.dispatch('user/fetch', to)
       }
+    },
+    data: {
+      handler(to) {
+        this.meta.title = `${to.profile?.name} (@${to.username})`
+      },
+      immediate: true
+    },
+    error(to) {
+      if (to)
+        this.meta.title = this.$t(this.humanizeError.title)
     }
   }
 }

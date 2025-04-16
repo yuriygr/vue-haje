@@ -47,7 +47,7 @@
 
       <div class="comments-list">
         <comment-item-wrapper v-for="item in data.comments" :key="`comment-${item.comment_id}`">
-          <comment-item :data="item" :showReplyButton="false" :index="1" replyButton="link" />
+          <comment-item :data="item" replyButton="link" />
         </comment-item-wrapper>
       </div>
 
@@ -160,7 +160,7 @@ export default {
     })
     this.$store.dispatch('search/all/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('search/all/clear')
   },
   watch: {

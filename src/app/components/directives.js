@@ -10,7 +10,7 @@ const clickOutside = {
     document.addEventListener("click", el.clickOutsideEvent)
   },
 
-  unmounted(el) {
+  beforeUnmount(el) {
     document.removeEventListener("click", el.clickOutsideEvent)
   },
 

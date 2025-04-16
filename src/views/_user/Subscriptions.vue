@@ -54,7 +54,7 @@ export default {
   mounted() {
     this.$store.dispatch('user/subscriptions/fetch')
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('user/subscriptions/clear')
   }
 }

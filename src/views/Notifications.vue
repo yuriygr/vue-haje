@@ -113,7 +113,7 @@ export default {
         this.$alerts.success({ text: this.$t('success.notifications_readed') })
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
       })
       .then(_ => this.load_more_loading = false)
     },
@@ -139,19 +139,21 @@ export default {
       this.seen()
     ])
   },
-  unmounted() {
+  beforeUnmount() {
     this.$store.dispatch('notifications/clear')
   },
   watch: {
     '$route.query.tab': {
       async handler(to) {
-        const tab = this.availableKeys.includes(to) ? to : 'all'
-        if (tab === this.filters.tab) return // Проверка на дубликаты
-        
-        await Promise.all([
-          this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
-          this.$store.dispatch('notifications/fetch')
-        ])
+        if (to) {
+          const tab = this.availableKeys.includes(to) ? to : 'all'
+          if (tab === this.filters.tab) return // Проверка на дубликаты
+          
+          await Promise.all([
+            this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
+            this.$store.dispatch('notifications/fetch')
+          ])
+        }
       },
       // @TODO: Перенести логику инициализации сюда
       immediate: false 
