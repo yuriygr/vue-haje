@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <tags-list v-if="loading">
-      <tag-item-wrapper v-for="_ in skeletons">
+      <tag-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
         <tag-item />
       </tag-item-wrapper>
     </tags-list>

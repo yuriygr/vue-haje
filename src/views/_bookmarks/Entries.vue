@@ -13,7 +13,7 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="_ in skeletons">
+      <entry-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>

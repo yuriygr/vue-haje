@@ -44,7 +44,7 @@ import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Tabbar, TabbarItem, Icon } from '@vue-norma/ui'
 
-let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
+let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
 export default {
   name: 'app-tabbar',

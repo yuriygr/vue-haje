@@ -422,7 +422,7 @@
     "create_account": {
       "title": "Создать аккаунт",
       "already": "Уже зарегистрированы?",
-      "agreement": "Нажимая «Продолжить», вы принимаете {0} и {1}",
+      "agreement": "Нажимая «Продолжить», вы принимаете {0} и даете согласие на обработку своих персональных данных  в соответствии с {1}",
       "terms": "пользовательское соглашение",
       "privacy": "политику конфиденциальности"
     },
@@ -450,16 +450,82 @@
     },
     "date": "Получен {date}"
   },
-  "success": {
+  "alerts": {
+    "already_logged": "Уже авторизован",
+    "please_enter_captcha": "Пройдите капчу",
+    "nope_deleting": "Нет, никуда ты не уйдешь",
+
+    "entry_added": "Запись добавлена",
+    "entry_edited": "Запись изменена",
     "entry_deleted": "Запись успешно удалена",
-    "comment_deleted": "Комментарий успешно удален"
-  },
-  "errors": {
+    "entry_reported": "Жалоба на пост отправлена",
+    "entry_pinned": "Запись закреплена",
+    "entry_unpinned": "Запись откреплена",
+    "entry_empty_text": "Пост обязан иметь текст",
+    "entry_empty_uuid": "Укажите UUID поста",
+    "entry_not_owned_by_user": "Запись не принадлежит текущему пользователю",
+    "entry_comments_disabled": "Комментарии под записью отключены",
+
+    "comment_added": "Комментарий добавлен",
+    "comment_edited": "Комментарий изменен",
+    "comment_deleted": "Комментарий успешно удален",
+    "comment_reported": "Жалоба на комментарий отправлена",
+    "comment_not_found": "Комментарий не найден",
+    "comment_empty_id": "Укажите ID комментария",
+    "comment_empty_text_or_file": "Напишите что-нибудь или прикрепите файл",
+    "comment_not_owned_by_user": "Комментарий не принадлежит текущему пользователю",
+
+    "feed_empty_uuid": "Укажите UUID ленты",
+    "feed_reported": "Жалоба на ленту отправлена",
+
+    "tag_empty_slug": "Укажите slug тега",
+    "tag_reported": "Жалоба на тег отправлена",
+
+    "notice_readed": "Уведомление прочтено",
+    "notice_hidden": "Уведомление скрыто",
+    "notice_all_seen": "Уведомлен что уведомления есть",
+    "notice_all_readed": "Все уведомления прочитаны",
+
+    "user_reported": "Жалоба на пользователя отправлена",
+    "user_empty_username": "Укажите имя пользователя",
+    "user_not_registered": "Такой пользователь не зарегистрирован",
+    "user_cant_create_entries": "Вы не можете добавлять записи",
     "user_cant_delete_entries": "Вы не можете удалять записи",
     "user_cant_edit_entries": "Вы не можете редактировать записи",
+    "user_cant_create_comments": "Вы не можете добавлять комментарии",
     "user_cant_delete_comments": "Вы не можете удалять комментарии",
     "user_cant_edit_comments": "Вы не можете редактировать комментарии",
+    "user_cant_subscribe_to_users": "Вы не можете подписываться на других пользователей",
+    "user_cant_attach_images": "Вы не можете прикреплять файлы",
 
+    "name_empty": "Необходимо указать Имя",
+    "name_to_short": "Имя слишком короткое",
+    "name_to_long": "Имя слишком длинное",
+
+    "email_needed": "Необходимо указать e-mail",
+    "email_not_valid": "E-mail некорректен",
+    "email_already_used": "E-mail уже используется",
+
+    "password_empty": "Необходио указать пароль",
+    "password_to_short": "Слишком короткий пароль",
+    "password_to_long": "Слишком длинный пароль",
+    "password_not_changed": "Пароль не изменен",
+    "password_changed": "Пароль успешно изменен",
+
+    "username_empty": "Необходимо указать имя пользователя",
+    "username_to_short": "Имя пользователя слишком короткое",
+    "username_to_long": "Имя пользователя слишком длинное",
+    "username_not_valid": "Имя пользователя некорректно",
+    "username_already_used": "Имя пользователя уже используется",
+    "username_in_blacklist": "Имя пользователя в черном списке",
+
+    "challenge_code_sended": "Код отправлен на ваш e-mail",
+    "challenge_code_confirmed": "Код подтвержден",
+    "challenge_invalide_code": "Код недействителен",
+
+    "invalid_json_format": "Неправильный формат JSON"
+  },
+  "errors": {
     "todo": {
       "icon": "ghost-line",
       "title": "На стадии разработки",
@@ -603,7 +669,9 @@
     "report": "Пожаловаться",
     "remove-bookmark": "Убрать из закладок",
     "add-bookmark": "Добавить в закладки",
-    "confirm": "Выйти без сохранения?"
+    "confirm": "Выйти без сохранения?",
+    "add_comment": "Отправить",
+    "save_comment": "Сохранить"
   },
   "modals": {
     "compose": {

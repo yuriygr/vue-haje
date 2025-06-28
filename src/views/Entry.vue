@@ -46,7 +46,10 @@ export default {
   data() {
     return {
       meta: {
-        title: this.$t('entry.title')
+        title: this.$t('entry.title'),
+        link: [
+          { rel: 'canonical', href: location.host + this.$route.path }
+        ]
       }
     }
   },

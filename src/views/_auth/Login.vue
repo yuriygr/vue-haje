@@ -71,7 +71,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },

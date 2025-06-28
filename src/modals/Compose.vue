@@ -1,6 +1,6 @@
 <template>
   <modal :class="$formClass" v-on="$formEvents">
-    <template v-if="currentView == 'form'">
+    <div v-show="currentView == 'form'">
 
       <div v-if="entryUser" class="compose__header">
         <user-item :data="entryUser" :clickable="false" :showSubscribeAction="false" />
@@ -31,9 +31,9 @@
           <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
         </buttons-group>
       </div>
-    </template>
+    </div>
 
-    <template v-else-if="currentView == 'drafts'">
+    <div v-show="currentView == 'drafts'">
       <modal-header :title="$t('modals.compose.drafts')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
@@ -48,9 +48,9 @@
         :header="$t('errors.todo.title')"
         :text="$t('errors.todo.description')"
       />
-    </template>
+    </div>
 
-    <template v-else-if="currentView == 'gifs'">
+    <div v-show="currentView == 'gifs'">
       <modal-header :title="$t('modals.compose.gifs')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
@@ -62,15 +62,15 @@
         :header="$t('errors.todo.title')"
         :text="$t('errors.todo.description')"
       />
-    </template>
+    </div>
   </modal>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
-import { mapState } from 'vuex'
 
 import { Modal, ModalHeader, NButton, ButtonsGroup, Placeholder } from '@vue-norma/ui'
 
@@ -87,7 +87,10 @@ export default {
     },
     mode: {
       type: String,
-      default: 'add'
+      default: 'add',
+      validator(value) {
+        return ['add', 'edit'].includes(value)
+      }
     },
     draggedFiles: {
       type: Array,
@@ -229,7 +232,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -246,7 +249,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },
@@ -272,10 +275,10 @@ export default {
     deleteAllDrafts() {
       this.$api.delete('my/drafts')
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 
@@ -410,7 +413,7 @@ export default {
     padding: 0 var(--modal--padding) var(--modal--padding);
     margin: 0;
     outline: 0;
-    min-height: 9rem;
+    min-height: 10rem;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -418,10 +421,11 @@ export default {
     line-height: calc(1.4 * 1em);
     word-wrap: break-word;
     -webkit-font-smoothing: subpixel-antialiased;
-    display: inline-block;
+    display: block;
 
     &:empty::before {
       font-size: 1.4rem;
+      line-height: calc(1.35 * 1em);
       content: attr(placeholder);
       display: block;
       opacity: .6;

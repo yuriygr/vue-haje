@@ -1,30 +1,33 @@
 <template>
-  <div :class="elClass">
-    <branches :count="level - 1" />
-    <div :class="$formClass" v-on="$formEvents">
+  <div :class="$formClass" v-on="$formEvents">
 
-      <div class="comment-form__field"
-        v-on="$fieldEvents"
-        v-bind="$fieldBinds"
-      ></div>
+    <div v-if="data.user" class="comment-form__header">
+      <user-item :data="data.user" :clickable="false" :showSubscribeAction="false" mode="small" />
+    </div>
 
-      <attachments-form class="comment-form__attachments"
-        v-model="form.files"
-        :allowedFormats="allowedFormats"
-        :max-files="1"
-        ref="file"
-      />
+    <div class="comment-form__field"
+      v-on="$fieldEvents"
+      v-bind="$fieldBinds"
+    ></div>
 
-      <div class="comment-form__actions">
-        <buttons-group :withGap="true">
-          <n-button size="s" icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
-          <n-button size="s" icon_before="gif-line" :disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
-        </buttons-group>
-        <buttons-group :withGap="true">
-          <n-button size="s" v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
-          <n-button size="s" :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="submitForm">{{ $t('action.create_entry') }}</n-button>
-        </buttons-group>
-      </div>
+    <attachments-form class="comment-form__attachments"
+      v-model="form.files"
+      :allowedFormats="allowedFormats"
+      :max-files="1"
+      ref="file"
+    />
+
+    <div class="comment-form__actions">
+      <buttons-group :withGap="true">
+        <n-button size="s" icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
+        <n-button size="s" icon_before="gif-line" :disabled="true" mode="tertiary" :title="$t('action.select_gif')" />
+      </buttons-group>
+      <buttons-group :withGap="true">
+        <n-button size="s" v-if="data.comment_id" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
+        <n-button size="s" v-if="isReply" mode="tertiary" @click.exact="resetForm">{{ $t('action.cancel') }}</n-button>
+        <n-button v-if="mode == 'add'"  size="s" :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="sendForm">{{ $t('action.add_comment') }}</n-button>
+        <n-button v-if="mode == 'edit'" size="s" :disabled="!canSubmit" :mode="!canSubmit ? 'tertiary' : 'primary'" @click.exact="sendForm">{{ $t('action.save_comment') }}</n-button>
+      </buttons-group>
     </div>
   </div>
 </template>
@@ -32,15 +35,23 @@
 <script>
 import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
+import { UserItem } from '@/components/user'
 
 import { NButton, ButtonsGroup } from '@vue-norma/ui'
 
 export default {
   name: 'comment-form',
   components: {
-    NButton, ButtonsGroup, AttachmentsForm
+    NButton, ButtonsGroup, AttachmentsForm, UserItem
   },
   props: {
+    mode: {
+      type: String,
+      default: 'add',
+      validator(value) {
+        return ['add', 'edit'].includes(value)
+      }
+    },
     entry: {
       type: String
     },
@@ -48,8 +59,12 @@ export default {
       type: [ Object, Boolean ],
       default: false
     },
+    parent_id: {
+      type: [ Number ],
+      default: 0
+    }
   },
-  emits: [ 'success', 'error' ],
+  emits: [ 'success', 'error', 'cancel' ],
   data() {
     return {
       hovered: false,
@@ -59,24 +74,14 @@ export default {
 
       allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
 
-      originalParentNode: false,
-      level: 1,
-
       form: {
-        parent_id: 0,
-        root_id: 0,
         text: '',
-        files: []
+        files: [],
+        link: false
       }
     }
   },
   computed: {
-    elClass() {
-      return [
-        'comment-form-wrapper',
-        `comment-form-wrapper--level-${this.level}`
-      ]
-    },
     $formClass() {
       return [
         'comment-form',
@@ -122,20 +127,40 @@ export default {
       return this.form.files.length != 0
     },
     isReply() {
-      return this.form.parent_id != 0
+      return this.parent_id != 0
     }
   },
   methods: {
-    async submitForm() {
+    sendForm() {
+      return this.mode == 'add' ? this.addComment() : this.updateComment()
+    },
+
+    addComment() {
       if (!this.canSubmit) return
 
       this.loading = true
       this.error = false
 
-      this.$api.postJSON(`entry/${this.entry}/comments`, this.form)
+      this.$api.postJSON(`entry/${this.entry}/comments`, { ...this.form, parent_id: this.parent_id })
       .then(result => {
-        this.resetForm()
         this.$emit('success', result)
+        this.resetForm()
+      })
+      .catch(error => {
+        this.$emit('error', error)
+      })
+      .then(_ => this.loading = false)
+    },
+    updateComment() {
+      if (!this.canSubmit) return
+
+      this.loading = true
+      this.error = false
+
+      this.$api.postJSON(`comment/${this.data.comment_id}`, this.form)
+      .then(result => {
+        this.$emit('success', result)
+        this.resetForm()
       })
       .catch(error => {
         this.$emit('error', error)
@@ -143,14 +168,12 @@ export default {
       .then(_ => this.loading = false)
     },
     resetForm() {
-      if (this.originalParentNode) {
-        this.originalParentNode.insertBefore(this.$el, this.originalParentNode.firstChild)
-      }
+      // TODO
+      this.$emit('cancel')
       
-      this.level = 1
       this.form.files = []
       this.form.text = ""
-      this.form.parent_id = 0
+
       this.$refs.field.innerText = ""
       this.$refs.file.reset()
     },
@@ -182,7 +205,7 @@ export default {
         switch(e.keyCode) {
           case 13: // Enter
             e.preventDefault()
-            this.submitForm()
+            this.sendForm()
           break;
         }
       }
@@ -237,54 +260,23 @@ export default {
     }
   },
   mounted() {
-    this.$bus.on('comment-form.reply', (payload) => {
-      if (!this.originalParentNode) {
-        this.originalParentNode = this.$el.parentNode
-      }
-
-      let target_comment = document.getElementById(`comment-${payload.comment_id}`)
-      target_comment.parentNode.insertBefore(this.$el, target_comment.nextSibling)
-
-      this.level = payload.level
-      this.form.parent_id = payload.comment_id
-    })
-    this.$bus.on('comment-form.edit', (payload) => {
-      if (!this.originalParentNode) {
-        this.originalParentNode = this.$el.parentNode
-      }
-
-      let target_comment = document.getElementById(`comment-body-${payload.comment_id}`)
-      target_comment.append(this.$el, target_comment.nextSibling)
-      
-      this.$refs.field.innerHTML = payload.data.content.text
+    if (this.data) {
+      this.$refs.field.innerHTML = this.data.content.text
       this.form = {
-        text: this.$refs.field.innerText, // TODO: watch на изменение?
-        files: payload.data.files ? payload.data.files.flatMap(i => i.file) : []
+        text: this.$refs.field.innerText,
+        files: this.data.files ? this.data.files.flatMap(i => i.file) : []
       }
-    })
+    }
   },
   beforeUnmount() {
-    this.$bus.off('comment-form.reply')
-    this.$bus.off('comment-form.edit')
+
   }
 }
 </script>
 
 <style lang="scss">
-.comment-form-wrapper {
-  &--level-1 { --level: 1 }
-  &--level-2 { --level: 2 }
-  &--level-3 { --level: 3 }
-  &--level-4 { --level: 4 }
-  &--level-5 { --level: 5 }
-
-  --gap-branch: 2rem;
-  --avatar-size: 18px;
-}
-
-.comment-form-wrapper {
-  display: grid;
-  grid-template-columns: auto 1fr;
+.comment-form {
+  --comment-form--padding: 1rem;
 }
 
 .comment-form {
@@ -328,24 +320,32 @@ export default {
     border: var(--comment-form--border-hovered);
   }
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--comment-form--padding) var(--comment-form--padding) .75rem var(--comment-form--padding);
+  }
+
   &__field {
     border: none;
-    padding: 1rem 1.5rem;
+    padding: var(--comment-form--padding);
     margin: 0;
     outline: 0;
     min-height: 5rem;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    font-size: 1.4rem;
-    line-height: 1.4;
+    font-size: 1.5rem;
+    line-height: calc(1.4 * 1em);
     word-wrap: break-word;
     -webkit-font-smoothing: subpixel-antialiased;
-    display: inline-block;
+    display: block;
     cursor: text;
 
     &:empty::before {
       font-size: 1.4rem;
+      line-height: calc(1.35 * 1em);
       content: attr(placeholder);
       display: block;
       opacity: .6;
@@ -358,8 +358,12 @@ export default {
     }
   }
 
+  &__header + &__field {
+    padding-top: 0;
+  }
+
   &__attachments {
-    padding: 0 .5rem;
+    padding: 0 var(--comment-form--padding);
   }
 
   &__actions {

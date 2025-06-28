@@ -1,6 +1,6 @@
 <template>
   <div class="entry-comments" id="comments">
-    <comment-form :entry="entry.uuid" @success="onSuccessAddingComment" @error="onErrorAddingComment" />
+    <comment-reply :entry="entry.uuid" @success="onSuccessAddingComment" @error="onErrorAddingComment" />
 
     <div class="comments-tree" v-if="(!loading && !error) || data.length > 0">
       <template v-for="item in tree" :key="`comment-${item.comment_id}`">
@@ -14,7 +14,7 @@
 
     <template v-if="data.length == 0">
       <div class="comments-list" v-if="loading">
-        <comment-item-wrapper v-for="_ in skeletons">
+        <comment-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
           <comment-item />
         </comment-item-wrapper>
       </div>
@@ -26,13 +26,13 @@
 import { mapGetters, mapState } from 'vuex'
 import { Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
 
-import { CommentItem, CommentItemWrapper, CommentForm } from '@/components/comment'
+import { CommentItem, CommentItemWrapper, CommentReply } from '@/components/comment'
 
 export default {
   name: 'entry-comments',
   components: {
     Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader,
-    CommentItem, CommentItemWrapper, CommentForm
+    CommentItem, CommentItemWrapper, CommentReply
   },
   props: {
     entry: {
@@ -57,7 +57,7 @@ export default {
       this.scrollToComment(result.payload.comment_id)
     },
     onErrorAddingComment(error) {
-      this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+      this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
     },
     loadMore() {
       this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })

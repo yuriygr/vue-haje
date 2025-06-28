@@ -3,13 +3,21 @@
     <div :class="elClass" :id="`comment-${data.comment_id}`">
       <branches :count="level - 1" />
       <div class="comment__body">
-        <div class="comment__header">
-          <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
-          <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
-        </div>
-        <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
-        <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
-        <meta-info class="comment__meta" :items="metaItems" />
+        <comment-form v-if="isEdit" mode="edit"
+          :data="data"
+          @success="onEditSuccess"
+          @error="onEditError"
+          @cancel="onEditCancel"
+        />
+        <template v-else>
+          <div class="comment__header">
+            <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
+            <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
+          </div>
+          <div v-if="data.content.text" class="comment__content" v-html="$filters.contentFormat(data.content.text)" />
+          <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
+          <meta-info class="comment__meta" :items="metaItems" />
+        </template>
       </div>
     </div>
     <template v-for="item in data.replies" :key="`comment-${item.comment_id}`">
@@ -40,15 +48,15 @@ import { Icon, NButton, MetaInfo } from '@vue-norma/ui'
 import Attachments from '@/components/attachments'
 import { UserItem } from '@/components/user'
 
-let CommentEditModal = defineAsyncComponent(() => import("@/components/modals/_comment/Edit.vue"))
-let CommentReportModal = defineAsyncComponent(() => import("@/components/modals/_comment/Report.vue"))
-let CommentHistoryModal = defineAsyncComponent(() => import("@/components/modals/_comment/History.vue"))
-let CommentDeleteModal = defineAsyncComponent(() => import("@/components/modals/_comment/Delete.vue"))
+let CommentForm = defineAsyncComponent(() => import("@/components/comment/Form.vue"))
+let CommentReportModal = defineAsyncComponent(() => import("@/modals/_comment/Report.vue"))
+let CommentHistoryModal = defineAsyncComponent(() => import("@/modals/_comment/History.vue"))
+let CommentDeleteModal = defineAsyncComponent(() => import("@/modals/_comment/Delete.vue"))
 
 export default {
   name: 'comment-item',
   components: {
-    UserItem, Attachments,
+    UserItem, Attachments, CommentForm,
     Icon, NButton, MetaInfo
   },
   props: {
@@ -191,11 +199,11 @@ export default {
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
 
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ =>  this.loading.bookmarks = false)
     },
@@ -218,20 +226,20 @@ export default {
     deleteComment() {
       return this.$api.delete(`comment/${this.data.comment_id}`)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 
     reportComment(reason = 0) {
       return this.$api.post(`comment/${this.data.comment_id}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 
@@ -249,9 +257,7 @@ export default {
       this.$popover.close()
     },
     edit() {
-      this.$modals.show(CommentEditModal, {
-        data: this.data
-      })
+      this.isEdit = true
       this.$popover.close()
     },
     delete() {
@@ -259,6 +265,22 @@ export default {
         deleteComment: this.deleteComment
       })
       this.$popover.close()
+    },
+    // Edit methods
+    onEditSuccess(data) {
+      this.isEdit = false
+      this.$nextTick(() => {
+        this.$store.dispatch('entry/comments/update_comment', {
+          comment_id: data.payload.comment_id,
+          value: data.payload
+        })
+      })
+    },
+    onEditError(error) {
+      this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+    },
+    onEditCancel() {
+      this.isEdit = false
     }
   }
 }

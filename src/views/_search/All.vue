@@ -63,7 +63,7 @@
       <group>
         <n-header><skeleton :width="80" :height="12" /></n-header>
         <users-list>
-          <user-item-wrapper v-for="_ in skeletons_min">
+          <user-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
             <user-item />
           </user-item-wrapper>
         </users-list>
@@ -71,7 +71,7 @@
       <group>
         <n-header><skeleton :width="91" :height="12" /></n-header>
         <entries-list>
-          <entry-item-wrapper v-for="_ in skeletons_min">
+          <entry-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
             <entry-item />
           </entry-item-wrapper>
         </entries-list>
@@ -79,7 +79,7 @@
       <group>
         <n-header><skeleton :width="30" :height="12" /></n-header>
         <tags-list>
-          <tag-item-wrapper v-for="_ in skeletons_min">
+          <tag-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
             <tag-item />
           </tag-item-wrapper>
         </tags-list>
@@ -87,7 +87,7 @@
       <group>
         <n-header><skeleton :width="60" :height="12" /></n-header>
         <div class="comments-list">
-          <comment-item-wrapper v-for="_ in skeletons_min">
+          <comment-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
             <comment-item />
           </comment-item-wrapper>
         </div>

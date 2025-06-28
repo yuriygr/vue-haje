@@ -21,13 +21,25 @@ export default defineConfig({
             src: 'icons/web-app-manifest-192x192.png', 
             sizes: '192x192', 
             type: 'image/png', 
-            purpose: 'maskable any' 
+            purpose: 'any' 
           },
           { 
             src: 'icons/web-app-manifest-512x512.png', 
             sizes: '512x512', 
             type: 'image/png', 
-            purpose: 'maskable any' 
+            purpose: 'any' 
+          },
+          { 
+            src: 'icons/web-app-manifest-192x192.png', 
+            sizes: '192x192', 
+            type: 'image/png', 
+            purpose: 'maskable' 
+          },
+          { 
+            src: 'icons/web-app-manifest-512x512.png', 
+            sizes: '512x512', 
+            type: 'image/png', 
+            purpose: 'maskable' 
           },
           { 
             src: 'icons/monochrome-icon.png', 

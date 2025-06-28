@@ -28,14 +28,27 @@
       </form-text>
     </form-group>
   </group>
+
+  <VueHcaptcha
+    ref="captcha"
+    size="invisible"
+    sitekey="b4328fc2-4178-4216-89e0-0694bbeeff18"
+    :theme="theme == 'black'?'dark':'light'"
+    @verify="onVerify" 
+    @expired="onExpire"
+    @closed="onClosed"
+    @challenge-expired="onExpire"
+  />
 </template>
 
 <script>
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 
 export default {
   name: 'auth-forgot',
   components: { 
+    VueHcaptcha,
     NButton, NHeader, Group, Spacer
   },
   meta() { return this.meta },
@@ -47,23 +60,30 @@ export default {
       error: false,
       loading: false,
 
-      form: {}
+      form: {
+        email: '',
+        'h-captcha-response': ''
+      }
     }
   },
   computed: {  },
   methods: {
-    submit() {
+    async submit() {
       this.loading = true
       this.error = false
+
+      await this.$refs.captcha.executeAsync()
       
       this.$api.post('auth/forgot', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
         this.$router.push({ name: 'auth-forgot-code', params: { token: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.form['h-captcha-response'] = ''
+        this.$refs.captcha.reset()
       })
       .then(_ => this.loading = false)
     },
@@ -74,6 +94,18 @@ export default {
       return {
         name: 'help', params: { uuid: 'contact-us' }
       }
+    },
+    // captcha
+    onVerify(token, ekey) {
+      this.form['h-captcha-response'] = token
+    },
+    onExpire() {
+      this.form['h-captcha-response'] = ''
+    },
+    onClosed() {
+      this.loading = false
+      this.error = false
+      this.form['h-captcha-response'] = ''
     }
   },
   watch: {

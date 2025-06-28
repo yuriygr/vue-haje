@@ -97,7 +97,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })

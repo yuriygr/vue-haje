@@ -1,5 +1,5 @@
 <template>
-  <modal>
+  <modal size="wide">
     <div class="image-viewer">
       <img class="image-viewer__image"
         :data-src="`https://leonardo.osnova.io/${data.uuid}`"

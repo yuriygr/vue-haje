@@ -56,7 +56,7 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup } from '@vue-norma/ui'
 
-let UserReportModal = defineAsyncComponent(() => import("@/components/modals/_user/Report.vue"))
+let UserReportModal = defineAsyncComponent(() => import("@/modals/_user/Report.vue"))
 
 export default {
   name: 'user-item',
@@ -165,11 +165,11 @@ export default {
       this.$api.post(_path)
       .then(result => {
         this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
 
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading.subscribe = false)
     },
@@ -184,12 +184,12 @@ export default {
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
 
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading.bookmarks = false)
     },
@@ -197,10 +197,10 @@ export default {
     reportUser(reason = 0) {
       return this.$api.post(`user/${this.data.username}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 

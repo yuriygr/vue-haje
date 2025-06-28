@@ -2,13 +2,23 @@
   <div :class="elClass" v-if="hasAttachments">
     <div class="images-list" v-if="files">
       <picture v-for="item in files" :key="`file-${item.file.uuid}`">
-        <img
+        <img v-if="item.file.type != 'mp4'"
           :data-src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
           :src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
           :width="item.file.width"
           :height="item.file.height"
           @click="viewImage(item.file)"
         >
+        <video v-else-if="item.file.type == 'mp4'"
+          :poster="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/format/mp4/`"
+          :width="item.file.width"
+          :height="item.file.height"
+          controls="true"
+          loop="true"
+          playsinline
+          preload="auto"
+        />
       </picture>
     </div>
 
@@ -24,7 +34,7 @@
 import { defineAsyncComponent } from 'vue'
 import { LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
 
-let ImageViewer = defineAsyncComponent(() => import("@/components/modals/ImageViewer.vue"))
+let ImageViewer = defineAsyncComponent(() => import("@/modals/ImageViewer.vue"))
 
 export default {
   name: 'attachments',
@@ -87,6 +97,12 @@ export default {
     }
 
     img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    video {
       width: 100%;
       height: auto;
       display: block;

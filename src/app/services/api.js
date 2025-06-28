@@ -62,16 +62,19 @@ export default new class {
 	// Преобразует ошибочный ответ в что-то более приятное моему глазу
 	handleResponseError(error) {
 		let hasResponse = error.response != undefined
+		let response = error.response.data
 
 		return Promise.reject({
 			code: hasResponse
-						? error.response.data.code || error.response.code
+						? response.code
 						: error.code,
+
 			status: hasResponse
-							? error.response.data.status || error.response.statusText
+							? response.error || response.status
 							: error.code,
+
 			message: hasResponse
-							? error.response.data.error
+							? response.error
 							: error.message
 		})
 	}

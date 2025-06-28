@@ -72,11 +72,11 @@ export default {
         code: this.code
       })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
         this.$router.push({ name: 'auth-forgot-change', params: { token: this.token } })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`error.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading = false)
     },

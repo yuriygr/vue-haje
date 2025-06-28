@@ -167,21 +167,21 @@ export default {
     },
     readNotify() {
       this.$api.post(`my/notifications/${this.data.notify_id}/read`)
-      .then(_ => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.$popover.close())
     },
     hideNotify() {
       this.$api.post(`my/notifications/${this.data.notify_id}/hide`)
-      .then(_ => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+      .then(result => {
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.$popover.close())
     }

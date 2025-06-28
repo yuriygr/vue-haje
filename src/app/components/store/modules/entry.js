@@ -21,6 +21,20 @@ let comments = {
     'CLEAR_DATA'(state) {
       state.data = []
     },
+    /**
+     * Заменяет элемент в массиве по ID
+     * @param {Object} state - Состояние хранилища
+     * @param {Object} payload - Объект с данными для замены
+     * @param {string|number} payload.comment_id - ID искомого элемента
+     * @param {Object} payload.value - Новый элемент для замены
+     */
+    UPDATE_COMMENT(state, { comment_id, value }) {
+      const index = state.data.findIndex(item => item.comment_id === comment_id);
+      
+      if (index !== -1) {
+        state.data[index] = value;
+      }
+    },
     // FILTEST
     'SET_FILTERS'(state, payload) {
       state.filters = payload
@@ -56,6 +70,10 @@ let comments = {
     },
     add({ commit }, payload) {
       commit('ADD_DATA', [payload])
+    },
+    // update_comment - Обновляем комментарий
+    update_comment({ commit }, payload) {
+      commit('UPDATE_COMMENT', payload)
     },
     async more({ state, commit, dispatch }, { uuid  = 'nope' }) {
       let last_id = (state.data.length > 0) ? state.data[state.data.length - 1].comment_id : 0

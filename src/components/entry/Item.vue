@@ -43,12 +43,12 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
-let ComposeModal = defineAsyncComponent(() => import("@/components/modals/Compose.vue"))
+let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
-let EntryPinModal = defineAsyncComponent(() => import("@/components/modals/_entry/Pin.vue"))
-let EntryReportModal = defineAsyncComponent(() => import("@/components/modals/_entry/Report.vue"))
-let EntryHistoryModal = defineAsyncComponent(() => import("@/components/modals/_entry/History.vue"))
-let EntryDeleteModal = defineAsyncComponent(() => import("@/components/modals/_entry/Delete.vue"))
+let EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
+let EntryReportModal = defineAsyncComponent(() => import("@/modals/_entry/Report.vue"))
+let EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
+let EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
 
 import { ActionItem } from '@/components/actions'
 import { UserItem } from '@/components/user'
@@ -244,11 +244,11 @@ export default {
           ? this.data.counters.bookmarks++
           : this.data.counters.bookmarks--
 
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ =>  this.loading.bookmarks = false)
     },
@@ -259,32 +259,32 @@ export default {
         : `entry/${this.data.uuid}/pin`
       return this.$api.post(path)
       .then(result => {
-        this.data.state.is_pinned = (result.status == 'pinned')
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.data.state.is_pinned = (result.status == 'entry_pinned')
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 
     reportEntry(reason = 0) {
       return this.$api.post(`entry/${this.data.uuid}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 
     deleteEntry() {
       return this.$api.delete(`entry/${this.data.uuid}`)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`success.${result.status}`) })
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
 

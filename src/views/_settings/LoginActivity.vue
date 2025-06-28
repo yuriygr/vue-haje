@@ -14,7 +14,7 @@
 
     <template v-if="data.length == 0">
       <logins-list v-if="loading">
-        <login-item-wrapper v-for="_ in skeletons">
+        <login-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
           <login-item  />
         </login-item-wrapper>
       </logins-list>

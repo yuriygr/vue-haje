@@ -33,7 +33,7 @@
 import { defineAsyncComponent } from 'vue'
 import { NButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
 
-let SearchFilterModal = defineAsyncComponent(() => import("@/components/modals/SearchFilter.vue"))
+let SearchFilterModal = defineAsyncComponent(() => import("@/modals/SearchFilter.vue"))
 
 export default {
   name: 'search',

@@ -33,11 +33,9 @@
 import axios from 'axios'
 import { Icon } from '@vue-norma/ui'
 
-let uniqueId = 0
-
 export default {
   name: 'attachments-form',
-  emits: ['update:modelValue', 'limit-reached', 'duplicate-detected'],
+  emits: ['update:modelValue','update:loading', 'limit-reached', 'duplicate-detected'],
   components: { Icon },
   props: {
     modelValue: {

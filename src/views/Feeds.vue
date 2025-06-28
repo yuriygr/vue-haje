@@ -47,7 +47,7 @@ import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { NButton, Separator, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
 
-let FeedCreateModal = defineAsyncComponent(() => import("@/components/modals/_feed/Create.vue"))
+let FeedCreateModal = defineAsyncComponent(() => import("@/modals/_feed/Create.vue"))
 
 import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 

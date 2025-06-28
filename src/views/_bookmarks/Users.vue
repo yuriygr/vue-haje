@@ -13,7 +13,7 @@
 
   <template v-if="data.length == 0">
     <users-list v-if="loading">
-      <user-item-wrapper v-for="_ in skeletons">
+      <user-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
         <user-item />
       </user-item-wrapper>
     </users-list>

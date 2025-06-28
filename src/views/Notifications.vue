@@ -26,7 +26,7 @@
 
   <template v-if="data.length == 0">
     <div class="notifications-list" v-if="loading">
-      <notification-item-wrapper v-for="_ in skeletons">
+      <notification-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
         <notification-item />
       </notification-item-wrapper>
     </div>
@@ -98,22 +98,25 @@ export default {
         this.$store.dispatch('auth/seen_notifications')
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
     },
     readNotify(data) {
-      if (!data.state.is_readed)
+      if (!data.state.is_readed) {
+        this.$store.dispatch('notifications/read', data.notify_id)
         this.$api.post(`my/notifications/${data.notify_id}/read`)
+      }
     },
     readAll() {
       this.load_more_loading = true
 
       this.$api.post('my/notifications/read', { mode: 'all' })
-      .then(_ => {
-        this.$alerts.success({ text: this.$t('success.notifications_readed') })
+      .then(result => {
+        this.$store.dispatch('notifications/read_all')
+        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`errors.${error.status}`) })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.load_more_loading = false)
     },
