@@ -264,10 +264,12 @@
   "about": {
     "title": "Sobre o aplicativo",
     "item": {
-      "user-agreement": "Termos de uso",
-      "privacy": "política de Privacidade",
-      "legal": "informação legal",
-      "data-security": "Proteção de dados"
+      "user-agreement": "Contrato do Usuário",
+      "privacy": "Política de Privacidade",
+      "legal": "Informações Legais",
+      "data-security": "Proteção de Dados",
+      "architecture": "Arquitetura do Aplicativo",
+      "ai-usage": "Uso de Inteligência Artificial"
     },
     "refresh": "Atualizar"
   },
@@ -422,6 +424,16 @@
       "icon": "cloud-off-line",
       "title": "Pedido ruim",
       "description": "Provavelmente você fez algo errado e o servidor não entendeu você"
+    },
+    "err_canceled": {
+      "icon": "cloud-off-line",
+      "title": "Solicitação cancelada",
+      "description": "Você provavelmente cancelou a solicitação"
+    },
+    "err_network": {
+      "icon": "cloud-off-line",
+      "title": "Erro de conexão",
+      "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
     },
     "network_error": {
       "icon": "cloud-off-line",

@@ -10,7 +10,7 @@
 
     <separator />
 
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }" name="tag">
       <keep-alive>
         <component :is="Component" />
       </keep-alive>
@@ -36,7 +36,7 @@ export default {
   props: {
     slug: {
       type: [ Boolean, String ],
-      defalult: false
+      default: false
     }
   },
   components: { Placeholder, PlaceholderLoading, Separator, MetaInfo },

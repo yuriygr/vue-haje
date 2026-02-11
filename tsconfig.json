@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Самое важное для постепенного перехода */
+    "allowJs": true,          // Разрешаем импортировать .js файлы в .ts
+    "checkJs": false,         // Не проверяем типы внутри .js файлов (пока что)
+
+    /* Базовые проверки */
+    "strict": false,          // Сначала отключи строгий режим, чтобы не завалить ошибками
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    
+    /* Vue специфика */
+    "jsx": "preserve"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.js",
+    "src/**/*.jsx"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}

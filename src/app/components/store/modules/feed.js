@@ -2,6 +2,9 @@ import { createListedModule } from '@/app/components/store/module'
 
 let feeds = createListedModule('feed/feeds')
 
+let timeline = createListedModule('feed/timeline')
+let abyss = createListedModule('feed/abyss')
+
 let custom = {
   namespaced: true,
   modules: {
@@ -61,7 +64,7 @@ let custom = {
 
 export default {
   namespaced: true,
-  modules: { feeds, custom },
+  modules: { timeline, abyss, feeds, custom },
   state() {
     return {
       data: [],

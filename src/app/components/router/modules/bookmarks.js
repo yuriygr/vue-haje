@@ -10,11 +10,11 @@ export default [
     component: Bookmarks,
     meta: { section: 'menu' },
     children: [
-      { path: '', name: 'bookmarks', component: BookmarksAll, meta: { key: 'all' }},
-      { path: 'users', name: 'bookmarks-users', component: BookmarksUsers, meta: { key: 'users' }},
-      { path: 'entries', name: 'bookmarks-entries', component: BookmarksEntries, meta: { key: 'entries' }},
-      { path: 'feeds', name: 'bookmarks-feeds', component: BookmarksFeeds, meta: { key: 'feeds' }},
-      { path: 'comments', name: 'bookmarks-comments', component: BookmarksComments, meta: { key: 'comments' }},
+      { path: '', name: 'bookmarks', components: { bookmarks: BookmarksAll }, meta: { key: 'all' }},
+      { path: 'users', name: 'bookmarks-users', components: { bookmarks: BookmarksUsers }, meta: { key: 'users' }},
+      { path: 'entries', name: 'bookmarks-entries', components: { bookmarks: BookmarksEntries }, meta: { key: 'entries' }},
+      { path: 'feeds', name: 'bookmarks-feeds', components: { bookmarks: BookmarksFeeds }, meta: { key: 'feeds' }},
+      { path: 'comments', name: 'bookmarks-comments', components: { bookmarks: BookmarksComments }, meta: { key: 'comments' }},
 	    { path: ':pathMatch(.*)*', redirect: { name: 'bookmarks' } }
     ]
   }

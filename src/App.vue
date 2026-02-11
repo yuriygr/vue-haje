@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [ 'locale', 'theme', 'density', 'loading' ]),
+    ...mapState('app', [ 'locale', 'theme', 'density', 'loading', 'cachedComponents' ]),
     ...mapState('auth', [ 'data' ]),
     ...mapGetters('app', [ 'themeStatusBar' ]),
     ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ])
@@ -42,7 +42,7 @@ export default {
     setLocale(state = false) {
       this.$i18n.locale = state
       this.changeDataset('locale', state ? state : false)
-      document.documentElement.setAttribute("lang", state ? state : false);
+      document.documentElement.setAttribute('lang', state ? state : false);
     }, 
     setTheme(state = false) {
       this.changeDataset('theme', state)

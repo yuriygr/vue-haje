@@ -1,17 +1,27 @@
 <template>
   <div class="attachments-form">
     <div class="thumb-grid" v-if="images.length > 0">
-      <div  v-for="(image, index) in images" :key="image.id" :class="[ 'thumb' ]">
-        <div :class="[ 'thumb__preview' , `thumb__preview--status-${image.status}` ]">
+      <div  v-for="(file, index) in images" :key="file.id" :class="[ 'thumb' ]">
+        <div :class="[ 'thumb__preview' , `thumb__preview--status-${file.status}` ]">
+          <video
+            v-if="(file.file && file.file.type == 'video/mp4') || (file.payload && file.payload.type == 'mp4')"
+            :src="file.file && file.preview"
+            :poster="file.payload && file.preview"
+            :width="100"
+            :height="100"
+            alt="Preview"
+            @dragstart.prevent
+          />
           <img
-            :src="image.preview"
+            v-else
+            :src="file.preview"
             :width="100"
             :height="100"
             alt="Preview"
             @dragstart.prevent
           />
         </div>
-        <div class="thumb__cancel" @click.stop.prevent="image.status === 'uploading' ? cancelUpload(index) : removeImage(index)">
+        <div class="thumb__cancel" @click.stop.prevent="file.status === 'uploading' ? cancelUpload(index) : removeFile(index)">
           <icon name="ui-close" size="16" />
         </div>
       </div>
@@ -117,7 +127,7 @@ export default {
       return {
         id: this.generateUniqueId(),
         file: null,
-        preview: `https://leonardo.osnova.io/${file.uuid}/-/scale_crop/640x/`,
+        preview: `https://leonardo.osnova.io/${file.uuid}/-/scale_crop/300x/`,
         status: 'success',
         payload: file,
         uuid: file.uuid,
@@ -172,7 +182,7 @@ export default {
       })
       .catch(error => {
         if (!axios.isCancel(error)) {
-          this.$alerts.danger({ text: error.status })
+          this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
           this.updateImageStatus(object.id, 'error')
         }
       })
@@ -222,6 +232,7 @@ export default {
       if (index !== -1) {
         this.images[index].status = status
         if (payload != null) {
+          this.images[index].preview = `https://leonardo.osnova.io/${payload.uuid}/-/scale_crop/300x/`
           this.images[index].payload = payload
           this.images[index].uuid = payload.uuid
         }
@@ -232,16 +243,16 @@ export default {
     cancelUpload(index) {
       const image = this.images[index]
       image.controller.abort()
-      this.removeImageById(image.id)
+      this.removeFileById(image.id)
     },
 
     // Удаляем файл
-    removeImage(index) {
-      this.removeImageById(this.images[index].id)
+    removeFile(index) {
+      this.removeFileById(this.images[index].id)
     },
 
     // Удаление по ID
-    removeImageById(id) {
+    removeFileById(id) {
       const index = this.images.findIndex(img => img.id === id)
       if (index === -1) return
       
@@ -317,29 +328,29 @@ export default {
     border-radius: 8px;
 
     &--status-error {
-      img {
+      img, video {
         filter: blur(5px) grayscale(1);
       }
       &:after {
-          content: "";
-          pointer-events: none;
-          border-radius: inherit;
-          box-shadow: inset 0 0 16px 3px rgb(255 0 0 / 27%);
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
+        content: "";
+        pointer-events: none;
+        border-radius: inherit;
+        box-shadow: inset 0 0 16px 3px rgb(255 0 0 / 27%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
     }
 
     &--status-uploading {
-      img {
+      img, video {
         filter: blur(5px) grayscale(1);
       }
     }
 
-    img {
+    img, video {
       position: relative;
       width: 100%;
       height: 100%;

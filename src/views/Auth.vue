@@ -1,7 +1,7 @@
 <template>
   <div class="auth-form-wrapper">
     <div class="auth-form">
-      <router-view></router-view>
+      <router-view name="auth"></router-view>
     </div>
   </div>
 </template>

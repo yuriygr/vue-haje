@@ -250,6 +250,10 @@ export default {
     font-family: inherit;
     line-height: calc(1.5 * 1em);
 
+    & > option {
+      background: var(--select-field--background);
+    }
+
     &:last-child {
       padding-right: var(--select-field--padding);
     }

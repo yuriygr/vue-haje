@@ -39,7 +39,7 @@ export default {
   props: {
     uuid: {
       type: [ Boolean, String ],
-      defalult: false
+      default: false
     }
   },
   components: {

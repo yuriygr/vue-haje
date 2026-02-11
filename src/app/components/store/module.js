@@ -68,6 +68,8 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
       commit('REMOVE_CONTROLLER')
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
+      commit('SET_LOADING', false)
+      commit('SET_ERROR', false)
     },
 
     setFilters({ commit }, payload) {

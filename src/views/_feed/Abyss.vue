@@ -58,11 +58,10 @@ export default {
   },
   computed: {
     ...mapState('app', [ 'skeletons' ]),
-    ...mapState('feed', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feed', [ 'hasMoreItems' ]),
+    ...mapState('feed/abyss', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('feed/abyss', [ 'hasMoreItems' ]),
     ...mapGetters('auth', [ 'isAuth' ]),
     humanizeError() {
-      console.log(this.error)
       return this.$filters.humanizeError(this.error)
     }
   },
@@ -77,25 +76,17 @@ export default {
       })
     },
     loadMore() {
-      this.$store.dispatch('feed/more')
+      this.$store.dispatch('feed/abyss/more')
     }
   },
   async mounted() {
-    await this.$store.dispatch('feed/setTab', this.$route.meta.tab)
-    this.$store.dispatch('feed/fetch')
+    this.$store.dispatch('feed/abyss/fetch')
   },
   beforeUnmount() {
-    this.$store.dispatch('feed/clear')
+    this.$store.dispatch('feed/abyss/clear')
   },
   watch: {
-   //async '$route.meta.tab'(to) {
-   //  if (['timeline', 'abyss'].includes(to)) {
-   //    this.meta.title = this.$t(`feed.tabs.${to}`)
-   //    await this.$store.dispatch('feed/clear')
-   //    await this.$store.dispatch('feed/setTab', to)
-   //    this.$store.dispatch('feed/fetch')
-   //  }
-   //}
+
   }
 }
 </script>

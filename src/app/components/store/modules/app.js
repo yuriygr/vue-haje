@@ -19,7 +19,9 @@ export default {
       skeletons_min: [...Array(5).keys()],
 
       loading: false,
-      error: {}
+      error: {},
+
+      cachedComponents: [] // Массив для хранения кэшируемых компонентов
     }
   },
   mutations: {
@@ -42,7 +44,20 @@ export default {
     },
     'CLEAN_ERRORS'(state) {
       state.error = {}
-    }
+    },
+    ADD_CACHED_COMPONENT(state, componentName) {
+      if (!state.cachedComponents.includes(componentName)) {
+        state.cachedComponents.push(componentName)
+      }
+    },
+    REMOVE_CACHED_COMPONENT(state, componentName) {
+      state.cachedComponents = state.cachedComponents.filter(
+        name => name !== componentName
+      )
+    },
+    RESET_CACHED_COMPONENTS(state) {
+      state.cachedComponents = []
+    },
   },
   actions: {
     init({ commit, state }) {

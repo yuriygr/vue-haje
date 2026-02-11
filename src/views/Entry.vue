@@ -1,6 +1,6 @@
 <template>
   <template v-if="Object.keys(data).length > 0">
-    <entry-item-wrapper :key="`entry-${data.uuid}`">
+    <entry-item-wrapper>
       <entry-item :data="data" type="full" />
     </entry-item-wrapper>
     

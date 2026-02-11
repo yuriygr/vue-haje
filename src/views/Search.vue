@@ -26,7 +26,7 @@
 
   <spacer height="30" />
 
-  <router-view />
+  <router-view name="search" />
 </template>
 
 <script>

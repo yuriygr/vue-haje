@@ -9,7 +9,7 @@ export default [
     props: true,
     meta: { section: 'search' },
 		children: [
-			{ path: '', name: 'tag', component: TagEntries },
+			{ path: '', name: 'tag', components: { tag: TagEntries } },
 	    { path: ':pathMatch(.*)*', redirect: { name: 'tag' } }
     ]
 	}

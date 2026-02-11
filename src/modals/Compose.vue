@@ -24,8 +24,8 @@
       <div class="compose__actions">
         <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
         <buttons-group :withGap="true">
-          <n-button icon_before="settings-line" @click="toggleOptions" mode="tertiary" ref="options" :title="$t('action.options')" />
-          <n-button icon_before="gif-line" @click="openView('gifs')" mode="tertiary" :title="$t('action.select_gif')" />
+          <n-button icon_before="settings-line" @click="openView('options')" mode="tertiary" ref="options" :title="$t('modals.compose.action.options')" />
+          <n-button icon_before="gif-line" @click="openView('gifs')" mode="tertiary" :title="$t('modals.compose.action.attach_gifs')" />
           <n-button icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
           <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
           <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
@@ -34,7 +34,7 @@
     </div>
 
     <div v-show="currentView == 'drafts'">
-      <modal-header :title="$t('modals.compose.drafts')">
+      <modal-header :title="$t('modals.compose.tab.drafts')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
         </template>
@@ -51,7 +51,7 @@
     </div>
 
     <div v-show="currentView == 'gifs'">
-      <modal-header :title="$t('modals.compose.gifs')">
+      <modal-header :title="$t('modals.compose.tab.gifs')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
         </template>
@@ -63,6 +63,30 @@
         :text="$t('errors.todo.description')"
       />
     </div>
+
+    <div v-show="currentView == 'options'">
+      <modal-header :title="$t('modals.compose.tab.options')">
+        <template #before>
+          <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
+        </template>
+      </modal-header>
+
+      <modal-body>
+        <form-block>
+          <n-checkbox :label="$t('modals.compose.options.is_comments_enabled')" v-model="form.is_comments_enabled" :disabled="loading" />
+        </form-block>
+        <form-block>
+          <n-checkbox :label="$t('modals.compose.options.is_hidden_from_feed')" v-model="form.is_hidden_from_feed" :disabled="loading" />
+        </form-block>
+        <form-block>
+          <n-checkbox :label="$t('modals.compose.options.is_nsfw')" v-model="form.is_nsfw" :disabled="loading" />
+        </form-block>
+        <form-block>
+          <n-checkbox :label="$t('modals.compose.options.is_ai')" v-model="form.is_ai" :disabled="loading" />
+        </form-block>
+      </modal-body>
+
+    </div>
   </modal>
 </template>
 
@@ -72,13 +96,13 @@ import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 
-import { Modal, ModalHeader, NButton, ButtonsGroup, Placeholder } from '@vue-norma/ui'
+import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, Group } from '@vue-norma/ui'
 
 export default {
   name: 'compose-modal',
   components: {
     UserItem,
-    Modal, ModalHeader, NButton, ButtonsGroup, AttachmentsForm, Placeholder
+    Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, AttachmentsForm, Placeholder, Group
   },
   props: {
     data: {
@@ -103,20 +127,22 @@ export default {
       loading: false,
       error: false,
 
-      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'video/mp4'],
 
       user: false,
 
       form: {
         text: '',
         files: [],
-        link: false,
+        link: null,
         is_comments_enabled: true,
-        is_hidden_from_feed: false
+        is_hidden_from_feed: false,
+        is_nsfw: false,
+        is_ai: false
       },
 
       currentView: 'form',
-      availableViews: [ 'form', 'drafts', 'gifs' ]
+      availableViews: [ 'form', 'options', 'drafts', 'gifs' ]
     }
   },
   computed: {
@@ -163,38 +189,6 @@ export default {
     },
     hasFiles() {
       return this.form.files.length != 0
-    },
-    optionsItems() {
-      let _comments = [
-        this.form.is_comments_enabled ?
-        {
-          icon: 'comments-line',
-          label: this.$t('entry.pseudo-form.comments-on'),
-          action: this.toggleState('is_comments_enabled')
-        } : {
-          icon: 'comments-off-line',
-          label: this.$t('entry.pseudo-form.comments-off'),
-          action: this.toggleState('is_comments_enabled')
-        }
-      ]
-
-      let _hidde_from_feed = [
-        this.form.is_hidden_from_feed ?
-        {
-          icon: 'eye-off-line',
-          label: this.$t('entry.pseudo-form.hidden_from_feed-on'),
-          action: this.toggleState('is_hidden_from_feed')
-        } : {
-          icon: 'eye-line',
-          label: this.$t('entry.pseudo-form.hidden_from_feed-off'),
-          action: this.toggleState('is_hidden_from_feed')
-        }
-      ]
-
-      return [
-        ..._comments,
-        ..._hidde_from_feed
-      ]
     },
     // Выбираем какого пользователя выводить как автора
     entryUser() {
@@ -253,20 +247,6 @@ export default {
       })
       .then(_ => this.loading = false)
     },
-    toggleOptions(e) {
-      let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
-      this.$popover.open({
-        items: this.optionsItems,
-        target: target,
-        align: 'right'
-      })
-    },
-    toggleState(key) {
-      return () => {
-        this.form[key] = !this.form[key]
-        this.$popover.close()
-      }
-    },
 
     attachFiles() {
       this.$refs.file.attachFiles()
@@ -280,6 +260,25 @@ export default {
       .catch(error => {
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
+    },
+
+    detectLink() {
+      if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
+      this.debounceTimer = setTimeout(async () => {
+        const text = this.$refs.field.innerText
+        const match = text.match(/(https?:\/\/[^\s]+)/)
+        const url = match ? match[0] : null
+
+        if (!url || url === this.currentUrl) return
+        this.currentUrl = url
+        this.form.link = null
+
+        try {
+          const { data } = await this.$api.get(`utils/linkpreview?url=${encodeURIComponent(url)}`)
+          this.form.link = { ...data, url }
+        } catch {}
+      }, 600)
     },
 
     // Field
@@ -365,6 +364,9 @@ export default {
         text: this.$refs.field.innerText,
         is_comments_enabled: this.data.state.is_comments_enabled,
         is_hidden_from_feed: this.data.state.is_hidden_from_feed,
+        is_nsfw: this.data.state.is_nsfw,
+        is_ai: this.data.state.is_ai,
+        link: this.data.link,
         files: this.data.files ? this.data.files.flatMap(i => i.file) : []
       }
     }

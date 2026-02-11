@@ -2,14 +2,7 @@
   <div :class="elClass" v-if="hasAttachments">
     <div class="images-list" v-if="files">
       <picture v-for="item in files" :key="`file-${item.file.uuid}`">
-        <img v-if="item.file.type != 'mp4'"
-          :data-src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-          :width="item.file.width"
-          :height="item.file.height"
-          @click="viewImage(item.file)"
-        >
-        <video v-else-if="item.file.type == 'mp4'"
+        <video v-if="item.file.type == 'mp4'"
           :poster="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
           :src="`https://leonardo.osnova.io/${item.file.uuid}/-/format/mp4/`"
           :width="item.file.width"
@@ -19,6 +12,13 @@
           playsinline
           preload="auto"
         />
+        <img v-else
+          :data-src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :width="item.file.width"
+          :height="item.file.height"
+          @click="viewImage(item.file)"
+        >
       </picture>
     </div>
 
@@ -73,7 +73,7 @@ export default {
   methods: {
     viewImage(data) {
       this.$modals.show(ImageViewer, {
-        data: data
+        images: [data]
       })
     }
   }
@@ -96,13 +96,7 @@ export default {
       margin-bottom: .75rem;
     }
 
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    video {
+    img, video {
       width: 100%;
       height: auto;
       display: block;

@@ -54,6 +54,14 @@ export default  {
 			app.config.globalProperties.$popover.close()
 			app.config.globalProperties.$alerts.close()
 		
+			if (from?.name === 'feed-timeline' && to?.name === 'entry') {
+				app.config.globalProperties.$store.commit('app/ADD_CACHED_COMPONENT', 'feed-timeline')
+			}
+
+			if (from?.name === 'feed-abyss' && to?.name === 'entry') {
+				app.config.globalProperties.$store.commit('app/ADD_CACHED_COMPONENT', 'feed-abyss')
+			}
+
 			next()
 		})
 	}

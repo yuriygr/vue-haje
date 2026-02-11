@@ -76,6 +76,11 @@ export default {
           label: this.$t('about.item.architecture'),
           to: { name: 'help-page', params: { uuid: 'architecture' } },
           chevron: true
+        },
+        {
+          label: this.$t('about.item.ai-usage'),
+          to: { name: 'help-page', params: { uuid: 'ai-usage' } },
+          chevron: true
         }
       ]
     }

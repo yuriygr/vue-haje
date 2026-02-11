@@ -72,7 +72,7 @@ export default {
       loading: false,
       error: false,
 
-      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'],
+      allowedFormats: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'video/mp4'],
 
       form: {
         text: '',

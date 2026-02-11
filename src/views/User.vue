@@ -12,7 +12,7 @@
 
     <spacer height="30" />
 
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }" name="user">
       <keep-alive>
         <component :is="Component" />
       </keep-alive>
@@ -40,7 +40,7 @@ export default {
   props: {
     username: {
       type: [ Boolean, String ],
-      defalult: false
+      default: false
     }
   },
   components: {

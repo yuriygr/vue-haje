@@ -11,7 +11,6 @@
       </div>
       <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
       <attachments class="entry__attachments" v-if="data.files || data.link" :files="data.files" :link="data.link" mode="full" />
-      <reactions v-if="data.reactions" class="entry__reactions" :reactions="data.reactions" @react="react" />
       <meta-info class="entry__meta" :items="metaItems" />
     </div>
   </template>
@@ -179,20 +178,6 @@ export default {
     }
   },
   methods: {
-    react(react) {
-      this.$api.post(`entry/${this.data.uuid}/react`, { react })
-      .then(result => {
-        this.data.reactions = result.payload
-      })
-      .catch(error => this.$alerts.danger({ text: error.status }))
-    },
-    removeReaction() {
-      this.$api.delete(`entry/${this.data.uuid}/react`)
-      .then(result => {
-        this.data.reactions = result.payload
-      })
-      .catch(error => this.$alerts.danger({ text: error.status }))
-    },
     prefetchEntry(e) {
       this.$store.dispatch('entry/pre_fetch', this.data)
     },

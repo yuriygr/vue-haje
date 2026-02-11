@@ -311,10 +311,12 @@
   "about": {
     "title": "アプリについて",
     "item": {
-      "user-agreement": "利用規約",
+      "user-agreement": "ユーザー契約",
       "privacy": "プライバシーポリシー",
       "legal": "法的情報",
-      "data-security": "データ保護"
+      "data-security": "データ保護",
+      "architecture": "アプリケーションアーキテクチャ",
+      "ai-usage": "人工知能の利用"
     },
     "refresh": "更新"
   },
@@ -485,6 +487,16 @@
       "icon": "cloud-off-line",
       "title": "不正なリクエスト",
       "description": "リクエスト形式が正しくない可能性があります"
+    },
+    "err_canceled": {
+      "icon": "cloud-off-line",
+      "title": "リクエストはキャンセルされました",
+      "description": "リクエストはキャンセルされた可能性があります。"
+    },
+    "err_network": {
+      "icon": "cloud-off-line",
+      "title": "接続エラー",
+      "description": "サーバーが応答しないか、通信を拒否しています"
     },
     "network_error": {
       "icon": "cloud-off-line",

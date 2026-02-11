@@ -143,6 +143,7 @@ const timeAgo = (timestamp, locale) => {
   return timeFormat(timestamp) // 10 January 2017 at 10:20
 }
 
+
 // ochen' mnogo kostiley
 const contentFormat = (value) => {
   let rules = {

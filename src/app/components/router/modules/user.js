@@ -9,11 +9,11 @@ export default [
     props: true,
     meta: { section: 'user' },
     children: [
-      { path: '', name: 'user', component: UserEntries },
-      { path: 'entries', name: 'user-entries', component: UserEntries },
-      { path: 'subscribers', name: 'user-subscribers', component: UserSubscribers },
-      { path: 'subscriptions', name: 'user-subscriptions', component: UserSubscriptions },
-      { path: 'badges', name: 'user-badges', component: UserBadges },
+      { path: '', name: 'user', components: { user: UserEntries } },
+      { path: 'entries', name: 'user-entries', components: { user: UserEntries } },
+      { path: 'subscribers', name: 'user-subscribers', components: { user: UserSubscribers } },
+      { path: 'subscriptions', name: 'user-subscriptions', components: { user: UserSubscriptions } },
+      { path: 'badges', name: 'user-badges', components: { user: UserBadges } },
 	    { path: ':pathMatch(.*)*', redirect: { name: 'user' } }
     ]
   }

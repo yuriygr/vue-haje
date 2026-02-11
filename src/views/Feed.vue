@@ -7,10 +7,15 @@
 
   <spacer height="30" />
 
-  <router-view />
+  <router-view v-slot="{ Component, route }" name="feed">
+    <keep-alive :include="cachedComponents">
+      <component :is="Component" :key="route.fullPath" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Spacer, Tabs, TabsItem } from '@vue-norma/ui'
 
 export default {
@@ -22,6 +27,7 @@ export default {
     return { }
   },
   computed: {
+    ...mapState('app', ['cachedComponents']),
     tabs() {
       return [
         {
@@ -44,6 +50,11 @@ export default {
         },
       ]
     }
-  }
+  },
+  activated() {
+    if (this.cachedComponents.length > 0) {
+      this.$store.commit('app/RESET_CACHED_COMPONENTS')
+    }
+  },
 }
 </script>

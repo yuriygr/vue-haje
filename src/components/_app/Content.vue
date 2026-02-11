@@ -1,6 +1,10 @@
 <template>
   <div :class="[ 'app-content' ]">
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive :include="['feed']">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 

@@ -7,7 +7,7 @@
 
   <spacer height="30" />
 
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component }" name="bookmarks">
     <keep-alive>
       <component :is="Component" />
     </keep-alive>

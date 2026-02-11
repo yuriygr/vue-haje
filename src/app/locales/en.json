@@ -295,10 +295,12 @@
   "about": {
     "title": "About the application",
     "item": {
-      "user-agreement": "Terms of use",
+      "user-agreement": "User Agreement",
       "privacy": "Privacy Policy",
-      "legal": "legal information",
-      "data-security": "Data protection"
+      "legal": "Legal Information",
+      "data-security": "Data Protection",
+      "architecture": "Application Architecture",
+      "ai-usage": "Use of Artificial Intelligence"
     },
     "refresh": "Update"
   },
@@ -462,6 +464,16 @@
       "title": "Bad request",
       "description": "Most likely, you did something wrong and the server did not understand you"
     },
+    "err_canceled": {
+      "icon": "cloud-off-line",
+      "title": "Request canceled",
+      "description": "You most likely canceled the request"
+    },
+    "err_network": {
+      "icon": "cloud-off-line",
+      "title": "Connection error",
+      "description": "Most likely, the server is unavailable or simply does not want to talk"
+    },
     "network_error": {
       "icon": "cloud-off-line",
       "title": "Connection error",
@@ -554,6 +566,25 @@
     }
   },
   "modals": {
+    "compose": {
+      "tab": {
+        "drafts": "Drafts",
+        "gifs": "Attach GIF",
+        "options": "Publishing Settings"
+      },
+      "action": {
+        "options": "Publishing Settings",
+        "attach_gifs": "Attach GIF",
+        "view_drafts": "View Drafts",
+        "delete_drafts": "Delete Drafts"
+      },
+      "options": {
+        "is_comments_enabled": "Allow Comments",
+        "is_hidden_from_feed": "Hide from General Feed",
+        "is_nsfw": "Contains Inappropriate Content",
+        "is_ai": "Contains AI Generated Content"
+      }
+    },
     "search-filter": {
       "title": "Search filter"
     },
