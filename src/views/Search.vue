@@ -11,8 +11,8 @@
       />
     </div>
 
-    <div v-if="hasFilters" class="search-form__filter">
-      <n-button icon_before="bars-filter-line" @click="openFilterModal" :badge="filterBadge" size="l" mode="tertiary" :title="$t('search.filter')" />
+    <div class="search-form__filter">
+      <n-button icon_before="bars-filter-line" @click="openFilterModal" :badge="hasFilters" size="l" mode="tertiary" :title="$t('search.filter')" />
     </div>
   </div>
   
@@ -47,16 +47,13 @@ export default {
     query() {
       return this.$route.query.q
     },
-    filterBadge() {
-      return true
-    },
     hasFilters() {
       let key = this.$route.meta.key
       return this.$store.getters[`search/${key}/hasFilters`]
     },
     tabs() {
       const currentKey = this.$route.meta.key
-      return Object.freeze([
+      return [
         {
           key: 'all',
           to: this.formatLink(),
@@ -87,7 +84,7 @@ export default {
           label: this.$t('search.tabs.tags'),
           active: currentKey == `tags`
         }
-      ])
+      ]
     },
     availableKeys() {
       return this.tabs.map(el => el.key)

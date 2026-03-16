@@ -56,7 +56,7 @@ export default {
       this.$store.dispatch('feed/feeds/more')
     },
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch('feed/feeds/fetch')
   },
   beforeUnmount() {

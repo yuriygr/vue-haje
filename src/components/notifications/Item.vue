@@ -51,9 +51,9 @@
 
       <div class="notification-item__content">
         <div class="notification-item__label">
-          <skeleton :width="240" :height="9" />
+          <skeleton :width="skeletonWidths.label" :height="9" />
         </div>
-        <skeleton :width="55" :height="8" />
+        <skeleton :width="skeletonWidths.info" :height="8" />
       </div>
 
       <buttons-group :withGap="true" class="notification-item__actions">
@@ -77,7 +77,10 @@ export default {
   },
   data() {
     return {
-
+      skeletonWidths: {
+        label: Math.floor(Math.random() * 100) + 100,
+        info: Math.floor(Math.random() * 100) + 50
+      }
     }
   },
   computed: {

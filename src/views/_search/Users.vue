@@ -64,7 +64,7 @@ export default {
     await this.$store.dispatch('search/users/setFilters', {
       query: this.$route.query.q, offset: undefined
     })
-    this.$store.dispatch('search/users/fetch')
+    await this.$store.dispatch('search/users/fetch')
   },
   beforeUnmount() {
     this.$store.dispatch('search/users/clear')
@@ -72,12 +72,8 @@ export default {
   watch: {
     async '$route.query.q'(to) {
       await this.$store.dispatch('search/users/setFilters', { query: to, offset: undefined })
-      this.$store.dispatch('search/users/fetch')
+      await this.$store.dispatch('search/users/fetch')
     }
   }
 }
 </script>
-
-<style>
-
-</style>

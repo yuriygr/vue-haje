@@ -12,7 +12,7 @@
     <div :class="[ 'tag-item' ]">
       <div class="tag-item__content">
         <div class="tag-item__hash">#</div>
-        <div class="tag-item__label"><skeleton :width="randomWidth" :height="7" /></div>
+        <div class="tag-item__label"><skeleton :width="skeletonWidths.label" :height="7" /></div>
       </div>
     </div>
   </template>
@@ -34,15 +34,14 @@ export default {
   },
   data() {
     return {
-      loading: { }
+      skeletonWidths: {
+        label: Math.floor(Math.random() * 100) + 60
+      }
     }
   },
   computed: {
     tagLink() {
       return { name: 'tag', params: { slug: this.data.slug } }
-    },
-    randomWidth() {
-      return Math.floor(Math.random() * 100) + 60;
     }
   },
   methods: {

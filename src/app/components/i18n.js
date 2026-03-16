@@ -1,27 +1,10 @@
 import { createI18n } from 'vue-i18n'
 
-const loadLocaleMessages = () => {
-  const locales = require.context(
-    // The relative path of the locales folder
-    '@/app/locales',
-    // Whether or not to look in subfolders
-    true,
-    // The regular expression used to match base locale filenames
-    /[A-Za-z0-9-_,\s]+\.json$/i
-  )
-  
-  const messages = {}
+import ru from '@/app/locales/ru'
+import en from '@/app/locales/en'
+import jp from '@/app/locales/jp'
+import pt from '@/app/locales/pt'
 
-  locales.keys().forEach(key => {
-    const matched = key.match(/([A-Za-z0-9-_]+)\./i)
-    if (matched && matched.length > 1) {
-      const locale = matched[1]
-      messages[locale] = locales(key)
-    }
-  })
-
-  return messages
-}
 
 const customRule = (choice, choicesLength, orgRule) => {
   if (choice === 0) {
@@ -44,7 +27,7 @@ const i18n = createI18n({
   //legacy: false,
   locale: process.env.VUE_APP_I18N_LOCALE || 'ru',
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'ru',
-  messages: loadLocaleMessages(),
+  messages: { ru, en, jp, pt },
   pluralizationRules: {
     ru: customRule
   }

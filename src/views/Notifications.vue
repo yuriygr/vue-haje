@@ -8,7 +8,7 @@
 
   <tabs>
     <template v-for="item in tabs" :key="`notification-tab-${item.key}`">
-      <tabs-item :to="item.to" :selected="item.key == filters.tab">{{ item.label }}</tabs-item>
+      <tabs-item :to="item.to" :selected="item.key === filters.tab">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 
@@ -69,15 +69,43 @@ export default {
     ...mapState('notifications', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('notifications', [ 'hasMoreItems' ]),
     tabs() {
-      return Object.freeze([
-        { key: 'all', to: this.formatLink(), label: this.$t('notifications.tabs.all') },
-        { key: 'subscription', to: this.formatLink('subscription'), label: this.$t('notifications.tabs.subscription') },
-        { key: 'comment', to: this.formatLink('comment'), label: this.$t('notifications.tabs.comment') },
-        { key: 'reply', to: this.formatLink('reply'), label: this.$t('notifications.tabs.reply') },
-        { key: 'mention', to: this.formatLink('mention'), label: this.$t('notifications.tabs.mention') },
-        { key: 'new_post', to: this.formatLink('new_post'), label: this.$t('notifications.tabs.new_post') },
-        { key: 'system', to: this.formatLink('system'), label: this.$t('notifications.tabs.system') }
-      ])
+      return [
+        { 
+          key: 'all',
+          to: this.formatLink(),
+          label: this.$t('notifications.tabs.all')
+        },
+        { 
+          key: 'subscription',
+          to: this.formatLink('subscription'),
+          label: this.$t('notifications.tabs.subscription')
+        },
+        { 
+          key: 'comment',
+          to: this.formatLink('comment'),
+          label: this.$t('notifications.tabs.comment')
+        },
+        { 
+          key: 'reply',
+          to: this.formatLink('reply'),
+          label: this.$t('notifications.tabs.reply')
+        },
+        { 
+          key: 'mention',
+          to: this.formatLink('mention'),
+          label: this.$t('notifications.tabs.mention')
+        },
+        { 
+          key: 'new_post',
+          to: this.formatLink('new_post'),
+          label: this.$t('notifications.tabs.new_post')
+        },
+        { 
+          key: 'system',
+          to: this.formatLink('system'),
+          label: this.$t('notifications.tabs.system')
+        }
+      ]
     },
     availableKeys() {
       return this.tabs.map(el => el.key)
@@ -134,13 +162,11 @@ export default {
       ? this.$route.query.tab 
       : 'all'
     
-    if (tab !== this.$route.query.tab) this.deleteTabQuery()
-    
     await Promise.all([
       this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
-      this.$store.dispatch('notifications/fetch'),
-      this.seen()
+      this.$store.dispatch('notifications/fetch')
     ])
+    this.seen()
   },
   beforeUnmount() {
     this.$store.dispatch('notifications/clear')
@@ -148,17 +174,14 @@ export default {
   watch: {
     '$route.query.tab': {
       async handler(to) {
-        if (to) {
-          const tab = this.availableKeys.includes(to) ? to : 'all'
-          if (tab === this.filters.tab) return // Проверка на дубликаты
-          
-          await Promise.all([
-            this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
-            this.$store.dispatch('notifications/fetch')
-          ])
-        }
+        const tab = this.availableKeys.includes(to) ? to : 'all'
+        if (tab === this.filters.tab) return // Проверка на дубликаты
+        
+        await Promise.all([
+          this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
+          this.$store.dispatch('notifications/fetch')
+        ])
       },
-      // @TODO: Перенести логику инициализации сюда
       immediate: false 
     }
   }

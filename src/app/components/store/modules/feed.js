@@ -1,12 +1,11 @@
-import { createListedModule } from '@/app/components/store/module'
+import { createItemModule, createListedModule } from '@/app/components/store/factory'
 
 let feeds = createListedModule('feed/feeds')
 
 let timeline = createListedModule('feed/timeline')
 let abyss = createListedModule('feed/abyss')
-
 let custom = {
-  namespaced: true,
+  ...createItemModule(uuid => `feed/${uuid}`),
   modules: {
     entries: createListedModule(
       (rootState) => `feed/${rootState.feed.custom.data.uuid}/entries`
@@ -14,52 +13,7 @@ let custom = {
     tags: createListedModule(
       (rootState) => `feed/${rootState.feed.custom.data.uuid}/tags`
     )
-  },
-  state() {
-    return {
-      data: {},
-
-      controller: false,
-      loading: false,
-      error: false
-    }
-  },
-  mutations: {
-    SET_DATA: (state, payload) => state.data = payload,
-    CLEAR_DATA: (state) => state.data = {},
-    SET_LOADING: (state, payload) => state.loading = payload,
-    SET_ERROR: (state, payload) => state.error = payload,
-    ADD_CONTROLLER: (state, payload) => state.controller = payload,
-    REMOVE_CONTROLLER: (state) => state.controller = false
-  },
-  actions: {
-    fetch({ commit }, uuid = '') {
-      commit('SET_LOADING', true)
-      commit('SET_ERROR', false)
-
-      const controller = new AbortController()
-      commit('ADD_CONTROLLER', controller)
-
-      this.$api.get(`feed/${uuid}`, false, controller.signal)
-      .then(result => {
-        commit('SET_DATA', result)
-      })
-      .catch(error => {
-        commit('SET_ERROR', error)
-      })
-      .then(_ => {
-        commit('REMOVE_CONTROLLER')
-        commit('SET_LOADING', false)
-      })
-    },
-    clear({ commit, state }) {
-      if (state.controller)
-        state.controller.abort()
-      commit('REMOVE_CONTROLLER')
-      commit('CLEAR_DATA')
-    }
-  },
-  getters: {}
+  }
 }
 
 export default {

@@ -6,29 +6,24 @@
       </template>
     </modal-header>
 
-    <modal-checklist
-      :title="$t('report.why')"
-      :items="reasons"
-      :current="current"
-      
-      @change="changeReason"
-      @reset="resetReason"
-    />
+    <template v-for="reason in reasons" :key="reason.key">
+      <n-radio v-model="current" :value="reason.key" :label="reason.label" name="reason" />
+    </template>
 
     <footer class="modal__footer">
       <n-button mode="secondary" @click.exact="closeModal">{{ $t('action.cancel') }}</n-button>
-      <n-button :disabled="current == 0" @click.exact="submit">{{ $t('action.send_report') }}</n-button>
+      <n-button :disabled="current == '' || loading" @click.exact="submit">{{ $t('action.send_report') }}</n-button>
     </footer>
   </modal>
 </template>
 
 <script>
-import { Modal, ModalHeader, ModalChecklist, NButton } from '@vue-norma/ui'
+import { Modal, ModalHeader, NButton } from '@vue-norma/ui'
 
 export default {
   name: 'feed-report-modal',
   components: {
-    Modal, ModalHeader, ModalChecklist, NButton
+    Modal, ModalHeader, NButton
   },
   props: {
     reportFeed: {
@@ -38,33 +33,38 @@ export default {
   },
   data() {
     return {
-      reasons: [
-        { id: 1, label: this.$t('report.reason.gore') },
-        { id: 2, label: this.$t('report.reason.harassment') },
-        { id: 3, label: this.$t('report.reason.hateful') },
-        { id: 4, label: this.$t('report.reason.self-harm') },
-        { id: 5, label: this.$t('report.reason.nudity') },
-        { id: 6, label: this.$t('report.reason.spam') },
-        { id: 7, label: this.$t('report.reason.screamer') },
-        { id: 8, label: this.$t('report.reason.terrorism') },
-      ],
-      current: 0
+      loading: false,
+      current: ''
+    }
+  },
+  computed: {
+    reasons() {
+      return [
+        { key: 'gore', label: this.$t('report.reason.gore') },
+        { key: 'harassment', label: this.$t('report.reason.harassment') },
+        { key: 'hateful', label: this.$t('report.reason.hateful') },
+        { key: 'self-harm', label: this.$t('report.reason.self-harm') },
+        { key: 'nudity', label: this.$t('report.reason.nudity') },
+        { key: 'spam', label: this.$t('report.reason.spam') },
+        { key: 'screamer', label: this.$t('report.reason.screamer') },
+        { key: 'terrorism', label: this.$t('report.reason.terrorism') },
+      ]
     }
   },
   methods: {
-    changeReason(e, id) {
-      this.current = id
-    },
     resetReason(e) {
-      this.current = 0
+      this.current = ''
     },
     submit() {
       this.loading = true
       
       this.reportFeed(this.current)
-      .then(_ => {
-        this.loading = false
+      .then(() => {
         this.$modals.close()
+      })
+      .catch()
+      .finally(() => {
+        this.loading = false
       })
     },
     closeModal() {
@@ -73,7 +73,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

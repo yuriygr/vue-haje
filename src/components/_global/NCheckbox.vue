@@ -1,9 +1,9 @@
 <template>
-  <label :class="elClass">
+  <label :class="controlClass">
     <input
      class="n-checkbox__input"
-      v-bind="$elBinds"
-      v-on="$elEvents"
+      v-bind="controlBinds"
+      v-on="controlEvents"
     >
     <div class="n-checkbox__control">
       <icon name="ui-check" v-if="checked" size="16" />
@@ -15,14 +15,6 @@
 <script>
 import { Icon } from '@vue-norma/ui'
 
-/**
- * Normal Checkbox
- * 
- * Украл ли я код у "Комитета"? Возможно!
- * Стыдно ли мне? Ни капли!
- * 
- * @version 1.0.2
- */
 export default {
   name: 'n-checkbox',
   components: { Icon },
@@ -51,7 +43,7 @@ export default {
     'update:modelValue'
   ],
   computed: {
-    elClass() {
+    controlClass() {
       return [
         'n-checkbox',
         {
@@ -61,16 +53,16 @@ export default {
         }
       ]
     },
-    $elBinds() {
+    controlBinds() {
       return {
         type:     'checkbox',
         tabindex: this.tabindex,
         value:    this.value,
         checked:  this.checked,
-        disabled: this.disabled,
+        disabled: this.disabled
       }
     },
-    $elEvents() {
+    controlEvents() {
       return {
         change: this.onChange
       }
@@ -81,11 +73,16 @@ export default {
   },
   methods: {
     onChange() {
-      let e = !this.checked;
-      Array.isArray(this.modelValue) && (e = [...this.modelValue],
-      this.checked ? e.splice(e.indexOf(this.value), 1) : e.push(this.value)),
-      this.$emit('update:modelValue', true === e && this.value ? this.value : e)
-    }
+      if (Array.isArray(this.modelValue)) {
+        const next = [...this.modelValue]
+        this.checked
+          ? next.splice(next.indexOf(this.value), 1)
+          : next.push(this.value)
+        this.$emit('update:modelValue', next)
+      } else {
+        this.$emit('update:modelValue', !this.checked)
+      }
+    },
   }
 }
 </script>

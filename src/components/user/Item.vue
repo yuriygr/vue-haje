@@ -8,22 +8,22 @@
       <template v-if="!onlyAvatar">
         <div class="user-item__content">
           <component :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__name">
-            {{ data.name }}
-            <span v-if="data.state.is_verified" class="user-item__verified">
+            {{ localData.name }}
+            <span v-if="localData.state.is_verified" class="user-item__verified">
               <icon name="verify-fill" size="12" />
             </span>
           </component>
           <component v-if="mode != 'small'" :is="clickable ? 'router-link' : 'div'" v-bind="userLinkBinds" class="user-item__username">
-            @{{ data.username }}
+            @{{ localData.username }}
           </component>
         </div>
-        <buttons-group :withGap="true" v-if="showSubscribeAction && !data.state.is_me" class="user-item__actions">
+        <buttons-group :withGap="true" v-if="showSubscribeAction && !localData.state.is_me" class="user-item__actions">
           <n-button
-            :icon_before="data.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
+            :icon_before="localData.state.me_subscribed ? 'user-follow-line' : 'user-add-line'"
             mode="tertiary"
             @click.exact="toggleSubscribe"
             :disabled="loading.subscribe"
-            :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+            :title="$t(localData.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
           />
           <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
         </buttons-group>
@@ -37,10 +37,10 @@
       <template v-if="!onlyAvatar">
         <div class="user-item__content">
           <div class="user-item__name">
-            <skeleton :width="randomWidth(60)" :height="9" />
+            <skeleton :width="skeletonWidths.name" :height="9" />
           </div>
           <div v-if="mode != 'small'" class="user-item__username">
-            <skeleton :width="randomWidth(50)" :height="8" />
+            <skeleton :width="skeletonWidths.username" :height="8" />
           </div>
         </div>
         <buttons-group :withGap="true" v-if="showSubscribeAction" class="user-item__actions">
@@ -53,18 +53,21 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup } from '@vue-norma/ui'
 
-let UserReportModal = defineAsyncComponent(() => import("@/modals/_user/Report.vue"))
+import { userActionsMixin } from '@/mixins/userActionsMixin'
 
 export default {
   name: 'user-item',
+  mixins: [userActionsMixin],
   components: {
     Icon, NButton, ButtonsGroup
   },
   props: {
-    data: false,
+    data: {
+      type: Object,
+      default: null
+    },
     clickable: {
       type: Boolean,
       default: true
@@ -87,23 +90,20 @@ export default {
   },
   data() {
     return {
-      loading: {
-        subscribe: false,
-        bookmarks: false
-      },
       sizes: {
         'hero': 120,
         'normal': 55,
         'small': 40
+      },
+      skeletonWidths: {
+        name: Math.floor(Math.random() * 100) + 60,
+        username: Math.floor(Math.random() * 100) + 50
       }
     }
   },
   computed: {
     avatarUrl() {
-      return `https://www.gravatar.com/avatar/${this.data.avatar.hash}?s=${this.sizes[this.mode]}&d=identicon`
-    },
-    userLink() {
-      return { name: 'user', params: { username: this.data.username } }
+      return `https://www.gravatar.com/avatar/${this.localData.avatar.hash}?s=${this.sizes[this.mode]}&d=identicon`
     },
     userLinkBinds() {
       if (this.clickable)
@@ -117,7 +117,7 @@ export default {
     },
     optionsItems() {
       let _bookmark = [
-        this.data.state.is_bookmarked ?
+        this.localData.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
           label: this.$t('action.remove-bookmark'),
@@ -130,19 +130,19 @@ export default {
       ]
 
       return [
-        ...(this.data.state.is_me) ? [] : _bookmark,
+        ...(this.localData.state.is_me) ? [] : _bookmark,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),
           action: this.copyLink
         },
-         ...(this.data.state.is_me) ? [] : [
+        ...(this.localData.state.is_me) ? [] : [
           {
             icon: 'ui-error-warning',
             label: this.$t('action.report'),
             action: this.report
           }
-         ],
+        ],
       ]
     }
   },
@@ -155,71 +155,6 @@ export default {
         target: target,
         align: 'right'
       })
-    },
-    // Подписки
-    toggleSubscribe() {
-      this.loading.subscribe = true
-      let _path = this.data.state.me_subscribed
-        ? `user/${this.data.username}/unsubscribe`
-        : `user/${this.data.username}/subscribe`
-      this.$api.post(_path)
-      .then(result => {
-        this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.loading.subscribe = false)
-    },
-    
-    // Переключалка закладок
-    toggleBookmarks() {
-      this.loading.bookmarks = true
-      this.$api.post('my/bookmarks', {
-        type: this.data.state.is_bookmarked ? 'remove' : 'add',
-        object: 'user',
-        user_id: this.data.user_id
-      })
-      .then(result => {
-        this.data.state.is_bookmarked = (result.status == 'added')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-
-        this.$popover.close()
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.loading.bookmarks = false)
-    },
-
-    reportUser(reason = 0) {
-      return this.$api.post(`user/${this.data.username}/report`, { reason })
-      .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-    },
-
-    // Остальные действия
-    copyLink() {
-      let _url = this.$router.resolve(this.userLink)
-      navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
-      })
-      this.$popover.close()
-    },
-    report() {
-      this.$modals.show(UserReportModal, {
-        reportUser: this.reportUser
-      })
-      this.$popover.close()
-    },
-    randomWidth(size) {
-      return Math.floor(Math.random() * 100) + size;
     }
   }
 }

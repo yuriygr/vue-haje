@@ -1,4 +1,4 @@
-import { createSearchModule } from '@/app/components/store/module'
+import { createSearchModule } from '@/app/components/store/factory'
 
 let all = {
   namespaced: true,

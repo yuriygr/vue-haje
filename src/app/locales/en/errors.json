@@ -1,0 +1,117 @@
+{
+  "todo": {
+    "icon": "ghost-line",
+    "title": "Under development",
+    "description": "This feature is not yet available and is under development. "
+  },
+  "method_not_allowed": {
+    "icon": "cloud-off-line",
+    "title": "Method not available",
+    "description": "Perhaps the developers made a mistake and it shouldn't be like this"
+  },
+  "unauthorized": {
+    "icon": "spy-line",
+    "title": "Access is denied",
+    "description": "To view the content you must log in"
+  },
+  "tag_not_found": {
+    "icon": "ghost-line",
+    "title": "Tag not found",
+    "description": "You may have thought that such a tag exists"
+  },
+  "user_not_found": {
+    "icon": "user-line",
+    "title": "User is not found",
+    "description": "Try searching for other existing users"
+  },
+  "feed_not_found": {
+    "icon": "feeds-line",
+    "title": "Feeds not found",
+    "description": "Try looking for other existing feeds"
+  },
+  "user_suspended": {
+    "icon": "ghost-line",
+    "title": "User suspendet",
+    "description": "I don’t know what this means, but he did something interesting"
+  },
+  "user_blocked": {
+    "icon": "ghost-line",
+    "title": "the user is blocked",
+    "description": "I behaved badly, that's right. "
+  },
+  "user_deleted": {
+    "icon": "ghost-line",
+    "title": "User deleted",
+    "description": "And anyway, where is such confidence that he existed?"
+  },
+  "user_not_activated": {
+    "icon": "ghost-line",
+    "title": "User is not activated",
+    "description": "As soon as he confirms his email, he will appear here"
+  },
+  "entry_not_found": {
+    "icon": "ghost-line",
+    "title": "Record not found",
+    "description": "Most likely, she was never here. "
+  },
+  "entry_hidden": {
+    "icon": "ghost-line",
+    "title": "Post hidden",
+    "description": "Yes, and this happens in our abode of free speech."
+  },
+  "bad_request": {
+    "icon": "cloud-off-line",
+    "title": "Bad request",
+    "description": "Most likely, you did something wrong and the server did not understand you"
+  },
+  "err_canceled": {
+    "icon": "cloud-off-line",
+    "title": "Request canceled",
+    "description": "You most likely canceled the request"
+  },
+  "err_network": {
+    "icon": "cloud-off-line",
+    "title": "Connection error",
+    "description": "Most likely, the server is unavailable or simply does not want to talk"
+  },
+  "network_error": {
+    "icon": "cloud-off-line",
+    "title": "Connection error",
+    "description": "Most likely, the server is unavailable or simply does not want to talk"
+  },
+  "invalid_connection": {
+    "icon": "cloud-off-line",
+    "title": "Incorrect connection",
+    "description": "Most likely, the server is unavailable or simply does not want to talk"
+  },
+  "timeout_exceeded": {
+    "icon": "cloud-off-line",
+    "title": "The server did not respond for a very long time",
+    "description": "Most likely, the server is unavailable or simply does not want to talk"
+  },
+  "empty_feed": {
+    "icon": "timeline-line",
+    "title": "The feed is empty",
+    "description": "Perhaps you should follow someone?"
+  },
+  "empty_bookmarks": {
+    "icon": "bookmarks-line",
+    "title": "No bookmarks",
+    "description": "To make them appear here you need to add them"
+  },
+  "empty_search": {
+    "icon": "search-line",
+    "title": "No results",
+    "description": "It might be worth clarifying your request."
+  },
+  "empty_notifications": {
+    "icon": "bell-line",
+    "title": "No notifications",
+    "description": "Most likely they will appear soon"
+  },
+  "empty_feeds": {
+    "icon": "feeds-line",
+    "title": "No feeds",
+    "description": "Maybe it’s worth looking for suitable ones and subscribing to them, what do you think?"
+  }
+}

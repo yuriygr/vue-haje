@@ -3,7 +3,7 @@
     <n-header>{{ $t('settings.appearance.title') }}</n-header>
 
     <form-block :label="$t('settings.appearance.field.theme')">
-      <select-field tabindex="1" name="theme" v-model="theme" @change="change('theme', $event)">
+      <select-field tabindex="1" name="theme" :model-value="theme" @change="change('theme', $event)">
         <template v-for="key in themes" :key="`theme-${key}`">
           <option :value="key" :selected="key == theme">{{ $t(`app.theme.${key}`) }}</option>
         </template>
@@ -11,7 +11,7 @@
     </form-block>
 
     <form-block :label="$t('settings.appearance.field.locale')">
-      <select-field tabindex="2" name="locale" v-model="locale" @change="change('locale', $event)">
+      <select-field tabindex="2" name="locale" :model-value="locale" @change="change('locale', $event)">
         <template v-for="key in locales" :key="`locale-${key}`">
           <option :value="key" :selected="key == locale">{{ $t(`app.locale.${key}`) }}</option>
         </template>
@@ -19,7 +19,7 @@
     </form-block>
 
     <form-block :label="$t('settings.appearance.field.density')">
-      <select-field tabindex="2" name="density" v-model="density" @change="change('density', $event)">
+      <select-field tabindex="3" name="density" :model-value="density" @change="change('density', $event)">
         <template v-for="key in densities" :key="`density-${key}`">
           <option :value="key" :selected="key == density">{{ $t(`app.density.${key}`) }}</option>
         </template>

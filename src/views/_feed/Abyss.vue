@@ -79,18 +79,11 @@ export default {
       this.$store.dispatch('feed/abyss/more')
     }
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch('feed/abyss/fetch')
   },
   beforeUnmount() {
     this.$store.dispatch('feed/abyss/clear')
-  },
-  watch: {
-
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

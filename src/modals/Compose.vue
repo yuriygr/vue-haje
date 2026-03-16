@@ -27,13 +27,14 @@
           <n-button icon_before="settings-line" @click="openView('options')" mode="tertiary" ref="options" :title="$t('modals.compose.action.options')" />
           <n-button icon_before="gif-line" @click="openView('gifs')" mode="tertiary" :title="$t('modals.compose.action.attach_gifs')" />
           <n-button icon_before="image-line" @click="attachFiles" mode="tertiary" :title="$t('action.attach_image')" />
-          <n-button v-if="mode == 'add'" :disabled="!canSubmit" @click="addEntry">{{ $t('action.create_entry') }}</n-button>
-          <n-button v-if="mode == 'edit'" :disabled="!canSubmit" @click="updateEntry">{{ $t('action.save_entry') }}</n-button>
+          <n-button :disabled="!canSubmit" @click="sendForm">
+            {{ $t(mode == 'add' ? 'action.create_entry' : 'action.save_entry') }}
+          </n-button>
         </buttons-group>
       </div>
     </div>
 
-    <div v-show="currentView == 'drafts'">
+    <div v-if="currentView == 'drafts'">
       <modal-header :title="$t('modals.compose.tab.drafts')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
@@ -43,14 +44,22 @@
         </template>
       </modal-header>
 
-      <placeholder
-        :icon="$t('errors.todo.icon')"
-        :header="$t('errors.todo.title')"
-        :text="$t('errors.todo.description')"
-      />
+      <template v-if="drafts.length == 0">
+        <placeholder-loading v-if="draftsLoading" />
+        <placeholder v-else-if="draftsError"
+          :icon="$t(humanizeError(draftsError).icon)"
+          :header="$t(humanizeError(draftsError).title)"
+          :text="$t(humanizeError(draftsError).description)"
+        />
+        <placeholder v-else
+          :icon="$t('errors.empty_drafts.icon')"
+          :header="$t('errors.empty_drafts.title')"
+          :text="$t('errors.empty_drafts.description')"
+        />
+      </template>
     </div>
 
-    <div v-show="currentView == 'gifs'">
+    <div v-if="currentView == 'gifs'">
       <modal-header :title="$t('modals.compose.tab.gifs')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
@@ -64,7 +73,7 @@
       />
     </div>
 
-    <div v-show="currentView == 'options'">
+    <div v-if="currentView == 'options'">
       <modal-header :title="$t('modals.compose.tab.options')">
         <template #before>
           <n-button icon_before="angle-left-line" mode="tertiary" @click.exact="openView('form')" :title="$t('action.back')" />
@@ -91,18 +100,20 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 
-import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, Group } from '@vue-norma/ui'
+import { useDraft } from '@/composables/useDraft'
+
+import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, PlaceholderLoading, Group } from '@vue-norma/ui'
 
 export default {
   name: 'compose-modal',
   components: {
     UserItem,
-    Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, AttachmentsForm, Placeholder, Group
+    Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, AttachmentsForm, Placeholder, PlaceholderLoading, Group
   },
   props: {
     data: {
@@ -149,6 +160,8 @@ export default {
     ...mapState('auth', {
       'session_data': state => state.data
     }),
+    ...mapState('drafts', { drafts: 'data', draftsLoading: 'loading', draftsError: 'error' }),
+    ...mapGetters('drafts', [ 'hasMoreItems' ]),
     $formClass() {
       return [
         'compose',
@@ -196,10 +209,15 @@ export default {
     }
   },
   methods: {
+    // ─── Навигация ────────────────────────────────────────
     openView(view) {
       this.currentView = this.availableViews.includes(view) 
                         ? view 
                         : this.availableViews[0] ?? 'form'
+
+      if (view === 'drafts') {
+        this.$store.dispatch('drafts/fetch')
+      }
     },
     closeModal() {
       if (this.canSubmit) {
@@ -209,18 +227,22 @@ export default {
       this.$modals.close()
     },
 
+    // ─── Публикация ───────────────────────────────────────
+
     sendForm() {
-      return this.mode == 'add' ? this.addEntry() : this.updateEntry()
-    },
-
-    addEntry() {
       if (!this.canSubmit) return
 
       this.loading = true
       this.error = false
 
-      this.$api.postJSON('entry', this.form)
-      .then(result => {
+      let endpoint = this.mode == 'add'
+        ? 'entry'
+        : `entry/${this.data.uuid}`
+
+      this.$api.postJSON(endpoint, this.form)
+      .then(async result => {
+        await this._draft.discardDraft()
+        this.clearForm()
         this.$modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
@@ -228,66 +250,63 @@ export default {
         this.error = error
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     },
-    updateEntry() {
-      if (!this.canSubmit) return
 
-      this.loading = true
-      this.error = false
-
-      this.$api.postJSON('entry/' + this.data.uuid, this.form)
-      .then(result => {
-        this.$modals.close()
-        this.$router.push({ name: 'entry', params: { uuid: result.payload } })
-      })
-      .catch(error => {
-        this.error = error
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.loading = false)
+    clearForm() {
+      this.form = {
+        text: '',
+        files: [],
+        link: null,
+        is_comments_enabled: true,
+        is_hidden_from_feed: false,
+        is_nsfw: false,
+        is_ai: false
+      }
     },
 
     attachFiles() {
       this.$refs.file.attachFiles()
     },
 
-    deleteAllDrafts() {
-      this.$api.delete('my/drafts')
-      .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
+    // ─── Работа с черновиками ─────────────────────────────
+
+    async loadDraft(id) {
+      const data = await this._draft.loadDraft(id)
+      if (!data) return
+
+      this.$refs.field.innerHTML = (data.text ?? '').replace(/\n/g, '<br>')
+      this.form = {
+        text: this.$refs.field.innerText,
+        files: data.files ?? [],
+        link: data.link,
+        is_comments_enabled: data.is_comments_enabled,
+        is_hidden_from_feed: data.is_hidden_from_feed,
+        is_nsfw: data.is_nsfw,
+        is_ai: data.is_ai
+      }
+      this.openView('form')
+      this.$refs.field.focus()
     },
 
-    detectLink() {
-      if (this.debounceTimer) clearTimeout(this.debounceTimer)
-
-      this.debounceTimer = setTimeout(async () => {
-        const text = this.$refs.field.innerText
-        const match = text.match(/(https?:\/\/[^\s]+)/)
-        const url = match ? match[0] : null
-
-        if (!url || url === this.currentUrl) return
-        this.currentUrl = url
-        this.form.link = null
-
-        try {
-          const { data } = await this.$api.get(`utils/linkpreview?url=${encodeURIComponent(url)}`)
-          this.form.link = { ...data, url }
-        } catch {}
-      }, 600)
+    removeDraft(id) {
+      this._draft.deleteDraft(id)
     },
 
-    // Field
+    async deleteAllDrafts() {
+      this._draft.deleteAll()
+    },
+
+    // ─── Поле ввода ───────────────────────────────────────
     
     field_onInput(e) {
       if (this.$refs.field.innerHTML == "<br>") {
         this.$refs.field.innerText = ''
       }
       this.form.text = this.$refs.field.innerText
+      
+      // Сохраняем при каждом нажатии
+      this._draft.autoSave(this.form)
     },
     field_onKeyup(e) {
       
@@ -352,7 +371,34 @@ export default {
     form_onDragOver(e) {
       e.preventDefault()
       this.dragover = true
-    }
+    },
+
+    detectLink() {
+      if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
+      this.debounceTimer = setTimeout(async () => {
+        const text = this.$refs.field.innerText
+        const match = text.match(/(https?:\/\/[^\s]+)/)
+        const url = match ? match[0] : null
+
+        if (!url || url === this.currentUrl) return
+        this.currentUrl = url
+        this.form.link = null
+
+        try {
+          const { data } = await this.$api.get(`utils/linkpreview?url=${encodeURIComponent(url)}`)
+          this.form.link = { ...data, url }
+        } catch {}
+      }, 600)
+    },
+
+
+    humanizeError(error) {
+      return this.$filters.humanizeError(error)
+    },
+  },
+  created() {
+    this._draft = useDraft(this, { mode: this.mode })
   },
   mounted() {
     this.$field.focus()
@@ -362,12 +408,19 @@ export default {
       this.user = this.data.user
       this.form = {
         text: this.$refs.field.innerText,
+        files: this.data.files ? this.data.files.flatMap(i => i.file) : [],
+        link: this.data.link,
         is_comments_enabled: this.data.state.is_comments_enabled,
         is_hidden_from_feed: this.data.state.is_hidden_from_feed,
         is_nsfw: this.data.state.is_nsfw,
-        is_ai: this.data.state.is_ai,
-        link: this.data.link,
-        files: this.data.files ? this.data.files.flatMap(i => i.file) : []
+        is_ai: this.data.state.is_ai
+      }
+    } else {
+      // Режим создания — восстанавливаем локальный черновик
+      const local = this._draft.loadLocal()
+      if (local) {
+        this.$refs.field.innerHTML = (local.text ?? '').replace(/\n/g, '<br>')
+        this.form = { ...this.form, ...local }
       }
     }
 
@@ -376,6 +429,16 @@ export default {
         this.$refs.file.handleFileSelect({ target: { files: this.draggedFiles }})
       }
     })
+  },
+  beforeUnmount() {
+    // Отменяем pending автосохранение
+    this._draft.autoSave.cancel()
+
+    // Сохраняем локально
+    this._draft.saveLocal(this.form)
+
+    // Очищаем стор черновиков
+    this.$store.dispatch('drafts/clear')
   }
 }
 </script>

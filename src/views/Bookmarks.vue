@@ -1,7 +1,7 @@
 <template>
   <tabs>
     <template v-for="item in tabs" :key="`bookmarks-tab-${item.key}`">
-      <tabs-item :to="item.to" :selected="item.key == $route.meta.key">{{ item.label }}</tabs-item>
+      <tabs-item :to="item.to" :selected="item.key === $route.meta.key">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     tabs() {
-      return Object.freeze([
+      return [
         {
           key: 'all',
           to: this.formatLink(),
@@ -58,10 +58,7 @@ export default {
           to: this.formatLink('feeds'),
           label: this.$t('bookmarks.tabs.feeds')
         }
-      ])
-    },
-    availableKeys() {
-      return this.tabs.map(el => el.key)
+      ]
     }
   },
   methods: {
@@ -78,7 +75,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

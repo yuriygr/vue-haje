@@ -12,6 +12,11 @@
     "theme": {
       "white": "ライトテーマ",
       "black": "ダークテーマ"
+    },
+    "density": {
+      "compact": "コンパクト",
+      "default": "スタンダード",
+      "spacious": "広々とした"
     }
   },
   "header": {
@@ -243,7 +248,12 @@
       "apply": "私は他人のアカウントを盗むつもりはなく、自らの意思でパスワードを変更します"
     },
     "appearance": {
-      "title": "外観"
+      "title": "外観",
+      "field": {
+        "locale": "インターフェース言語",
+        "theme": "インターフェーステーマ",
+        "density": "要素密度"
+      }
     },
     "connections": {
       "title": "連携アカウント"
@@ -417,138 +427,6 @@
     "entry_deleted": "投稿を削除しました",
     "comment_deleted": "コメントを削除しました"
   },
-  "errors": {
-    "user_cant_delete_entries": "投稿を削除できません",
-    "user_cant_edit_entries": "投稿を編集できません",
-    "user_cant_delete_comments": "コメントを削除できません",
-    "user_cant_edit_comments": "コメントを編集できません",
-
-    "todo": {
-      "icon": "ghost-line",
-      "title": "開発中",
-      "description": "この機能はまだ利用できません。開発者が怠けているのかもしれません"
-    },
-    "method_not_allowed": {
-      "icon": "cloud-off-line",
-      "title": "メソッドが許可されていません",
-      "description": "開発者がミスをしたようです"
-    },
-    "unauthorized": {
-      "icon": "spy-line",
-      "title": "アクセス拒否",
-      "description": "閲覧するにはログインが必要です"
-    },
-    "tag_not_found": {
-      "icon": "ghost-line",
-      "title": "タグが見つかりません",
-      "description": "そんなタグは存在しないかもしれません"
-    },
-    "user_not_found": {
-      "icon": "user-line",
-      "title": "ユーザーが見つかりません",
-      "description": "他のユーザーを探してみてください"
-    },
-    "feed_not_found": {
-      "icon": "feeds-line",
-      "title": "フィードが見つかりません",
-      "description": "他のフィードを探してみてください"
-    },
-    "user_suspended": {
-      "icon": "ghost-line",
-      "title": "ユーザー停止中",
-      "description": "何か面白いことをしたようです"
-    },
-    "user_blocked": {
-      "icon": "ghost-line",
-      "title": "ユーザーがブロックされました",
-      "description": "不適切な行動があったためブロックされました。同じ行動を続けるとあなたも同じ運命をたどりますよ"
-    },
-    "user_deleted": {
-      "icon": "ghost-line",
-      "title": "ユーザーが削除されました",
-      "description": "そもそも、そのユーザーが本当に存在していたかどうか確信がありますか？"
-    },
-    "user_not_activated": {
-      "icon": "ghost-line",
-      "title": "ユーザーが未アクティベートです",
-      "description": "メールアドレスを確認すると、ここに表示されます"
-    },
-    "entry_not_found": {
-      "icon": "ghost-line",
-      "title": "投稿が見つかりません",
-      "description": "おそらく、最初から存在していなかったのでしょう。でも、確かなことは誰にもわかりませんね"
-    },
-    "entry_hidden": {
-      "icon": "user-unfollow-line",
-      "title": "投稿が非表示です",
-      "description": "自由な表現の場でも、時にはこういうことがあります"
-    },
-    "bad_request": {
-      "icon": "cloud-off-line",
-      "title": "不正なリクエスト",
-      "description": "リクエスト形式が正しくない可能性があります"
-    },
-    "err_canceled": {
-      "icon": "cloud-off-line",
-      "title": "リクエストはキャンセルされました",
-      "description": "リクエストはキャンセルされた可能性があります。"
-    },
-    "err_network": {
-      "icon": "cloud-off-line",
-      "title": "接続エラー",
-      "description": "サーバーが応答しないか、通信を拒否しています"
-    },
-    "network_error": {
-      "icon": "cloud-off-line",
-      "title": "接続エラー",
-      "description": "サーバーが応答しないか、通信を拒否しています"
-    },
-    "invalid_connection": {
-      "icon": "cloud-off-line",
-      "title": "無効な接続",
-      "description": "サーバーとの接続に問題が発生しました"
-    },
-    "timeout_exceeded": {
-      "icon": "cloud-off-line",
-      "title": "タイムアウトしました",
-      "description": "サーバーの応答がありません。しばらく待ってから再試行してください"
-    },
-    "empty_feed": {
-      "icon": "timeline-line",
-      "title": "フィードが空です",
-      "description": "誰かをフォローしてみてはいかがですか？"
-    },
-    "empty_bookmarks": {
-      "icon": "bookmarks-line",
-      "title": "ブックマークがありません",
-      "description": "ブックマークを追加するとここに表示されます"
-    },
-    "empty_search": {
-      "icon": "search-line",
-      "title": "検索結果なし",
-      "description": "検索条件を変えてみてください"
-    },
-    "empty_notifications": {
-      "icon": "bell-line",
-      "title": "通知はありません",
-      "description": "すぐに新しい通知が届くかもしれません"
-    },
-    "empty_feeds": {
-      "icon": "feeds-line",
-      "title": "フィードがありません",
-      "description": "興味のあるフィードを探して登録してみませんか？"
-    },
-    "feeds_not_created": {
-      "icon": "feeds-line",
-      "title": "フィードがありません",
-      "description": "まだフィードを作成していません。今すぐ始めましょう！"
-    },
-    "help_page_not_found": {
-      "icon": "ghost-line",
-      "title": "ページが見つかりません",
-      "description": "もともと存在しなかったのかもしれません。確かなことは誰にも..."
-    }
-  },
   "action": {
     "options": "その他",
     "subscribe": "フォローする",
@@ -573,42 +451,5 @@
     "remove-bookmark": "ブックマークから削除",
     "add-bookmark": "ブックマークに追加",
     "confirm": "保存せずに終了しますか？"
-  },
-  "modals": {
-    "search-filter": {
-      "title": "検索フィルター"
-    },
-    "entry-history": {
-      "title": "編集履歴"
-    },
-    "entry-delete": {
-      "title": "投稿を削除",
-      "help": "この投稿を削除しようとしています。本当に必要ですか？"
-    },
-    "entry-report": {
-      "title": "投稿の報告"
-    },
-    "comment-history": {
-      "title": "コメントの編集履歴"
-    },
-    "comment-edit": {
-      "title": "コメントを編集"
-    },
-    "comment-report": {
-      "title": "コメントの報告"
-    },
-    "comment-delete": {
-      "title": "コメントを削除",
-      "help": "このコメントを削除しようとしています。本当に必要ですか？"
-    },
-    "user-report": {
-      "title": "ユーザーの報告"
-    },
-    "feed-create": {
-      "title": "フィードを作成"
-    },
-    "feed-report": {
-      "title": "フィードの報告"
-    }
   }
 }

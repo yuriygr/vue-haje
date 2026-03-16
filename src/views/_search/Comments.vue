@@ -64,7 +64,7 @@ export default {
     await this.$store.dispatch('search/comments/setFilters', {
       query: this.$route.query.q, offset: undefined
     })
-    this.$store.dispatch('search/comments/fetch')
+    await this.$store.dispatch('search/comments/fetch')
   },
   beforeUnmount() {
     this.$store.dispatch('search/comments/clear')
@@ -72,12 +72,8 @@ export default {
   watch: {
     async '$route.query.q'(to) {
       await this.$store.dispatch('search/comments/setFilters', { query: to, offset: undefined })
-      this.$store.dispatch('search/comments/fetch')
+      await this.$store.dispatch('search/comments/fetch')
     }
   }
 }
 </script>
-
-<style>
-
-</style>

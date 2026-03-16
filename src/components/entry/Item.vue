@@ -24,15 +24,15 @@
         </buttons-group>
       </div>
       <div class="entry__content">
-        <skeleton :width="240" :height="9" />
+        <skeleton :width="skeletonWidths.q" :height="9" />
         <br />
-        <skeleton :width="310" :height="9" />
+        <skeleton :width="skeletonWidths.w" :height="9" />
         <br />
-        <skeleton :width="80" :height="9" />
+        <skeleton :width="skeletonWidths.e" :height="9" />
         <br />
-        <skeleton :width="190" :height="9" />
+        <skeleton :width="skeletonWidths.r" :height="9" />
         <br />
-        <skeleton :width="55" :height="8" /> <skeleton :width="70" :height="8" />
+        <skeleton :width="skeletonWidths.t" :height="8" /> <skeleton :width="skeletonWidths.y" :height="8" />
       </div>
     </div>
   </template>
@@ -42,12 +42,13 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
-let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
+const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
-let EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
-let EntryReportModal = defineAsyncComponent(() => import("@/modals/_entry/Report.vue"))
-let EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
-let EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
+const EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
+const EntryReportModal = defineAsyncComponent(() => import("@/modals/_entry/Report.vue"))
+const EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
+const EntryReportsModal = defineAsyncComponent(() => import("@/modals/_entry/Reports.vue"))
+const EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
 
 import { ActionItem } from '@/components/actions'
 import { UserItem } from '@/components/user'
@@ -78,6 +79,14 @@ export default {
       loading: {
         stars: false,
         bookmarks: false
+      },
+      skeletonWidths: {
+        q: Math.floor(Math.random() * 100) + 220,
+        w: Math.floor(Math.random() * 100) + 200,
+        e: Math.floor(Math.random() * 100) + 80,
+        r: Math.floor(Math.random() * 100) + 190,
+        t: Math.floor(Math.random() * 100) + 55,
+        y: Math.floor(Math.random() * 100) + 70,
       }
     }
   },
@@ -112,6 +121,11 @@ export default {
       ]
 
       let _edit = [
+        {
+          icon: 'ui-error-warning',
+          label: this.$t('action.reports'),
+          action: this.reports
+        },
         {
           icon: 'ui-pencil',
           label: this.$t('action.edit'),
@@ -164,13 +178,11 @@ export default {
           action: this.history
         }] : [],
         ...(this.data.user.state.is_me && this.showPinAction) ? _pin : [],
-        ...(this.data.user.state.is_me) ? _edit : [
-          {
-            icon: 'ui-error-warning',
-            label: this.$t('action.report'),
-            action: this.report
-          }
-        ]
+        ...(this.data.user.state.is_me) ? _edit : [{
+          icon: 'ui-error-warning',
+          label: this.$t('action.report'),
+          action: this.report
+        }]
       ]
     },
     formatedDate() {
@@ -283,6 +295,12 @@ export default {
     report() {
       this.$modals.show(EntryReportModal, {
         reportEntry: this.reportEntry
+      })
+      this.$popover.close()
+    },
+    reports() {
+      this.$modals.show(EntryReportsModal, {
+        uuid: this.data.uuid
       })
       this.$popover.close()
     },

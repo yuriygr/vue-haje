@@ -78,7 +78,7 @@ export default {
       .catch(error => {
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     },
     cleanError(type) {
 

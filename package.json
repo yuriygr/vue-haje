@@ -1,7 +1,7 @@
 {
   "name": "vue-haje",
   "productName": "Futubra",
-  "version": "1.8.105",
+  "version": "1.9.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode local",

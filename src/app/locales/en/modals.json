@@ -1,0 +1,56 @@
+{
+  "compose": {
+    "tab": {
+      "drafts": "Drafts",
+      "gifs": "Attach GIF",
+      "options": "Publishing Settings"
+    },
+    "action": {
+      "options": "Publishing Settings",
+      "attach_gifs": "Attach GIF",
+      "view_drafts": "View Drafts",
+      "delete_drafts": "Delete Drafts"
+    },
+    "options": {
+      "is_comments_enabled": "Allow Comments",
+      "is_hidden_from_feed": "Hide from General Feed",
+      "is_nsfw": "Contains Inappropriate Content",
+      "is_ai": "Contains AI Generated Content"
+    }
+  },
+  "search-filter": {
+    "title": "Search filter"
+  },
+  "entry-history": {
+    "title": "Version history"
+  },
+  "entry-delete": {
+    "title": "Delete entry",
+    "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
+  },
+  "entry-report": {
+    "title": "Complaint about the post"
+  },
+  "comment-history": {
+    "title": "Version history"
+  },
+  "comment-edit": {
+    "title": "Edit comment"
+  },
+  "comment-report": {
+    "title": "Complaint about the comment"
+  },
+  "comment-delete": {
+    "title": "Delete comment",
+    "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
+  },
+  "user-report": {
+    "title": "Complaint about an user"
+  },
+  "feed-create": {
+    "title": "Create feed"
+  },
+  "feed-report": {
+    "title": "Complaint about the feed"
+  }
+}

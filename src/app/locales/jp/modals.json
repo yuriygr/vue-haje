@@ -1,0 +1,56 @@
+{
+  "compose": {
+    "tab": {
+      "drafts": "下書き",
+      "gifs": "GIFを添付",
+      "options": "公開設定"
+    },
+    "action": {
+      "options": "公開設定",
+      "attach_gifs": "GIFを添付",
+      "view_drafts": "下書きを表示",
+      "delete_drafts": "下書きを削除"
+    },
+    "options": {
+      "is_comments_enabled": "コメントを許可",
+      "is_hidden_from_feed": "一般フィードから非表示",
+      "is_nsfw": "不適切なコンテンツが含まれています",
+      "is_ai": "AI生成コンテンツが含まれています"
+    }
+  },
+  "search-filter": {
+    "title": "検索フィルター"
+  },
+  "entry-history": {
+    "title": "編集履歴"
+  },
+  "entry-delete": {
+    "title": "投稿を削除",
+    "help": "この投稿を削除しようとしています。本当に必要ですか？"
+  },
+  "entry-report": {
+    "title": "投稿の報告"
+  },
+  "comment-history": {
+    "title": "コメントの編集履歴"
+  },
+  "comment-edit": {
+    "title": "コメントを編集"
+  },
+  "comment-report": {
+    "title": "コメントの報告"
+  },
+  "comment-delete": {
+    "title": "コメントを削除",
+    "help": "このコメントを削除しようとしています。本当に必要ですか？"
+  },
+  "user-report": {
+    "title": "ユーザーの報告"
+  },
+  "feed-create": {
+    "title": "フィードを作成"
+  },
+  "feed-report": {
+    "title": "フィードの報告"
+  }
+}

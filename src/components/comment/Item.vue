@@ -32,9 +32,9 @@
           <user-item :showSubscribeAction="false" mode="small" />
         </div>
         <div class="comment__content">
-          <skeleton :width="240" :height="9" />
+          <skeleton :width="skeletonWidths.q" :height="9" />
           <br />
-          <skeleton :width="55" :height="8" /> <skeleton :width="70" :height="8" />
+          <skeleton :width="skeletonWidths.w" :height="8" /> <skeleton :width="skeletonWidths.e" :height="8" />
         </div>
       </div>
     </div>
@@ -48,10 +48,10 @@ import { Icon, NButton, MetaInfo } from '@vue-norma/ui'
 import Attachments from '@/components/attachments'
 import { UserItem } from '@/components/user'
 
-let CommentForm = defineAsyncComponent(() => import("@/components/comment/Form.vue"))
-let CommentReportModal = defineAsyncComponent(() => import("@/modals/_comment/Report.vue"))
-let CommentHistoryModal = defineAsyncComponent(() => import("@/modals/_comment/History.vue"))
-let CommentDeleteModal = defineAsyncComponent(() => import("@/modals/_comment/Delete.vue"))
+const CommentForm = defineAsyncComponent(() => import("@/components/comment/Form.vue"))
+const CommentReportModal = defineAsyncComponent(() => import("@/modals/_comment/Report.vue"))
+const CommentHistoryModal = defineAsyncComponent(() => import("@/modals/_comment/History.vue"))
+const CommentDeleteModal = defineAsyncComponent(() => import("@/modals/_comment/Delete.vue"))
 
 export default {
   name: 'comment-item',
@@ -98,6 +98,11 @@ export default {
       loading: {
         stars: false,
         bookmarks: false
+      },
+      skeletonWidths: {
+        q: Math.floor(Math.random() * 100) + 200,
+        w: Math.floor(Math.random() * 100) + 40,
+        e: Math.floor(Math.random() * 100) + 50
       }
     }
   },
@@ -302,13 +307,13 @@ export default {
 
 .comment {
   --comment--background-highlighted: rgba(255, 255, 255, .03);
-  --comment__author--backgroud: var(--x-color-pink--tint10); 
-  --comment__author--color: var(--x-color-pink--tint70); 
+  --comment__author--background: var(--x-color-pink--tint70); 
+  --comment__author--color: var(--x-color-pink--tint10); 
 
   html[data-theme="black"] & {
     --comment--background-highlighted: rgba(255, 255, 255, .03);
-    --comment__author--backgroud: var(--x-color-pink--tint60); 
-    --comment__author--color: var(--x-color-pink--shade50); 
+    --comment__author--background: var(--x-color-pink--shade50); 
+    --comment__author--color: var(--x-color-pink--tint60); 
   }
 }
 
@@ -337,8 +342,8 @@ export default {
     margin-left: 1rem;
     font-size: 1.1rem;
     line-height: 1.6em;
-    color: var(--comment__author--backgroud);
-    background: var(--comment__author--color);
+    background: var(--comment__author--background);
+    color: var(--comment__author--color);
     padding: 0 .3rem;
     border-radius: 4px;
     text-transform: lowercase;

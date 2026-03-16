@@ -77,3 +77,22 @@ export const captureVideoFrame = (video, format, quality) => {
   var blob = new Blob([ arr ], { type: mimeType });
   return { blob: blob, dataUri: dataUri, format: format };
 }
+
+export function debounce(fn, delay) {
+  let timer = null
+
+  function debounced(...args) {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    }, delay)
+  }
+
+  debounced.cancel = () => {
+    clearTimeout(timer)
+    timer = null
+  }
+
+  return debounced
+}

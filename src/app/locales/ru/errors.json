@@ -1,0 +1,132 @@
+{
+  "todo": {
+    "icon": "ghost-line",
+    "title": "На стадии разработки",
+    "description": "Данная фича еще недоступна и находится на стадии разработки. Или может дело в Плюсе..."
+  },
+  "method_not_allowed": {
+    "icon": "cloud-off-line",
+    "title": "Метод недоступен",
+    "description": "Возможно, разработчики допустили ошибку и так быть не должно"
+  },
+  "unauthorized": {
+    "icon": "spy-line",
+    "title": "Доступ запрещен",
+    "description": "Для просмотра содержимого необходимо авторизироваться"
+  },
+  "tag_not_found": {
+    "icon": "ghost-line",
+    "title": "Тег не найден",
+    "description": "Возможно вам показалось что такой тег существует"
+  },
+  "user_not_found": {
+    "icon": "user-line",
+    "title": "Пользователь не найден",
+    "description": "Попробуйте поискать других, существующих, пользователей"
+  },
+  "feed_not_found": {
+    "icon": "feeds-line",
+    "title": "Лента не найдена",
+    "description": "Попробуйте поискать другие, существующие, ленты"
+  },
+  "user_suspended": {
+    "icon": "ghost-line",
+    "title": "Пользователь суспендет",
+    "description": "Я не знаю что это значит, но что-то короче интересное сделал он"
+  },
+  "user_blocked": {
+    "icon": "ghost-line",
+    "title": "Пользователь заблокирован",
+    "description": "Вел себя плохо, все верно. Будешь вести себя так же и отправишься следом"
+  },
+  "user_deleted": {
+    "icon": "ghost-line",
+    "title": "Пользователь удален",
+    "description": "Да и вообще, откуда такая уверенность что он существовал?"
+  },
+  "user_not_activated": {
+    "icon": "ghost-line",
+    "title": "Пользователь не активирован",
+    "description": "Как только он подтвердит почту - появится тут"
+  },
+  "entry_not_found": {
+    "icon": "ghost-line",
+    "title": "Запись не найдена",
+    "description": "Вероятнее всего, ее тут никогда и небыло. Но кто знает наверняка, правда?"
+  },
+  "entry_hidden": {
+    "icon": "user-unfollow-line",
+    "title": "Запись скрыта",
+    "description": "Да, и такое бывает в нашей обители свободы слова"
+  },
+  "bad_request": {
+    "icon": "cloud-off-line",
+    "title": "Плохой запрос",
+    "description": "Вероятнее всего, вы что-то сделали не так и сервер вас не понял"
+  },
+  "err_canceled": {
+    "icon": "cloud-off-line",
+    "title": "Запрос отменен",
+    "description": "Вероятнее всего, вы отменили запрос"
+  },
+  "err_network": {
+    "icon": "cloud-off-line",
+    "title": "Ошибка соединения",
+    "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+  },
+  "network_error": {
+    "icon": "cloud-off-line",
+    "title": "Ошибка соединения",
+    "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+  },
+  "invalid_connection": {
+    "icon": "cloud-off-line",
+    "title": "Некорректное соединения",
+    "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+  },
+  "timeout_exceeded" : {
+    "icon": "cloud-off-line",
+    "title": "Сервер очень долго не отвечал",
+    "description": "Вероятнее всего, сервер недоступен или просто не хочет разговаривать"
+  },
+  "empty_feed": {
+    "icon": "timeline-line",
+    "title": "Лента пуста",
+    "description": "Возможно, стоит подписаться на кого-нибудь?"
+  },
+  "empty_bookmarks": {
+    "icon": "bookmarks-line",
+    "title": "Закладок нет",
+    "description": "Чтобы они тут появились необходимо их добавить"
+  },
+  "empty_search": {
+    "icon": "search-line",
+    "title": "Нет результатов",
+    "description": "Возможно, стоит уточнить запрос"
+  },
+  "empty_notifications": {
+    "icon": "bell-line",
+    "title": "Уведомлений нет",
+    "description": "Скорее всего, они скоро появятся"
+  },
+  "empty_feeds": {
+    "icon": "feeds-line",
+    "title": "Лент нет",
+    "description": "Может, стоит поискать подходящие и подписаться на них, как считаешь?"
+  },
+  "feeds_not_created": {
+    "icon": "feeds-line",
+    "title": "Лент нет",
+    "description": "Вы еще не создали ни одной ленты. Может, пора это исправить?"
+  },
+  "help_page_not_found": {
+    "icon": "ghost-line",
+    "title": "Страница не найдена",
+    "description": "Вероятнее всего, ее тут никогда и небыло. Но кто знает наверняка, правда?"
+  },
+  "empty_drafts": {
+    "icon": "drafts-line",
+    "title": "Черновиков нет",
+    "description": "Возможно, стоит написать что-нибудь и уйти"
+  }
+}

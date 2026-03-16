@@ -22,13 +22,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { BadgesList, BadgeItem, BadgeItemWrapper } from '@/components/badge'
 
 export default {
   name: 'user-badges',
   components: {
-    Placeholder, PlaceholderLoading,
+    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger,
     BadgesList, BadgeItem, BadgeItemWrapper
   },
   computed: {

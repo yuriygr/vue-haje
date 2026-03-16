@@ -3,19 +3,16 @@
     <div class="select-field__icon" v-if="icon">
       <icon :name="icon" :size="iconSize" />
     </div>
-    <select ref="input"
+    <select
+      ref="input"
       :value="modelValue"
-
-      @input="$emit('update:modelValue', $event.target.value)"
+      v-bind="$elBinds"
+      class="select-field__input"
+      @change="onChange"
       @keyup="onKeyup"
       @keydown="onKeydown"
-      @update="onUpdate"
       @focus="onFocus"
       @blur="onBlur"
-
-      v-bind="$elBinds"
-
-      class="select-field__input"
     >
       <slot />
     </select>
@@ -30,10 +27,11 @@ export default {
   components: {
     Icon
   },
+  inheritAttrs: false,
   props: {
     icon: {
       type: [ String, Boolean ],
-      default: false 
+      default: false
     },
     modelValue: {
       type: [ String, Number, Boolean ],
@@ -45,7 +43,8 @@ export default {
     // Mods
     size: {
       type: String,
-      default: 'm'
+      default: 'm',
+      validator: (v) => ['s', 'm', 'l'].includes(v)
     },
     stretched: {
       type: Boolean,
@@ -64,20 +63,18 @@ export default {
       type: Boolean,
       default: false
     },
-    // Input props
-    type: {
-      type: String,
-      default: 'text'
+    // Native select props
+    tabindex: {
+      default: 0
     },
-    tabindex: 0,
-    name: false,
-    autocomplete: false,
-    placeholder: {
-      type: String,
-      default: ''
+    name: {
+      default: undefined
+    },
+    autocomplete: {
+      default: undefined
     }
   },
-  emits: [ 'click', 'update', 'keyup', 'keydown', 'blur', 'update:modelValue' ],
+  emits: [ 'click', 'change', 'keyup', 'keydown', 'blur', 'update:modelValue' ],
   data() {
     return {
       focused: false
@@ -101,34 +98,27 @@ export default {
     $elBinds() {
       return {
         tabindex:     this.tabindex,
-        type:         this.type,
         name:         this.name,
         autocomplete: this.autocomplete,
-        placeholder:  this.placeholder
+        disabled:     this.disabled
       }
     },
     iconSize() {
-      switch (this.size) {
-        case 's':
-          return 14;
-        case 'm':
-          return 16;
-        case 'l':
-          return 18;
-        default:
-          return 16;
-      }
+      const sizes = { s: 14, m: 16, l: 18 }
+      return sizes[this.size] ?? 16
     }
   },
   methods: {
     focus() {
       this.$refs.input.focus()
     },
-    // Events
     onClick(e) {
       this.$refs.input.focus()
-      this.focused = true
       this.$emit('click', e)
+    },
+    onChange(e) {
+      this.$emit('update:modelValue', e.target.value)
+      this.$emit('change', e)
     },
     onKeyup(e) {
       this.$emit('keyup', e)
@@ -136,10 +126,7 @@ export default {
     onKeydown(e) {
       this.$emit('keydown', e)
     },
-    onUpdate(e) {
-      this.$emit('update', e)
-    },
-    onFocus(e) {
+    onFocus() {
       this.focused = true
     },
     onBlur(e) {
@@ -174,7 +161,6 @@ export default {
   --select-field--background: #f1f3f5;
   --select-field--border-color: #f0f0f0;
   --select-field__icon--color: #868e96;
-  --select-field__placeholder--color: #868e96;
 
   --select-field--background-focused: #f1f3f5;
   --select-field--border-color-focused: #d76ea0;
@@ -187,7 +173,6 @@ export default {
     --select-field--background: #181818;
     --select-field--border-color: #1b1b1b;
     --select-field__icon--color: #999;
-    --select-field__placeholder--color: #999;
 
     --select-field--background-focused: #181818;
     --select-field--border-color-focused: #771d47;
@@ -205,11 +190,12 @@ export default {
   align-items: center;
   height: var(--select-field--height);
   width: 100%;
-  cursor: text;
+  cursor: pointer;
 
   background: var(--select-field--background);
   border-radius: 8px;
   border: 1px solid var(--select-field--border-color);
+  transition: border-color 0.15s ease, background 0.15s ease;
 
   &--focused {
     background: var(--select-field--background-focused);
@@ -222,36 +208,36 @@ export default {
       border-color: var(--select-field--border-color-hovered);
     }
   }
-  
+
   &__icon {
     color: var(--select-field__icon--color, #aaa);
     display: flex;
     justify-content: center;
     align-items: center;
-
     padding-left: var(--select-field--padding);
+    flex-shrink: 0;
 
     svg { fill: currentColor; flex-shrink: 0; }
   }
 
   &__input {
-    display: flex;
-    align-items: center;
+    display: block;
     background: transparent;
     border: 0;
-    border-radius: 0;
     padding: 0;
     height: 100%;
     width: 100%;
     outline: none;
-    appearance: textfield;
+    //appearance: none;
     color: var(--select-field--color, #111);
     font-size: var(--select-field--font-size);
     font-family: inherit;
     line-height: calc(1.5 * 1em);
+    cursor: pointer;
 
     & > option {
       background: var(--select-field--background);
+      color: var(--select-field--color);
     }
 
     &:last-child {
@@ -260,26 +246,11 @@ export default {
     &:first-child {
       padding-left: var(--select-field--padding);
     }
-
-    &::placeholder {
-      user-select: none;
-      color: var(--select-field__placeholder--color, #999);
-      opacity: 1;
-    }
-
-    &::-webkit-search-decoration,
-    &::-webkit-search-cancel-button,
-    &::-webkit-search-results-button,
-    &::-webkit-search-results-decoration {
-      appearance: none;
-    }
   }
 
-  &__clear:not(:first-child),
   &__icon:not(:last-child) + &__input {
     margin-left: 8px;
   }
-
 
   &--stretched {
     display: block;
@@ -292,12 +263,6 @@ export default {
     opacity: 0.4;
     pointer-events: none;
     cursor: default;
-    @media(hover: hover) {
-      &:hover {
-        background: var(--select-field--background);
-        color: var(--select-field--color);
-      }
-    }
   }
 }
 </style>

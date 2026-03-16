@@ -1,4 +1,5 @@
 import mitt from 'mitt';
+import { markRaw } from 'vue'
 
 /**
  * Небольшая обертка над Mitt.
@@ -19,7 +20,11 @@ export default new class {
 	}
 
   show(component, props = {}, onClose = () => {}) {
-    this.bus.emit('modals:show', { component, props, onClose })
+    this.bus.emit('modals:show', {
+      component: markRaw(component),
+      props,
+      onClose
+    })
   }
 
   close() {

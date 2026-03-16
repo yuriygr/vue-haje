@@ -99,6 +99,8 @@ let comments = {
   }
 }
 
+let initialFilters = {}
+
 let history = {
   namespaced: true,
   state() {
@@ -106,47 +108,37 @@ let history = {
       data: [],
       total_items: 0,
 
-      filters: { },
+      filters: { ...initialFilters },
 
+      controller: false,
       loading: false,
       error: false
     }
   },
   mutations: {
-    // DATA
-    'SET_DATA'(state, payload) {
-      state.data = payload
-    },
-    'ADD_DATA'(state, payload) {
-      state.data = [...state.data, ...payload]
-    },
-    'SET_TOTAL_ITEMS'(state, payload) {
-      state.total_items = payload
-    },
-    'CLEAR_DATA'(state) {
+    SET_DATA: (state, payload) => state.data = payload,
+    ADD_DATA: (state, payload) => state.data.push(...payload),
+    SET_TOTAL_ITEMS: (state, payload) => state.total_items = payload,
+    CLEAR_DATA: (state) => {
       state.data = []
+      state.total_items = 0
     },
-    // FILTEST
-    'SET_FILTERS'(state, payload) {
-      state.filters = payload
-    },
-    'CLEAR_FILTERS'(state) {
-      state.filters = {}
-    },
-    // OTHER
-    'SET_LOADING'(state, payload) {
-      state.loading = payload
-    },
-    'SET_ERROR'(state, payload) {
-      state.error = payload
-    }
+    SET_FILTERS: (state, payload) => state.filters = { ...payload },
+    CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
+    SET_LOADING: (state, payload) => state.loading = payload,
+    SET_ERROR: (state, payload) => state.error = payload,
+    ADD_CONTROLLER: (state, payload) => state.controller = payload,
+    REMOVE_CONTROLLER: (state) => state.controller = false
   },
   actions: {
     fetch({ commit, state }, { initial = true, uuid = '' }) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      return this.$api.get(`entry/${uuid}/history`, state.filters)
+      const controller = new AbortController()
+      commit('ADD_CONTROLLER', controller)
+
+      return this.$api.get(`entry/${uuid}/history`, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
         commit('SET_TOTAL_ITEMS', result.total_items)
@@ -154,9 +146,89 @@ let history = {
       .catch(error => {
         commit('SET_ERROR', error)
       })
-      .then(_ => commit('SET_LOADING', false))
+      .then(_ => {
+        commit('REMOVE_CONTROLLER')
+        commit('SET_LOADING', false)
+      })
     },
-    clear({ commit }) {
+    clear({ commit, state }) {
+      if (state.controller)
+        state.controller.abort()
+      commit('REMOVE_CONTROLLER')
+      commit('CLEAR_DATA')
+      commit('CLEAR_FILTERS')
+      commit('SET_TOTAL_ITEMS', 0)
+    },
+
+    async more({ state, commit, dispatch }, uuid = '') {
+      await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
+      dispatch('fetch', { initial: false, uuid })
+    },
+
+    setFilters({ commit }, payload) {
+      commit('SET_FILTERS', payload)
+    }
+  },
+  getters: {
+    hasMoreItems: state => state.data.length < state.total_items
+  }
+}
+
+let reports = {
+  namespaced: true,
+  state() {
+    return {
+      data: [],
+      total_items: 0,
+
+      filters: { ...initialFilters },
+
+      controller: false,
+      loading: false,
+      error: false
+    }
+  },
+  mutations: {
+    SET_DATA: (state, payload) => state.data = payload,
+    ADD_DATA: (state, payload) => state.data.push(...payload),
+    SET_TOTAL_ITEMS: (state, payload) => state.total_items = payload,
+    CLEAR_DATA: (state) => {
+      state.data = []
+      state.total_items = 0
+    },
+    SET_FILTERS: (state, payload) => state.filters = { ...payload },
+    CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
+    SET_LOADING: (state, payload) => state.loading = payload,
+    SET_ERROR: (state, payload) => state.error = payload,
+    ADD_CONTROLLER: (state, payload) => state.controller = payload,
+    REMOVE_CONTROLLER: (state) => state.controller = false
+  },
+  actions: {
+    fetch({ commit, state }, { initial = true, uuid = '' }) {
+      commit('SET_LOADING', true)
+      commit('SET_ERROR', false)
+
+      const controller = new AbortController()
+      commit('ADD_CONTROLLER', controller)
+
+      return this.$api.get(`entry/${uuid}/reports`, state.filters, controller.signal)
+      .then(result => {
+        commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
+        commit('SET_TOTAL_ITEMS', result.total_items)
+      })
+      .catch(error => {
+        commit('SET_ERROR', error)
+      })
+      .then(_ => {
+        commit('REMOVE_CONTROLLER')
+        commit('SET_LOADING', false)
+      })
+    },
+
+    clear({ commit, state }) {
+      if (state.controller)
+        state.controller.abort()
+      commit('REMOVE_CONTROLLER')
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
       commit('SET_TOTAL_ITEMS', 0)
@@ -165,17 +237,19 @@ let history = {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
       dispatch('fetch', { initial: false, uuid })
     },
+
+    setFilters({ commit }, payload) {
+      commit('SET_FILTERS', payload)
+    }
   },
   getters: {
-    hasMoreItems(state) {
-      return state.data.length < state.total_items
-    }
+    hasMoreItems: state => state.data.length < state.total_items
   }
 }
 
 export default {
   namespaced: true,
-  modules: { comments, history },
+  modules: { comments, history, reports },
   state() {
     return {
       data: {},

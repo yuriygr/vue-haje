@@ -158,7 +158,7 @@ export default {
     await this.$store.dispatch('search/all/setFilters', {
       query: this.$route.query.q
     })
-    this.$store.dispatch('search/all/fetch')
+    await this.$store.dispatch('search/all/fetch')
   },
   beforeUnmount() {
     this.$store.dispatch('search/all/clear')
@@ -166,12 +166,8 @@ export default {
   watch: {
     async '$route.query.q'(to) {
       await this.$store.dispatch('search/all/setFilters', { query: to })
-      this.$store.dispatch('search/all/fetch')
+      await this.$store.dispatch('search/all/fetch')
     }
   }
 }
 </script>
-
-<style>
-
-</style>

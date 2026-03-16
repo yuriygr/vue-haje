@@ -101,7 +101,7 @@ export default {
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     },
     cleanError(type) {
 

@@ -40,7 +40,7 @@ import { Placeholder, Spacer, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
 
-let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
+const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
 export default {
   name: 'feed-timeline',
@@ -67,10 +67,6 @@ export default {
   },
   methods: {
     openComposeModal(event) {
-      if (!this.isAuth) {
-        this.$router.push({ name: 'auth' })
-        return
-      }
       this.$modals.show(ComposeModal, {
         draggedFiles: event.dataTransfer ? [...event.dataTransfer.files] : []
       })
@@ -79,18 +75,11 @@ export default {
       this.$store.dispatch('feed/timeline/more')
     }
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch('feed/timeline/fetch')
   },
   beforeUnmount() {
     this.$store.dispatch('feed/timeline/clear')
-  },
-  watch: {
-
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

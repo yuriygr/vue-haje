@@ -149,7 +149,7 @@ export default {
       .catch(error => {
         this.$emit('error', error)
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     },
     updateComment() {
       if (!this.canSubmit) return
@@ -165,7 +165,7 @@ export default {
       .catch(error => {
         this.$emit('error', error)
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     },
     resetForm() {
       // TODO

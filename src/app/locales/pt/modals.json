@@ -1,0 +1,50 @@
+{
+  "compose": {
+    "tab": {
+      "drafts": "Rascunhos",
+      "gifs": "Anexar GIF",
+      "options": "Configurações de publicação"
+    },
+    "action": {
+      "options": "Configurações de publicação",
+      "attach_gifs": "Anexar GIF",
+      "view_drafts": "Ver rascunhos",
+      "delete_drafts": "Excluir rascunhos"
+    },
+    "options": {
+      "is_comments_enabled": "Permitir comentários",
+      "is_hidden_from_feed": "Ocultar do feed geral",
+      "is_nsfw": "Contém conteúdo impróprio",
+      "is_ai": "Contém conteúdo gerado por IA"
+    }
+  },
+  "search-filter": {
+    "title": "Search filter"
+  },
+  "entry-history": {
+    "title": "Version history"
+  },
+  "entry-delete": {
+    "title": "Delete entry",
+    "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
+  },
+  "entry-report": {
+    "title": "Complaint about the post"
+  },
+  "comment-history": {
+    "title": "Version history"
+  },
+  "comment-edit": {
+    "title": "Edit comment"
+  },
+  "comment-report": {
+    "title": "Complaint about the comment"
+  },
+  "comment-delete": {
+    "title": "Delete comment",
+    "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
+  },
+  "user-report": {
+    "title": "Complaint about an user"
+  }
+}

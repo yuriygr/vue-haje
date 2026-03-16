@@ -1,4 +1,4 @@
-import { createListedModule } from '@/app/components/store/module'
+import { createListedModule } from '@/app/components/store/factory'
 
 let all = {
   namespaced: true,

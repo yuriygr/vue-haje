@@ -9,7 +9,7 @@
   <loading-layer :loading="loading" />
   <popover-layer />
 
-  <icons-sprite-layer :path="require('@/assets/symbols.svg')" />
+  <icons-sprite-layer :path="iconsSpritePath" />
 </template>
 
 <script>
@@ -26,11 +26,12 @@ export default {
   },
   data() {
     return {
+      iconsSpritePath: require('@/assets/symbols.svg'),
       modal: false
     }
   },
   computed: {
-    ...mapState('app', [ 'locale', 'theme', 'density', 'loading', 'cachedComponents' ]),
+    ...mapState('app', [ 'locale', 'theme', 'density', 'loading' ]),
     ...mapState('auth', [ 'data' ]),
     ...mapGetters('app', [ 'themeStatusBar' ]),
     ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ])
@@ -41,9 +42,14 @@ export default {
     }, 
     setLocale(state = false) {
       this.$i18n.locale = state
-      this.changeDataset('locale', state ? state : false)
-      document.documentElement.setAttribute('lang', state ? state : false);
-    }, 
+      this.changeDataset('locale', state || false)
+
+      if (state) {
+        document.documentElement.setAttribute('lang', state)
+      } else {
+        document.documentElement.removeAttribute('lang')
+      }
+    },
     setTheme(state = false) {
       this.changeDataset('theme', state)
       this.changeMeta('theme-color', this.themeStatusBar)
@@ -61,19 +67,25 @@ export default {
         : '/icons/favicon.ico'
     }
   },
-  mounted() {
-    this.$store.dispatch('initApplication')
-    this.$store.dispatch('auth/fetch')
-  },
-  created() {
+  async mounted() {
     this.$sse.on('has_notice', (e) => {
       this.$store.dispatch('auth/has_notice', e)
     })
 
     this.$modals.on('show', _ => this.modal = true)
     this.$modals.on('close', _ => this.modal = false)
+
+    try {
+      await Promise.all([
+        this.$store.dispatch('initApplication'),
+        this.$store.dispatch('auth/fetch')
+      ])
+    } catch (error) {
+      this.$alerts.danger({ text: this.$t('errors.init_failed') })
+      console.error('[App] Init failed:', error)
+    }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$sse.off('has_notice')
 
     this.$modals.off('show')
@@ -81,39 +93,27 @@ export default {
   },
   watch: {
     modal: {
-      handler(to) {
-        this.setModal(to)
-      },
+      handler: 'setModal',
       immediate: true
     },
     locale: {
-      handler(to) {
-        this.setLocale(to)
-      },
+      handler: 'setLocale',
       immediate: true
     },
     theme: {
-      handler(to) {
-        this.setTheme(to)
-      },
+      handler: 'setTheme',
       immediate: true
     },
     density: {
-      handler(to) {
-        this.setDensity(to)
-      },
+      handler: 'setDensity',
       immediate: true
     },
     '$route.meta.layout': {
-      handler(to) {
-        this.setLayout(to)
-      },
+      handler: 'setLayout',
       immediate: true
     },
     hasNewNotifications: {
-      handler(to) {
-        this.updateFavicon(to)
-      },
+      handler: 'updateFavicon',
       immediate: false
     }
   }

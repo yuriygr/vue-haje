@@ -20,15 +20,15 @@
     <div :class="[ 'login-item' ]">
       <div class="login-item__content">
         <div class="login-item__key">ОС:</div>
-        <div class="login-item__value"><skeleton :width="randomWidth" :height="7" /></div>
+        <div class="login-item__value"><skeleton :width="skeletonWidths.os" :height="7" /></div>
       </div>
       <div class="login-item__content">
         <div class="login-item__key">Браузер:</div>
-        <div class="login-item__value"><skeleton :width="randomWidth" :height="7" /></div>
+        <div class="login-item__value"><skeleton :width="skeletonWidths.br" :height="7" /></div>
       </div>
       <div class="login-item__content">
         <div class="login-item__key">Дата:</div>
-        <div class="login-item__value"><skeleton :width="randomWidth" :height="7" /></div>
+        <div class="login-item__value"><skeleton :width="skeletonWidths.ts" :height="7" /></div>
       </div>
     </div>
   </template>
@@ -50,15 +50,16 @@ export default {
   },
   data() {
     return {
-      loading: { }
+      skeletonWidths: {
+        os: Math.floor(Math.random() * 100) + 60,
+        br: Math.floor(Math.random() * 100) + 70,
+        ts: Math.floor(Math.random() * 100) + 50,
+      }
     }
   },
   computed: {
     formatedDate() {
       return this.$filters.timeAgo(this.data.date_added, this.$i18n.locale)
-    },
-    randomWidth() {
-      return Math.floor(Math.random() * 100) + 60;
     }
   },
   methods: {

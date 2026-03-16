@@ -45,9 +45,12 @@ export default {
       this.loading = true
 
       this.pinEntry()
-      .then(_ => {
-        this.loading = false
+      .then(() => {
         this.$modals.close()
+      })
+      .catch()
+      .finally(() => {
+        this.loading = false
       })
     },
     closeModal() {

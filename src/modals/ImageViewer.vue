@@ -71,7 +71,7 @@ export default {
     this.canZoom = false;
     document.addEventListener('keyup', this.handleKeyPress);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keyup', this.handleKeyPress);
   },
   methods: {

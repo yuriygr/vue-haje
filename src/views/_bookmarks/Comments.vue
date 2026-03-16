@@ -66,7 +66,7 @@ export default {
   watch: {
     async '$route.query.q'(to) {
       await this.$store.dispatch('bookmarks/entries/setFilters', { offset: undefined })
-      this.$store.dispatch('bookmarks/entries/fetch')
+      await this.$store.dispatch('bookmarks/entries/fetch')
     }
   }
 }

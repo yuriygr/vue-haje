@@ -1,0 +1,117 @@
+{
+  "todo": {
+    "icon": "ghost-line",
+    "title": "Em desenvolvimento",
+    "description": "Este recurso ainda não está disponível e está em desenvolvimento"
+  },
+  "method_not_allowed": {
+    "icon": "cloud-off-line",
+    "title": "Método não disponível",
+    "description": "Talvez os desenvolvedores tenham cometido um erro e não deveria ser assim"
+  },
+  "unauthorized": {
+    "icon": "spy-line",
+    "title": "Acesso negado",
+    "description": "Para visualizar o conteúdo você deve fazer login"
+  },
+  "tag_not_found": {
+    "icon": "ghost-line",
+    "title": "Etiqueta não encontrada",
+    "description": "Você pode ter pensado que tal tag existe"
+  },
+  "user_not_found": {
+    "icon": "user-line",
+    "title": "O usuário não foi encontrado",
+    "description": "Tente pesquisar outros usuários existentes"
+  },
+  "feed_not_found": {
+    "icon": "feeds-line",
+    "title": "Comunidade não encontrada",
+    "description": "Tente procurar outras comunidades existentes"
+  },
+  "user_suspended": {
+    "icon": "ghost-line",
+    "title": "Suspensão do usuário",
+    "description": "Não sei o que isso significa, mas ele fez algo interessante"
+  },
+  "user_blocked": {
+    "icon": "ghost-line",
+    "title": "O usuário está bloqueado",
+    "description": "Eu me comportei mal, isso mesmo. Você se comportará da mesma maneira e seguirá"
+  },
+  "user_deleted": {
+    "icon": "ghost-line",
+    "title": "Usuário excluído",
+    "description": "E de qualquer forma, onde existe tanta confiança de que ele existiu?"
+  },
+  "user_not_activated": {
+    "icon": "ghost-line",
+    "title": "O usuário não está ativado",
+    "description": "Assim que ele confirmar seu e-mail, ele aparecerá aqui"
+  },
+  "entry_not_found": {
+    "icon": "ghost-line",
+    "title": "Registro não encontrado",
+    "description": "Muito provavelmente, ela nunca esteve aqui. Mas quem sabe com certeza, a verdade?"
+  },
+  "entry_hidden": {
+    "icon": "ghost-line",
+    "title": "Postagem oculta",
+    "description": "Sim, e isso acontece em nossa casa de liberdade de expressão."
+  },
+  "bad_request": {
+    "icon": "cloud-off-line",
+    "title": "Pedido ruim",
+    "description": "Provavelmente você fez algo errado e o servidor não entendeu você"
+  },
+  "err_canceled": {
+    "icon": "cloud-off-line",
+    "title": "Solicitação cancelada",
+    "description": "Você provavelmente cancelou a solicitação"
+  },
+  "err_network": {
+    "icon": "cloud-off-line",
+    "title": "Erro de conexão",
+    "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+  },
+  "network_error": {
+    "icon": "cloud-off-line",
+    "title": "Erro de conexão",
+    "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+  },
+  "invalid_connection": {
+    "icon": "cloud-off-line",
+    "title": "Conexão incorreta",
+    "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+  },
+  "timeout_exceeded" : {
+    "icon": "cloud-off-line",
+    "title": "O servidor não respondeu por muito tempo",
+    "description": "Muito provavelmente, o servidor não está disponível ou simplesmente não quer comunicar"
+  },
+  "empty_feed": {
+    "icon": "timeline-line",
+    "title": "O feed está vazio",
+    "description": "Pode valer a pena seguir alguém?"
+  },
+  "empty_bookmarks": {
+    "icon": "bookmarks-line",
+    "title": "Sem favoritos",
+    "description": "Para fazê-los aparecer aqui você precisa adicioná-los"
+  },
+  "empty_search": {
+    "icon": "search-line",
+    "title": "Nenhum resultado",
+    "description": "Talvez valha a pena esclarecer seu pedido"
+  },
+  "empty_notifications": {
+    "icon": "bell-line",
+    "title": "Nenhuma notificação",
+    "description": "Muito provavelmente eles aparecerão em breve"
+  },
+  "empty_feeds": {
+    "icon": "feeds-line",
+    "title": "Nenhuma comunidade",
+    "description": "Talvez valha a pena procurar os adequados e assiná-los, o que você acha?"
+  }
+}

@@ -74,7 +74,7 @@ export default {
     this.$root.$on('show-image', this.open);
     document.addEventListener('keyup', this.handleKeyPress);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$root.$off('show-image', this.open);
     document.removeEventListener('keyup', this.handleKeyPress);
   },

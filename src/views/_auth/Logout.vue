@@ -33,7 +33,7 @@ export default {
       .catch(error => {
         this.error = error
       })
-      .then(_ => this.loading = false)
+      .finally(_ => this.loading = false)
     }
   },
   watch: {},

@@ -61,21 +61,19 @@ export default new class {
 
 	// Преобразует ошибочный ответ в что-то более приятное моему глазу
 	handleResponseError(error) {
-		let hasResponse = error.response != undefined 
-		let response = error.response?.data
-
+		// Сетевая ошибка — нет ответа от сервера
+		if (!error.response) {
+			return Promise.reject({
+				code: error.code,
+				status: error.code ?? 'network_error'
+			})
+		}
+	
+		const response = error.response.data
+	
 		return Promise.reject({
-			code: hasResponse
-						? response.code
-						: error.code,
-
-			status: hasResponse
-							? response.error || response.status
-							: error.code,
-
-			message: hasResponse
-							? response.error
-							: error.message
+			code: response.code,
+			status: response.error || response.status
 		})
 	}
 

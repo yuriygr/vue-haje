@@ -13,6 +13,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: process.env.VITE_APP_TITLE || packageJson.name,
+        start_url: '/',
         theme_color: '#111111',
         background_color: '#111111',
         display_override: ['window-controls-overlay'],

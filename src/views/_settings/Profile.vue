@@ -26,7 +26,7 @@
       </form-block>
 
       <form-block :label="$t('settings.field.sex')">
-        <select-field tabindex="3" name="sex" :disabled="loading.profile" v-model.trim="profile.sex">
+        <select-field tabindex="3" name="sex" :disabled="loading.profile" :model-value="profile.sex">
           <template v-for="key in sexs" :key="`sex-${key}`">
             <option :value="key" :selected="key == profile.sex">{{ $t(`settings.sex.${key}`) }}</option>
           </template>
@@ -119,7 +119,7 @@ export default {
         this.profile = result
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading.profile = false)
     },
@@ -130,7 +130,7 @@ export default {
         this.tints = result.items
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .then(_ => this.loading.tint = false)
     },
