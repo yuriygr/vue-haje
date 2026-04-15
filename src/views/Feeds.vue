@@ -18,7 +18,7 @@
   <spacer height="15" />
 
   <feeds-list v-if="(!loading && !error) || data.length > 0">
-    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`">
+    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
       <feed-item :data="item" type="short" />
     </feed-item-wrapper>
 
@@ -28,11 +28,15 @@
   </feeds-list>
 
   <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
+    <feeds-list v-if="loading">
+      <feed-item-wrapper v-for="index in 5" :key="`item-${index}`">
+        <feed-item />
+      </feed-item-wrapper>
+    </feeds-list>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else
       :icon="$t('errors.feeds_not_created.icon')"
@@ -44,17 +48,17 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { mapState, mapGetters } from 'vuex'
-import { NButton, Separator, Spacer, Placeholder, PlaceholderLoading, LoadmoreTrigger } from '@vue-norma/ui'
+import { NButton, Separator, Spacer, Placeholder, LoadmoreTrigger } from '@vue-norma/ui'
+
+import { useFeedsStore } from '@/app/components/stores/modules/feeds'
+import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 let FeedCreateModal = defineAsyncComponent(() => import("@/modals/_feed/Create.vue"))
-
-import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
 
 export default {
   name: 'feeds',
   components: {
-    NButton, Separator, Spacer, Placeholder, PlaceholderLoading, LoadmoreTrigger,
+    NButton, Separator, Spacer, Placeholder, LoadmoreTrigger,
     FeedsList, FeedItem, FeedItemWrapper
   },
   meta() { return this.meta },
@@ -65,42 +69,39 @@ export default {
       }
     }
   },
+  created() {
+    this.feedsStore = useFeedsStore()
+  },
   computed: {
-    ...mapState('feeds', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feeds', [ 'hasMoreItems' ]),
-    query() {
-      return this.$route.query.q
-    },
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    data()         { return this.feedsStore.data },
+    filters()      { return this.feedsStore.filters },
+    loading()      { return this.feedsStore.loading },
+    error()        { return this.feedsStore.error },
+    hasMoreItems() { return this.feedsStore.hasMoreItems },
+    query()        { return this.$route.query.q ?? '' },
   },
   methods: {
     openCreateModal() {
-      this.$modals.show(FeedCreateModal, {
-        data: this.$route.meta.key
-      })
+      this.$modals.show(FeedCreateModal)
     },
-    changeInput(query) {
-      this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: query } })
+    changeInput(value) {
+      this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: value } })
     },
     loadMore() {
-      this.$store.dispatch('feeds/more')
+      this.feedsStore.more()
     }
   },
   async mounted() {
-    await this.$store.dispatch('feeds/setFilters', {
-      query: this.$route.query.q, offset: undefined
-    })
-    this.$store.dispatch('feeds/fetch')
+    await this.feedsStore.setFilters({ query: this.query, offset: undefined })
+    await this.feedsStore.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('feeds/clear')
+    this.feedsStore.clear()
   },
   watch: {
     async '$route.query.q'(to) {
-      await this.$store.dispatch('feeds/setFilters', { query: to, offset: undefined })
-      this.$store.dispatch('feeds/fetch')
+      await this.feedsStore.setFilters({ query: to, offset: undefined })
+      await this.feedsStore.fetch()
     }
   }
 }

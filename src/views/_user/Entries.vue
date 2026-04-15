@@ -1,6 +1,6 @@
 <template>
   <entries-list v-if="(!loading && !error) || data.length > 0">
-    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
+    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
       <entry-item :data="item" type="short" :showPinAction="true" />
     </entry-item-wrapper>
 
@@ -11,55 +11,57 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else :text="$t('user.errors.entries_empty')" />
   </template>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { useUserEntriesStore } from '@/app/components/stores/modules/user'
 
 export default {
   name: 'user-entries',
+  props: {
+    username: {
+      type: [ Boolean, String ],
+      default: false
+    }
+  },
   components: {
     EntriesList, EntryItem, EntryItemWrapper,
     Placeholder, NButton, LoadmoreTrigger
   },
-  computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('user/entries', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('user/entries', [ 'hasMoreItems' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+  setup() {
+    const store = useUserEntriesStore()
+    return { store }
   },
-  data() {
-    return { }
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('user/entries/more')
+      this.store.more(this.username)
     }
   },
   mounted() {
-    this.$store.dispatch('user/entries/fetch')
+    this.store.fetch(this.username)
   },
   beforeUnmount() {
-    this.$store.dispatch('user/entries/clear')
+    this.store.clear()
   }
 }
 </script>
-
-<style>
-
-</style>

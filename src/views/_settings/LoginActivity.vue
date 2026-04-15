@@ -3,7 +3,7 @@
     <n-header>{{ $t('settings.login-activity.title') }}</n-header>
 
     <logins-list v-if="(!loading && !error) || data.length > 0">
-      <login-item-wrapper v-for="item in data" :key="`login-item-${item.login_id}`">
+      <login-item-wrapper v-for="item in data" :key="`login-item-${item.login_id}`" v-memo="[item.login_id]">
         <login-item :data="item" />
       </login-item-wrapper>
 
@@ -14,15 +14,14 @@
 
     <template v-if="data.length == 0">
       <logins-list v-if="loading">
-        <login-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+        <login-item-wrapper v-for="index in 15" :key="`item-${index}`">
           <login-item  />
         </login-item-wrapper>
       </logins-list>
-
       <placeholder v-else-if="error"
-        :icon="$t(humanizeError.icon)"
-        :header="$t(humanizeError.title)"
-        :text="$t(humanizeError.description)"
+        :icon="$t($filters.humanizeError(error).icon)"
+        :header="$t($filters.humanizeError(error).title)"
+        :text="$t($filters.humanizeError(error).description)"
       />
       <placeholder v-else :text="$t('settings.login-activity.empty')" />
     </template>
@@ -30,9 +29,10 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { NButton, LoadmoreTrigger, Group, NHeader, Placeholder } from '@vue-norma/ui'
+
 import { LoginsList, LoginItem, LoginItemWrapper } from '@/components/login'
+import { useLoginsStore } from '@/app/components/stores/modules/logins'
 
 export default {
   name: 'settings-login-activity',
@@ -48,28 +48,31 @@ export default {
       }
     }
   },
+  created() {
+    this.loginsStore = useLoginsStore()
+  },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('logins', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('logins', [ 'hasMoreItems' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    data()         { return this.loginsStore.data },
+    loading()      { return this.loginsStore.loading },
+    error()        { return this.loginsStore.error },
+    hasMoreItems() { return this.loginsStore.hasMoreItems }
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('logins/more')
+      this.loginsStore.more()
+    },
+    async revokeSession(loginId) {
+      const error = await this.loginsStore.revokeSession(loginId)
+      if (error) {
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      }
     }
   },
   mounted() {
-    this.$store.dispatch('logins/fetch')
+    this.loginsStore.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('logins/clear')
-  },
+    this.loginsStore.clear()
+  }
 }
 </script>
-
-<style>
-
-</style>

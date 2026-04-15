@@ -68,12 +68,15 @@ import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
 export default {
   name: 'notification-item',
-  emits: [ 'click' ],
+  emits: [ 'click', 'read', 'hide' ],
   components: {
     Icon, NButton, ButtonsGroup, MetaInfo
   },
   props: {
-    data: false,
+    data: {
+      type: Object,
+      default: null
+    },
   },
   data() {
     return {
@@ -84,11 +87,6 @@ export default {
     }
   },
   computed: {
-    payload() {
-      return false
-      return JSON.parse(this.data.payload)
-    },
-
     link() {
       switch (this.data.type) {
         case 'subscription':
@@ -166,27 +164,13 @@ export default {
       })
     },
     onClick() {
-      this.$emit('click', this.data)
+      this.$emit('click', this.data.notify_id)
     },
     readNotify() {
-      this.$api.post(`my/notifications/${this.data.notify_id}/read`)
-      .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.$popover.close())
+      this.$emit('read', this.data.notify_id)
     },
     hideNotify() {
-      this.$api.post(`my/notifications/${this.data.notify_id}/hide`)
-      .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.$popover.close())
+      this.$emit('hide', this.data.notify_id)
     }
   }
 }

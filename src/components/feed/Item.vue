@@ -1,26 +1,44 @@
 <template>
-  <div :class="[ 'feed-item' ]">
-    <div class="feed-item__icon">
-      {{ data.emoji }}
+  <template v-if="data">
+    <div :class="[ 'feed-item' ]">
+      <div class="feed-item__icon">
+        {{ data.emoji }}
+      </div>
+      <div class="feed-item__content">
+        <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
+          {{ data.title }}
+        </component>
+    
+        <meta-info class="feed-item__meta" :items="metaItems" />
+      </div>
+      <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
+        <n-button
+          :icon_before="data.state.me_subscribed ? 'check-line' : 'add-line'"
+          mode="tertiary"
+          @click.exact="toggleSubscribe"
+          :disabled="loading.subscribe"
+          :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+        />
+        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+      </buttons-group>
     </div>
-    <div class="feed-item__content">
-      <component :is="clickable ? 'router-link' : 'div'" v-bind="feedLinkBinds" class="feed-item__name">
-        {{ data.title }}
-      </component>
-  
-      <meta-info class="feed-item__meta" :items="metaItems" />
+  </template>
+  <template v-else>
+    <div :class="[ 'feed-item' ]">
+      <div class="feed-item__icon">
+        <skeleton :width="10" :height="10" />
+      </div>
+      <div class="feed-item__content">
+        <div class="feed-item__name">
+          <skeleton :width="skeletonWidths.label" :height="9" />
+        </div>
+        <skeleton :width="skeletonWidths.info" :height="8" />
+      </div>
+      <buttons-group :withGap="true" class="feed-item__actions">
+        <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
+      </buttons-group>
     </div>
-    <buttons-group :withGap="true" v-if="showSubscribeAction" class="feed-item__actions">
-      <n-button
-        :icon_before="data.state.me_subscribed ? 'check-line' : 'add-line'"
-        mode="tertiary"
-        @click.exact="toggleSubscribe"
-        :disabled="loading.subscribe"
-        :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
-      />
-      <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
-    </buttons-group>
-  </div>
+  </template>
 </template>
 
 <script>
@@ -48,6 +66,10 @@ export default {
   },
   data() {
     return {
+      skeletonWidths: {
+        label: Math.floor(Math.random() * 100) + 100,
+        info: Math.floor(Math.random() * 100) + 50
+      },
       loading: {
         subscribe: false,
         bookmarks: false
@@ -73,7 +95,7 @@ export default {
     },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$tc('feed.meta.author', { author: this.data.author.name }), to: { name: 'user', params: { username: this.data.author.username } } })
+      _result.push({ label: this.$t('feed.meta.author', { author: this.data.author.name }), to: { name: 'user', params: { username: this.data.author.username } } })
       return _result
     },
     optionsItems() {

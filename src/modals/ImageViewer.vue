@@ -16,7 +16,7 @@
       
       <div class="image-wrapper">
         <img 
-          :src="`https://leonardo.osnova.io/` + currentImage.uuid" 
+          :src="`https://leonardo2.osnova.io/` + currentImage.uuid" 
           :class="{ 'zoomed': isZoomed }" 
           @click="toggleZoom"
           ref="image"

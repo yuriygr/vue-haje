@@ -1,6 +1,6 @@
 <template>
   <users-list v-if="(!loading && !error) || data.length > 0">
-    <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`">
+    <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
       <user-item :data="item" />
     </user-item-wrapper>
     
@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <users-list v-if="loading">
-      <user-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <user-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <user-item />
       </user-item-wrapper>
     </users-list>
@@ -40,8 +40,7 @@ export default {
     Placeholder, NHeader, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('search/users', [ 'data', 'filters', 'loading', 'error' ]),
+        ...mapState('search/users', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/users', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)

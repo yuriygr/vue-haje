@@ -127,7 +127,7 @@ export default {
       return {
         id: this.generateUniqueId(),
         file: null,
-        preview: `https://leonardo.osnova.io/${file.uuid}/-/scale_crop/300x/`,
+        preview: `https://leonardo2.osnova.io/${file.uuid}/-/scale_crop/300x/`,
         status: 'success',
         payload: file,
         uuid: file.uuid,
@@ -232,7 +232,7 @@ export default {
       if (index !== -1) {
         this.images[index].status = status
         if (payload != null) {
-          this.images[index].preview = `https://leonardo.osnova.io/${payload.uuid}/-/scale_crop/300x/`
+          this.images[index].preview = `https://leonardo2.osnova.io/${payload.uuid}/-/scale_crop/300x/`
           this.images[index].payload = payload
           this.images[index].uuid = payload.uuid
         }

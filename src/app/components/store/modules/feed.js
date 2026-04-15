@@ -3,7 +3,9 @@ import { createItemModule, createListedModule } from '@/app/components/store/fac
 let feeds = createListedModule('feed/feeds')
 
 let timeline = createListedModule('feed/timeline')
+
 let abyss = createListedModule('feed/abyss')
+
 let custom = {
   ...createItemModule(uuid => `feed/${uuid}`),
   modules: {
@@ -22,7 +24,7 @@ export default {
   state() {
     return {
       data: [],
-      total_items: 0,
+      hasMore: false,
       
       tab: 'timeline',
       filters: {
@@ -41,8 +43,8 @@ export default {
     'ADD_DATA'(state, payload) {
       state.data = [...state.data, ...payload]
     },
-    'SET_TOTAL_ITEMS'(state, payload) {
-      state.total_items = payload
+    'SET_HAS_MORE'(state, payload) {
+      state.hasMore = payload
     },
     'CLEAR_DATA'(state) {
       state.data = []
@@ -79,7 +81,7 @@ export default {
       this.$api.get(`feed/${state.tab}`, state.filters)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
-        commit('SET_TOTAL_ITEMS', result.total_items)
+        commit('SET_HAS_MORE', result.has_more)
       })
       .catch(error => {
         commit('SET_ERROR', error)
@@ -98,7 +100,7 @@ export default {
       commit('CLEAR_DATA')
       commit('CLEAR_TAB')
       commit('CLEAR_FILTERS')
-      commit('SET_TOTAL_ITEMS', 0)
+      commit('SET_HAS_MORE', false)
     },
     // Tab
     setTab({ commit }, payload) {
@@ -116,8 +118,6 @@ export default {
     }
   },
   getters: {
-    hasMoreItems(state) {
-      return state.data.length < state.total_items
-    }
+    hasMoreItems: state => state.hasMore,
   }
 }

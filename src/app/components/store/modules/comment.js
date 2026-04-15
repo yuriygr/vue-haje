@@ -3,62 +3,55 @@ let history = {
   state() {
     return {
       data: [],
-      total_items: 0,
+      hasMore: false,
 
       filters: { },
 
+      controller: false,
       loading: false,
       error: false
     }
   },
   mutations: {
-    // DATA
-    'SET_DATA'(state, payload) {
-      state.data = payload
-    },
-    'ADD_DATA'(state, payload) {
-      state.data = [...state.data, ...payload]
-    },
-    'SET_TOTAL_ITEMS'(state, payload) {
-      state.total_items = payload
-    },
-    'CLEAR_DATA'(state) {
+    SET_DATA: (state, payload) => state.data = payload,
+    ADD_DATA: (state, payload) => state.data.push(...payload),
+    SET_HAS_MORE: (state, payload) => state.hasMore = payload,
+    CLEAR_DATA: (state) => {
       state.data = []
+      state.hasMore = false
     },
-    // FILTEST
-    'SET_FILTERS'(state, payload) {
-      state.filters = payload
-    },
-    'CLEAR_FILTERS'(state) {
-      state.filters = {}
-    },
-    // OTHER
-    'SET_LOADING'(state, payload) {
-      state.loading = payload
-    },
-    'SET_ERROR'(state, payload) {
-      state.error = payload
-    }
+    SET_FILTERS: (state, payload) => state.filters = { ...payload },
+    CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
+    SET_LOADING: (state, payload) => state.loading = payload,
+    SET_ERROR: (state, payload) => state.error = payload,
+    ADD_CONTROLLER: (state, payload) => state.controller = payload,
+    REMOVE_CONTROLLER: (state) => state.controller = false
   },
   actions: {
     fetch({ commit, state }, { initial = true, id = '' }) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
-      this.$api.get(`comment/${id}/history`, state.filters)
+      const controller = new AbortController()
+      commit('ADD_CONTROLLER', controller)
+
+      this.$api.get(`comment/${id}/history`, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
-        commit('SET_TOTAL_ITEMS', result.total_items)
+        commit('SET_HAS_MORE', result.has_more)
       })
       .catch(error => {
         commit('SET_ERROR', error)
       })
-      .then(_ => commit('SET_LOADING', false))
+      .then(_ => {
+        commit('REMOVE_CONTROLLER')
+        commit('SET_LOADING', false)
+      })
     },
     clear({ commit }) {
       commit('CLEAR_DATA')
       commit('CLEAR_FILTERS')
-      commit('SET_TOTAL_ITEMS', 0)
+      commit('SET_HAS_MORE', false)
     },
     async more({ state, commit, dispatch }, id = '') {
       await commit('SET_FILTERS', { ...state.filters, offset: state.data.length })
@@ -66,9 +59,7 @@ let history = {
     },
   },
   getters: {
-    hasMoreItems(state) {
-      return state.data.length < state.total_items
-    }
+    hasMoreItems: state => state.hasMore,
   }
 }
 

@@ -68,8 +68,8 @@ export default {
     }
   },
   async mounted() {
-    this.$sse.on('has_notice', (e) => {
-      this.$store.dispatch('auth/has_notice', e)
+    this.$sse.on('has_notice', payload => {
+      this.$store.dispatch('auth/has_notice', payload)
     })
 
     this.$modals.on('show', _ => this.modal = true)

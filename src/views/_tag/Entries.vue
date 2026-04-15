@@ -1,6 +1,6 @@
 <template>
   <entries-list v-if="(!loading && !error) || data.length > 0">
-    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`">
+    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
       <entry-item :data="item" type="short" :showPinAction="false" />
     </entry-item-wrapper>
 
@@ -11,55 +11,57 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else :text="$t('user.errors.entries_empty')" />
   </template>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { useTagEntriesStore } from '@/app/components/stores/modules/tag'
 
 export default {
   name: 'tag-entries',
-  components: {
-    EntriesList, EntryItem, EntryItemWrapper,
-    Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
-  },
-  computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('tag/entries', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('tag/entries', [ 'hasMoreItems' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
+  props: {
+    slug: {
+      type: [ Boolean, String ],
+      default: false
     }
   },
-  data() {
-    return { }
+  components: {
+    EntriesList, EntryItem, EntryItemWrapper,
+    Placeholder, NButton, LoadmoreTrigger
+  },
+  setup() {
+    const store = useTagEntriesStore()
+    return { store }
+  },
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('tag/entries/more')
+      this.store.more(this.slug)
     }
   },
   mounted() {
-    this.$store.dispatch('tag/entries/fetch')
+    this.store.fetch(this.slug)
   },
   beforeUnmount() {
-    this.$store.dispatch('tag/entries/clear')
+    this.store.clear()
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -14,26 +14,30 @@
 
   <spacer height="30" />
 
-  <template v-if="(!loading && !error) || data.length > 0">
-    <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`">
-      <notification-item :data="item" @click="readNotify" />
+  <notifications-list v-if="(!loading && !error) || data.length > 0">
+    <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]">
+      <notification-item :data="item"
+        @click="read"
+        @read="onRead"
+        @hide="onHide"
+      />
     </notification-item-wrapper>
 
     <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
 
     <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </template>
+  </notifications-list>
 
   <template v-if="data.length == 0">
-    <div class="notifications-list" v-if="loading">
-      <notification-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+    <notifications-list v-if="loading">
+      <notification-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <notification-item />
       </notification-item-wrapper>
-    </div>
+    </notifications-list>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else
       :icon="$t('errors.empty_notifications.icon')"
@@ -44,15 +48,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
+import { to } from '@/app/services/utilities'
 
-import { NotificationItem, NotificationItemWrapper } from '@/components/notifications'
+import { NotificationsList, NotificationItem, NotificationItemWrapper } from '@/components/notifications'
+import { useNotificationsStore } from '@/app/components/stores/modules/notifications'
 
 export default {
   name: 'notifications',
   components: {
-    NotificationItem, NotificationItemWrapper,
+    NotificationsList, NotificationItem, NotificationItemWrapper,
     Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup
   },
   meta() { return this.meta },
@@ -64,10 +69,15 @@ export default {
       load_more_loading: false
     }
   },
+  created() {
+    this.store = useNotificationsStore()
+  },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('notifications', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('notifications', [ 'hasMoreItems' ]),
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
     tabs() {
       return [
         { 
@@ -109,9 +119,6 @@ export default {
     },
     availableKeys() {
       return this.tabs.map(el => el.key)
-    },
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
     }
   },
   methods: {
@@ -120,36 +127,46 @@ export default {
         ? { name: this.$route.name, query: { tab } }
         : { name: this.$route.name }
     },
-    seen() {
-      this.$api.post('my/notifications/seen')
-      .then(_ => {
-        this.$store.dispatch('auth/seen_notifications')
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
+    async seen() {
+      const [error] = await to(this.store.seen())
+      error
+        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        : this.$store.dispatch('auth/seen_notifications')
     },
-    readNotify(data) {
-      if (!data.state.is_readed) {
-        this.$store.dispatch('notifications/read', data.notify_id)
-        this.$api.post(`my/notifications/${data.notify_id}/read`)
-      }
+
+    async read(notifyId) {
+      const [error] = await to(this.store.read(notifyId))
+      if (error) this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
     },
-    readAll() {
+
+    async onRead(notifyId) {
+      this.$popover.close()
+      const [error, result] = await to(this.store.read(notifyId))
+      error
+        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+    },
+
+    async onHide(notifyId) {
+      this.$popover.close()
+      const [error, result] = await to(this.store.hide(notifyId))
+      error
+        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+    },
+
+    async readAll() {
       this.load_more_loading = true
 
-      this.$api.post('my/notifications/read', { mode: 'all' })
-      .then(result => {
-        this.$store.dispatch('notifications/read_all')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
-      })
-      .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-      })
-      .then(_ => this.load_more_loading = false)
+      const [error, result] = await to(this.store.readAll())
+      error
+        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+
+      this.load_more_loading = false
     },
     loadMore() {
-      this.$store.dispatch('notifications/more')
+      this.store.more()
     },
     deleteTabQuery() {
       let query = Object.assign({}, this.$route.query)
@@ -162,14 +179,12 @@ export default {
       ? this.$route.query.tab 
       : 'all'
     
-    await Promise.all([
-      this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
-      this.$store.dispatch('notifications/fetch')
-    ])
-    this.seen()
+    await this.store.setFilters({ tab, offset: undefined })
+    await this.store.fetch()
+    await this.seen()
   },
   beforeUnmount() {
-    this.$store.dispatch('notifications/clear')
+    this.store.clear()
   },
   watch: {
     '$route.query.tab': {
@@ -177,10 +192,8 @@ export default {
         const tab = this.availableKeys.includes(to) ? to : 'all'
         if (tab === this.filters.tab) return // Проверка на дубликаты
         
-        await Promise.all([
-          this.$store.dispatch('notifications/setFilters', { tab, offset: undefined }),
-          this.$store.dispatch('notifications/fetch')
-        ])
+        await this.store.setFilters({ tab, offset: undefined })
+        await this.store.fetch()
       },
       immediate: false 
     }

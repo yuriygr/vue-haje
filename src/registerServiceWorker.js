@@ -20,9 +20,13 @@ if (process.env.NODE_ENV === 'production') {
       console.log('New content is downloading.')
     },
     updated () {
+      const event = new CustomEvent('sw:updated')
+      document.dispatchEvent(event)
       console.log('New content is available; please refresh.')
     },
     offline () {
+      const event = new CustomEvent('sw:offline')
+      document.dispatchEvent(event)
       console.log('No internet connection found. App is running in offline mode.')
     },
     error (error) {

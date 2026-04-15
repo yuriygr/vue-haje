@@ -14,7 +14,7 @@
 
     <router-view v-slot="{ Component }" name="user">
       <keep-alive>
-        <component :is="Component" />
+        <component :is="Component" :username="username" />
       </keep-alive>
     </router-view>
   </template>
@@ -22,18 +22,18 @@
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
   </template>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { Placeholder, PlaceholderLoading, Separator, Spacer, Tabs, TabsItem } from '@vue-norma/ui'
 
 import { UserCard } from '@/components/user'
+import { useUserStore } from '@/app/components/stores/modules/user'
 
 export default {
   name: 'user',
@@ -43,10 +43,7 @@ export default {
       default: false
     }
   },
-  components: {
-    UserCard,
-    Placeholder, PlaceholderLoading, Separator, Spacer, Tabs, TabsItem
-  },
+  components: {  UserCard, Placeholder, PlaceholderLoading, Separator, Spacer, Tabs, TabsItem },
   meta() { return this.meta },
   data() {
     return {
@@ -55,69 +52,68 @@ export default {
       }
     }
   },
+  setup() {
+    const store = useUserStore()
+    return { store }
+  },
   computed: {
-    ...mapState('user', [ 'data', 'loading', 'error' ]),
+    data()         { return this.store.data },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    isEmpty()      { return this.store.isEmpty },
     tabItems() {
       return [
         {
           key: 'entries',
           to: { name: 'user' },
-          label: this.$tc('user.tabs.entries', this.data.counters.entries),
+          label: this.$t('user.tabs.entries', this.data.counters.entries),
           active: this.$route.name == `user-entries` || this.$route.name == `user` 
         },
         {
           key: 'subscribers',
           to: { name: 'user-subscribers' },
-          label: this.$tc('user.tabs.subscribers', this.data.counters.subscribers),
+          label: this.$t('user.tabs.subscribers', this.data.counters.subscribers),
           active: this.$route.name == `user-subscribers`
         },
         {
           key: 'subscriptions',
           to: { name: 'user-subscriptions' },
-          label: this.$tc('user.tabs.subscriptions', this.data.counters.subscriptions),
+          label: this.$t('user.tabs.subscriptions', this.data.counters.subscriptions),
           active: this.$route.name == `user-subscriptions`
         },
         {
           key: 'badges',
           to: { name: 'user-badges' },
-          label: this.$tc('user.tabs.badges', this.data.counters.badges),
+          label: this.$t('user.tabs.badges', this.data.counters.badges),
           active: this.$route.name == `user-badges`
         },
       ]
-    },
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
     }
   },
-  methods: {
-
-  },
   mounted() {
-    this.$store.dispatch('user/fetch', this.username)
+    this.store.fetch(this.username)
   },
   beforeUnmount() {
-    this.$store.dispatch('user/clear')
+    this.store.clear()
   },
   watch: {
     username(to) {
       if (to) {
-        this.$store.dispatch('user/fetch', to)
+        this.store.clear()
+        this.store.fetch(to)
       }
     },
     data: {
       handler(to) {
-        this.meta.title = `${to.profile?.name} (@${to.username})`
+        if (to.profile?.name && to.username)
+          this.meta.title = `${to.profile.name} (@${to.username})`
       },
       immediate: true
     },
     error(to) {
       if (to)
-        this.meta.title = this.$t(this.humanizeError.title)
+        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

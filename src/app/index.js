@@ -1,7 +1,7 @@
 import VueGtag from 'vue-gtag'
 
 // app components & services
-import { router, directives, filters, store, global_ui, i18n } from '@/app/components'
+import { router, directives, filters, store, stores, global_ui, i18n } from '@/app/components'
 import { api, sse, alerts, meta, modals, popover, bus } from '@/app/services'
 
 /**
@@ -44,7 +44,8 @@ export default new class {
     app.use(router, app)
     app.use(directives)
     app.use(filters)
-    app.use(store)
+    app.use(store) // TODO: Remove
+    app.use(stores)
     app.use(global_ui)
     app.use(i18n)
   

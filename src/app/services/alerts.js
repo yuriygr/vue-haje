@@ -50,7 +50,7 @@ export default new class {
     this.bus.on(this.options.key, callback)
   }
 
-  off() {
-    this.bus.off(this.options.key)
+  off(callback) {
+    this.bus.off(this.options.key, callback)
   }
 }

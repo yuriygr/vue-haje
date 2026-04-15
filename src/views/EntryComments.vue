@@ -14,7 +14,7 @@
 
     <template v-if="data.length == 0">
       <div class="comments-list" v-if="loading">
-        <comment-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+        <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
           <comment-item />
         </comment-item-wrapper>
       </div>
@@ -41,7 +41,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
     ...mapState('entry/comments', [ 'data', 'loading', 'error' ]),
     ...mapGetters('entry/comments', [ 'tree' ]),
     ...mapState('auth', {

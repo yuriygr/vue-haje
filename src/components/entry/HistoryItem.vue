@@ -4,7 +4,7 @@
       <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
       <meta-info class="entry-history__meta" :items="metaItems" />
     </div>
-    <div v-if="data.content" class="entry-history__content" v-html="$filters.contentFormat(data.content.text)" />
+    <div v-if="data.content" class="entry-history__content" v-linkified="data.content.text" />
   </div>
 </template>
 

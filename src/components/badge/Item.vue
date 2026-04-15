@@ -82,6 +82,12 @@ export default {
     --badge-item__label--color: var(--x-color-orange--shade10);
   }
 
+  &--type-kilo {
+    --badge-item__icon--background: var(--x-color-red--tint80);
+    --badge-item__icon--color: var(--x-color-red--shade10);
+    --badge-item__label--color: var(--x-color-red--shade10);
+  }
+
   html[data-theme="black"] & {
     --badge-item--background: transparent;
     --badge-item__icon--background: #161616;
@@ -111,6 +117,12 @@ export default {
       --badge-item__icon--background: var(--x-color-orange--shade70);
       --badge-item__icon--color: var(--x-color-orange--tint20);
       --badge-item__label--color: var(--x-color-orange--tint20);
+    }
+
+    &--type-kilo {
+      --badge-item__icon--background: var(--x-color-red--shade70);
+      --badge-item__icon--color: var(--x-color-red--tint20);
+      --badge-item__label--color: var(--x-color-red--tint20);
     }
   }
 }

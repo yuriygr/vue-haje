@@ -4,7 +4,7 @@
       <n-header>{{ $t('bookmarks.section.users') }}</n-header>
 
       <users-list>
-        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`">
+        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
           <user-item :data="item" />
         </user-item-wrapper>
       </users-list>
@@ -46,7 +46,7 @@
       <n-header>{{ $t('bookmarks.section.feeds') }}</n-header>
 
       <feeds-list>
-        <feed-item-wrapper v-for="item in data.feeds" :key="`feed-${item.feed_id}`">
+        <feed-item-wrapper v-for="item in data.feeds" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
           <feed-item :data="item" type="short" />
         </feed-item-wrapper>
       </feeds-list>
@@ -62,7 +62,7 @@
       <group>
         <n-header><skeleton :width="80" :height="12" /></n-header>
         <users-list>
-          <user-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <user-item-wrapper v-for="index in 5" :key="`user-skeleton-${index}`">
             <user-item />
           </user-item-wrapper>
         </users-list>
@@ -70,16 +70,16 @@
       <group>
         <n-header><skeleton :width="91" :height="12" /></n-header>
         <entries-list>
-          <entry-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <entry-item-wrapper v-for="index in 5" :key="`entry-skeleton-${index}`">
             <entry-item />
           </entry-item-wrapper>
         </entries-list>
       </group>
     </template>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else
       :icon="$t('errors.empty_bookmarks.icon')"
@@ -114,12 +114,8 @@ export default {
     FeedsList, FeedItem, FeedItemWrapper
   },
   computed: {
-    ...mapState('app', [ 'skeletons_min' ]),
     ...mapState('bookmarks/all', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/all', [ 'emptyData' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    ...mapGetters('bookmarks/all', [ 'emptyData' ])
   },
   data() {
     return { }

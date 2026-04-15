@@ -1,8 +1,8 @@
-const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
+const createListedModule = (endpointBuilder = '', initialFilters = {}, ignoredFilterKeys = ['offset']) => ({
   namespaced: true,
   state: () => ({
     data: [],
-    total_items: 0,
+    hasMore: false,
 
     filters: { ...initialFilters },
 
@@ -13,10 +13,10 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
   mutations: {
     SET_DATA: (state, payload) => state.data = payload,
     ADD_DATA: (state, payload) => state.data.push(...payload),
-    SET_TOTAL_ITEMS: (state, payload) => state.total_items = payload,
+    SET_HAS_MORE: (state, payload) => state.hasMore = payload,
     CLEAR_DATA: (state) => {
       state.data = []
-      state.total_items = 0
+      state.hasMore = false
     },
     SET_FILTERS: (state, payload) => state.filters = { ...payload },
     CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
@@ -40,7 +40,7 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
       return this.$api.get(endpoint, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
-        commit('SET_TOTAL_ITEMS', result.total_items)
+        commit('SET_HAS_MORE', result.has_more)
       })
       .catch(error => {
         commit('SET_ERROR', error)
@@ -79,7 +79,28 @@ const createListedModule = (endpointBuilder = '', initialFilters = {}) => ({
     }
   },
   getters: {
-    hasMoreItems: state => state.data.length < state.total_items
+    hasMoreItems: state => state.hasMore,
+    hasFilters: (state) => {
+      return Object.entries(state.filters).some(([key, value]) => {
+        // Пропускаем служебные ключи
+        if (ignoredFilterKeys.includes(key)) return false
+
+        // Сравниваем с начальным значением
+        const initialValue = initialFilters[key]
+
+        // Массив — проверяем что не пустой и отличается от initial
+        if (Array.isArray(value)) {
+          return value.length > 0 && 
+            JSON.stringify(value) !== JSON.stringify(initialValue ?? [])
+        }
+
+        // Остальные значения — сравниваем с initial
+        return value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          value !== initialValue
+      })
+    }
   }
 })
 
@@ -103,7 +124,10 @@ const createItemModule = (endpointBuilder) => ({
     REMOVE_CONTROLLER: (state) => state.controller = false
   },
   actions: {
-    fetch({ commit }, prop = 'nope') {
+    pre_fetch({ commit }, payload) {
+      commit('SET_DATA', payload)
+    },
+    fetch({ commit }, prop = '') {
       commit('SET_LOADING', true)
       commit('SET_ERROR', false)
 
@@ -142,7 +166,7 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }, ignoredFil
   namespaced: true,
   state: () => ({
     data: [],
-    total_items: 0,
+    hasMore: false,
 
     filters: { ...initialFilters },
 
@@ -153,10 +177,10 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }, ignoredFil
   mutations: {
     SET_DATA: (state, payload) => state.data = payload,
     ADD_DATA: (state, payload) => state.data.push(...payload),
-    SET_TOTAL_ITEMS: (state, payload) => state.total_items = payload,
+    SET_HAS_MORE: (state, payload) => state.hasMore = payload,
     CLEAR_DATA: (state) => {
       state.data = []
-      state.total_items = 0
+      state.hasMore = false
     },
     SET_FILTERS: (state, payload) => state.filters = { ...payload },
     CLEAR_FILTERS: (state) => state.filters = { ...initialFilters },
@@ -176,7 +200,7 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }, ignoredFil
       return this.$api.get(endpoint, state.filters, controller.signal)
       .then(result => {
         commit(initial ? 'SET_DATA' : 'ADD_DATA', result.items)
-        commit('SET_TOTAL_ITEMS', result.total_items)
+        commit('SET_HAS_MORE', result.has_more)
       })
       .catch(error => {
         commit('SET_ERROR', error)
@@ -236,7 +260,7 @@ const createSearchModule = (endpoint, initialFilters = { query: '' }, ignoredFil
           value !== initialValue
       })
     },
-    hasMoreItems: state => state.data.length < state.total_items,
+    hasMoreItems: state => state.hasMore,
     emptyQuery: state => state.filters.query === '',
     searching: state => state.filters.query !== ''
   }

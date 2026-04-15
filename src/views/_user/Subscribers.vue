@@ -1,6 +1,6 @@
 <template>
   <users-list v-if="(!loading && !error) || data.length > 0">
-    <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`">
+    <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
       <user-item :data="item" />
     </user-item-wrapper>
     
@@ -11,55 +11,57 @@
 
   <template v-if="data.length == 0">
     <users-list v-if="loading">
-      <user-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <user-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <user-item />
       </user-item-wrapper>
     </users-list>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else :text="$t('user.errors.subscribers_empty')" />
   </template>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
+import { useUserSubscribersStore } from '@/app/components/stores/modules/user'
 
 export default {
   name: 'user-subscribers',
+  props: {
+    username: {
+      type: [ Boolean, String ],
+      default: false
+    }
+  },
   components: {
     UsersList, UserItem, UserItemWrapper,
     Placeholder, NButton, LoadmoreTrigger
   },
-  computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('user/subscribers', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('user/subscribers', [ 'hasMoreItems' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+  setup() {
+    const store = useUserSubscribersStore()
+    return { store }
   },
-  data() {
-    return { }
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('user/subscribers/more')
+      this.store.more(this.username)
     }
   },
   mounted() {
-    this.$store.dispatch('user/subscribers/fetch')
+    this.store.fetch(this.username)
   },
   beforeUnmount() {
-    this.$store.dispatch('user/subscribers/clear')
+    this.store.clear()
   }
 }
 </script>
-
-<style>
-
-</style>

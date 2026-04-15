@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <div class="comments-list" v-if="loading">
-      <comment-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <comment-item />
       </comment-item-wrapper>
     </div>
@@ -40,8 +40,7 @@ export default {
     Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('search/comments', [ 'data', 'filters', 'loading', 'error' ]),
+        ...mapState('search/comments', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/comments', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)

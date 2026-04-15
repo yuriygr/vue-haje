@@ -9,7 +9,7 @@
         <img :src="avatarUrl" alt="" />
       </div>
     </div>
-    <div v-if="localData.profile.bio" class="user-card__bio" v-html="$filters.contentFormat(localData.profile.bio)" />
+    <div v-if="localData.profile.bio" class="user-card__bio" v-linkified="localData.profile.bio" />
     <meta-info class="user-card__meta" :items="metaItems" />
     
     <spacer height="20" />
@@ -19,7 +19,6 @@
         <n-button mode="secondary" component="router-link" :stretched="true" :to="{ name: 'settings-profile' }" icon_before="user-edit-line">
           {{ $t('user.action.settings') }}
         </n-button>
-        <n-button component="router-link" icon_before="logout-line" mode="secondary" :to="{ name: 'auth-logout' }" :title="$t('user.action.logout')" />
       </template>
       
       <template v-else>
@@ -42,7 +41,7 @@
 import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
-import { userActionsMixin } from '@/mixins/userActionsMixin'
+import { userActionsMixin } from '@/app/mixins/userActionsMixin'
 
 let UserAvatarView = defineAsyncComponent(() => import("@/modals/_user/AvatarView.vue"))
 
@@ -53,7 +52,10 @@ export default {
     NButton, ButtonsGroup, MetaInfo, Spacer
   },
   props: {
-    data: false
+    data: {
+      type: Object,
+      default: false
+    }
   },
   data() {
     return {}

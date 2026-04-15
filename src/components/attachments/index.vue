@@ -3,8 +3,8 @@
     <div class="images-list" v-if="files">
       <picture v-for="item in files" :key="`file-${item.file.uuid}`">
         <video v-if="item.file.type == 'mp4'"
-          :poster="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/format/mp4/`"
+          :poster="`https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :src="`https://leonardo2.osnova.io/${item.file.uuid}/-/format/mp4/`"
           :width="item.file.width"
           :height="item.file.height"
           controls="true"
@@ -13,8 +13,8 @@
           preload="auto"
         />
         <img v-else
-          :data-src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-          :src="`https://leonardo.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :data-src="`https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
+          :src="`https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
           :width="item.file.width"
           :height="item.file.height"
           @click="viewImage(item.file)"
@@ -22,31 +22,39 @@
       </picture>
     </div>
 
-    <links-list v-if="link">
-      <link-item-wrapper>
-        <link-item :data="link" />
-      </link-item-wrapper>
-    </links-list>
+    <template v-for="link in links">
+      <template v-if="link.link.domain == 'youtube.com'">
+        <YouTubePreview :data="link.link" />
+      </template>
+      <template v-else>
+        <link-item-wrapper>
+          <link-item :data="link.link" />
+        </link-item-wrapper>
+      </template>
+    </template>
+
   </div>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { LinksList,LinkItem,LinkItemWrapper } from '@/components/links'
+import { LinkItem, LinkItemWrapper } from '@/components/links'
+import YouTubePreview from '@/components/embed/YouTube.vue'
 
 let ImageViewer = defineAsyncComponent(() => import("@/modals/ImageViewer.vue"))
 
 export default {
   name: 'attachments',
   components: {
-   LinksList,LinkItem,LinkItemWrapper
+    YouTubePreview,
+    LinkItem, LinkItemWrapper
   },
   props: {
     files: {
       type: [ Array, Object, Boolean ],
       default: false
     },
-    link: {
+    links: {
       type: [ Array, Object, Boolean ],
       default: false
     },
@@ -60,7 +68,7 @@ export default {
   },
   computed: {
     hasAttachments() {
-      return this.files || this.link
+      return this.files || this.links
     },
 
     elClass() {

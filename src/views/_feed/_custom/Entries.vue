@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>
@@ -50,8 +50,7 @@ export default {
     return { }
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('feed/custom/entries', [ 'data', 'filters', 'loading', 'error' ]),
+        ...mapState('feed/custom/entries', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('feed/custom/entries', [ 'hasMoreItems' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)

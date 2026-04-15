@@ -55,7 +55,7 @@
 <script>
 import { Icon, NButton, ButtonsGroup } from '@vue-norma/ui'
 
-import { userActionsMixin } from '@/mixins/userActionsMixin'
+import { userActionsMixin } from '@/app/mixins/userActionsMixin'
 
 export default {
   name: 'user-item',

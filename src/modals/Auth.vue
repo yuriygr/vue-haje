@@ -56,7 +56,7 @@ export default {
   computed: {
     coverStyle() {
       return {
-        'background-image': 'url("https://leonardo.osnova.io/dfc1cb18-aadb-7e41-4854-88af19bd9a63/-/format/webp/")'
+        'background-image': 'url("https://leonardo2.osnova.io/dfc1cb18-aadb-7e41-4854-88af19bd9a63/-/format/webp/")'
       }
     }
   },

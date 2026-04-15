@@ -11,7 +11,7 @@
 
   <template v-if="data.length == 0">
     <entries-list v-if="loading">
-      <entry-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
     </entries-list>
@@ -40,8 +40,7 @@ export default {
     Placeholder, PlaceholderLoading, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('search/entries', [ 'data', 'filters', 'loading', 'error' ]),
+        ...mapState('search/entries', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/entries', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)

@@ -96,3 +96,31 @@ export function debounce(fn, delay) {
 
   return debounced
 }
+
+export async function to(promise) {
+  try {
+    const result = await promise
+    return [null, result]
+  } catch (error) {
+    return [error, null]
+  }
+}
+
+export const getYouTubeID = (url) => {
+  if (!url) return null
+
+  const patterns = [
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,      // https://www.youtube.com/watch?v=XXXXXXXXXXX
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,         // https://www.youtube.com/shorts/XXXXXXXXXXX
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,                    // https://youtu.be/XXXXXXXXXXX
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,          // https://www.youtube.com/embed/XXXXXXXXXXX
+    /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/,              // https://www.youtube.com/v/XXXXXXXXXXX
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) return match[1]
+  }
+
+  return null
+}

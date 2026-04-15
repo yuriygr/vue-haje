@@ -1,6 +1,6 @@
 <template>
   <tags-list v-if="(!loading && !error) || data.length > 0">
-    <tag-item-wrapper v-for="item in data" :key="`tag-item-${item.tag_id}`">
+    <tag-item-wrapper v-for="item in data" :key="`tag-item-${item.tag_id}`" v-memo="[item.tag_id]">
       <tag-item :data="item" />
     </tag-item-wrapper>
 
@@ -11,11 +11,10 @@
 
   <template v-if="data.length == 0">
     <tags-list v-if="loading">
-      <tag-item-wrapper v-for="index in skeletons" :key="`item-${index}`">
+      <tag-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <tag-item />
       </tag-item-wrapper>
     </tags-list>
-
     <placeholder v-else-if="error"
       :icon="$t(humanizeError.icon)"
       :header="$t(humanizeError.title)"
@@ -41,8 +40,7 @@ export default {
     Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
-    ...mapState('app', [ 'skeletons' ]),
-    ...mapState('search/tags', [ 'data', 'filters', 'loading', 'error' ]),
+        ...mapState('search/tags', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/tags', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
     humanizeError() {
       return this.$filters.humanizeError(this.error)

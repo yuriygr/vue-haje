@@ -145,7 +145,7 @@ const timeAgo = (timestamp, locale) => {
 
 
 // ochen' mnogo kostiley
-const contentFormat = (value) => {
+export const contentFormat = (value) => {
   let rules = {
     // http://, https://, ftp://
     url: {
@@ -165,12 +165,12 @@ const contentFormat = (value) => {
     // hashtags
     tags: {
       pattern: /\B(#([^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
-      replacment: `<a href="/t/$2" target="_self">$1</a>`
+      replacment: `<a href="/t/$2" target="_self" class="hashtag">$1</a>`
     },
     // Упоминание
     mentions: {
       pattern: /\B(@([^\s!#$%^&*()=+.\/,\[{\]};:'"?><]{1,24}))/gi,
-      replacment: `<a href="/u/$2" target="_self">$1</a>`
+      replacment: `<a href="/u/$2" target="_self" class="mention">$1</a>`
     },
     // Цитата
     quote: {
@@ -188,14 +188,16 @@ const contentFormat = (value) => {
   value = value.replace(/&#39;/gi, "'")
                .replace(/&#34;/gi, '"')
 
-  Object.keys(rules).forEach(key => 
-    value = value.replace(rules[key].pattern, rules[key].replacment)
-  )
+  Object.keys(rules).forEach(key => {
+    let rule = rules[key]
+    rule.pattern.lastIndex = 0
+    value = value.replace(rule.pattern, rule.replacment)
+  })
 
   return value
 }
 
-const truncateText = (value, length = 50) => {
+export const truncateText = (value, length = 50) => {
   // unescape some HTML
   value = value.replace(/(?:\r\n|\r|\n)/g, ` `)
   value = value.replace(/<br>/g, ` `)

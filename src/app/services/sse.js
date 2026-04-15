@@ -44,8 +44,8 @@ export default new class {
       withCredentials: this.withCredentials
     })
 
-    this.connection.onopen = _ => {
-			this.handleConnect()
+    this.connection.onopen = event => {
+			this.handleConnect(event)
 		}
 
     this.connection.onerror = error => {
@@ -60,7 +60,7 @@ export default new class {
 	}
 
 	// Обрабатываем подключение
-	handleConnect() {
+	handleConnect(_) {
 		this.isConnected = true
 		this.isReconnecting = false
 		this.reconnectAttempts = 0
@@ -93,7 +93,7 @@ export default new class {
 		}, delay)
 	}
 
-	// Обрабатываем сообщения
+	// Обрабатываем дефолтные сообщения
 	handleMessages(event) {
 		const { type, data } = JSON.parse(event.data)
 
@@ -120,22 +120,38 @@ export default new class {
 	close() {
 		this.shouldReconnect = false
 		this.cleanup()
-		this.handlers.clear();
+		this.handlers.clear()
 	}
 
-	// Adds a handler
 	on(type, callback) {
-    if (this.handlers.has(type)) {
+		if (!this.connection) {
+			return console.error('[SSE] Connection not established')
+		}
+
+		if (this.handlers.has(type)) {
 			return console.error('[SSE] A handler with this type already exists.')
-    }
+		}
 
-    this.handlers.set(type, callback)
-  }
+		const handler = (event) => {
+			try {
+				const data = JSON.parse(event.data)
+				callback(data)
+			} catch (err) {
+				console.error('[SSE] Failed to parse JSON', err)
+				return
+			}
+		}
 
-	// Removes the handler
-  off(type) {
-    if (this.handlers.has(type)) {
-      this.handlers.delete(type)
-    }
-  }
+		this.connection.addEventListener(type, handler)
+		this.handlers.set(type, handler)
+	}
+
+	off(type) {
+		if (!this.connection) return;
+		const handler = this.handlers.get(type)
+		if (handler) {
+			this.connection.removeEventListener(type, handler)
+			this.handlers.delete(type)
+		}
+	}
 }

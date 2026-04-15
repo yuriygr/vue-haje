@@ -9,8 +9,8 @@
           <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
         </buttons-group>
       </div>
-      <div v-if="data.content.text" class="entry__content" v-html="$filters.contentFormat(data.content.text)" />
-      <attachments class="entry__attachments" v-if="data.files || data.link" :files="data.files" :link="data.link" mode="full" />
+      <div v-if="data.content.text" class="entry__content" v-linkified="data.content.text" />
+      <attachments class="entry__attachments" v-if="data.files || data.links" :files="data.files" :links="data.links" mode="full" />
       <meta-info class="entry__meta" :items="metaItems" />
     </div>
   </template>
@@ -94,7 +94,7 @@ export default {
     metaItems() {
       let _result = []
 
-      this.data.state.is_comments_enabled && _result.push({ label: this.$tc('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
+      this.data.state.is_comments_enabled && _result.push({ label: this.$t('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
       _result.push({ label: this.formatedDate, to: this.entryLink, action: this.prefetchEntry })
       this.data.state.is_edited && _result.push({ label: this.$t('entry.meta.edited'), action: this.history })
 

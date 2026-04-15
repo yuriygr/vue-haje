@@ -4,7 +4,7 @@
       <n-header>{{ $t('search.section.users') }}</n-header>
 
       <users-list>
-        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`">
+        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
           <user-item :data="item" />
         </user-item-wrapper>
       </users-list>
@@ -32,7 +32,7 @@
       <n-header>{{ $t('search.section.tags') }}</n-header>
 
       <tags-list>
-        <tag-item-wrapper v-for="item in data.tags" :key="`tag-item-${item.tag_id}`">
+        <tag-item-wrapper v-for="item in data.tags" :key="`tag-item-${item.tag_id}`" v-memo="[item.tag_id]">
           <tag-item :data="item" />
         </tag-item-wrapper>
       </tags-list>
@@ -63,7 +63,7 @@
       <group>
         <n-header><skeleton :width="80" :height="12" /></n-header>
         <users-list>
-          <user-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <user-item-wrapper v-for="index in 5" :key="`user-skeleton-${index}`">
             <user-item />
           </user-item-wrapper>
         </users-list>
@@ -71,7 +71,7 @@
       <group>
         <n-header><skeleton :width="91" :height="12" /></n-header>
         <entries-list>
-          <entry-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <entry-item-wrapper v-for="index in 5" :key="`entry-skeleton-${index}`">
             <entry-item />
           </entry-item-wrapper>
         </entries-list>
@@ -79,7 +79,7 @@
       <group>
         <n-header><skeleton :width="30" :height="12" /></n-header>
         <tags-list>
-          <tag-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <tag-item-wrapper v-for="index in 5" :key="`tag-skeleton-${index}`">
             <tag-item />
           </tag-item-wrapper>
         </tags-list>
@@ -87,7 +87,7 @@
       <group>
         <n-header><skeleton :width="60" :height="12" /></n-header>
         <div class="comments-list">
-          <comment-item-wrapper v-for="index in skeletons_min" :key="`item-${index}`">
+          <comment-item-wrapper v-for="index in 5" :key="`item-${index}`">
             <comment-item />
           </comment-item-wrapper>
         </div>
@@ -131,7 +131,6 @@ export default {
     TagsList, TagItem, TagItemWrapper
   },
   computed: {
-    ...mapState('app', [ 'skeletons_min' ]),
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
     ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ]),
     humanizeError() {
