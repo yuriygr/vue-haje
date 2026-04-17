@@ -8,7 +8,7 @@ export default new class {
 
   defaultOptions = {
     defaultTitle: false,
-    separator: '—'
+    separator: '-'
   }
 
   createMixin(options = {}) {
@@ -22,7 +22,9 @@ export default new class {
           document.documentElement.dataset[key] = value
         },
         changeTitle(value) {
-          document.title = value + (options.defaultTitle ? ` ${options.separator} ${options.defaultTitle}` : '')
+          const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+
+          document.title = (!isPWA ? `${value} ${options.separator} ${options.defaultTitle}` : (value || options.defaultTitle))
         },
         changeMeta(key, value) {
           document.querySelector(`meta[name="${key}"]`).setAttribute("content", value)

@@ -74,6 +74,8 @@ export default {
             top: y,
             behavior: 'instant'
           })
+
+          this.$bus.emit('comment.highlight', commentId)
         }
       })
     }

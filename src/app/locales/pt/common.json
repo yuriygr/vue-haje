@@ -372,7 +372,8 @@
       "common": "Comum",
       "rare": "Raro",
       "epic": "Épico",
-      "legendary": "Lendário"
+      "legendary": "Lendário",
+      "mythical": "Mythical"
     },
     "date": "Recebido {date}"
   },

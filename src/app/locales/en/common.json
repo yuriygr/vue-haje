@@ -399,7 +399,8 @@
       "common": "Common",
       "rare": "Rare",
       "epic": "Epic",
-      "legendary": "Legendary"
+      "legendary": "Legendary",
+      "mythical": "Mythical"
     },
     "date": "Received {date}"
   },

@@ -20,7 +20,7 @@
         </template>
       </div>
     </div>
-    <template v-for="item in data.replies" :key="`comment-${item.comment_id}`">
+    <template v-for="item in data.replies">
       <comment-item :data="item" :level="level >= maxBranchesLevel ? level : level + 1" :entryAuthorID="entryAuthorID" />
     </template>
   </template>
@@ -94,6 +94,7 @@ export default {
     return {
       isReply: false,
       isEdit: false,
+      isHighlighted:false,
 
       loading: {
         stars: false,
@@ -111,7 +112,7 @@ export default {
       return [
         'comment',
         'comment--level-' + this.level,
-        { 'comment--highlighted': false } // TODO: Сделать
+        { 'comment--highlighted': this.isHighlighted }
       ]
     },
     metaItems() {
@@ -186,6 +187,11 @@ export default {
     }
   },
   methods: {
+    onHighlight(commentId) {
+      if (commentId != this.data.comment_id) return
+      this.isHighlighted = true
+      setTimeout(() => { this.isHighlighted = false }, 2000)
+    },
     toggleReplyForm() {
       this.isReply = !this.isReply
       this.$bus.emit('comment-form.reply', {
@@ -287,6 +293,12 @@ export default {
     onEditCancel() {
       this.isEdit = false
     }
+  },
+  mounted() {
+    this.$bus.on('comment.highlight', this.onHighlight)
+  },
+  beforeUnmount() {
+    this.$bus.off('comment.highlight', this.onHighlight)
   }
 }
 </script>
@@ -311,7 +323,7 @@ export default {
   --comment__author--color: var(--x-color-pink--tint10); 
 
   html[data-theme="black"] & {
-    --comment--background-highlighted: rgba(255, 255, 255, .03);
+    --comment--background-highlighted: rgba(255, 255, 255, 0.05);
     --comment__author--background: var(--x-color-pink--shade50); 
     --comment__author--color: var(--x-color-pink--tint60); 
   }
@@ -322,9 +334,11 @@ export default {
   grid-template-columns: auto 1fr;
 
   &--highlighted {
-    --animation-duration: 1.2s;
-    background-color: var(--comment--background-highlighted);
-    animation: commentAttention var(--animation-duration) forwards ease-in-out;
+    .comment__body {
+      --animation-duration: 1.2s;
+      background-color: var(--comment--background-highlighted);
+      animation: commentAttention var(--animation-duration) forwards ease-in-out;
+    }
   }
 
   &__body {
@@ -367,5 +381,4 @@ export default {
   0%, 50% { background-color: var(--comment--background-highlighted) }
   to { background-color: transparent }
 }
-
 </style>

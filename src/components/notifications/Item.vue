@@ -2,7 +2,7 @@
   <template v-if="data">
     <div :class="[ 'notification-item', `notification-item--type-${data.type}` ]">
       <router-link @click="onClick" @click.middle.exact="onClick" :to="link" :class="[ 'notification-item__icon']" active-class="" exact-active-class="">
-        <span v-if="data.is_readed" class="notification-item__badge"></span>
+        <span v-if="!data.state.is_readed" class="notification-item__badge"></span>
         <icon :name="noticeIcon" size="18" />
       </router-link>
       <router-link @click="onClick" @click.middle.exact="onClick" :to="link" class="notification-item__content" active-class="" exact-active-class="">
@@ -115,9 +115,9 @@ export default {
         case 'mention':
           return 'at-line'
         case 'reply':
-          return 'reply' + (this.data.state.is_readed ? '-line' : '-fill')
+          return 'reply-line'
         case 'comment':
-          return 'comments' + (this.data.state.is_readed ? '-line' : '-fill')
+          return 'comments-line'
         case 'new_post':
           return ''
       }
@@ -179,6 +179,7 @@ export default {
 <style lang="scss">
 .notification-item {
   --notification-item__icon--background: #fafafa;
+  --notification-item__icon--color: #212529;
   --notification-item__name--color: #212529;
   --notification-item__label--color: #666;
   --notification-item__badge--color: #e03131;
@@ -186,6 +187,7 @@ export default {
   
   html[data-theme="black"] & {
     --notification-item__icon--background: #171717;
+    --notification-item__icon--color: #919190;
     --notification-item__name--color: var(--x-body--color);
     --notification-item__label--color: #919190;
     --notification-item__badge--color: #e03131;
@@ -195,19 +197,6 @@ export default {
 
 .notification-item {
   --notification-item__icon--size: 40px;
-
-  &--type-mention {
-    --notification-item__icon--color: var(--x-color-pink--shade30);
-  }
-
-  &--type-subscription {
-    --notification-item__icon--color: var(--x-color-success--shade10);
-  }
-
-  &--type-reply,
-  &--type-comment {
-    --notification-item__icon--color: var(--x-color-action--shade30);
-  }
 }
 
 .notification-item {
@@ -221,12 +210,12 @@ export default {
     top: -2px;
     background-color: var(--notification-item__badge--color);
     border-radius: 50%;
-    border: 3px solid var(--notification-item__badge--border);
+    border: 4px solid var(--notification-item__badge--border);
     display: block;
     flex-grow: 0;
     flex-shrink: 0;
-    height: 12px;
-    width: 12px;
+    height: 16px;
+    width: 16px;
     user-select: none;
   }
 
@@ -234,7 +223,7 @@ export default {
     background: var(--notification-item__icon--background);
     color: var(--notification-item__icon--color);
     margin-right: .75rem;
-    padding: 11px;
+    padding: 10px;
     width: var(--notification-item__icon--size);
     height: var(--notification-item__icon--size);
     position: relative;
@@ -242,6 +231,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:hover {
+      color: var(--notification-item__icon--color);
+    }
 
     svg { display: block; fill: currentColor; }
   }
@@ -252,11 +245,10 @@ export default {
     position: relative;
     align-items: flex-start;
     flex: 1;
-
     color: var(--notification-item__label--color);
 
     @media(hover: hover) {
-      &:hover { text-decoration: none; color: var(--notification-item__label--color);; }
+      &:hover { text-decoration: none; color: var(--notification-item__label--color); }
     }
   }
 
@@ -269,6 +261,7 @@ export default {
 
     a {
       color: var(--notification-item__name--color);
+      pointer-events: none;
 
       @media(hover: hover) {
         &:hover { text-decoration: underline; color: var(--notification-item__name--color); }

@@ -82,7 +82,7 @@ export default {
     --badge-item__label--color: var(--x-color-orange--shade10);
   }
 
-  &--type-kilo {
+  &--type-mythical {
     --badge-item__icon--background: var(--x-color-red--tint80);
     --badge-item__icon--color: var(--x-color-red--shade10);
     --badge-item__label--color: var(--x-color-red--shade10);
@@ -119,7 +119,7 @@ export default {
       --badge-item__label--color: var(--x-color-orange--tint20);
     }
 
-    &--type-kilo {
+    &--type-mythical {
       --badge-item__icon--background: var(--x-color-red--shade70);
       --badge-item__icon--color: var(--x-color-red--tint20);
       --badge-item__label--color: var(--x-color-red--tint20);

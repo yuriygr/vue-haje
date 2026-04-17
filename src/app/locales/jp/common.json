@@ -419,7 +419,8 @@
       "common": "一般",
       "rare": "レア",
       "epic": "エピック",
-      "legendary": "レジェンダリー"
+      "legendary": "レジェンダリー",
+      "mythical": "Mythical"
     },
     "date": "{date}に取得"
   },
