@@ -1,6 +1,6 @@
 import Help from '@/views/Help'
 
-import { HelpMenu, HelpPage } from '@/views/_help'
+import { HelpPages, HelpPage } from '@/views/_help'
 
 export default [
   {
@@ -8,13 +8,10 @@ export default [
     name: 'helps',
     component: Help,
     meta: { section: 'menu' },
-    redirect: { name: 'help-menu' },
+    redirect: { name: 'help-pages' },
     children: [
-      { path: '', name: 'help-menu', component: HelpMenu },
-      { path: 'all-questions', name: 'help-all-questions', component: HelpMenu },
-      { path: 'my-questions', name: 'help-my-questions', component: HelpMenu },
-      { path: 'add-question', name: 'help-add-question', component: HelpMenu },
-      { path: ':uuid', name: 'help-page', component: HelpPage, props: true },
-	    { path: ':pathMatch(.*)*', redirect: { name: 'help-menu' } }
+      { path: '', name: 'help-pages', component: HelpPages },
+      { path: ':slug', name: 'help-page', component: HelpPage, props: true },
+	    { path: ':pathMatch(.*)*', redirect: { name: 'help-pages' } }
 	] }
 ]

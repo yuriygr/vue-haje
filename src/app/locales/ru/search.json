@@ -1,0 +1,34 @@
+{
+  "title": {
+    "all": "Поиск",
+    "users": "Поиск пользователей",
+    "entries": "Поиск постов",
+    "comments": "Поиск комментариев",
+    "feeds": "Поиск лент",
+    "tags": "Поиск тегов"
+  },
+  "search-field": {
+    "placeholder": "Поиск"
+  },
+  "filter": "Фильтр",
+  "tabs": {
+    "all": "Всюду",
+    "users": "Пользователи",
+    "entries": "Посты",
+    "comments": "Комментарии",
+    "feeds": "Ленты",
+    "tags": "Теги"
+  },
+  "section": {
+    "users": "@:search.tabs.users",
+    "entries": "@:search.tabs.entries",
+    "comments": "@:search.tabs.comments",
+    "tags": "@:search.tabs.tags",
+    "feeds": "@:search.tabs.feeds"
+  },
+  "empty": {
+    "icon": "search-line",
+    "title": "Нет результатов",
+    "description": "Возможно, стоит уточнить запрос"
+  }
+}

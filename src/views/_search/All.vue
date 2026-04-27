@@ -94,14 +94,14 @@
       </group>
     </template>
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else
-      :icon="$t('errors.empty_search.icon')"
-      :header="$t('errors.empty_search.title')"
-      :text="$t('errors.empty_search.description')"
+      :icon="$t('search.empty.icon')"
+      :header="$t('search.empty.title')"
+      :text="$t('search.empty.description')"
     />
   </template>
 </template>
@@ -132,10 +132,7 @@ export default {
   },
   computed: {
     ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ])
   },
   meta() { return this.meta },
   data() {

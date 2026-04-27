@@ -1,27 +1,27 @@
 <template>
-  <entries-list v-if="(!loading && !error) || data.length > 0">
-    <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
-      <entry-item :data="item" type="short" :showPinAction="false" />
-    </entry-item-wrapper>
+  <entries-list v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
+        <entry-item :data="item" type="short" :showPinAction="false" />
+      </entry-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </entries-list>
-
-  <template v-if="data.length == 0">
-    <entries-list v-if="loading">
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
+  
+    <template v-else-if="loading">
       <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <entry-item type="short" />
       </entry-item-wrapper>
-    </entries-list>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else :text="$t('user.errors.entries_empty')" />
-  </template>
+    </template>
+  </entries-list>
+
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else :text="$t('tag.errors.entries_empty')" />
 </template>
 
 <script>

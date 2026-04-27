@@ -2,7 +2,7 @@
   <template v-if="data">
     <div :class="elClass" :id="`comment-${data.comment_id}`">
       <branches :count="level - 1" />
-      <div class="comment__body">
+      <div v-if="data.status == 1" class="comment__body">
         <comment-form v-if="isEdit" mode="edit"
           :data="data"
           @success="onEditSuccess"
@@ -18,6 +18,12 @@
           <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
           <meta-info class="comment__meta" :items="metaItems" />
         </template>
+      </div>
+      <div v-else-if="data.status == 2" class="comment__deleted">
+        <div class="deleted-item__icon">
+          <icon name="cross-line" :size="8" />
+        </div>
+        <div class="deleted-item__label">{{ $t('comment.deleted', { reason: 0 }) }}</div>
       </div>
     </div>
     <template v-for="item in data.replies">
@@ -322,10 +328,18 @@ export default {
   --comment__author--background: var(--x-color-pink--tint70); 
   --comment__author--color: var(--x-color-pink--tint10); 
 
+  --deleted-item__icon--background: #f5f5f5;
+  --deleted-item__icon--color: #666;
+  --deleted-item__label--color: #666;
+
   html[data-theme="black"] & {
     --comment--background-highlighted: rgba(255, 255, 255, 0.05);
     --comment__author--background: var(--x-color-pink--shade50); 
     --comment__author--color: var(--x-color-pink--tint60); 
+
+    --deleted-item__icon--background: #161616;
+    --deleted-item__icon--color: #919190;
+    --deleted-item__label--color: #919190;
   }
 }
 
@@ -373,6 +387,42 @@ export default {
 
   &__attachments {
     margin-bottom: 1rem;
+  }
+
+  
+  &__deleted {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    position: relative;
+    overflow: hidden;
+
+    padding: 1rem 0;
+
+    .deleted-item__icon {
+      background: var(--deleted-item__icon--background);
+      color: var(--deleted-item__icon--color);
+      display: flex;
+      justify-content: center;
+      padding: 1.3rem;
+      margin-right: 1rem;
+      border-radius: 8px;
+
+      svg {
+        fill: currentColor;
+        width: 1rem;
+        height: 1rem;
+        display: block;
+      }
+    }
+
+    .deleted-item__label {
+      color: var(--deleted-item__label--color);
+      font-size: 1.4rem;
+      line-height: calc(1.4 * 1em);
+    }
   }
 
 }

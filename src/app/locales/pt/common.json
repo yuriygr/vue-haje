@@ -75,72 +75,13 @@
       "from_date": "Publicado {date}"
     }
   },
-  "search": {
-    "title": {
-      "all": "Procurar",
-      "users": "Pesquisar usuários",
-      "entries": "Pesquisar postagens",
-      "comments": "Pesquisar comentários",
-      "feeds": "Pesquisar notícias",
-      "tags": "Tags de pesquisa"
-    },
-    "search-field": {
-      "placeholder": "Procurar"
-    },
-    "filter": "Filtro",
-    "tabs": {
-      "all": "Em todos os lugares",
-      "users": "Usuários",
-      "entries": "Postagens",
-      "comments": "Comentários",
-      "feeds": "Notícias",
-      "tags": "Tag"
-    },
-    "section": {
-      "users": "@:search.tabs.users",
-      "entries": "@:search.tabs.entries",
-      "comments": "@:search.tabs.comments",
-      "feeds": "@:search.tabs.feeds",
-      "tags": "@:search.tabs.tags"
-    }
-  },
-  "notifications": {
-    "title": "Notificações",
-    "action": {
-      "read_all": "Marque tudo como lido",
-      "settings": "Configurar notificações",
-      "options": "Mais",
-      "hide": "Esconder",
-      "dont": "Não notificar"
-    },
-    "tabs": {
-      "all": "Todo",
-      "subscriptions": "Inscrição",
-      "replies": "Respostas",
-      "mentions": "Mencionar",
-      "new_post": "Novas postagens",
-      "system": "Sistema"
-    },
-    "user": {
-      "subscriptions": "{0} se inscreveu em voçê",
-      "new_post": "{0} publicou um novo post",
-      "replies": "{0} respondeu ao seu post",
-      "mentions": "{0} mencionou você"
-    },
-    "system": {
-      "reports": "Foi recebida uma denúncia contra voçê",
-      "login": "Conectado"
-    },
-    "support": {
-      "replies": "Foi recebida uma resposta ao seu pedido"
-    }
-  },
   "menu": {
     "title": "Menu",
     "item": {
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
+      "support": "@:support.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
@@ -153,18 +94,6 @@
     "tabs": {
       "subscribed": "Мои ленты",
       "manage": "Управление"
-    }
-  },
-  "bookmarks": {
-    "title": "Favoritos",
-    "tabs": {
-      "all": "Todos",
-      "entries": "Postagens",
-      "users": "Usuários"
-    },
-    "section": {
-      "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries"
     }
   },
   "settings": {
@@ -264,15 +193,9 @@
     }
   },
   "help": {
-    "title": "Ajuda",
-    "section": {
-      "base": "Principal",
-      "my": "Meu"
-    },
-    "item": {
-      "all-questions": "Base de conhecimento",
-      "my-questions": "Minhas perguntas",
-      "add-question": "Faça uma pergunta"
+    "title": "Base de conhecimento",
+    "meta": {
+      "edited": "{date}"
     }
   },
   "donate": {
@@ -281,6 +204,7 @@
   "about": {
     "title": "Sobre o aplicativo",
     "item": {
+      "rules": "Regras do site",
       "user-agreement": "Contrato do Usuário",
       "privacy": "Política de Privacidade",
       "legal": "Informações Legais",
@@ -322,6 +246,7 @@
       "replies": "0 respostas | {n} resposta | {n} respostas | {n} respostas",
       "edited": "editar"
     },
+    "deleted": "Комментарий удален",
     "form": {
       "placeholder": "Responda alguma coisa..."
     },

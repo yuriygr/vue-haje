@@ -65,14 +65,20 @@ export default {
           label: this.$t('menu.item.settings'),
           to: { name: 'settings' },
           chevron: true
+        },
+        {
+          icon: 'charity-line',
+          label: this.$t('menu.item.donate'),
+          to: { name: 'donate' },
+          chevron: true
         }
       ]
 
       let main = [
         {
-          icon: 'charity-line',
-          label: this.$t('menu.item.donate'),
-          to: { name: 'donate' },
+          icon: 'support-line',
+          label: this.$t('menu.item.support'),
+          to: { name: 'support' },
           chevron: true
         },
         {

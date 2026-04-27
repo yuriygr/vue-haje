@@ -14,9 +14,9 @@
     </entry-item-wrapper>
     
     <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else :text="$t('entry.errors.empty')" />
   </template>
@@ -57,10 +57,7 @@ export default {
     ...mapState('entry', [ 'data', 'loading', 'error' ]),
     ...mapState('auth', {
       'session_data': state => state.data
-    }),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    })
   },
   created() {
     this.$store.dispatch('entry/fetch', this.uuid)

@@ -1,0 +1,21 @@
+{
+  "title": "Bookmarks",
+  "tabs": {
+    "all": "All",
+    "entries": "Posts",
+    "users": "Users",
+    "comments": "Comments",
+    "feeds": "Feeds"
+  },
+  "section": {
+    "users": "@:bookmarks.tabs.users",
+    "entries": "@:bookmarks.tabs.entries",
+    "comments": "@:bookmarks.tabs.comments",
+    "feeds": "@:bookmarks.tabs.feeds"
+  },
+  "empty": {
+    "icon": "bookmarks-line",
+    "title": "No bookmarks",
+    "description": "To make them appear here you need to add them"
+  }
+}

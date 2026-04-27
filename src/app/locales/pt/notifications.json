@@ -1,0 +1,38 @@
+{
+  "title": "Notificações",
+  "action": {
+    "read_all": "Marcar tudo como lido",
+    "settings": "Configurar notificações",
+    "options": "Mais",
+    "read": "Lido",
+    "hide": "Ocultar",
+    "dont": "Não notificar"
+  },
+  "tabs": {
+    "all": "Todas",
+    "subscriptions": "Inscrições",
+    "replies": "Respostas",
+    "comments": "Comentários",
+    "mentions": "Menções",
+    "new_post": "Novas publicações",
+    "system": "Sistema"
+  },
+  "type": {
+    "subscription": "{0} começou a seguir você",
+    "new_post": "{0} publicou uma nova entrada",
+    "reply": "{0} respondeu ao seu comentário na publicação",
+    "comment": "{0} comentou na sua publicação",
+    "mention": "{0} mencionou você em {1}",
+    "reports": "Uma denúncia foi recebida contra você",
+    "login": "Foi realizado um acesso à sua conta"
+  },
+  "const": {
+    "entry": ["publicação", "publicações"],
+    "comment": ["comentário", "comentários"]
+  },
+  "empty": {
+    "icon": "bell-line",
+    "title": "Nenhuma notificação",
+    "description": "Muito provavelmente eles aparecerão em breve"
+  }
+}

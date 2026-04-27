@@ -1,31 +1,31 @@
 <template>
-  <feeds-list v-if="(!loading && !error) || data.length > 0">
-    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
-      <feed-item :data="item" type="short" />
-    </feed-item-wrapper>
+  <feeds-list v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
+        <feed-item :data="item" type="short" />
+      </feed-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </feeds-list>
-
-  <template v-if="data.length == 0">
-    <feeds-list v-if="loading">
-      <feed-item-wrapper v-for="index in 15" :key="`item-${index}`">
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
+  
+    <template v-else-if="loading">
+      <feed-item-wrapper v-for="index in 5" :key="`item-${index}`">
         <feed-item />
       </feed-item-wrapper>
-    </feeds-list>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else
-      :icon="$t('errors.empty_bookmarks.icon')"
-      :header="$t('errors.empty_bookmarks.title')"
-      :text="$t('errors.empty_bookmarks.description')"
-    />
-  </template>
+    </template>
+  </feeds-list>
+
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else
+    :icon="$t('bookmarks.empty.icon')"
+    :header="$t('bookmarks.empty.title')"
+    :text="$t('bookmarks.empty.description')"
+  />
 </template>
 
 <script>

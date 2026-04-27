@@ -54,32 +54,37 @@ export default {
       return [
         {
           label: this.$t('about.item.user-agreement'),
-          to: { name: 'help-page', params: { uuid: 'user-agreement' } },
+          to: { name: 'help-page', params: { slug: 'user-agreement' } },
           chevron: true
         },
         {
           label: this.$t('about.item.privacy'),
-          to: { name: 'help-page', params: { uuid: 'privacy' } },
+          to: { name: 'help-page', params: { slug: 'privacy' } },
           chevron: true
         },
         {
           label: this.$t('about.item.legal'),
-          to: { name: 'help-page', params: { uuid: 'legal' } },
+          to: { name: 'help-page', params: { slug: 'legal' } },
           chevron: true
         },
         {
           label: this.$t('about.item.data-security'),
-          to: { name: 'help-page', params: { uuid: 'data-security' } },
+          to: { name: 'help-page', params: { slug: 'data-security' } },
           chevron: true
         },
         {
           label: this.$t('about.item.architecture'),
-          to: { name: 'help-page', params: { uuid: 'architecture' } },
+          to: { name: 'help-page', params: { slug: 'architecture' } },
           chevron: true
         },
         {
           label: this.$t('about.item.ai-usage'),
-          to: { name: 'help-page', params: { uuid: 'ai-usage' } },
+          to: { name: 'help-page', params: { slug: 'ai-usage' } },
+          chevron: true
+        },
+        {
+          label: this.$t('about.item.rules'),
+          to: { name: 'help-page', params: { slug: 'rules' } },
           chevron: true
         }
       ]

@@ -264,7 +264,7 @@ export default {
       this.$refs.field.innerHTML = this.data.content.text
       this.form = {
         text: this.$refs.field.innerText,
-        files: this.data.files ? this.data.files.flatMap(i => i.file) : []
+        files: this.data.files ? this.data.files.map(i => ({ ...i.file, spoiler: i.is_spoiler })) : [],
       }
     }
   },

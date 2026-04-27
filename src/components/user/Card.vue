@@ -42,6 +42,7 @@ import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
 import { userActionsMixin } from '@/app/mixins/userActionsMixin'
+import { useUserStore } from '@/app/components/stores/modules/user'
 
 let UserAvatarView = defineAsyncComponent(() => import("@/modals/_user/AvatarView.vue"))
 
@@ -59,6 +60,10 @@ export default {
   },
   data() {
     return {}
+  },
+  setup() {
+    const store = useUserStore()
+    return { store }
   },
   computed: {
     avatarUrl() {
@@ -130,6 +135,10 @@ export default {
     }
   },
   methods: {
+    onSubscribeResult(result) {
+      const delta = result.status === 'subscribed' ? 1 : -1
+      this.store.data.counters.subscribers += delta
+    },
     // Опции
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el

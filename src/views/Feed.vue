@@ -39,7 +39,7 @@ export default {
         {
           key: 'list',
           to: { name: 'feed-list' },
-          label: this.$t('feed.tabs.list'),
+          label: this.$t('feed.tabs.feeds'),
           icon: 'spark-line'
         },
         {

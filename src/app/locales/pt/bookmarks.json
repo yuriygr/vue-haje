@@ -1,0 +1,21 @@
+{
+  "title": "Favoritos",
+  "tabs": {
+    "all": "Todos",
+    "entries": "Postagens",
+    "users": "Usuários",
+    "comments": "Comentários",
+    "feeds": "Notícias"
+  },
+  "section": {
+    "users": "@:bookmarks.tabs.users",
+    "entries": "@:bookmarks.tabs.entries",
+    "comments": "@:bookmarks.tabs.comments",
+    "feeds": "@:bookmarks.tabs.feeds"
+  },
+  "empty": {
+    "icon": "bookmarks-line",
+    "title": "Sem favoritos",
+    "description": "Para fazê-los aparecer aqui você precisa adicioná-los"
+  }
+}

@@ -47,7 +47,6 @@ const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 const EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
 const EntryReportModal = defineAsyncComponent(() => import("@/modals/_entry/Report.vue"))
 const EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
-const EntryReportsModal = defineAsyncComponent(() => import("@/modals/_entry/Reports.vue"))
 const EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
 
 import { ActionItem } from '@/components/actions'
@@ -121,11 +120,6 @@ export default {
       ]
 
       let _edit = [
-        {
-          icon: 'ui-error-warning',
-          label: this.$t('action.reports'),
-          action: this.reports
-        },
         {
           icon: 'ui-pencil',
           label: this.$t('action.edit'),
@@ -295,12 +289,6 @@ export default {
     report() {
       this.$modals.show(EntryReportModal, {
         reportEntry: this.reportEntry
-      })
-      this.$popover.close()
-    },
-    reports() {
-      this.$modals.show(EntryReportsModal, {
-        uuid: this.data.uuid
       })
       this.$popover.close()
     },

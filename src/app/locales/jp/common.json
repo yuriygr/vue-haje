@@ -97,100 +97,18 @@
       "from_date": "{date}に作成"
     }
   },
-  "search": {
-    "title": {
-      "all": "検索",
-      "users": "ユーザー検索",
-      "entries": "投稿検索",
-      "comments": "コメント検索",
-      "feeds": "フィード検索",
-      "tags": "タグ検索"
-    },
-    "search-field": {
-      "placeholder": "検索"
-    },
-    "filter": "フィルター",
-    "tabs": {
-      "all": "すべて",
-      "users": "ユーザー",
-      "entries": "投稿",
-      "comments": "コメント",
-      "feeds": "フィード",
-      "tags": "タグ"
-    },
-    "section": {
-      "users": "@:search.tabs.users",
-      "entries": "@:search.tabs.entries",
-      "comments": "@:search.tabs.comments",
-      "tags": "@:search.tabs.tags",
-      "feeds": "@:search.tabs.feeds"
-    }
-  },
-  "notifications": {
-    "title": "通知",
-    "action": {
-      "read_all": "全て既読にする",
-      "settings": "通知設定",
-      "options": "その他",
-      "read": "既読",
-      "hide": "非表示",
-      "dont": "通知しない"
-    },
-    "tabs": {
-      "all": "すべて",
-      "subscription": "フォロー",
-      "reply": "返信",
-      "comment": "コメント",
-      "mention": "メンション",
-      "new_post": "新着投稿",
-      "system": "システム"
-    },
-    "type": {
-      "subscription": "{0}があなたをフォローしました",
-      "new_post": "{0}が新しい{1}を投稿しました",
-      "reply": "{0}が{2}への{1}に返信しました",
-      "comment": "{0}があなたの{1}にコメントしました",
-      "mention": "{0}が{1}であなたに言及しました",
-      "reports": "報告を受け取りました",
-      "login": "ログインされました"
-    },
-    "const": {
-      "entry": ["投稿", "投稿"],
-      "comment": ["コメント", "コメント"]
-    }
-  },
   "menu": {
     "title": "メニュー",
     "item": {
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
+      "support": "@:support.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "ログイン",
       "logout": "ログアウト"
-    }
-  },
-  "feeds": {
-    "title": "フィード",
-    "tabs": {
-      "subscribed": "登録済みフィード",
-      "manage": "管理"
-    }
-  },
-  "bookmarks": {
-    "title": "ブックマーク",
-    "tabs": {
-      "all": "すべて",
-      "entries": "投稿",
-      "users": "ユーザー",
-      "feeds": "フィード"
-    },
-    "section": {
-      "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries",
-      "feeds": "@:bookmarks.tabs.feeds"
     }
   },
   "settings": {
@@ -300,16 +218,7 @@
     }
   },
   "help": {
-    "title": "ヘルプ",
-    "section": {
-      "base": "基本",
-      "my": "マイヘルプ"
-    },
-    "item": {
-      "all-questions": "ナレッジベース",
-      "my-questions": "自分の質問",
-      "add-question": "質問する"
-    },
+    "title": "ナレッジベース",
     "meta": {
       "edited": "{date}に編集"
     }
@@ -321,6 +230,7 @@
   "about": {
     "title": "アプリについて",
     "item": {
+      "rules": "サイトルール",
       "user-agreement": "ユーザー契約",
       "privacy": "プライバシーポリシー",
       "legal": "法的情報",
@@ -368,6 +278,7 @@
       "replies": "0件の返信 | {n}件の返信",
       "edited": "編集済み"
     },
+    "deleted": "Комментарий удален",
     "form": {
       "placeholder": "返信を入力..."
     },

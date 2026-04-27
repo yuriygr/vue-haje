@@ -82,9 +82,9 @@
       :text="$t($filters.humanizeError(error).description)"
     />
     <placeholder v-else
-      :icon="$t('errors.empty_bookmarks.icon')"
-      :header="$t('errors.empty_bookmarks.title')"
-      :text="$t('errors.empty_bookmarks.description')"
+      :icon="$t('bookmarks.empty.icon')"
+      :header="$t('bookmarks.empty.title')"
+      :text="$t('bookmarks.empty.description')"
     />
   </template>
 </template>

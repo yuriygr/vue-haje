@@ -1,0 +1,21 @@
+{
+  "title": "ブックマーク",
+  "tabs": {
+    "all": "すべて",
+    "entries": "投稿",
+    "users": "ユーザー",
+    "comments": "コメント検索",
+    "feeds": "フィード"
+  },
+  "section": {
+    "users": "@:bookmarks.tabs.users",
+    "entries": "@:bookmarks.tabs.entries",
+    "comments": "@:bookmarks.tabs.comments",
+    "feeds": "@:bookmarks.tabs.feeds"
+  },
+  "empty": {
+    "icon": "bookmarks-line",
+    "title": "ブックマークがありません",
+    "description": "ブックマークを追加するとここに表示されます"
+  }
+}

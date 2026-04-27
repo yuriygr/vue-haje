@@ -1,23 +1,27 @@
 <template>
-  <badges-list v-if="(!loading && !error) || data.length > 0">
-    <badge-item-wrapper v-for="item in data" :key="`badge-item-${item.badge_id}`" v-memo="[item.badge_id]">
-      <badge-item :data="item" />
-    </badge-item-wrapper>
-    
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+  <badges-list v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <badge-item-wrapper v-for="item in data" :key="`badge-${item.badge_id}`" v-memo="[item.badge_id]">
+        <badge-item :data="item" />
+      </badge-item-wrapper>
+      
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
 
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template v-else-if="loading">
+      <badge-item-wrapper v-for="index in 5" :key="`item-${index}`">
+        <badge-item />
+      </badge-item-wrapper>
+    </template>
   </badges-list>
 
-  <template v-if="data.length == 0">
-    <placeholder-loading v-if="loading" />
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else :text="$t('user.errors.badges_empty')" />
-  </template>
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else :text="$t('user.errors.badges_empty')" />
 </template>
 
 <script>

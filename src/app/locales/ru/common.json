@@ -56,7 +56,7 @@
     "title": "Лента",
     "tabs": {
       "timeline": "Моя лента",
-      "list": "Ленты",
+      "feeds": "Ленты",
       "abyss": "Бездна"
     },
     "meta": {
@@ -98,102 +98,18 @@
       "from_date": "Появился {date}"
     }
   },
-  "search": {
-    "title": {
-      "all": "Поиск",
-      "users": "Поиск пользователей",
-      "entries": "Поиск постов",
-      "comments": "Поиск комментариев",
-      "feeds": "Поиск лент",
-      "tags": "Поиск тегов"
-    },
-    "search-field": {
-      "placeholder": "Поиск"
-    },
-    "filter": "Фильтр",
-    "tabs": {
-      "all": "Всюду",
-      "users": "Пользователи",
-      "entries": "Посты",
-      "comments": "Комментарии",
-      "feeds": "Ленты",
-      "tags": "Теги"
-    },
-    "section": {
-      "users": "@:search.tabs.users",
-      "entries": "@:search.tabs.entries",
-      "comments": "@:search.tabs.comments",
-      "tags": "@:search.tabs.tags",
-      "feeds": "@:search.tabs.feeds"
-    }
-  },
-  "notifications": {
-    "title": "Уведомления",
-    "action": {
-      "read_all": "Отметить все как прочитанное",
-      "settings": "Настроить уведомления",
-      "options": "Еще",
-      "read": "Прочитано",
-      "hide": "Скрыть",
-      "dont": "Не уведомлять"
-    },
-    "tabs": {
-      "all": "Все",
-      "subscription": "Подписки",
-      "reply": "Ответы",
-      "comment": "Комментарии",
-      "mention": "Упоминания",
-      "new_post": "Новые посты",
-      "system": "Системные"
-    },
-    "type": {
-      "subscription": "{0} подписался на вас",
-      "new_post": "{0} опубликовал новую запись",
-      "reply": "{0} ответил на ваш комментарий к записи",
-      "comment": "{0} прокомментировал вашу запись",
-      "mention": "{0} упомянул вас в {1}",
-      "reports": "Получена жалоба на вас",
-      "login": "Произведен вход"
-    },
-    "const": {
-      "entry": ["запись", "записи"],
-      "comment": ["комментарий", "комментарии"]
-    }
-  },
   "menu": {
     "title": "Меню",
     "item": {
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
+      "support": "@:support.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
       "login": "Войти",
       "logout": "Выйти"
-    }
-  },
-  "feeds": {
-    "title": "Ленты",
-    "tabs": {
-      "subscribed": "Мои ленты",
-      "manage": "Управление"
-    }
-  },
-  "bookmarks": {
-    "title": "Закладки",
-    "tabs": {
-      "all": "Все",
-      "entries": "Посты",
-      "users": "Пользователи",
-      "comments": "Комментарии",
-      "feeds": "Ленты"
-    },
-    "section": {
-      "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries",
-      "comments": "@:bookmarks.tabs.comments",
-      "feeds": "@:bookmarks.tabs.feeds"
     }
   },
   "settings": {
@@ -285,7 +201,8 @@
         "edit_comments": "Редактирование комментариев",
         "delete_comments": "Удаление комментариев",
         "subscribe_to_users": "Подписываться на пользователей",
-        "attach_images": "Прикреплять изобажения"
+        "attach_images": "Прикреплять изобажения",
+        "create_feeds": "Создавать ленты"
       },
       "empty": "Разрешений нет"
     },
@@ -319,16 +236,7 @@
     }
   },
   "help": {
-    "title": "Помощь",
-    "section": {
-      "base": "Основные",
-      "my": "Мое"
-    },
-    "item": {
-      "all-questions": "База знаний",
-      "my-questions": "Мои вопросы",
-      "add-question": "Задать вопрос"
-    },
+    "title": "База знаний",
     "meta": {
       "edited": "Изменено {date}"
     }
@@ -340,6 +248,7 @@
   "about": {
     "title": "О приложении",
     "item": {
+      "rules": "Правила площадки",
       "user-agreement": "Пользовательское соглашение",
       "privacy": "Политика конфиденциальности",
       "legal": "Правовая информация",
@@ -355,7 +264,6 @@
       "comments": "0 ответов | {n} ответ | {n} ответа | {n} ответов",
       "stars": "0 звезд | {n} звезда | {n} звезды | {n} звезд",
       "bookmarks": "0 закладок | {n} закладка | {n} закладки | {n} закладок",
-      "react": "Реакция",
       "edited": "ред",
       "pinned": "Закреплен",
       "hidden_from_feed": "Скрыт из ленты"
@@ -387,6 +295,7 @@
       "edited": "ред",
       "parent": "Родительский комментарий"
     },
+    "deleted": "Комментарий удален",
     "form": {
       "placeholder": "Ответьте что-нибудь..."
     },
@@ -457,7 +366,7 @@
 
     "entry_added": "Запись добавлена",
     "entry_edited": "Запись изменена",
-    "entry_deleted": "Запись успешно удалена",
+    "entry_deleted": "Запись удалена",
     "entry_reported": "Жалоба на пост отправлена",
     "entry_pinned": "Запись закреплена",
     "entry_unpinned": "Запись откреплена",
@@ -468,7 +377,7 @@
 
     "comment_added": "Комментарий добавлен",
     "comment_edited": "Комментарий изменен",
-    "comment_deleted": "Комментарий успешно удален",
+    "comment_deleted": "Комментарий удален",
     "comment_reported": "Жалоба на комментарий отправлена",
     "comment_not_found": "Комментарий не найден",
     "comment_empty_id": "Укажите ID комментария",
@@ -526,7 +435,8 @@
     "invalid_json_format": "Неправильный формат JSON",
 
     "err_canceled": "Запрос отменен",
-    "err_network": "Ошибка соединения"
+    "err_network": "Ошибка соединения",
+    "todo": "В разработке"
   },
   "action": {
     "pin": "Закрепить",

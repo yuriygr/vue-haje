@@ -20,9 +20,9 @@
     <template v-if="data.length == 0">
       <placeholder-loading v-if="loading" />
       <placeholder v-else-if="error"
-        :icon="$t(humanizeError.icon)"
-        :header="$t(humanizeError.title)"
-        :text="$t(humanizeError.description)"
+        :icon="$t($filters.humanizeError(error).icon)"
+        :header="$t($filters.humanizeError(error).title)"
+        :text="$t($filters.humanizeError(error).description)"
       />
       <placeholder v-else :text="$t('comment.errors.empty_comment_history')" />
     </template>
@@ -57,11 +57,7 @@ export default {
   },
   computed: {
     ...mapState('comment/history', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('comment/history', [ 'hasMoreItems' ]),
-
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    ...mapGetters('comment/history', [ 'hasMoreItems' ])
   },
   methods: {
     closeModal() {

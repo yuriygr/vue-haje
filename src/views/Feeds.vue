@@ -17,33 +17,33 @@
 
   <spacer height="15" />
 
-  <feeds-list v-if="(!loading && !error) || data.length > 0">
-    <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
-      <feed-item :data="item" type="short" />
-    </feed-item-wrapper>
+  <feeds-list v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
+        <feed-item :data="item" type="short" />
+      </feed-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </feeds-list>
-
-  <template v-if="data.length == 0">
-    <feeds-list v-if="loading">
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
+  
+    <template v-else-if="loading">
       <feed-item-wrapper v-for="index in 5" :key="`item-${index}`">
         <feed-item />
       </feed-item-wrapper>
-    </feeds-list>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else
-      :icon="$t('errors.feeds_not_created.icon')"
-      :header="$t('errors.feeds_not_created.title')"
-      :text="$t('errors.feeds_not_created.description')"
-    />
-  </template>
+    </template>
+  </feeds-list>
+
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else
+    :icon="$t('feeds.empty.icon')"
+    :header="$t('feeds.empty.title')"
+    :text="$t('feeds.empty.description')"
+  />
 </template>
 
 <script>
@@ -70,14 +70,14 @@ export default {
     }
   },
   created() {
-    this.feedsStore = useFeedsStore()
+    this.store = useFeedsStore()
   },
   computed: {
-    data()         { return this.feedsStore.data },
-    filters()      { return this.feedsStore.filters },
-    loading()      { return this.feedsStore.loading },
-    error()        { return this.feedsStore.error },
-    hasMoreItems() { return this.feedsStore.hasMoreItems },
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
     query()        { return this.$route.query.q ?? '' },
   },
   methods: {
@@ -88,20 +88,20 @@ export default {
       this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: value } })
     },
     loadMore() {
-      this.feedsStore.more()
+      this.store.more()
     }
   },
   async mounted() {
-    await this.feedsStore.setFilters({ query: this.query, offset: undefined })
-    await this.feedsStore.fetch()
+    await this.store.setFilters({ query: this.query, offset: undefined })
+    await this.store.fetch()
   },
   beforeUnmount() {
-    this.feedsStore.clear()
+    this.store.clear()
   },
   watch: {
     async '$route.query.q'(to) {
-      await this.feedsStore.setFilters({ query: to, offset: undefined })
-      await this.feedsStore.fetch()
+      await this.store.setFilters({ query: to, offset: undefined })
+      await this.store.fetch()
     }
   }
 }

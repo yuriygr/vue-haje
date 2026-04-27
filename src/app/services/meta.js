@@ -58,13 +58,16 @@ export default new class {
           if (meta.description) this.changeMeta('description', meta.description)
         }
       },
-      mounted() {
-        this._createMetatags()
-      },
       watch: {
         'meta.title': '_changeMetaTitle',
         'meta.description': '_changeMetaDescription'
-      }
+      },
+      mounted() {
+        this._createMetatags()
+      },
+      activated() {
+        this._createMetatags()
+      },
     }
   }
 

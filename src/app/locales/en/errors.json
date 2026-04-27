@@ -94,21 +94,6 @@
     "title": "The feed is empty",
     "description": "Perhaps you should follow someone?"
   },
-  "empty_bookmarks": {
-    "icon": "bookmarks-line",
-    "title": "No bookmarks",
-    "description": "To make them appear here you need to add them"
-  },
-  "empty_search": {
-    "icon": "search-line",
-    "title": "No results",
-    "description": "It might be worth clarifying your request."
-  },
-  "empty_notifications": {
-    "icon": "bell-line",
-    "title": "No notifications",
-    "description": "Most likely they will appear soon"
-  },
   "empty_feeds": {
     "icon": "feeds-line",
     "title": "No feeds",

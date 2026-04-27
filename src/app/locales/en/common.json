@@ -93,73 +93,13 @@
       "from_date": "Appeared on {date}"
     }
   },
-  "search": {
-    "title": {
-      "all": "Search",
-      "users": "Search for users",
-      "entries": "Search posts",
-      "comments": "Search comments",
-      "feeds": "Search for feeds",
-      "tags": "Search tags"
-    },
-    "search-field": {
-      "placeholder": "Search"
-    },
-    "filter": "Filter",
-    "tabs": {
-      "all": "Everywhere",
-      "users": "Users",
-      "entries": "Posts",
-      "comments": "Comments",
-      "feeds": "Feeds",
-      "tags": "Tags"
-    },
-    "section": {
-      "users": "@:search.tabs.users",
-      "entries": "@:search.tabs.entries",
-      "comments": "@:search.tabs.comments",
-      "tags": "@:search.tabs.tags",
-      "feeds": "@:search.tabs.feeds"
-    }
-  },
-  "notifications": {
-    "title": "Notifications",
-    "action": {
-      "read_all": "Mark all as read",
-      "settings": "Set up notifications",
-      "options": "More",
-      "hide": "Hide",
-      "dont": "Do not notify"
-    },
-    "tabs": {
-      "all": "All",
-      "subscriptions": "Subscriptions",
-      "replies": "Answers",
-      "comments": "Comments",
-      "mentions": "Mentions",
-      "new_post": "New posts",
-      "system": "System"
-    },
-    "user": {
-      "subscriptions": "{0} subscribed to you",
-      "new_post": "{0} published a new post",
-      "replies": "{0} responded to your post",
-      "mentions": "{0} mentioned you"
-    },
-    "system": {
-      "reports": "A complaint has been received against you",
-      "login": "Logged in"
-    },
-    "support": {
-      "replies": "We have received a response to your request."
-    }
-  },
   "menu": {
     "title": "Menu",
     "item": {
       "feeds": "@:feeds.title",
       "bookmarks": "@:bookmarks.title",
       "settings": "@:settings.title",
+      "support": "@:support.title",
       "help": "@:help.title",
       "about": "@:about.title",
       "donate": "@:donate.title",
@@ -169,20 +109,6 @@
   },
   "feeds": {
     "title": "Feeds"
-  },
-  "bookmarks": {
-    "title": "Bookmarks",
-    "tabs": {
-      "all": "All",
-      "entries": "Posts",
-      "users": "Users",
-      "feeds": "Feeds"
-    },
-    "section": {
-      "users": "@:bookmarks.tabs.users",
-      "entries": "@:bookmarks.tabs.entries",
-      "feeds": "@:bookmarks.tabs.feeds"
-    }
   },
   "settings": {
     "title": "Settings",
@@ -285,16 +211,7 @@
     }
   },
   "help": {
-    "title": "Help",
-    "section": {
-      "base": "Basic",
-      "my": "My"
-    },
-    "item": {
-      "all-questions": "Knowledge base",
-      "my-questions": "My questions",
-      "add-question": "Ask a Question"
-    },
+    "title": "Knowledge base",
     "meta": {
       "edited": "Edited at {date}"
     }
@@ -305,6 +222,7 @@
   "about": {
     "title": "About the application",
     "item": {
+      "rules": "Rules",
       "user-agreement": "User Agreement",
       "privacy": "Privacy Policy",
       "legal": "Legal Information",
@@ -352,6 +270,7 @@
     "form": {
       "placeholder": "Answer something..."
     },
+    "deleted": "Comment deleted",
     "errors": {
       "empty": "Empty"
     },

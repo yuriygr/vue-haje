@@ -26,6 +26,8 @@ export const userActionsMixin = {
     }
   },
   methods: {
+    // Хук для компонентов, которые хотят реагировать на результат подписки
+    onSubscribeResult(result) {},
     // Подписка
     toggleSubscribe() {
       this.loading.subscribe = true
@@ -38,6 +40,7 @@ export const userActionsMixin = {
         this.localData.state.me_subscribed = result.status === 'subscribed'
         this.$emit('update:data', { ...this.localData })
         this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.onSubscribeResult(result)
       })
       .catch(error => {
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })

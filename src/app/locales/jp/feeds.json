@@ -1,0 +1,12 @@
+{
+  "title": "フィード",
+  "tabs": {
+    "subscribed": "登録済みフィード",
+    "manage": "管理"
+  },
+  "empty": {
+    "icon": "feeds-line",
+    "title": "フィードがありません",
+    "description": "まだフィードを作成していません。今すぐ始めましょう！"
+  }
+}

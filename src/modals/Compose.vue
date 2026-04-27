@@ -408,7 +408,7 @@ export default {
       this.user = this.data.user
       this.form = {
         text: this.$refs.field.innerText,
-        files: this.data.files ? this.data.files.flatMap(i => i.file) : [],
+        files: this.data.files ? this.data.files.map(i => ({ ...i.file, spoiler: i.is_spoiler })) : [],
         link: this.data.link,
         is_comments_enabled: this.data.state.is_comments_enabled,
         is_hidden_from_feed: this.data.state.is_hidden_from_feed,

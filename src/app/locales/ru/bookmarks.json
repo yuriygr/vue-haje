@@ -1,0 +1,21 @@
+{
+  "title": "Закладки",
+  "tabs": {
+    "all": "Все",
+    "entries": "Посты",
+    "users": "Пользователи",
+    "comments": "Комментарии",
+    "feeds": "Ленты"
+  },
+  "section": {
+    "users": "@:bookmarks.tabs.users",
+    "entries": "@:bookmarks.tabs.entries",
+    "comments": "@:bookmarks.tabs.comments",
+    "feeds": "@:bookmarks.tabs.feeds"
+  },
+  "empty": {
+    "icon": "bookmarks-line",
+    "title": "Закладок нет",
+    "description": "Чтобы они тут появились необходимо их добавить"
+  }
+}

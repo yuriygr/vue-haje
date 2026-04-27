@@ -94,30 +94,10 @@
     "title": "Лента пуста",
     "description": "Возможно, стоит подписаться на кого-нибудь?"
   },
-  "empty_bookmarks": {
-    "icon": "bookmarks-line",
-    "title": "Закладок нет",
-    "description": "Чтобы они тут появились необходимо их добавить"
-  },
-  "empty_search": {
-    "icon": "search-line",
-    "title": "Нет результатов",
-    "description": "Возможно, стоит уточнить запрос"
-  },
-  "empty_notifications": {
-    "icon": "bell-line",
-    "title": "Уведомлений нет",
-    "description": "Скорее всего, они скоро появятся"
-  },
   "empty_feeds": {
     "icon": "feeds-line",
     "title": "Лент нет",
     "description": "Может, стоит поискать подходящие и подписаться на них, как считаешь?"
-  },
-  "feeds_not_created": {
-    "icon": "feeds-line",
-    "title": "Лент нет",
-    "description": "Вы еще не создали ни одной ленты. Может, пора это исправить?"
   },
   "help_page_not_found": {
     "icon": "ghost-line",

@@ -1,31 +1,31 @@
 <template>
-  <div class="comments-list" v-if="(!loading && !error) || data.length > 0">
-    <comment-item-wrapper v-for="item in data" :key="`comment-${item.comment_id}`">
-      <comment-item :data="item" replyButton="link" />
-    </comment-item-wrapper>
+  <div class="comments-list" v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <comment-item-wrapper v-for="item in data" :key="`comment-${item.comment_id}`">
+        <comment-item :data="item" replyButton="link" />
+      </comment-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
+   
+    <template v-else-if="loading">
+      <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
+        <comment-item type="short" />
+      </comment-item-wrapper>
+    </template>
   </div>
 
-  <template v-if="data.length == 0">
-    <div class="comments-list" v-if="loading">
-      <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <comment-item />
-      </comment-item-wrapper>
-    </div>
-    <placeholder v-else-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
-    />
-    <placeholder v-else
-      :icon="$t('errors.empty_search.icon')"
-      :header="$t('errors.empty_search.title')"
-      :text="$t('errors.empty_search.description')"
-    />
-  </template>
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else
+    :icon="$t('search.empty.icon')"
+    :header="$t('search.empty.title')"
+    :text="$t('search.empty.description')"
+  />
 </template>
 
 <script>
@@ -40,11 +40,8 @@ export default {
     Placeholder, NButton, LoadmoreTrigger
   },
   computed: {
-        ...mapState('search/comments', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/comments', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
+    ...mapState('search/comments', [ 'data', 'filters', 'loading', 'error' ]),
+    ...mapGetters('search/comments', [ 'hasMoreItems', 'emptyQuery', 'searching' ])
   },
   meta() { return this.meta },
   data() {

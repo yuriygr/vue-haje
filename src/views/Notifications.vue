@@ -14,37 +14,37 @@
 
   <spacer height="30" />
 
-  <notifications-list v-if="(!loading && !error) || data.length > 0">
-    <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]">
-      <notification-item :data="item"
-        @click="read"
-        @read="onRead"
-        @hide="onHide"
-      />
-    </notification-item-wrapper>
+  <notifications-list v-if="data.length > 0 || loading">
+    <template v-if="data.length > 0">
+      <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]">
+        <notification-item :data="item"
+          @click="read"
+          @read="onRead"
+          @hide="onHide"
+        />
+      </notification-item-wrapper>
 
-    <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
+      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    </template>
 
-    <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
-  </notifications-list>
-
-  <template v-if="data.length == 0">
-    <notifications-list v-if="loading">
+    <template v-else-if="loading">
       <notification-item-wrapper v-for="index in 15" :key="`item-${index}`">
         <notification-item />
       </notification-item-wrapper>
-    </notifications-list>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else
-      :icon="$t('errors.empty_notifications.icon')"
-      :header="$t('errors.empty_notifications.title')"
-      :text="$t('errors.empty_notifications.description')"
-    />
-  </template>
+    </template>
+  </notifications-list>
+
+  <placeholder v-else-if="error"
+    :icon="$t($filters.humanizeError(error).icon)"
+    :header="$t($filters.humanizeError(error).title)"
+    :text="$t($filters.humanizeError(error).description)"
+  />
+  <placeholder v-else
+    :icon="$t('notifications.empty.icon')"
+    :header="$t('notifications.empty.title')"
+    :text="$t('notifications.empty.description')"
+  />
 </template>
 
 <script>
@@ -88,22 +88,22 @@ export default {
         { 
           key: 'subscription',
           to: this.formatLink('subscription'),
-          label: this.$t('notifications.tabs.subscription')
+          label: this.$t('notifications.tabs.subscriptions')
         },
         { 
           key: 'comment',
           to: this.formatLink('comment'),
-          label: this.$t('notifications.tabs.comment')
+          label: this.$t('notifications.tabs.comments')
         },
         { 
           key: 'reply',
           to: this.formatLink('reply'),
-          label: this.$t('notifications.tabs.reply')
+          label: this.$t('notifications.tabs.replies')
         },
         { 
           key: 'mention',
           to: this.formatLink('mention'),
-          label: this.$t('notifications.tabs.mention')
+          label: this.$t('notifications.tabs.mentions')
         },
         { 
           key: 'new_post',

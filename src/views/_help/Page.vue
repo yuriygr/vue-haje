@@ -4,25 +4,27 @@
     <meta-info :items="metaItems" />
     <div v-html="data.content" />
   </template>
+  
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
     <placeholder v-if="(!loading && !error)" :text="$t('help.errors.empty_page')" />
-    <placeholder v-if="error"
-      :icon="$t(humanizeError.icon)"
-      :header="$t(humanizeError.title)"
-      :text="$t(humanizeError.description)"
+    <placeholder v-else-if="error"
+      :icon="$t($filters.humanizeError(error).icon)"
+      :header="$t($filters.humanizeError(error).title)"
+      :text="$t($filters.humanizeError(error).description)"
     />
   </template>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
+
+import { useHelpPageStore } from '@/app/components/stores/modules/help'
 
 export default {
   name: 'help-page',
   props: {
-    uuid: {
+    slug: {
       type: [ Boolean, String ],
       default: false
     }
@@ -38,43 +40,42 @@ export default {
       },
     }
   },
+  setup() {
+    const store = useHelpPageStore()
+    return { store }
+  },
   computed: {
-    ...mapState('help', [ 'data', 'loading', 'error' ]),
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    },
-    formatedDate() {
-      return this.$filters.timeAgo(this.data.meta.date_edited, this.$i18n.locale)
-    },
+    data()         { return this.store.data },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    isEmpty()      { return this.store.isEmpty },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$t('help.meta.edited', { date: this.formatedDate }) })
+      _result.push({ label: this.$t('help.meta.edited', { date: this.$filters.timeAgo(this.data.meta.date_edited, this.$i18n.locale) }) })
 
       return _result
     },
   },
   mounted() {
-    this.$store.dispatch('help/fetch', this.uuid)
+    this.store.fetch(this.slug)
   },
   beforeUnmount() {
-    this.$store.dispatch('help/clear')
+    this.store.clear()
   },
   watch: {
-    'data'(to) {
+    slug(to) {
+      if (to) {
+        this.store.clear()
+        this.store.fetch(to)
+      }
+    },
+    data(to) {
       if (to)
         this.meta.title = to.title
     },
-    'error'(to) {
+    error(to) {
       if (to)
-        this.meta.title = this.$t(this.humanizeError.title)
-    },
-    '$route.params.username'(to, from) {
-      if (to != from) {
-        this.$store.dispatch('user/fetch', to)
-      }
+        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
     }
   }
 }

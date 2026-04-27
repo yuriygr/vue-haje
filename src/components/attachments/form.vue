@@ -2,7 +2,7 @@
   <div class="attachments-form">
     <div class="thumb-grid" v-if="images.length > 0">
       <div  v-for="(file, index) in images" :key="file.id" :class="[ 'thumb' ]">
-        <div :class="[ 'thumb__preview' , `thumb__preview--status-${file.status}` ]">
+        <div :class="[ 'thumb__preview', `thumb__preview--status-${file.status}`, { 'thumb__preview--spoiler': file.spoiler } ]">
           <video
             v-if="(file.file && file.file.type == 'video/mp4') || (file.payload && file.payload.type == 'mp4')"
             :src="file.file && file.preview"
@@ -21,8 +21,11 @@
             @dragstart.prevent
           />
         </div>
-        <div class="thumb__cancel" @click.stop.prevent="file.status === 'uploading' ? cancelUpload(index) : removeFile(index)">
+        <div class="thumb__action thumb__action--cancel" @click.stop.prevent="file.status === 'uploading' ? cancelUpload(index) : removeFile(index)">
           <icon name="ui-close" size="16" />
+        </div>
+        <div class="thumb__action thumb__action--spoiler" @click.stop.prevent="toggleSpoiler(index)">
+          <icon :name="file.spoiler ? 'ui-eye' : 'ui-eye-off'" size="16" />
         </div>
       </div>
     </div>
@@ -98,7 +101,10 @@ export default {
     uploadedFiles() {
       return this.images
         .filter(img => img.status === 'success')
-        .map(img => img.payload)
+        .map(img => ({
+          ...img.payload,
+          spoiler: img.spoiler
+        }))
     },
     remainingSlots() {
       return Math.max(0, this.maxFiles - this.images.length)
@@ -129,6 +135,7 @@ export default {
         file: null,
         preview: `https://leonardo2.osnova.io/${file.uuid}/-/scale_crop/300x/`,
         status: 'success',
+        spoiler: file.spoiler,
         payload: file,
         uuid: file.uuid,
         progress: 100,
@@ -142,6 +149,7 @@ export default {
         file,
         preview: URL.createObjectURL(file),
         status: 'uploading',
+        spoiler: false,
         payload: null,
         uuid: null,
         progress: 0,
@@ -239,6 +247,13 @@ export default {
       }
     },
 
+    updateImageSpoiler(id, spoiler) {
+      const index = this.images.findIndex(img => img.id === id)
+      if (index !== -1) {
+        this.images[index].spoiler = spoiler
+      }
+    },
+
     // Отменяем загрузку файла
     cancelUpload(index) {
       const image = this.images[index]
@@ -259,6 +274,12 @@ export default {
       const image = this.images[index]
       this.revokePreview(image)
       this.images.splice(index, 1)
+    },
+
+    // Спойлер
+    toggleSpoiler(index) {
+      const image = this.images[index]
+      this.updateImageSpoiler(image.id, !image.spoiler)
     },
 
     // Сбрасываем
@@ -290,20 +311,21 @@ export default {
 
 .thumb {
   --thumb--background: #fafafa;
-  --thumb__cancel--background: #212529;
-  --thumb__cancel--background-hover: #343a40;
-  --thumb__cancel--border-color: #ffffff;
-  --thumb__cancel--color: #fff;
-  --thumb__cancel--color-hover: #fff;
+
+  --thumb__action--background: #212529;
+  --thumb__action--background-hover: #343a40;
+  --thumb__action--border-color: #ffffff;
+  --thumb__action--color: #fff;
+  --thumb__action--color-hover: #fff;
 
   html[data-theme="black"] & {
     --thumb--background: #171717;
 
-    --thumb__cancel--background: #f2f2f0;
-    --thumb__cancel--background-hover: #e5e5e3;
-    --thumb__cancel--border-color: #111111;
-    --thumb__cancel--color: #1d1d1d;
-    --thumb__cancel--color-hover: #1d1d1d;
+    --thumb__action--background: #f2f2f0;
+    --thumb__action--background-hover: #e5e5e3;
+    --thumb__action--border-color: #111111;
+    --thumb__action--color: #1d1d1d;
+    --thumb__action--color-hover: #1d1d1d;
   }
 }
 
@@ -350,6 +372,25 @@ export default {
       }
     }
 
+    &--spoiler {
+      img, video { visibility: hidden; }
+      
+      &:after {
+        content: "SPOILER";
+        position: absolute;
+        inset: 0;
+        background: var(--thumb__action--background);
+        color: var(--thumb__action--color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        border-radius: inherit;
+      }
+    }
+
     img, video {
       position: relative;
       width: 100%;
@@ -360,20 +401,29 @@ export default {
     }
   }
 
-  &__cancel {
+  &__action {
+
+    &--cancel {
+      top: calc(var(--size)* -.4);
+      right: calc(var(--size)* -.4);
+    }
+
+    &--spoiler {
+      bottom: calc(var(--size)* -.4);
+      right: calc(var(--size)* -.4);
+    }
+
     --size: 26px;
     position: absolute;
     z-index: 1;
-    top: calc(var(--size)* -.4);
-    right: calc(var(--size)* -.4);
     display: flex;
     align-items: center;
     justify-content: center;
     width: var(--size);
     height: var(--size);
-    background-color: var(--thumb__cancel--background);
-    border: 3px solid var(--thumb__cancel--border-color);
-    color: var(--thumb__cancel--color);
+    background-color: var(--thumb__action--background);
+    border: 3px solid var(--thumb__action--border-color);
+    color: var(--thumb__action--color);
     border-radius: 50%;
     cursor: pointer;
 
@@ -385,8 +435,8 @@ export default {
 
     @media (hover: hover) {
       .button:hover {
-        background: var(--thumb__cancel--background-hover);
-        color: var(--thumb__cancel--color-hover);
+        background: var(--thumb__action--background-hover);
+        color: var(--thumb__action--color-hover);
       }
     }
   }

@@ -1,0 +1,38 @@
+{
+  "title": "Notifications",
+  "action": {
+    "read_all": "Mark all as read",
+    "settings": "Set up notifications",
+    "options": "More",
+    "read": "Readed",
+    "hide": "Hide",
+    "dont": "Do not notify"
+  },
+  "tabs": {
+    "all": "All",
+    "subscriptions": "Subscriptions",
+    "replies": "Answers",
+    "comments": "Comments",
+    "mentions": "Mentions",
+    "new_post": "New posts",
+    "system": "System"
+  },
+  "type": {
+    "subscription": "{0} followed you",
+    "new_post": "{0} published a new post",
+    "reply": "{0} replied to your comment on a post",
+    "comment": "{0} commented on your post",
+    "mention": "{0} mentioned you in {1}",
+    "reports": "Received a complaint about you",
+    "login": "Logged in"
+  },
+  "const": {
+    "entry": ["post", "posts"],
+    "comment": ["comment", "comments"]
+  },
+  "empty": {
+    "icon": "bell-line",
+    "title": "No notifications",
+    "description": "Most likely they will appear soon"
+  }
+}

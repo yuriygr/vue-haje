@@ -94,30 +94,10 @@
     "title": "フィードが空です",
     "description": "誰かをフォローしてみてはいかがですか？"
   },
-  "empty_bookmarks": {
-    "icon": "bookmarks-line",
-    "title": "ブックマークがありません",
-    "description": "ブックマークを追加するとここに表示されます"
-  },
-  "empty_search": {
-    "icon": "search-line",
-    "title": "検索結果なし",
-    "description": "検索条件を変えてみてください"
-  },
-  "empty_notifications": {
-    "icon": "bell-line",
-    "title": "通知はありません",
-    "description": "すぐに新しい通知が届くかもしれません"
-  },
   "empty_feeds": {
     "icon": "feeds-line",
     "title": "フィードがありません",
     "description": "興味のあるフィードを探して登録してみませんか？"
-  },
-  "feeds_not_created": {
-    "icon": "feeds-line",
-    "title": "フィードがありません",
-    "description": "まだフィードを作成していません。今すぐ始めましょう！"
   },
   "help_page_not_found": {
     "icon": "ghost-line",

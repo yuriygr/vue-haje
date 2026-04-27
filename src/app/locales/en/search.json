@@ -1,0 +1,34 @@
+{
+  "title": {
+    "all": "Search",
+    "users": "Search for users",
+    "entries": "Search posts",
+    "comments": "Search comments",
+    "feeds": "Search for feeds",
+    "tags": "Search tags"
+  },
+  "search-field": {
+    "placeholder": "Search"
+  },
+  "filter": "Filter",
+  "tabs": {
+    "all": "Everywhere",
+    "users": "Users",
+    "entries": "Posts",
+    "comments": "Comments",
+    "feeds": "Feeds",
+    "tags": "Tags"
+  },
+  "section": {
+    "users": "@:search.tabs.users",
+    "entries": "@:search.tabs.entries",
+    "comments": "@:search.tabs.comments",
+    "tags": "@:search.tabs.tags",
+    "feeds": "@:search.tabs.feeds"
+  },
+  "empty": {
+    "icon": "search-line",
+    "title": "No results",
+    "description": "It might be worth clarifying your request."
+  }
+}

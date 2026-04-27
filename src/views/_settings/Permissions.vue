@@ -45,9 +45,9 @@
     <template v-if="Object.keys(data).length == 0">
       <placeholder-loading v-if="loading" />
       <placeholder v-else-if="error"
-        :icon="$t(humanizeError.icon)"
-        :header="$t(humanizeError.title)"
-        :text="$t(humanizeError.description)"
+        :icon="$t($filters.humanizeError(error).icon)"
+        :header="$t($filters.humanizeError(error).title)"
+        :text="$t($filters.humanizeError(error).description)"
       />
       <placeholder v-else :text="$t('settings.permissions.empty')" />
     </template>
@@ -75,11 +75,7 @@ export default {
       loading: true
     }
   },
-  computed: {
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
-  },
+  computed: {  },
   methods: {
     // Fetching
     fetch() {

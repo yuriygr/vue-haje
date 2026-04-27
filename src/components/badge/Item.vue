@@ -1,14 +1,32 @@
 <template>
-  <div :class="elClass">
-    <div class="badge-item__icon">
-      <icon :name="data.content.icon" :size="22" />
+  <template v-if="data">
+    <div :class="elClass">
+      <div class="badge-item__icon">
+        <icon :name="data.content.icon" :size="22" />
+      </div>
+      <div class="badge-item__content">
+        <div class="badge-item__label">{{ data.content.label }}</div>
+        <div class="badge-item__description">{{ data.content.description }}</div>
+        <meta-info class="badge-item__meta" :items="metaItems" />
+      </div>
     </div>
-    <div class="badge-item__content">
-      <div class="badge-item__label">{{ data.content.label }}</div>
-      <div class="badge-item__description">{{ data.content.description }}</div>
-      <meta-info class="badge-item__meta" :items="metaItems" />
+  </template>
+  <template v-else>
+    <div :class="[ 'badge-item' ]">
+      <div class="badge-item__icon">
+        <skeleton :width="27" :height="27" />
+      </div>
+      <div class="badge-item__content">
+        <div class="badge-item__label">
+          <skeleton :width="skeletonWidths.label" :height="9" />
+        </div>
+        <div class="badge-item__description">
+          <skeleton :width="skeletonWidths.description" :height="8" />
+        </div>
+        <skeleton :width="skeletonWidths.meta" :height="7" />
+      </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <script>
@@ -24,6 +42,11 @@ export default {
   },
   data() {
     return {
+      skeletonWidths: {
+        label: Math.floor(Math.random() * 100) + 100,
+        description: Math.floor(Math.random() * 100) + 150,
+        meta: Math.floor(Math.random() * 100) + 70
+      },
       loading: { }
     }
   },
