@@ -1,37 +1,30 @@
 <template>
-  <div :class="elClass" v-if="hasAttachments">
-    <div class="images-list" v-if="files" :style="{ '--max-img-height': '550px' }">
-      <figure v-for="item in files" :key="`file-${item.file.uuid}`">
-        <video v-if="item.file.type == 'mp4'"
-          :poster="`https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-          :src="`https://leonardo2.osnova.io/${item.file.uuid}/-/format/mp4/`"
-          :width="item.file.width"
-          :height="item.file.height"
-          controls="true"
-          loop="true"
-          playsinline
-          preload="auto"
+  <div :class="elClass" v-if="hasAttachments" :style="{ '--max-img-height': '550px' }">
+    <div class="images-list" v-if="mediaImages.length">
+      <div v-for="item in mediaImages" :key="item.file.uuid"
+        :class="['image-wrapper', {
+          'image-wrapper--tall': item.isTall,
+          'image-wrapper--spoiler': item.isSpoilerActive
+        }]"
+        @click="handleImageClick(item)"
+      >
+        <div
+          v-if="item.isTall || item.isSpoilerActive"
+          class="image-wrapper__backdrop"
+          :style="{ backgroundImage: `url(${cdnUrl(item.file.uuid, 'scale_crop/10x')})` }"
         />
+        <img :src="cdnUrl(item.file.uuid)" :width="item.file.width" :height="item.file.height">
+      </div>
+    </div>
 
-        <div v-else
-          :class="['img-wrapper', {
-            'img-wrapper--tall': isTall(item.file),
-            'img-wrapper--spoiler': item.is_spoiler && !isSpoilerRevealed(item.file.uuid)
-          }]"
-          @click="handleImageClick(item)"
-        >
-          <div
-            class="img-blur-bg"
-            :style="{ backgroundImage: `url(https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/10x/)` }"
-          />
-          <img
-            :src="`https://leonardo2.osnova.io/${item.file.uuid}/-/scale_crop/640x/`"
-            :width="item.file.width"
-            :height="item.file.height"
-          >
-        </div>
-      
-      </figure>
+    <div class="videos-list" v-if="mediaVideos.length">
+      <video v-for="item in mediaVideos" :key="item.file.uuid"
+        :poster="cdnUrl(item.file.uuid, 'scale_crop/640x')"
+        :src="cdnUrl(item.file.uuid, 'format/mp4')"
+        :width="item.file.width"
+        :height="item.file.height"
+        controls loop playsinline preload="auto"
+      />
     </div>
 
     <template v-for="link in links">
@@ -89,6 +82,24 @@ export default {
       return this.files || this.links
     },
 
+    processedFiles() {
+      return (this.files || []).map(item => ({
+        ...item,
+        isVideo: item.file.type === 'mp4',
+        revealed: this.revealedSpoilers.has(item.file.uuid),
+        isSpoilerActive: item.is_spoiler && !this.revealedSpoilers.has(item.file.uuid),
+        isTall: this.isTall(item.file)
+      }))
+    },
+
+    mediaImages() {
+      return this.processedFiles.filter(item => !item.isVideo)
+    },
+    
+    mediaVideos() {
+      return this.processedFiles.filter(item => item.isVideo)
+    },
+
     elClass() {
       return [
         'attachments',
@@ -97,6 +108,9 @@ export default {
     },
   },
   methods: {
+    cdnUrl(uuid, params = 'scale_crop/640x') {
+      return `https://leonardo2.osnova.io/${uuid}/-/${params}/`
+    },
     revealSpoiler(uuid) {
       this.revealedSpoilers = new Set([...this.revealedSpoilers, uuid])
     },
@@ -146,7 +160,15 @@ export default {
     margin-top: .75rem;
   }
 
-  figure {
+  &--mode-compact {
+    .images-list,
+    .videos-list {
+      max-width: 300px;
+    }
+  }
+
+  .images-list,
+  .videos-list {
     display: block;
     overflow: hidden;
     border-radius: 12px;
@@ -163,11 +185,15 @@ export default {
     }
   }
 
-  .img-wrapper {
+  .image-wrapper {
     background-color: var(--attachment--background);
     position: relative;
     overflow: hidden;
     border-radius: 12px;
+
+    &:not(:last-child) {
+      margin-bottom: .75rem;
+    }
 
     &--spoiler {
       img, video { visibility: hidden; }
@@ -187,7 +213,7 @@ export default {
       }
     }
 
-    .img-blur-bg {
+    &__backdrop {
       position: absolute;
       inset: 0;
       background-repeat: no-repeat;
@@ -224,10 +250,5 @@ export default {
     }
   }
 
-  &--mode-compact {
-    figure {
-      max-width: 300px;
-    }
-  }
 }
 </style>
