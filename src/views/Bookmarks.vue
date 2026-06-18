@@ -14,64 +14,27 @@
   </router-view>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { Tabs, TabsItem, Spacer } from '@vue-norma/ui'
 
-export default {
-  name: 'bookmarks',
-  components: {
-    Tabs, TabsItem, Spacer
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('bookmarks.title')
-      }
-    }
-  },
-  computed: {
-    tabs() {
-      return [
-        {
-          key: 'all',
-          to: this.formatLink(),
-          label: this.$t('bookmarks.tabs.all')
-        },
-        {
-          key: 'users',
-          to: this.formatLink('users'),
-          label: this.$t('bookmarks.tabs.users')
-        },
-        {
-          key: 'entries',
-          to: this.formatLink('entries'),
-          label: this.$t('bookmarks.tabs.entries')
-        },
-        {
-          key: 'comments',
-          to: this.formatLink('comments'),
-          label: this.$t('bookmarks.tabs.comments')
-        },
-        {
-          key: 'feeds',
-          to: this.formatLink('feeds'),
-          label: this.$t('bookmarks.tabs.feeds')
-        }
-      ]
-    }
-  },
-  methods: {
-    formatLink(tab = false) {
-      let query = Object.assign({}, this.$route.query),
-          q = query.q
+const { t } = useI18n()
+const route = useRoute()
 
-      if (tab) {
-        return { name: `bookmarks-${tab}`, query: { q }}
-      } else {
-        return { name: `bookmarks`, query: { q }}
-      }
-    }
-  }
+const formatLink = (tab = false) => {
+  const { q } = route.query
+  return tab
+    ? { name: `bookmarks-${tab}`, query: { q } }
+    : { name: 'bookmarks', query: { q } }
 }
+
+const tabs = computed(() => [
+  { key: 'all',      to: formatLink(),           label: t('bookmarks.tabs.all') },
+  { key: 'users',    to: formatLink('users'),    label: t('bookmarks.tabs.users') },
+  { key: 'entries',  to: formatLink('entries'),  label: t('bookmarks.tabs.entries') },
+  { key: 'comments', to: formatLink('comments'), label: t('bookmarks.tabs.comments') },
+  { key: 'feeds',    to: formatLink('feeds'),    label: t('bookmarks.tabs.feeds') },
+])
 </script>

@@ -6,6 +6,7 @@
           'image-wrapper--tall': item.isTall,
           'image-wrapper--spoiler': item.isSpoilerActive
         }]"
+        :style="item.aspectRatio ? { aspectRatio: item.aspectRatio } : {}"
         @click="handleImageClick(item)"
       >
         <div
@@ -23,7 +24,7 @@
         :src="cdnUrl(item.file.uuid, 'format/mp4')"
         :width="item.file.width"
         :height="item.file.height"
-        controls loop playsinline preload="auto"
+        controls loop playsinline preload="auto" muted="muted"
       />
     </div>
 
@@ -32,9 +33,7 @@
         <YouTubePreview :data="link.link" />
       </template>
       <template v-else>
-        <link-item-wrapper>
-          <link-item :data="link.link" />
-        </link-item-wrapper>
+        <link-item :data="link.link" />
       </template>
     </template>
 
@@ -43,8 +42,9 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { LinkItem, LinkItemWrapper } from '@/components/links'
+import { LinkItem } from '@/components/links'
 import YouTubePreview from '@/components/embed/YouTube.vue'
+import { useModals } from '@vue-norma/ui'
 
 let ImageViewer = defineAsyncComponent(() => import("@/modals/ImageViewer.vue"))
 const MAX_HEIGHT = 550
@@ -53,7 +53,7 @@ export default {
   name: 'attachments',
   components: {
     YouTubePreview,
-    LinkItem, LinkItemWrapper
+    LinkItem
   },
   props: {
     files: {
@@ -72,6 +72,10 @@ export default {
       }
     }
   },
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       revealedSpoilers: new Set()
@@ -88,7 +92,10 @@ export default {
         isVideo: item.file.type === 'mp4',
         revealed: this.revealedSpoilers.has(item.file.uuid),
         isSpoilerActive: item.is_spoiler && !this.revealedSpoilers.has(item.file.uuid),
-        isTall: this.isTall(item.file)
+        isTall: this.isTall(item.file),
+        aspectRatio: item.file.width && item.file.height 
+          ? item.file.width / item.file.height 
+          : null
       }))
     },
 
@@ -109,7 +116,7 @@ export default {
   },
   methods: {
     cdnUrl(uuid, params = 'scale_crop/640x') {
-      return `https://leonardo2.osnova.io/${uuid}/-/${params}/`
+      return `https://leonardo3.osnova.io/${uuid}/-/${params}/`
     },
     revealSpoiler(uuid) {
       this.revealedSpoilers = new Set([...this.revealedSpoilers, uuid])
@@ -136,7 +143,7 @@ export default {
 
 
     viewImage(data) {
-      this.$modals.show(ImageViewer, {
+      this.modals.show(ImageViewer, {
         images: [data]
       })
     }
@@ -190,6 +197,20 @@ export default {
     position: relative;
     overflow: hidden;
     border-radius: 12px;
+    width: 100%;
+
+    &:after {
+      content: "";
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 90;
+    }
 
     &:not(:last-child) {
       margin-bottom: .75rem;
@@ -210,6 +231,7 @@ export default {
         font-weight: 600;
         letter-spacing: 0.05em;
         border-radius: inherit;
+        z-index: 100;
       }
     }
 
@@ -229,23 +251,24 @@ export default {
     }
 
     img {
-      position: relative;
-      z-index: 1;
+      position: absolute; // меняем
+      inset: 0;
       width: 100%;
-      height: auto;
-      display: block;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
     }
 
     &--tall {
-      max-height: var(--max-img-height);
+      aspect-ratio: unset; // сбрасываем
+      height: var(--max-img-height);
 
       img {
-        width: auto;
-        max-width: 100%;
-        max-height: var(--max-img-height);
+        position: absolute;
+        inset: 0;
+        width: 100%;
         height: 100%;
         object-fit: contain;
-        margin: 0 auto;
       }
     }
   }

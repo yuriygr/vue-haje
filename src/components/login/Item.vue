@@ -34,38 +34,33 @@
   </template>
 </template>
 
-<script>
-export default {
-  name: 'login-item',
-  props: {
-    data: false,
-    clickable: {
-      type: Boolean,
-      default: true
-    },
-    showSubscribeAction: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data() {
-    return {
-      skeletonWidths: {
-        os: Math.floor(Math.random() * 100) + 60,
-        br: Math.floor(Math.random() * 100) + 70,
-        ts: Math.floor(Math.random() * 100) + 50,
-      }
-    }
-  },
-  computed: {
-    formatedDate() {
-      return this.$filters.timeAgo(this.data.date_added, this.$i18n.locale)
-    }
-  },
-  methods: {
+<script setup>
+import { computed } from 'vue'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 
+const props = defineProps({
+  data: {
+    default: false
+  },
+  clickable: {
+    type: Boolean,
+    default: true
+  },
+  showSubscribeAction: {
+    type: Boolean,
+    default: true
   }
+})
+
+const { timeAgo } = useTimeAgo()
+
+const skeletonWidths = {
+  os: Math.floor(Math.random() * 100) + 60,
+  br: Math.floor(Math.random() * 100) + 70,
+  ts: Math.floor(Math.random() * 100) + 50,
 }
+
+const formatedDate = computed(() => timeAgo(props.data.date_added))
 </script>
 
 <style lang="scss">
@@ -76,7 +71,7 @@ export default {
 
   --login-item--background-hover: #e9ecef;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --login-item--background: #1f1f1f;
     --login-item__key--color: var(--x-color-white--shade40, #999);
     --login-item__value--color: #f0f0f0;

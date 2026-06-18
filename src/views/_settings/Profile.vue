@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { PlaceholderLoading, NButton, Spacer, Group, NHeader } from '@vue-norma/ui'
 import { TintsGrid, TintItem } from '@/components/tint'
 
@@ -99,9 +98,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
     sexs() {
       return [
         'male',

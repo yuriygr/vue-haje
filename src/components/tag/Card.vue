@@ -10,6 +10,7 @@
 
 <script>
 import { MetaInfo } from '@vue-norma/ui'
+import { timeFormatOnlyYear } from '@/app/services/datetime.js'
 
 export default {
   name: 'tag-card',
@@ -36,7 +37,7 @@ export default {
       return _result
     },
     formatedDate() {
-      return this.$filters.timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
+      return timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
     }
   },
   methods: { }
@@ -48,7 +49,7 @@ export default {
   --tag-header__label-color: var(--x-body--color);
   --tag-header__hash-color: #868e96;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --tag-header__label-color: var(--x-body--color);
     --tag-header__hash-color: var(--x-color-white--shade40, #999);
   }

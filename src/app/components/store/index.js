@@ -10,22 +10,7 @@ requireModule.keys().forEach(filename => {
 
 // Create store
 const store = createStore({
-  modules,
-  actions: {
-    initApplication({ dispatch }) {
-      Object.keys(modules).forEach(moduleName => {
-        let action = `${moduleName}/init`
-        this._actions[action] && dispatch(action)
-      })
-    }
-  }
-})
-
-store.subscribe((mutation, state) => {
-  mutation.type == "auth/SET_DATA" && localStorage.setItem('auth', JSON.stringify(mutation.payload))
-  mutation.type == "app/SET_THEME" && localStorage.setItem('theme', mutation.payload)
-  mutation.type == "app/SET_LOCALE" && localStorage.setItem('locale', mutation.payload)
-  mutation.type == "app/TOGGLE_THEME" && localStorage.setItem('theme', state.app.theme)
+  modules
 })
 
 export default store

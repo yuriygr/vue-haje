@@ -18,6 +18,9 @@
       "is_ai": "AI生成コンテンツが含まれています"
     }
   },
+  "report": {
+    "title": "の報告"
+  },
   "search-filter": {
     "title": "検索フィルター"
   },
@@ -28,29 +31,17 @@
     "title": "投稿を削除",
     "help": "この投稿を削除しようとしています。本当に必要ですか？"
   },
-  "entry-report": {
-    "title": "投稿の報告"
-  },
   "comment-history": {
     "title": "コメントの編集履歴"
   },
   "comment-edit": {
     "title": "コメントを編集"
   },
-  "comment-report": {
-    "title": "コメントの報告"
-  },
   "comment-delete": {
     "title": "コメントを削除",
     "help": "このコメントを削除しようとしています。本当に必要ですか？"
   },
-  "user-report": {
-    "title": "ユーザーの報告"
-  },
   "feed-create": {
     "title": "フィードを作成"
-  },
-  "feed-report": {
-    "title": "フィードの報告"
   }
 }

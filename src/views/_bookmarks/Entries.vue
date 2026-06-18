@@ -1,25 +1,16 @@
 <template>
-  <entries-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
-        <entry-item :data="item" type="short" />
-      </entry-item-wrapper>
+  <items-list type="entries" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <entry-item v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <entry-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <entry-item type="short" />
-      </entry-item-wrapper>
-    </template>
-  </entries-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('bookmarks.empty.icon')"
@@ -29,39 +20,47 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { Placeholder } from '@vue-norma/ui'
+
+import { EntryItem } from '@/components/entry'
+import { useBookmarksEntriesStore } from '@/app/components/stores/modules/bookmarks'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'bookmarks-entries',
   components: {
-    EntriesList, EntryItem, EntryItemWrapper,
-    Placeholder, NButton, LoadmoreTrigger
+    Placeholder, EntryItem
+  },
+  meta() { return this.meta },
+  data() {
+    return {
+      meta: {
+        title: this.$t('bookmarks.title.entries')
+      }
+    }
+  },
+  setup() {
+    const store = useBookmarksEntriesStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
-    ...mapState('bookmarks/entries', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/entries', [ 'hasMoreItems' ])
-  },
-  data() {
-    return { }
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('bookmarks/entries/more')
+      this.store.more()
     }
   },
   mounted() {
-    this.$store.dispatch('bookmarks/entries/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('bookmarks/entries/clear')
-  },
-  watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('bookmarks/entries/setFilters', { offset: undefined })
-      await this.$store.dispatch('bookmarks/entries/fetch')
-    }
+    this.store.clear()
   }
 }
 </script>

@@ -36,20 +36,12 @@
   </group>
 </template>
 
-<script>
-import { Placeholder, Group, NHeader } from '@vue-norma/ui'
+<script setup>
+import { useI18n } from 'vue-i18n'
+import { Group, NHeader } from '@vue-norma/ui'
+import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'donate',
-  components: { Placeholder, Group, NHeader },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('donate.title')
-      },
-    }
-  },
-  computed: { }
-}
+const { t } = useI18n()
+
+useMeta(() => ({ title: t('donate.title') }))
 </script>

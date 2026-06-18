@@ -20,9 +20,9 @@
     <template v-if="data.length == 0">
       <placeholder-loading v-if="loading" />
       <placeholder v-else-if="error"
-        :icon="$t($filters.humanizeError(error).icon)"
-        :header="$t($filters.humanizeError(error).title)"
-        :text="$t($filters.humanizeError(error).description)"
+        :icon="humanizeError(error).icon"
+        :header="humanizeError(error).title"
+        :text="humanizeError(error).description"
       />
       <placeholder v-else :text="$t('entry.errors.empty_entry_history')" />
     </template>
@@ -34,10 +34,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Modal, ModalHeader, ModalBody, NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
 import { EntryHistoryItem } from '@/components/entry'
+import { useEntryHistoryStore } from '@/app/components/stores/modules/entry'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'entry-history-modal',
@@ -48,34 +50,36 @@ export default {
   },
   props: {
     uuid: {
-      type: [ Boolean, String ],
-      default: false
+      type: String,
+      default: '',
+      validator: (v) => v !== ''
     }
   },
-  data() {
-    return { }
+  setup() {
+    const store = useEntryHistoryStore()
+    const humanizeError = useHumanizeError()
+    const modals = useModals()
+    return { store, humanizeError, modals }
   },
   computed: {
-    ...mapState('entry/history', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('entry/history', [ 'hasMoreItems' ])
+    data()         { return this.store.data },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     },
     loadMore() {
-      this.$store.dispatch('entry/history/more', this.uuid)
-    },
+      this.store.more(this.uuid)
+    }
   },
   mounted() {
-    this.$store.dispatch('entry/history/fetch', { initial: true, uuid: this.uuid })
+    this.store.fetch(this.uuid)
   },
   beforeUnmount() {
-    this.$store.dispatch('entry/history/clear')
-  },
+    this.store.clear()
+  }
 }
 </script>
-
-<style lang="scss">
-
-</style>

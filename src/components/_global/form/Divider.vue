@@ -13,6 +13,6 @@ export default {
   height: 0;
   margin: .5rem 0;
   background: transparent;
-  border-bottom: 1px solid var(--separator--color, #eee);
+  border-bottom: 1px solid var(--x-separator--color, #f1f3f5);
 }
 </style>

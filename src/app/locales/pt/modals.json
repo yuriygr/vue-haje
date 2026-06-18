@@ -18,6 +18,9 @@
       "is_ai": "Contém conteúdo gerado por IA"
     }
   },
+  "report": {
+    "title": "Complaint"
+  },
   "search-filter": {
     "title": "Search filter"
   },
@@ -28,23 +31,14 @@
     "title": "Delete entry",
     "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
   },
-  "entry-report": {
-    "title": "Complaint about the post"
-  },
   "comment-history": {
     "title": "Version history"
   },
   "comment-edit": {
     "title": "Edit comment"
   },
-  "comment-report": {
-    "title": "Complaint about the comment"
-  },
   "comment-delete": {
     "title": "Delete comment",
     "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
-  },
-  "user-report": {
-    "title": "Complaint about an user"
   }
 }

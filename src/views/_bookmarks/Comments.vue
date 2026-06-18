@@ -1,25 +1,16 @@
 <template>
-  <div class="comments-list" v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <comment-item-wrapper v-for="item in data" :key="`comment-${item.comment_id}`">
-        <comment-item :data="item" replyButton="link" />
-      </comment-item-wrapper>
+  <items-list type="comments" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <comment-item v-for="item in data" :key="`comment-${item.comment_id}`" v-memo="[item.comment_id]" :data="item" replyButton="link" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <comment-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-   
-    <template v-else-if="loading">
-      <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <comment-item type="short" />
-      </comment-item-wrapper>
-    </template>
-  </div>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('bookmarks.empty.icon')"
@@ -29,39 +20,48 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { CommentItem, CommentItemWrapper } from '@/components/comment'
+
+import { CommentItem } from '@/components/comment'
+import { useBookmarksCommentsStore } from '@/app/components/stores/modules/bookmarks'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'bookmarks-comments',
   components: {
-    CommentItem, CommentItemWrapper,
+    CommentItem,
     Placeholder, NButton, LoadmoreTrigger
   },
-  computed: {
-    ...mapState('bookmarks/comments', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/comments', [ 'hasMoreItems' ])
-  },
+  meta() { return this.meta },
   data() {
-    return { }
+    return {
+      meta: {
+        title: this.$t('bookmarks.title.comments')
+      }
+    }
+  },
+  setup() {
+    const store = useBookmarksCommentsStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
+  },
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('bookmarks/comments/more')
+      this.store.more()
     }
   },
   mounted() {
-    this.$store.dispatch('bookmarks/comments/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('bookmarks/comments/clear')
-  },
-  watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('bookmarks/entries/setFilters', { offset: undefined })
-      await this.$store.dispatch('bookmarks/entries/fetch')
-    }
+    this.store.clear()
   }
 }
 </script>

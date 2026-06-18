@@ -15,19 +15,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { Spacer, Tabs, TabsItem } from '@vue-norma/ui'
+import { useAppStore } from '@/app/components/stores/modules/app'
 
 export default {
   name: 'feed',
   components: {
     Spacer, Tabs, TabsItem
   },
-  data() {
-    return { }
+  setup() {
+    const appStore = useAppStore()
+    return { appStore }
   },
   computed: {
-    ...mapState('app', ['cachedComponents']),
+    cachedComponents() { return this.appStore.cachedComponents },
+    
     tabs() {
       return [
         {
@@ -53,7 +55,7 @@ export default {
   },
   activated() {
     if (this.cachedComponents.length > 0) {
-      this.$store.commit('app/RESET_CACHED_COMPONENTS')
+      this.appStore.resetCachedComponents()
     }
   },
 }

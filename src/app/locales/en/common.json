@@ -11,13 +11,25 @@
     },
     "theme": {
       "white": "Light theme",
-      "black": "Dark theme"
+      "black": "Dark theme",
+      "void": "Void theme"
+
     },
     "density": {
       "compact": "Compact",
       "default": "Standard",
       "spacious": "Spacious"
     }
+  },
+  "time_ago": {
+    "now": "just now",
+    "about_a_minute": "about a minute ago",
+    "seconds": "{n} seconds ago | {n} second ago | {n} seconds ago",
+    "minutes": "{n} minutes ago | {n} minute ago | {n} minutes ago",
+    "hours":   "{n} hours ago | {n} hour ago | {n} hours ago",
+    "yesterday_at": "yesterday at {hours}:{minutes}",
+    "short":        "{month} {day} at {hours}:{minutes}",
+    "full":         "{month} {day} {year} at {hours}:{minutes}"
   },
   "header": {
     "nav": {
@@ -97,7 +109,7 @@
     "title": "Menu",
     "item": {
       "feeds": "@:feeds.title",
-      "bookmarks": "@:bookmarks.title",
+      "bookmarks": "@:bookmarks.title.all",
       "settings": "@:settings.title",
       "support": "@:support.title",
       "help": "@:help.title",
@@ -106,9 +118,6 @@
       "login": "To come in",
       "logout": "Go out"
     }
-  },
-  "feeds": {
-    "title": "Feeds"
   },
   "settings": {
     "title": "Settings",
@@ -217,7 +226,7 @@
     }
   },
   "donate": {
-    "title": "Support"
+    "title": "Donate"
   },
   "about": {
     "title": "About the application",
@@ -345,7 +354,9 @@
     "report": "Complain",
     "remove-bookmark": "Remove from bookmarks",
     "add-bookmark": "Add to bookmarks",
-    "confirm": "Leave without saving?"
+    "confirm": "Leave without saving?",
+    "add_comment": "Send",
+    "save_comment": "Save"
   },
   "brands": {
     "grustnogram": {

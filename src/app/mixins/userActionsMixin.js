@@ -1,6 +1,7 @@
 import { defineAsyncComponent } from 'vue'
+import { useModals } from '@vue-norma/ui'
 
-const UserReportModal = defineAsyncComponent(() => import("@/modals/_user/Report.vue"))
+const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
 export const userActionsMixin = {
   data() {
@@ -109,8 +110,9 @@ export const userActionsMixin = {
 
     // Открыть модалку репорта
     report() {
-      this.$modals.show(UserReportModal, {
-        reportUser: this.reportUser
+      const { show } = useModals()
+      show(ReportModal, {
+        callback: this.reportUser
       })
       this.$popover.close()
     }

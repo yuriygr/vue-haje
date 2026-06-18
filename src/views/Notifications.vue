@@ -14,31 +14,22 @@
 
   <spacer height="30" />
 
-  <notifications-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <notification-item-wrapper v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]">
-        <notification-item :data="item"
-          @click="read"
-          @read="onRead"
-          @hide="onHide"
-        />
-      </notification-item-wrapper>
+  <items-list type="notifications" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <notification-item v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]" :data="item"
+      @click="read"
+      @read="onRead"
+      @hide="onHide"
+    />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <notification-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-
-    <template v-else-if="loading">
-      <notification-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <notification-item />
-      </notification-item-wrapper>
-    </template>
-  </notifications-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('notifications.empty.icon')"
@@ -48,29 +39,36 @@
 </template>
 
 <script>
-import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup } from '@vue-norma/ui'
+import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup } from '@vue-norma/ui'
 import { to } from '@/app/services/utilities'
 
-import { NotificationsList, NotificationItem, NotificationItemWrapper } from '@/components/notifications'
+import { NotificationItem } from '@/components/notifications'
 import { useNotificationsStore } from '@/app/components/stores/modules/notifications'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'notifications',
   components: {
-    NotificationsList, NotificationItem, NotificationItemWrapper,
-    Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, LoadmoreTrigger, ButtonsGroup
+    Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup,
+    NotificationItem
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('notifications.title')
-      },
       load_more_loading: false
     }
   },
-  created() {
-    this.store = useNotificationsStore()
+  setup() {
+    const { t } = useI18n()
+    const store = useNotificationsStore()
+    const authStore = useAuthStore()
+    const humanizeError = useHumanizeError()
+
+    useMeta(() => ({ title: t('notifications.title') }))
+
+    return { authStore, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -78,6 +76,7 @@ export default {
     loading()      { return this.store.loading },
     error()        { return this.store.error },
     hasMoreItems() { return this.store.hasMoreItems },
+
     tabs() {
       return [
         { 
@@ -131,7 +130,7 @@ export default {
       const [error] = await to(this.store.seen())
       error
         ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-        : this.$store.dispatch('auth/seen_notifications')
+        : this.authStore.seenNotifications()
     },
 
     async read(notifyId) {
@@ -174,26 +173,27 @@ export default {
       this.$router.replace({ name: this.$route.name, query })
     },
   },
-  async mounted() {
+  mounted() {
+    this.seen()
+
     const tab = this.availableKeys.includes(this.$route.query.tab) 
       ? this.$route.query.tab 
       : 'all'
     
-    await this.store.setFilters({ tab, offset: undefined })
-    await this.store.fetch()
-    await this.seen()
+    this.store.setFilters({ tab, offset: undefined })
+    this.store.fetch()
   },
   beforeUnmount() {
     this.store.clear()
   },
   watch: {
     '$route.query.tab': {
-      async handler(to) {
+      handler(to) {
         const tab = this.availableKeys.includes(to) ? to : 'all'
         if (tab === this.filters.tab) return // Проверка на дубликаты
         
-        await this.store.setFilters({ tab, offset: undefined })
-        await this.store.fetch()
+        this.store.setFilters({ tab, offset: undefined })
+        this.store.fetch()
       },
       immediate: false 
     }

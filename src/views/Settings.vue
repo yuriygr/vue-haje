@@ -3,7 +3,5 @@
 </template>
 
 <script>
-export default {
-  name: 'settings'
-}
+export default { name: 'settings' }
 </script>

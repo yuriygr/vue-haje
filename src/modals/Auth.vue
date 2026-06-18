@@ -42,8 +42,14 @@
 </template>
 
 <script>
+import { useModals } from '@vue-norma/ui'
+
 export default {
   name: 'auth-modal',
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       activePanel: 'home',
@@ -56,7 +62,7 @@ export default {
   computed: {
     coverStyle() {
       return {
-        'background-image': 'url("https://leonardo2.osnova.io/dfc1cb18-aadb-7e41-4854-88af19bd9a63/-/format/webp/")'
+        'background-image': 'url("https://leonardo3.osnova.io/dfc1cb18-aadb-7e41-4854-88af19bd9a63/-/format/webp/")'
       }
     }
   },
@@ -119,7 +125,7 @@ export default {
     },
 
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }

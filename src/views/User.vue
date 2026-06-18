@@ -22,98 +22,85 @@
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
   </template>
 </template>
 
-<script>
-import { Placeholder, PlaceholderLoading, Separator, Spacer, Tabs, TabsItem } from '@vue-norma/ui'
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { Placeholder, PlaceholderLoading, Spacer, Tabs, TabsItem } from '@vue-norma/ui'
+import { storeToRefs } from 'pinia'
 
 import { UserCard } from '@/components/user'
 import { useUserStore } from '@/app/components/stores/modules/user'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'user',
-  props: {
-    username: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: {  UserCard, Placeholder, PlaceholderLoading, Separator, Spacer, Tabs, TabsItem },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('user.title'),
-      }
-    }
-  },
-  setup() {
-    const store = useUserStore()
-    return { store }
-  },
-  computed: {
-    data()         { return this.store.data },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    isEmpty()      { return this.store.isEmpty },
-    tabItems() {
-      return [
-        {
-          key: 'entries',
-          to: { name: 'user' },
-          label: this.$t('user.tabs.entries', this.data.counters.entries),
-          active: this.$route.name == `user-entries` || this.$route.name == `user` 
-        },
-        {
-          key: 'subscribers',
-          to: { name: 'user-subscribers' },
-          label: this.$t('user.tabs.subscribers', this.data.counters.subscribers),
-          active: this.$route.name == `user-subscribers`
-        },
-        {
-          key: 'subscriptions',
-          to: { name: 'user-subscriptions' },
-          label: this.$t('user.tabs.subscriptions', this.data.counters.subscriptions),
-          active: this.$route.name == `user-subscriptions`
-        },
-        {
-          key: 'badges',
-          to: { name: 'user-badges' },
-          label: this.$t('user.tabs.badges', this.data.counters.badges),
-          active: this.$route.name == `user-badges`
-        },
-      ]
-    }
-  },
-  mounted() {
-    this.store.fetch(this.username)
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    username(to) {
-      if (to) {
-        this.store.clear()
-        this.store.fetch(to)
-      }
-    },
-    data: {
-      handler(to) {
-        if (to.profile?.name && to.username)
-          this.meta.title = `${to.profile.name} (@${to.username})`
-      },
-      immediate: true
-    },
-    error(to) {
-      if (to)
-        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
-    }
+const props = defineProps({
+  username: {
+    type: [Boolean, String],
+    default: false
   }
-}
+})
+
+const { t } = useI18n()
+const route = useRoute()
+const store = useUserStore()
+const humanizeError = useHumanizeError()
+const { data, loading, error, isEmpty } = storeToRefs(store)
+
+const title = ref(t('user.title'))
+
+useMeta(() => ({ title: title.value }))
+
+const tabItems = computed(() => [
+  {
+    key: 'entries',
+    to: { name: 'user', params: { username: props.username } },
+    label: t('user.tabs.entries', data.value.counters.entries),
+    active: route.name == 'user-entries' || route.name == 'user'
+  },
+  {
+    key: 'subscribers',
+    to: { name: 'user-subscribers', params: { username: props.username } },
+    label: t('user.tabs.subscribers', data.value.counters.subscribers),
+    active: route.name == 'user-subscribers'
+  },
+  {
+    key: 'subscriptions',
+    to: { name: 'user-subscriptions', params: { username: props.username } },
+    label: t('user.tabs.subscriptions', data.value.counters.subscriptions),
+    active: route.name == 'user-subscriptions'
+  },
+  {
+    key: 'badges',
+    to: { name: 'user-badges', params: { username: props.username } },
+    label: t('user.tabs.badges', data.value.counters.badges),
+    active: route.name == 'user-badges'
+  },
+])
+
+watch(() => props.username, (to) => {
+  if (to) {
+    store.clear()
+    store.fetch(to)
+  }
+})
+
+watch(data, (to) => {
+  if (to.profile?.name && to.username)
+    title.value = `${to.profile.name} (@${to.username})`
+}, { immediate: true })
+
+watch(error, (to) => {
+  if (to) title.value = humanizeError(to).title
+})
+
+onMounted(() => store.fetch(props.username))
+onBeforeUnmount(() => store.clear())
 </script>

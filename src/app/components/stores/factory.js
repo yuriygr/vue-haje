@@ -1,16 +1,34 @@
 import { defineStore } from 'pinia'
 import { to } from '@/app/services/utilities'
 
-export const createItemStore = (storeId, endpointBuilder) => defineStore(storeId, {
+export const createItemStore = (storeId, endpointBuilder, initialData = {}, initialFilters = {}) => defineStore(storeId, {
   state: () => ({
-    data: {},
+    data: Object.assign({}, initialData),
+    filters: Object.assign({}, initialFilters),
+    ignoredFilterKeys: ['offset', 'query'],
+
     loading: false,
     error: null,
     controller: null
   }),
 
   getters: {
-    isEmpty: state => Object.keys(state.data).length === 0
+    isEmpty: state => Object.keys(state.data).length === 0,
+    hasFilters: state => Object.entries(state.filters).some(([key, value]) => {
+      if (state.ignoredFilterKeys.includes(key)) return false
+
+      const initialValue = initialFilters[key]
+
+      if (Array.isArray(value)) {
+        return value.length > 0 &&
+          JSON.stringify(value) !== JSON.stringify(initialValue ?? [])
+      }
+
+      return value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        value !== initialValue
+    })
   },
 
   actions: {
@@ -30,7 +48,7 @@ export const createItemStore = (storeId, endpointBuilder) => defineStore(storeId
         : `${endpointBuilder}/${prop}`
 
       const [error, result] = await to(
-        this.$api.get(endpoint, false, controller.signal)
+        this.$api.get(endpoint, this.filters, controller.signal)
       )
 
       if (error) {
@@ -45,22 +63,32 @@ export const createItemStore = (storeId, endpointBuilder) => defineStore(storeId
 
     clear() {
       this.controller?.abort()
-      this.$patch({
-        controller: null,
-        data: {},
-        loading: false,
-        error: null
-      })
+      this.data       = JSON.parse(JSON.stringify(initialData))
+      this.filters    = JSON.parse(JSON.stringify(initialFilters))
+      this.loading    = false
+      this.error      = null
+      this.controller = null
+    },
+
+    // ─── Filters ─────────────────────────────────────────────────────────────────
+
+    setFilters(payload) {
+      this.filters = { ...this.filters, ...payload }
+    },
+
+    clearFilters() {
+      this.filters = Object.assign({}, initialFilters)
     }
   }
 })
 
-export const createListStore = (storeId, endpointBuilder, initialFilters = {}) => defineStore(storeId, {
+export const createListStore = (storeId, endpointBuilder, initialFilters = {}, initialData = []) => defineStore(storeId, {
   state: () => ({
-    data: [],
+    data: Object.assign({}, initialData),
     hasMore: false,
 
     filters: Object.assign({}, initialFilters),
+    ignoredFilterKeys: ['offset', 'query'],
 
     loading: false,
     error: null,
@@ -68,7 +96,22 @@ export const createListStore = (storeId, endpointBuilder, initialFilters = {}) =
   }),
 
   getters: {
-    hasMoreItems: state => state.hasMore
+    hasMoreItems: state => state.hasMore,
+    hasFilters: state => Object.entries(state.filters).some(([key, value]) => {
+      if (state.ignoredFilterKeys.includes(key)) return false
+
+      const initialValue = initialFilters[key]
+
+      if (Array.isArray(value)) {
+        return value.length > 0 &&
+          JSON.stringify(value) !== JSON.stringify(initialValue ?? [])
+      }
+
+      return value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        value !== initialValue
+    })
   },
 
   actions: {
@@ -100,6 +143,11 @@ export const createListStore = (storeId, endpointBuilder, initialFilters = {}) =
       this.loading = false
     },
 
+    async refresh(prop) {
+      this.filters = { ...this.filters, offset: 0 }
+      await this.fetch(prop, true)
+    },
+
     async more(prop) {
       this.filters = { ...this.filters, offset: this.data.length }
       await this.fetch(prop, false)
@@ -107,15 +155,14 @@ export const createListStore = (storeId, endpointBuilder, initialFilters = {}) =
 
     clear() {
       this.controller?.abort()
-      this.$patch({
-        controller: null,
-        data: [],
-        hasMore: false,
-        filters: Object.assign({}, initialFilters),
-        loading: false,
-        error: null
-      })
+      this.data       = JSON.parse(JSON.stringify(initialData))
+      this.filters    = JSON.parse(JSON.stringify(initialFilters))
+      this.loading    = false
+      this.error      = null
+      this.controller = null
     },
+
+    // ─── Filters ─────────────────────────────────────────────────────────────────
 
     setFilters(payload) {
       this.filters = { ...this.filters, ...payload }

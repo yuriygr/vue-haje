@@ -2,43 +2,34 @@
   <group>
     <n-header>{{ $t('settings.login-activity.title') }}</n-header>
 
-    <logins-list v-if="data.length > 0 || loading">
-      <template v-if="data.length > 0">
-        <login-item-wrapper v-for="item in data" :key="`login-item-${item.login_id}`" v-memo="[item.login_id]">
-          <login-item :data="item" />
-        </login-item-wrapper>
+    <items-list type="logins" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+      <login-item v-for="item in data" :key="`login-item-${item.login_id}`" v-memo="[item.login_id]" :data="item" />
 
-        <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-        <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+      <template #skeleton>
+        <login-item v-for="index in 15" :key="`item-${index}`" />
       </template>
-    
-      <template v-else-if="loading">
-        <login-item-wrapper v-for="index in 15" :key="`item-${index}`">
-          <login-item  />
-        </login-item-wrapper>
-      </template>
-    </logins-list>
+    </items-list>
 
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
     <placeholder v-else :text="$t('settings.login-activity.empty')" />
   </group>
 </template>
 
 <script>
-import { NButton, LoadmoreTrigger, Group, NHeader, Placeholder } from '@vue-norma/ui'
+import { Group, NHeader, Placeholder } from '@vue-norma/ui'
 
-import { LoginsList, LoginItem, LoginItemWrapper } from '@/components/login'
+import { LoginItem } from '@/components/login'
 import { useLoginsStore } from '@/app/components/stores/modules/logins'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'settings-login-activity',
   components: {
-    NButton, LoadmoreTrigger, Group, NHeader, Placeholder,
-    LoginsList, LoginItem, LoginItemWrapper
+    Group, NHeader, Placeholder, LoginItem
   },
   meta() { return this.meta },
   data() {
@@ -48,31 +39,33 @@ export default {
       }
     }
   },
-  created() {
-    this.loginsStore = useLoginsStore()
+  setup() {
+    const store = useLoginsStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
-    data()         { return this.loginsStore.data },
-    loading()      { return this.loginsStore.loading },
-    error()        { return this.loginsStore.error },
-    hasMoreItems() { return this.loginsStore.hasMoreItems }
+    data()         { return this.store.data },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems }
   },
   methods: {
     loadMore() {
-      this.loginsStore.more()
+      this.store.more()
     },
     async revokeSession(loginId) {
-      const error = await this.loginsStore.revokeSession(loginId)
+      const error = await this.store.revokeSession(loginId)
       if (error) {
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       }
     }
   },
   mounted() {
-    this.loginsStore.fetch()
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.loginsStore.clear()
+    this.store.clear()
   }
 }
 </script>

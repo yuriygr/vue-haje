@@ -22,7 +22,7 @@
           <icon name="bell-line" size="20" />
         </tabbar-item>
 
-        <template v-if="session_data.is_auth">
+        <template v-if="authData.is_auth">
           <tabbar-item :to="{ name: 'menu' }" :title="$t('header.nav.menu')" :preActive="$route.meta.section == 'menu'">
             <icon name="menu-line" size="20" />
           </tabbar-item>
@@ -41,22 +41,24 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { mapState, mapGetters } from 'vuex'
 import { Tabbar, TabbarItem, Icon } from '@vue-norma/ui'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useModals } from '@vue-norma/ui'
 
 let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
 export default {
   name: 'app-tabbar',
   components: { Tabbar, TabbarItem, Icon },
-  data() {
-    return {}
+  setup() {
+    const authStore = useAuthStore()
+    const modals = useModals()
+    return { authStore, modals }
   },
   computed: {
-    ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ]),
-    ...mapState('auth', {
-      'session_data': state => state.data
-    })
+    authData()            { return this.authStore.data },
+    isAuth()              { return this.authStore.isAuth },
+    hasNewNotifications() { return this.authStore.hasNewNotifications },
   },
   methods: {
     openComposeModal() {
@@ -64,7 +66,7 @@ export default {
         this.$router.push({ name: 'auth' })
         return
       }
-      this.$modals.show(ComposeModal)
+      this.modals.show(ComposeModal)
     }
   }
 }
@@ -77,10 +79,6 @@ export default {
 
 .app-tabbar {
   --tabbar--background: var(--x-body--background);
-
-  html[data-theme="black"] & {
-    --tabbar--background: var(--x-body--background);
-  }
 }
 
 .app-tabbar {
@@ -113,6 +111,11 @@ export default {
     position: fixed;
     bottom: 0;
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) - env(safe-area-max-inset-bottom, 0px));
+  }
+
+  @include on-tablet-device {
+    position: sticky;
+    top: 0;
   }
 
   @include on-desktop-device {

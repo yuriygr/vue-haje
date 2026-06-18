@@ -100,3 +100,16 @@ a {
 	}
 }
 
+.spoiler {
+  background-color: currentColor;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+	user-select: none;
+}
+
+.spoiler.revealed {
+  background-color: transparent;
+	user-select: text;
+}
+

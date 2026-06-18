@@ -1,3 +1,20 @@
+export const humanizeError = (error) => {
+  const snakeCase = string => {
+    return string.replace(/\W+/g, " ")
+      .split(/ |\B(?=[A-Z])/)
+      .map(word => word.toLowerCase())
+      .join('');
+  }
+
+  let _code = snakeCase(error.status)
+
+  return {
+    icon: `errors.${_code}.icon`,
+    title: `errors.${_code}.title`,
+    description: `errors.${_code}.description`
+  }
+}
+
 export const cancelEvent = (event) => {
   event = event || window.event
   if (event) {
@@ -21,11 +38,37 @@ export const createThumb = (file) => {
   })
 }
 
+// formatBytes - переводит байты в удобночитаемый вид
+export const formatBytes = (bytes, decimals) => {
+  if (bytes === 0) return '0 Bytes'
+
+  const k = 1024,
+    dm = decimals ?? 1,
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k))
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
+// formatDuration - преобразует секунды в удобночитаемый вид
+export const formatDuration = (seconds) => {
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = Math.round(seconds % 60)
+
+  const mm = m > 9 ? m : '0' + m
+  const ss = s > 9 ? s : '0' + s
+
+  return h ? `${h}:${mm}:${ss}` : `${mm}:${ss}`
+}
+
+// Видимо надо было
 export const isObject = (value) => {
   if (value === null) { return false }
   return ( (typeof value === 'function') || (typeof value === 'object') )
 }
 
+// Видимо надо было
 export const isArray = (value) => {
   return value && typeof value === 'object' && value.constructor === Array;
 }

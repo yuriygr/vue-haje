@@ -5,6 +5,8 @@ import viteCompression from 'vite-plugin-compression'
 import { fileURLToPath, URL } from 'node:url'
 import packageJson from './package.json' assert { type: 'json' }
 
+const r = (p) => fileURLToPath(new URL(p, import.meta.url))
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -68,7 +70,6 @@ export default defineConfig({
     })
   ],
   define: {
-    'process.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
     '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': JSON.stringify(false),
     'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version)
   },
@@ -82,9 +83,9 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-          @use "/src/assets/scss/utilities/_functions.scss" as *;
-          @use "/src/assets/scss/utilities/_mixins.scss" as *;
-          @use "/src/assets/scss/utilities/_variables.scss" as *;
+          @use "${r('src/assets/scss/utilities/_functions.scss')}" as *;
+          @use "${r('src/assets/scss/utilities/_mixins.scss')}" as *;
+          @use "${r('src/assets/scss/utilities/_variables.scss')}" as *;
         `
       }
     }

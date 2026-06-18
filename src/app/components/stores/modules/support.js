@@ -1,6 +1,6 @@
 import { createItemStore, createListStore } from '@/app/components/stores/factory'
 
-export const useSupportTicketStore = createItemStore(`support_ticket`,
+export const useSupportTicketStore = createItemStore('support_ticket',
   (slug) => `support/${slug}`
 )
 

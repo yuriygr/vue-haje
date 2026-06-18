@@ -20,9 +20,9 @@
     <template v-if="data.length == 0">
       <placeholder-loading v-if="loading" />
       <placeholder v-else-if="error"
-        :icon="$t($filters.humanizeError(error).icon)"
-        :header="$t($filters.humanizeError(error).title)"
-        :text="$t($filters.humanizeError(error).description)"
+        :icon="humanizeError(error).icon"
+        :header="humanizeError(error).title"
+        :text="humanizeError(error).description"
       />
       <placeholder v-else :text="$t('comment.errors.empty_comment_history')" />
     </template>
@@ -34,10 +34,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Modal, ModalHeader, ModalBody, NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
 import { CommentHistoryItem } from '@/components/comment'
+import { useCommentHistoryStore } from '@/app/components/stores/modules/comment'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'comment-history-modal',
@@ -48,34 +50,36 @@ export default {
   },
   props: {
     id: {
-      type: [ Boolean, String ],
-      default: false
+      type: Number,
+      default: 0,
+      validator: (v) => v !== 0
     }
   },
-  data() {
-    return { }
+  setup() {
+    const store = useCommentHistoryStore()
+    const humanizeError = useHumanizeError()
+    const modals = useModals()
+    return { store, humanizeError, modals }
   },
   computed: {
-    ...mapState('comment/history', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('comment/history', [ 'hasMoreItems' ])
+    data()         { return this.store.data },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     },
     loadMore() {
-      this.$store.dispatch('comment/history/more', this.id)
-    },
+      this.store.more(this.id)
+    }
   },
   mounted() {
-    this.$store.dispatch('comment/history/fetch', { initial: true, id: this.id })
+    this.store.fetch(this.id)
   },
   beforeUnmount() {
-    this.$store.dispatch('comment/history/clear')
-  },
+    this.store.clear()
+  }
 }
 </script>
-
-<style lang="scss">
-
-</style>

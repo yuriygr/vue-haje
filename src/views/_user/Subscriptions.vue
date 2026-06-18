@@ -1,33 +1,26 @@
 <template>
-  <users-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
-        <user-item :data="item" />
-      </user-item-wrapper>
+  <items-list type="users" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <user-item v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <user-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-    
-    <template v-else-if="loading">
-      <user-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <user-item />
-      </user-item-wrapper>
-    </template>
-  </users-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else :text="$t('user.errors.subscriptions_empty')" />
 </template>
 
 <script>
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
+import { Placeholder } from '@vue-norma/ui'
+
+import { UserItem } from '@/components/user'
 import { useUserSubscriptionsStore } from '@/app/components/stores/modules/user'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'user-subscriptions',
@@ -38,12 +31,12 @@ export default {
     }
   },
   components: {
-    UsersList, UserItem, UserItemWrapper,
-    Placeholder, NButton, LoadmoreTrigger
+    UserItem,  Placeholder
   },
   setup() {
     const store = useUserSubscriptionsStore()
-    return { store }
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

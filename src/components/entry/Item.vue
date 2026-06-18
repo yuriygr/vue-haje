@@ -9,7 +9,7 @@
           <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
         </buttons-group>
       </div>
-      <div v-if="data.content.text" class="entry__content" v-linkified="data.content.text" />
+      <div v-if="data.content.text" class="entry__content" v-markup="data.content.text" />
       <attachments class="entry__attachments" v-if="data.files || data.links" :files="data.files" :links="data.links" mode="full" />
       <meta-info class="entry__meta" :items="metaItems" />
     </div>
@@ -42,21 +42,25 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
+import { useEntryStore } from '@/app/components/stores/modules/entry'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
+import { useModals } from '@vue-norma/ui'
+
 const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
 const EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
-const EntryReportModal = defineAsyncComponent(() => import("@/modals/_entry/Report.vue"))
 const EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
 const EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
 
-import { ActionItem } from '@/components/actions'
+const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
+
 import { UserItem } from '@/components/user'
 import Attachments from '@/components/attachments'
 
 export default {
   name: 'entry-item',
   components: {
-    UserItem, Attachments, ActionItem,
+    UserItem, Attachments,
     Icon, NButton, ButtonsGroup, MetaInfo
   },
   props: {
@@ -88,6 +92,12 @@ export default {
         y: Math.floor(Math.random() * 100) + 70,
       }
     }
+  },
+  setup() {
+    const entryStore = useEntryStore()
+    const { timeAgo, fullDate } = useTimeAgo()
+    const modals = useModals()
+    return { entryStore, timeAgo, fullDate, modals }
   },
   computed: {
     metaItems() {
@@ -180,12 +190,14 @@ export default {
       ]
     },
     formatedDate() {
-      return this.$filters.timeAgo(this.data.meta.date_added, this.$i18n.locale)
-    }
+      return this.type == 'short'
+        ? this.timeAgo(this.data.meta.date_added)
+        : this.fullDate(this.data.meta.date_added)
+    },
   },
   methods: {
     prefetchEntry(e) {
-      this.$store.dispatch('entry/pre_fetch', this.data)
+      this.entryStore.preFetch(this.data)
     },
     toggleOptions(e) {
       let target = typeof e == "object" ? e.currentTarget : this.$refs.options.$el
@@ -281,32 +293,32 @@ export default {
 
     // Modals
     pin() {
-      this.$modals.show(EntryPinModal, {
+      this.modals.show(EntryPinModal, {
         pinEntry: this.togglePin
       })
       this.$popover.close()
     },
     report() {
-      this.$modals.show(EntryReportModal, {
-        reportEntry: this.reportEntry
+      this.modals.show(ReportModal, {
+        callback: this.reportEntry
       })
       this.$popover.close()
     },
     history() {
-      this.$modals.show(EntryHistoryModal, {
+      this.modals.show(EntryHistoryModal, {
         uuid: this.data.uuid
       })
       this.$popover.close()
     },
     edit() {
-      this.$modals.show(ComposeModal, {
+      this.modals.show(ComposeModal, {
         data: this.data,
         mode: 'edit'
       })
       this.$popover.close()
     },
     delete() {
-      this.$modals.show(EntryDeleteModal, {
+      this.modals.show(EntryDeleteModal, {
         deleteEntry: this.deleteEntry
       })
       this.$popover.close()

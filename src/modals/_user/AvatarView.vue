@@ -8,6 +8,7 @@
 
 <script>
 import { Modal } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'user-avatar-view-modal',
@@ -19,6 +20,10 @@ export default {
       type: Object,
       default: false
     }
+  },
+  setup() {
+    const modals = useModals()
+    return { modals }
   },
   data() {
     return {
@@ -32,7 +37,7 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }

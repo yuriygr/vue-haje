@@ -29,48 +29,39 @@
   </template>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Icon, MetaInfo } from '@vue-norma/ui'
+import { timeFormatOnlyYear } from '@/app/services/datetime.js'
 
-export default {
-  name: 'badge-item',
-  components: {
-    Icon, MetaInfo
-  },
-  props: {
-    data: false
-  },
-  data() {
-    return {
-      skeletonWidths: {
-        label: Math.floor(Math.random() * 100) + 100,
-        description: Math.floor(Math.random() * 100) + 150,
-        meta: Math.floor(Math.random() * 100) + 70
-      },
-      loading: { }
-    }
-  },
-  computed: {
-    elClass() {
-      return [
-        'badge-item',
-        'badge-item--type-' + this.data.type
-      ]
-    },
-    metaItems() {
-      let _result = []
+const props = defineProps({
+  data: {
+    default: false
+  }
+})
 
-      _result.push({ label: this.$t(`badge.type.${this.data.type}`) })
-      _result.push({ label: this.$t('badge.date', { date: this.formatedDate }) })
+const { t, locale } = useI18n()
 
-      return _result
-    },
-    formatedDate() {
-      return this.$filters.timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
-    }
-  },
-  methods: { }
+const skeletonWidths = {
+  label:       Math.floor(Math.random() * 100) + 100,
+  description: Math.floor(Math.random() * 100) + 150,
+  meta:        Math.floor(Math.random() * 100) + 70
 }
+
+const elClass = computed(() => [
+  'badge-item',
+  `badge-item--type-${props.data.type}`
+])
+
+const formatedDate = computed(() =>
+  timeFormatOnlyYear(props.data.date_added, locale.value)
+)
+
+const metaItems = computed(() => [
+  { label: t(`badge.type.${props.data.type}`) },
+  { label: t('badge.date', { date: formatedDate.value }) }
+])
 </script>
 
 <style lang="scss">

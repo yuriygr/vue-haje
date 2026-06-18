@@ -45,9 +45,9 @@
     <template v-if="Object.keys(data).length == 0">
       <placeholder-loading v-if="loading" />
       <placeholder v-else-if="error"
-        :icon="$t($filters.humanizeError(error).icon)"
-        :header="$t($filters.humanizeError(error).title)"
-        :text="$t($filters.humanizeError(error).description)"
+        :icon="humanizeError(error).icon"
+        :header="humanizeError(error).title"
+        :text="humanizeError(error).description"
       />
       <placeholder v-else :text="$t('settings.permissions.empty')" />
     </template>
@@ -56,6 +56,7 @@
 
 <script>
 import { Icon, Group, NHeader, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'settings-permissions',
@@ -75,7 +76,10 @@ export default {
       loading: true
     }
   },
-  computed: {  },
+  setup() {
+    const humanizeError = useHumanizeError()
+    return { humanizeError }
+  },
   methods: {
     // Fetching
     fetch() {

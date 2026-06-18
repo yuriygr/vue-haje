@@ -22,80 +22,36 @@
   </navigation-footer>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { NHeader, Separator, NavigationSection, NavigationItem, NavigationFooter, MetaInfo } from '@vue-norma/ui'
+import { storeToRefs } from 'pinia'
 
-export default {
-  name: 'about',
-  components: {
-    NHeader, Separator,
-    NavigationSection, NavigationItem, NavigationFooter, MetaInfo
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('about.title')
-      }
-    }
-  },
-  computed: {
-    ...mapState('app', {
-      'appTitle': state => state.title,
-      'appVersion': state => state.version
-    }),
-    metaItems() {
-      return [
-        { label: this.$t('app.version', { version: this.appVersion }) }
-      ]
-    },
-    helpItems() {
-      return [
-        {
-          label: this.$t('about.item.user-agreement'),
-          to: { name: 'help-page', params: { slug: 'user-agreement' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.privacy'),
-          to: { name: 'help-page', params: { slug: 'privacy' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.legal'),
-          to: { name: 'help-page', params: { slug: 'legal' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.data-security'),
-          to: { name: 'help-page', params: { slug: 'data-security' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.architecture'),
-          to: { name: 'help-page', params: { slug: 'architecture' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.ai-usage'),
-          to: { name: 'help-page', params: { slug: 'ai-usage' } },
-          chevron: true
-        },
-        {
-          label: this.$t('about.item.rules'),
-          to: { name: 'help-page', params: { slug: 'rules' } },
-          chevron: true
-        }
-      ]
-    }
-  },
-  methods: {
-    refresh() {
-      window.location.reload()
-    }
-  }
-}
+import { useAppStore } from '@/app/components/stores/modules/app'
+import { useMeta } from '@/app/composables/useMeta'
+
+const { t } = useI18n()
+const store = useAppStore()
+const { title: appTitle, version: appVersion } = storeToRefs(store)
+
+useMeta(() => ({ title: t('about.title') }))
+
+const metaItems = computed(() => [
+  { label: t('app.version', { version: appVersion.value }) }
+])
+
+const helpItems = computed(() => [
+  { label: t('about.item.user-agreement'), to: { name: 'help-page', params: { slug: 'user-agreement' } }, chevron: true },
+  { label: t('about.item.privacy'),        to: { name: 'help-page', params: { slug: 'privacy' } },        chevron: true },
+  { label: t('about.item.legal'),          to: { name: 'help-page', params: { slug: 'legal' } },          chevron: true },
+  { label: t('about.item.data-security'),  to: { name: 'help-page', params: { slug: 'data-security' } },  chevron: true },
+  { label: t('about.item.architecture'),   to: { name: 'help-page', params: { slug: 'architecture' } },   chevron: true },
+  { label: t('about.item.ai-usage'),       to: { name: 'help-page', params: { slug: 'ai-usage' } },       chevron: true },
+  { label: t('about.item.rules'),          to: { name: 'help-page', params: { slug: 'rules' } },          chevron: true },
+])
+
+const refresh = () => window.location.reload()
 </script>
 
 <style lang="scss">

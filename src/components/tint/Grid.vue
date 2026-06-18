@@ -4,13 +4,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'tints-grid',
-}
-</script>
-
-<style lang="scss" scoped>
+<style lang="scss">
 .tints-grid {
   --item-size: 4.4rem;
 }

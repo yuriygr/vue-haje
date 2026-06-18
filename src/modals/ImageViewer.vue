@@ -19,7 +19,7 @@
       >
         <img
           ref="image"
-          :src="`https://leonardo2.osnova.io/${currentImage.uuid}/`"
+          :src="`https://leonardo3.osnova.io/${currentImage.uuid}/`"
           :style="imgStyle"
           draggable="false"
           @click="toggleZoom"
@@ -34,9 +34,10 @@
 </template>
 
 <script>
+import { useModals } from '@vue-norma/ui'
+
 export default {
   name: 'image-viewer-modal',
-
   props: {
     images: {
       type: Array,
@@ -47,7 +48,10 @@ export default {
       default: 0
     }
   },
-
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       currentIndex: this.initialIndex,
@@ -95,7 +99,7 @@ export default {
 
   methods: {
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     },
 
     nextImage() {

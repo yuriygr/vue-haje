@@ -1,8 +1,6 @@
 <template>
   <template v-if="(!loading && !error) && Object.keys(data).length > 0">
-    <feed-item-wrapper :key="`feed-${data.feed_id}`">
-      <feed-item :data="data" type="short" />
-    </feed-item-wrapper>
+    <feed-item :data="data" />
 
     <separator />
 
@@ -12,18 +10,19 @@
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
   </template>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Placeholder, PlaceholderLoading, Separator, MetaInfo } from '@vue-norma/ui'
+import { Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
-import { FeedItem, FeedItemWrapper } from '@/components/feed'
+import { FeedItem } from '@/components/feed'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'feed-custom',
@@ -34,8 +33,8 @@ export default {
     }
   },
   components: {
-    Placeholder, PlaceholderLoading, Separator, MetaInfo,
-    FeedItem, FeedItemWrapper
+    Placeholder, PlaceholderLoading, Separator,
+    FeedItem
   },
   meta() { return this.meta },
   data() {
@@ -45,11 +44,12 @@ export default {
       },
     }
   },
+  setup() {
+    const humanizeError = useHumanizeError()
+    return { humanizeError }
+  },
   computed: {
     ...mapState('feed/custom', [ 'data', 'loading', 'error' ])
-  },
-  methods: {
-
   },
   mounted() {
     this.$store.dispatch('feed/custom/fetch', this.uuid)
@@ -64,7 +64,7 @@ export default {
     },
     'error'(to) {
       if (to)
-        this.meta.title = this.$t(this.humanizeError.title)
+        this.meta.title = this.humanizeError(to).title
     },
     '$route.params.uuid'(to) {
       if (to) {
@@ -80,7 +80,7 @@ export default {
   --tag-header__label-color: var(--x-body--color);
   --tag-header__hash-color: #868e96;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --tag-header__label-color: var(--x-body--color);
     --tag-header__hash-color: var(--x-color-white--shade40, #999);
   }

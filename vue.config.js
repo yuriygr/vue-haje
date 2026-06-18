@@ -1,12 +1,16 @@
 const { defineConfig } = require('@vue/cli-service')
 const { DefinePlugin } = require('webpack')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const productionGzipExtensions = ['js', 'css']
 
 const packageJson = require('./package.json')
 
 module.exports = defineConfig({
   chainWebpack: config => {
+    if (process.env.NODE_ENV === 'analyze') {
+      config.plugin('bundle-analyzer').use(BundleAnalyzerPlugin)
+    }
     config.resolve.alias.set('vue-i18n', 'vue-i18n/dist/vue-i18n.cjs.js'),
     config.plugin('CompressionWebpackPlugin').use(CompressionWebpackPlugin, [{
       filename: '[file].gz[query]',

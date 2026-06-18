@@ -5,7 +5,6 @@ import en from '@/app/locales/en'
 import jp from '@/app/locales/jp'
 import pt from '@/app/locales/pt'
 
-
 const customRule = (choice, choicesLength) => {
   if (choice === 0) return 0
   const teen = choice > 10 && choice < 20
@@ -21,7 +20,8 @@ const i18n = createI18n({
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'ru',
   messages: { ru, en, jp, pt },
   pluralRules: {
-    ru: customRule
+    ru: customRule,
+    // uk: customRule
   }
 })
 

@@ -17,27 +17,18 @@
 
   <spacer height="15" />
 
-  <feeds-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
-        <feed-item :data="item" type="short" />
-      </feed-item-wrapper>
+  <items-list type="feeds" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <feed-item v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <feed-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <feed-item-wrapper v-for="index in 5" :key="`item-${index}`">
-        <feed-item />
-      </feed-item-wrapper>
-    </template>
-  </feeds-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('feeds.empty.icon')"
@@ -46,65 +37,46 @@
   />
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue'
-import { NButton, Separator, Spacer, Placeholder, LoadmoreTrigger } from '@vue-norma/ui'
+<script setup>
+import { computed, watch, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
+import { NButton, Spacer, Placeholder, useModals } from '@vue-norma/ui'
+import { storeToRefs } from 'pinia'
 
 import { useFeedsStore } from '@/app/components/stores/modules/feeds'
-import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
+import { FeedItem } from '@/components/feed'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
-let FeedCreateModal = defineAsyncComponent(() => import("@/modals/_feed/Create.vue"))
+const FeedCreateModal = defineAsyncComponent(() => import("@/modals/_feed/Create.vue"))
 
-export default {
-  name: 'feeds',
-  components: {
-    NButton, Separator, Spacer, Placeholder, LoadmoreTrigger,
-    FeedsList, FeedItem, FeedItemWrapper
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('feeds.title')
-      }
-    }
-  },
-  created() {
-    this.store = useFeedsStore()
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
-    query()        { return this.$route.query.q ?? '' },
-  },
-  methods: {
-    openCreateModal() {
-      this.$modals.show(FeedCreateModal)
-    },
-    changeInput(value) {
-      this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: value } })
-    },
-    loadMore() {
-      this.store.more()
-    }
-  },
-  async mounted() {
-    await this.store.setFilters({ query: this.query, offset: undefined })
-    await this.store.fetch()
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    async '$route.query.q'(to) {
-      await this.store.setFilters({ query: to, offset: undefined })
-      await this.store.fetch()
-    }
-  }
-}
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const store = useFeedsStore()
+const humanizeError = useHumanizeError()
+const modals = useModals()
+const { data, filters, loading, error, hasMoreItems } = storeToRefs(store)
+
+useMeta(() => ({ title: t('feeds.title') }))
+
+const query = computed(() => route.query.q ?? '')
+
+const openCreateModal = () => modals.show(FeedCreateModal)
+const loadMore = () => store.more()
+const changeInput = (value) => router.replace({ name: route.name, query: { ...route.query, q: value } })
+
+watch(() => route.query.q, (to) => {
+  store.setFilters({ query: to, offset: undefined })
+  store.fetch()
+})
+
+onMounted(() => {
+  store.setFilters({ query: query.value, offset: undefined })
+  store.fetch()
+})
+onBeforeUnmount(() => store.clear())
 </script>
 
 <style lang="scss">

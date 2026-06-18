@@ -1,6 +1,6 @@
 import { createItemStore, createListStore } from '@/app/components/stores/factory'
 
-export const useUserStore = createItemStore(`user`,
+export const useUserStore = createItemStore('user',
   (username) => `user/${username}`
 )
 

@@ -1,123 +1,90 @@
 <template>
-  <template v-if="!emptyData">
-    <group v-if="data.users.length > 0">
-      <n-header>{{ $t('search.section.users') }}</n-header>
+  <group v-if="data.users.length > 0 || loading">
+    <n-header>{{ $t('search.section.users') }}</n-header>
 
-      <users-list>
-        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
-          <user-item :data="item" />
-        </user-item-wrapper>
-      </users-list>
+    <items-list type="users" :has-data="data.users.length > 0" :loading="loading">
+      <user-item v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]" :data="item" />
 
-      <spacer height="20" />
+      <template #skeleton>
+        <user-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('users')">{{ $t('action.show_more') }}</n-button>
-    </group>
+    <spacer height="20" />
 
-    <group v-if="data.entries.length > 0">
-      <n-header>{{ $t('search.section.entries') }}</n-header>
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="formatLink('users')">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <entries-list>
-        <entry-item-wrapper v-for="item in data.entries" :key="`entry-${item.uuid}`">
-          <entry-item :data="item" type="short" />
-        </entry-item-wrapper>
-      </entries-list>
+  <group v-if="data.entries.length > 0 || loading">
+    <n-header>{{ $t('search.section.entries') }}</n-header>
 
-      <spacer height="20" />
+    <items-list type="entries" :has-data="data.entries.length > 0" :loading="loading">
+      <entry-item v-for="item in data.entries" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" type="short" />
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('entries')">{{ $t('action.show_more') }}</n-button>
-    </group>
+      <template #skeleton>
+        <entry-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-    <group v-if="data.tags.length > 0">
-      <n-header>{{ $t('search.section.tags') }}</n-header>
+    <spacer height="20" />
 
-      <tags-list>
-        <tag-item-wrapper v-for="item in data.tags" :key="`tag-item-${item.tag_id}`" v-memo="[item.tag_id]">
-          <tag-item :data="item" />
-        </tag-item-wrapper>
-      </tags-list>
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="formatLink('entries')">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <spacer height="20" />
+  <group v-if="data.tags.length > 0 || loading">
+    <n-header>{{ $t('search.section.tags') }}</n-header>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('tags')">{{ $t('action.show_more') }}</n-button>
-    </group>
+    <items-list type="tags" :has-data="data.tags.length > 0" :loading="loading">
+      <tag-item v-for="item in data.tags" :key="`tag-${item.tag_id}`" v-memo="[item.tag_id]" :data="item" />
 
-    <group v-if="data.comments.length > 0">
-      <n-header>{{ $t('search.section.comments') }}</n-header>
+      <template #skeleton>
+        <tag-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-      <div class="comments-list">
-        <comment-item-wrapper v-for="item in data.comments" :key="`comment-${item.comment_id}`">
-          <comment-item :data="item" replyButton="link" />
-        </comment-item-wrapper>
-      </div>
+    <spacer height="20" />
 
-      <spacer height="20" />
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="formatLink('tags')">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="formatLink('comments')">{{ $t('action.show_more') }}</n-button>
-    </group>
+  <group v-if="data.comments.length > 0 || loading">
+    <n-header>{{ $t('search.section.comments') }}</n-header>
 
-  </template>
+    <items-list type="comments" :has-data="data.comments.length > 0" :loading="loading">
+      <comment-item v-for="item in data.comments" :key="`comment-${item.comment_id}`" v-memo="[item.comment_id]" :data="item" replyButton="link" />
 
-  <template v-if="emptyData">
-    <template v-if="loading">
-      <group>
-        <n-header><skeleton :width="80" :height="12" /></n-header>
-        <users-list>
-          <user-item-wrapper v-for="index in 5" :key="`user-skeleton-${index}`">
-            <user-item />
-          </user-item-wrapper>
-        </users-list>
-      </group>
-      <group>
-        <n-header><skeleton :width="91" :height="12" /></n-header>
-        <entries-list>
-          <entry-item-wrapper v-for="index in 5" :key="`entry-skeleton-${index}`">
-            <entry-item />
-          </entry-item-wrapper>
-        </entries-list>
-      </group>
-      <group>
-        <n-header><skeleton :width="30" :height="12" /></n-header>
-        <tags-list>
-          <tag-item-wrapper v-for="index in 5" :key="`tag-skeleton-${index}`">
-            <tag-item />
-          </tag-item-wrapper>
-        </tags-list>
-      </group>
-      <group>
-        <n-header><skeleton :width="60" :height="12" /></n-header>
-        <div class="comments-list">
-          <comment-item-wrapper v-for="index in 5" :key="`item-${index}`">
-            <comment-item />
-          </comment-item-wrapper>
-        </div>
-      </group>
-    </template>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else
-      :icon="$t('search.empty.icon')"
-      :header="$t('search.empty.title')"
-      :text="$t('search.empty.description')"
-    />
-  </template>
+      <template #skeleton>
+        <comment-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
+    
+    <spacer height="20" />
+
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="formatLink('comments')">{{ $t('action.show_more') }}</n-button>
+  </group>
+
+  <placeholder v-if="error"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
+  />
+  <placeholder v-else-if="emptyData && !loading"
+    :icon="$t('search.empty.icon')"
+    :header="$t('search.empty.title')"
+    :text="$t('search.empty.description')"
+  />
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import {
-  NHeader,
-  Placeholder, Separator, Spacer,
-  Group, NButton
-} from '@vue-norma/ui'
+import { NHeader, Placeholder, Separator, Spacer, Group, NButton } from '@vue-norma/ui'
 
-import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
-import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
-import { CommentItem, CommentItemWrapper } from '@/components/comment'
-import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
+import { EntryItem } from '@/components/entry'
+import { CommentItem } from '@/components/comment'
+import { UserItem } from '@/components/user'
+import { TagItem } from '@/components/tag'
+
+import { useSearchAllStore } from '@/app/components/stores/modules/search'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'search-all',
@@ -125,14 +92,10 @@ export default {
     NHeader,
     Placeholder, Separator, Spacer,
     Group, NButton,
-    UsersList, UserItem, UserItemWrapper,
-    EntriesList, EntryItem, EntryItemWrapper,
-    CommentItem, CommentItemWrapper,
-    TagsList, TagItem, TagItemWrapper
-  },
-  computed: {
-    ...mapState('search/all', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/all', [ 'emptyData', 'emptyQuery', 'searching' ])
+    UserItem,
+    EntryItem,
+    CommentItem,
+    TagItem
   },
   meta() { return this.meta },
   data() {
@@ -142,6 +105,23 @@ export default {
       }
     }
   },
+  setup() {
+    const store = useSearchAllStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
+  },
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    
+    emptyData()    {
+      return (
+        this.data.entries.length + this.data.users.length + this.data.comments.length + this.data.tags.length + this.data.feeds.length
+      ) == 0
+    },
+  },
   methods: {
     formatLink(tab = false) {
       let query = Object.assign({}, this.$route.query),
@@ -150,19 +130,21 @@ export default {
       return { name: `search-${tab}`, query: { q }}
     },
   },
-  async mounted() {
-    await this.$store.dispatch('search/all/setFilters', {
+  mounted() {
+    this.store.setFilters({
       query: this.$route.query.q
     })
-    await this.$store.dispatch('search/all/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('search/all/clear')
+    this.store.clear()
   },
   watch: {
     async '$route.query.q'(to) {
-      await this.$store.dispatch('search/all/setFilters', { query: to })
-      await this.$store.dispatch('search/all/fetch')
+      this.store.setFilters({
+        query: to
+      })
+      this.store.fetch()
     }
   }
 }

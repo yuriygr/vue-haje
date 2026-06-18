@@ -6,22 +6,25 @@
 
   <alerts-layer />
   <modals-layer />
-  <loading-layer :loading="loading" />
   <popover-layer />
 
   <icons-sprite-layer :path="iconsSpritePath" />
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import { AlertsLayer, IconsSpriteLayer, LoadingLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
+import { onMounted, onUnmounted } from 'vue'
+import { AlertsLayer, IconsSpriteLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
 
 import { AppTabbar, AppContent, AppLayout } from '@/components/_app'
+import { useSSE } from '@/app/composables/useSSE'
+import { useModals } from '@vue-norma/ui'
+import { useAppStore } from '@/app/components/stores/modules/app'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
 export default {
   name: 'app',
   components: {
-    AlertsLayer, IconsSpriteLayer, LoadingLayer, ModalsLayer, PopoverLayer,
+    AlertsLayer, IconsSpriteLayer, ModalsLayer, PopoverLayer,
     AppTabbar, AppContent, AppLayout
   },
   data() {
@@ -30,11 +33,38 @@ export default {
       modal: false
     }
   },
+  setup() {
+    const authStore = useAuthStore()
+    const appStore = useAppStore()
+    const modals = useModals()
+    
+    const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT)
+
+    sse.on('has_notice', authStore.hasNotice)
+
+    const handleSpoilerClick = (e) => {
+      if (e.target.classList.contains('spoiler')) {
+        e.target.classList.toggle('revealed')
+      }
+    }
+
+    onMounted(() => {
+      document.addEventListener('click', handleSpoilerClick)
+    })
+
+    onUnmounted(() => {
+      document.removeEventListener('click', handleSpoilerClick)
+    })
+
+    return { sse, authStore, appStore, modals }
+  },
   computed: {
-    ...mapState('app', [ 'locale', 'theme', 'density', 'loading' ]),
-    ...mapState('auth', [ 'data' ]),
-    ...mapGetters('app', [ 'themeStatusBar' ]),
-    ...mapGetters('auth', [ 'isAuth', 'hasNewNotifications' ])
+    locale()         { return this.appStore.locale },
+    theme()          { return this.appStore.theme },
+    density()        { return this.appStore.density },
+    themeStatusBar() { return this.appStore.themeStatusBar },
+
+    hasNewNotifications() { return this.authStore.hasNewNotifications },
   },
   methods: {
     setModal(state = false) {
@@ -68,28 +98,19 @@ export default {
     }
   },
   async mounted() {
-    this.$sse.on('has_notice', payload => {
-      this.$store.dispatch('auth/has_notice', payload)
-    })
-
-    this.$modals.on('show', _ => this.modal = true)
-    this.$modals.on('close', _ => this.modal = false)
+    this.modals.on('show', _ => this.modal = true)
+    this.modals.on('close', _ => this.modal = false)
 
     try {
-      await Promise.all([
-        this.$store.dispatch('initApplication'),
-        this.$store.dispatch('auth/fetch')
-      ])
+      await this.authStore.fetch()
     } catch (error) {
       this.$alerts.danger({ text: this.$t('errors.init_failed') })
       console.error('[App] Init failed:', error)
     }
   },
   beforeUnmount() {
-    this.$sse.off('has_notice')
-
-    this.$modals.off('show')
-    this.$modals.off('close')
+    this.modals.off('show')
+    this.modals.off('close')
   },
   watch: {
     modal: {
@@ -114,7 +135,7 @@ export default {
     },
     hasNewNotifications: {
       handler: 'updateFavicon',
-      immediate: false
+      immediate: true
     }
   }
 }

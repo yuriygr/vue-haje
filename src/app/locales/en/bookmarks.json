@@ -1,5 +1,11 @@
 {
-  "title": "Bookmarks",
+  "title": {
+    "all": "Bookmarks",
+    "entries": "Bookmarked posts",
+    "users": "Bookmarked users",
+    "comments": "Bookmarked comments",
+    "feeds": "Bookmarked feeds"
+  },
   "tabs": {
     "all": "All",
     "entries": "Posts",

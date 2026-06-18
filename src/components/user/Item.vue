@@ -206,7 +206,7 @@ export default {
     height: var(--user-item__avatar--size, 34px);
     margin-right: .75rem;
     flex-shrink: 0;
-    
+
     @media(hover: hover) {
       &:hover { color: inherit; text-decoration: none; }
     }

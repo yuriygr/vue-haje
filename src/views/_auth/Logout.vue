@@ -3,31 +3,30 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { PlaceholderLoading } from '@vue-norma/ui'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
 export default {
   name: 'auth-logout',
   components: {
     PlaceholderLoading
   },
-  data() {
-    return { }
+  setup() {
+    const authStore = useAuthStore()
+
+    return { authStore }
   },
   computed: {
-    ...mapState('auth', {
-      'session_data': state => state.data
-    })
+    authData() { return this.authStore.data },
   },
   methods: {
     logout() {
       this.loading = true
       this.error = false
 
-      this.$api.post('auth/logout', { logout_hash: this.session_data.logout_hash })
+      this.$api.post('auth/logout', { logout_hash: this.authData.logout_hash })
       .then(result => {
-        this.$store.dispatch('auth/fetch')
-
+        this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'home' })
       })
       .catch(error => {

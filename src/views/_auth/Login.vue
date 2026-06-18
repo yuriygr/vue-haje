@@ -32,6 +32,7 @@
 
 <script>
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
 export default {
   name: 'auth-login',
@@ -53,6 +54,11 @@ export default {
       }
     }
   },
+  setup() {
+    const authStore = useAuthStore()
+
+    return { authStore }
+  },
   computed: {
     canSubmit() {
       return (this.form.email.length > 0) && (this.form.password.length > 0)
@@ -65,8 +71,7 @@ export default {
 
       this.$api.post('auth/login', this.form)
       .then(result => {
-        this.$store.dispatch('auth/fetch')
-
+        this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })
       })
       .catch(error => {

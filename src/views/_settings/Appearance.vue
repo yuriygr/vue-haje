@@ -3,25 +3,25 @@
     <n-header>{{ $t('settings.appearance.title') }}</n-header>
 
     <form-block :label="$t('settings.appearance.field.theme')">
-      <select-field tabindex="1" name="theme" :model-value="theme" @change="change('theme', $event)">
-        <template v-for="key in themes" :key="`theme-${key}`">
-          <option :value="key" :selected="key == theme">{{ $t(`app.theme.${key}`) }}</option>
+      <select-field tabindex="1" name="theme" :model-value="store.theme" @change="store.setTheme($event.target.value)">
+        <template v-for="key in store.themes" :key="`theme-${key}`">
+          <option :value="key" :selected="key == store.theme">{{ $t(`app.theme.${key}`) }}</option>
         </template>
       </select-field>
     </form-block>
 
     <form-block :label="$t('settings.appearance.field.locale')">
-      <select-field tabindex="2" name="locale" :model-value="locale" @change="change('locale', $event)">
+      <select-field tabindex="2" name="locale" :model-value="store.locale" @change="store.setLocale($event.target.value)">
         <template v-for="key in locales" :key="`locale-${key}`">
-          <option :value="key" :selected="key == locale">{{ $t(`app.locale.${key}`) }}</option>
+          <option :value="key" :selected="key == store.locale">{{ $t(`app.locale.${key}`) }}</option>
         </template>
       </select-field>
     </form-block>
 
     <form-block :label="$t('settings.appearance.field.density')">
-      <select-field tabindex="3" name="density" :model-value="density" @change="change('density', $event)">
-        <template v-for="key in densities" :key="`density-${key}`">
-          <option :value="key" :selected="key == density">{{ $t(`app.density.${key}`) }}</option>
+      <select-field tabindex="3" name="density" :model-value="store.density" @change="store.setDensity($event.target.value)">
+        <template v-for="key in store.densities" :key="`density-${key}`">
+          <option :value="key" :selected="key == store.density">{{ $t(`app.density.${key}`) }}</option>
         </template>
       </select-field>
     </form-block>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { useAppStore } from '@/app/components/stores/modules/app'
 import { NButton, NHeader, Group, Placeholder } from '@vue-norma/ui'
 
 export default {
@@ -46,30 +46,13 @@ export default {
       loading: false
     }
   },
+  setup() {
+    const store = useAppStore()
+    return { store }
+  },
   computed: {
-    ...mapState('app', [ 'locale', 'theme', 'density' ]),
-    ...mapGetters('app', [ 'themes', 'densities' ]),
     locales() {
       return this.$i18n.availableLocales
-    }
-  },
-  methods: {
-    change(type, event) {
-      let method
-      switch (type) {
-        case 'locale':
-          method = 'SET_LOCALE'
-          break;
-        case 'theme':
-          method = 'SET_THEME'
-          break;
-        case 'density':
-          method = 'SET_DENSITY'
-          break;
-        default:
-          return false
-      }
-      this.$store.commit(`app/${method}`, event.target.value)
     }
   }
 }

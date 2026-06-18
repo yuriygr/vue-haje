@@ -24,15 +24,6 @@ export default {
   },
   props: {
     data: false
-  },
-  data() {
-    return {
-      loading: { }
-    }
-  },
-  computed: {},
-  methods: {
-
   }
 }
 </script>
@@ -45,7 +36,7 @@ export default {
   --link__title--color: #212529;
   --link__url--color: #495057;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --link__icon--background: #1f1f1f;
     --link__icon--color: #f0f0f0;
 

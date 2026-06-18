@@ -1,93 +1,70 @@
 <template>
-  <template v-if="Object.keys(data).length > 0">
-    <entry-item-wrapper>
-      <entry-item :data="data" type="full" />
-    </entry-item-wrapper>
+  <template v-if="!isEmpty">
+    <entry-item :data="data" type="full" />
     
     <entry-comments v-if="data.state.is_comments_enabled" :entry="data" />
     <placeholder v-else :text="$t('entry.errors.comments_disabled')" />
   </template>
   
-  <template v-if="Object.keys(data).length == 0">
-    <entry-item-wrapper v-if="loading">
-      <entry-item type="full" />
-    </entry-item-wrapper>
+  <template v-if="isEmpty">
+    <entry-item v-if="loading" type="full" />
     
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
     <placeholder v-else :text="$t('entry.errors.empty')" />
   </template>
 
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import { Placeholder, PlaceholderLoading, Separator, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { Placeholder } from '@vue-norma/ui'
+import { storeToRefs } from 'pinia'
 
-import { EntryItem, EntryItemWrapper } from '@/components/entry'
+import { truncateText } from '@/app/services/content'
 import EntryComments from '@/views/EntryComments'
+import { EntryItem } from '@/components/entry'
+import { useEntryStore } from '@/app/components/stores/modules/entry'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'entry',
-  props: {
-    uuid: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: {
-    EntryItem, EntryItemWrapper, EntryComments,
-    Placeholder, PlaceholderLoading, Separator, NButton, LoadmoreTrigger
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('entry.title'),
-        link: [
-          { rel: 'canonical', href: location.host + this.$route.path }
-        ]
-      }
-    }
-  },
-  computed: {
-    ...mapState('entry', [ 'data', 'loading', 'error' ]),
-    ...mapState('auth', {
-      'session_data': state => state.data
-    })
-  },
-  created() {
-    this.$store.dispatch('entry/fetch', this.uuid)
-  },
-  beforeUnmount() {
-    this.$store.dispatch('entry/clear')
-  },
-  watch: {
-    async uuid(to) {
-      if (to != undefined) {
-        await this.$store.dispatch('entry/clear')
-        await this.$store.dispatch('entry/comments/clear')
-        this.$store.dispatch('entry/fetch', to)
-      }
-    },
-    data: {
-      handler(to) {
-        if (to.content)
-          this.meta.title = this.$filters.truncateText(to.content.text)
-      },
-      immediate: true
-    },
-    error(to) {
-      if (to)
-        this.meta.title = this.$t(this.humanizeError.title)
-    },
+const props = defineProps({
+  uuid: {
+    type: String,
+    default: '',
+    validator: (v) => v !== ''
   }
-}
+})
+
+const { t } = useI18n()
+const store = useEntryStore()
+const humanizeError = useHumanizeError()
+const { data, loading, error, isEmpty } = storeToRefs(store)
+
+const title = ref(t('entry.title'))
+
+useMeta(() => ({ title: title.value }))
+
+watch(() => props.uuid, (to) => {
+  if (to != undefined) {
+    store.clear()
+    store.fetch(to)
+  }
+})
+
+watch(data, (to) => {
+  if (to.content)
+    title.value = to.content.text != '' ? truncateText(to.content.text) : t('entry.title')
+}, { immediate: true })
+
+watch(error, (to) => {
+  if (to) title.value = humanizeError(to).title
+})
+
+onMounted(() => store.fetch(props.uuid))
+onBeforeUnmount(() => store.clear())
 </script>
-
-<style>
-
-</style>

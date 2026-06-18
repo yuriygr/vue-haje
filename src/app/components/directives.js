@@ -1,5 +1,4 @@
-import router from '@/app/components/router'
-import { contentFormat } from '@/app/components/filters'
+import { contentFormat } from '@/app/services/content'
 
 const clickOutside = {
   beforeMount(el, binding) {
@@ -58,7 +57,8 @@ const handleClick = (router) => (e) => {
   }
 }
 
-const linkified = {
+// штука что размечает текст в html
+const markup = {
   mounted(el, binding, vnode) {
     const router = binding.instance?.$router
     el.innerHTML = contentFormat(binding.value)
@@ -79,7 +79,7 @@ const linkified = {
 }
 
 
-let directives = { clickOutside, CropHighText, linkified }
+let directives = { clickOutside, CropHighText, markup }
 
 export default new class {
   install(app) {

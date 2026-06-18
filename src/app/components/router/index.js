@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAppStore } from '@/app/components/stores/modules/app'
+import { useModals } from '@vue-norma/ui'
 
 import Entry from '@/views/Entry'
 const Home = () => import('@/views/Home')
@@ -50,16 +52,17 @@ export default  {
 		router.install(app)
 
 		router.beforeEach((to, from, next) => {
-			app.config.globalProperties.$modals.close()
+			const appStore = useAppStore(app.config.globalProperties.$pinia)
+			const modals = useModals()
+
+			modals.close()
 			app.config.globalProperties.$popover.close()
 			app.config.globalProperties.$alerts.close()
-		
-			if (from?.name === 'feed-timeline' && to?.name === 'entry') {
-				app.config.globalProperties.$store.commit('app/ADD_CACHED_COMPONENT', 'feed-timeline')
-			}
 
-			if (from?.name === 'feed-abyss' && to?.name === 'entry') {
-				app.config.globalProperties.$store.commit('app/ADD_CACHED_COMPONENT', 'feed-abyss')
+		
+			if (to?.name === 'entry') {
+				if (from?.name === 'feed-timeline') appStore.addCachedComponent('feed-timeline')
+				if (from?.name === 'feed-abyss')    appStore.addCachedComponent('feed-abyss')
 			}
 
 			next()

@@ -1,25 +1,16 @@
 <template>
-  <feeds-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <feed-item-wrapper v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
-        <feed-item :data="item" type="short" />
-      </feed-item-wrapper>
+  <items-list type="feeds" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <feed-item v-for="item in data" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <feed-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <feed-item-wrapper v-for="index in 5" :key="`item-${index}`">
-        <feed-item />
-      </feed-item-wrapper>
-    </template>
-  </feeds-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('bookmarks.empty.icon')"
@@ -29,39 +20,47 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
+import { Placeholder } from '@vue-norma/ui'
+
+import { FeedItem } from '@/components/feed'
+import { useBookmarksFeedsStore } from '@/app/components/stores/modules/bookmarks'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'bookmarks-feeds',
   components: {
-    FeedsList, FeedItem, FeedItemWrapper,
-    Placeholder, NButton, LoadmoreTrigger
+    Placeholder, FeedItem
+  },
+  meta() { return this.meta },
+  data() {
+    return {
+      meta: {
+        title: this.$t('bookmarks.title.feeds')
+      }
+    }
+  },
+  setup() {
+    const store = useBookmarksFeedsStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
-    ...mapState('bookmarks/feeds', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/feeds', [ 'hasMoreItems' ])
-  },
-  data() {
-    return { }
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('bookmarks/feeds/more')
+      this.store.more()
     }
   },
   mounted() {
-    this.$store.dispatch('bookmarks/feeds/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('bookmarks/feeds/clear')
-  },
-  watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('bookmarks/feeds/setFilters', { offset: undefined })
-      await this.$store.dispatch('bookmarks/feeds/fetch')
-    }
+    this.store.clear()
   }
 }
 </script>

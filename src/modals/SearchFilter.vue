@@ -21,6 +21,7 @@
 
 <script>
 import { Modal, ModalHeader, ModalBody, NButton, Placeholder } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'search-filter-modal',
@@ -33,6 +34,10 @@ export default {
       default: false
     }
   },
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       loading: false
@@ -43,12 +48,8 @@ export default {
       alert("@TODO")
     },
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

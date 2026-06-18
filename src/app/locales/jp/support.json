@@ -1,3 +1,20 @@
 {
-  "title": "Помощь и поддержка"
+  "title": "ヘルプとサポート",
+  "tickets": "作成されたチケット",
+  "ticket": "チケット",
+  "field": {
+    "subject": "件名",
+    "category": "カテゴリ",
+    "message": "メッセージ"
+  },
+  "empty": {
+    "icon": "ghost-line",
+    "title": "チケットはありません",
+    "description": "おそらく、まだ問題は発生していません"
+  },
+  "empty_ticket": {
+    "icon": "ghost-line",
+    "title": "チケットはありません",
+    "description": "この通知は表示されませんでした。"
+  }
 }

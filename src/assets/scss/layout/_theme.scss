@@ -41,7 +41,7 @@ html {
   --x-body--background: #fff;
   --x-body--color: var(--x-color-black);
   --x-background: var(--x-body--background);
-  --x-divider-color: #f1f3f5;
+  --x-separator--color: #f1f3f5;
 }
 
 // Темная тема
@@ -49,5 +49,13 @@ html[data-theme="black"] {
   --x-body--background: #111111;
   --x-body--color: var(--x-color-white);
   --x-background: var(--x-body--background);
-  --x-divider-color: #292B2E;
+  --x-separator--color: #292B2E;
+}
+
+// Пустота
+html[data-theme="void"] {
+  --x-body--background: #000;
+  --x-body--color: var(--x-color-white);
+  --x-background: var(--x-body--background);
+  --x-separator--color: #292B2E;
 }

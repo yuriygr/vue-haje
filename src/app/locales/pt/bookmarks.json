@@ -1,5 +1,11 @@
 {
-  "title": "Favoritos",
+  "title": {
+    "all": "Todos os favoritos",
+    "entries": "Posts favoritos",
+    "users": "Usuários favoritos",
+    "comments": "Comentários favoritos",
+    "feeds": "Feeds favoritos"
+  },
   "tabs": {
     "all": "Todos",
     "entries": "Postagens",

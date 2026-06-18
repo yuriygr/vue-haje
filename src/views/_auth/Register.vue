@@ -31,8 +31,8 @@
 
       <form-text align="center">
         <i18n-t keypath="auth.create_account.agreement">
-          <router-link :to="{ name: 'help-page', params: { uuid: 'user-agreement' } }">{{ $t('auth.create_account.terms') }}</router-link>
-          <router-link :to="{ name: 'help-page', params: { uuid: 'privacy' } }">{{ $t('auth.create_account.privacy') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'user-agreement' } }">{{ $t('auth.create_account.terms') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'privacy' } }">{{ $t('auth.create_account.privacy') }}</router-link>
         </i18n-t>
       </form-text>
     </form-group>
@@ -51,10 +51,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useAppStore } from '@/app/components/stores/modules/app'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
 export default {
   name: 'auth-register',
@@ -80,8 +81,17 @@ export default {
       }
     }
   },
+  setup() {
+    const store = useAppStore()
+    const authStore = useAuthStore()
+
+    return { store, authStore }
+  },
   computed: {
-    ...mapState('app', [ 'theme' ]),
+    theme() { return this.store.theme },
+
+    authData() { return this.authStore.data },
+
   },
   methods: {
     async submit() {
@@ -92,7 +102,7 @@ export default {
 
       this.$api.post('auth/register', this.form)
       .then(result => {
-        this.$store.dispatch('auth/fetch')
+        this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })
       })
       .catch(error => {

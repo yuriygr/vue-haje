@@ -14,7 +14,7 @@
             <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
             <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
           </div>
-          <div v-if="data.content.text" class="comment__content" v-linkified="data.content.text" />
+          <div v-if="data.content.text" class="comment__content" v-markup="data.content.text" />
           <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
           <meta-info class="comment__meta" :items="metaItems" />
         </template>
@@ -53,11 +53,14 @@ import { Icon, NButton, MetaInfo } from '@vue-norma/ui'
 
 import Attachments from '@/components/attachments'
 import { UserItem } from '@/components/user'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
+import { useModals } from '@vue-norma/ui'
 
 const CommentForm = defineAsyncComponent(() => import("@/components/comment/Form.vue"))
-const CommentReportModal = defineAsyncComponent(() => import("@/modals/_comment/Report.vue"))
 const CommentHistoryModal = defineAsyncComponent(() => import("@/modals/_comment/History.vue"))
 const CommentDeleteModal = defineAsyncComponent(() => import("@/modals/_comment/Delete.vue"))
+
+const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
 export default {
   name: 'comment-item',
@@ -112,6 +115,11 @@ export default {
         e: Math.floor(Math.random() * 100) + 50
       }
     }
+  },
+  setup() {
+    const { timeAgo } = useTimeAgo()
+    const modals = useModals()
+    return { timeAgo, modals }
   },
   computed: {
     elClass() {
@@ -189,7 +197,7 @@ export default {
       ]
     },
     formatedDate() {
-      return this.$filters.timeAgo(this.data.meta.date_added, this.$i18n.locale)
+      return this.timeAgo(this.data.meta.date_added)
     }
   },
   methods: {
@@ -262,13 +270,13 @@ export default {
 
     // Modals
     report() {
-      this.$modals.show(CommentReportModal, {
-        reportComment: this.reportComment
+      this.modals.show(ReportModal, {
+        callback: this.reportComment
       })
       this.$popover.close()
     },
     history() {
-      this.$modals.show(CommentHistoryModal, {
+      this.modals.show(CommentHistoryModal, {
         id: this.data.comment_id
       })
       this.$popover.close()
@@ -278,7 +286,7 @@ export default {
       this.$popover.close()
     },
     delete() {
-      this.$modals.show(CommentDeleteModal, {
+      this.modals.show(CommentDeleteModal, {
         deleteComment: this.deleteComment
       })
       this.$popover.close()

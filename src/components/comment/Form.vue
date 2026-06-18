@@ -10,6 +10,17 @@
       v-bind="$fieldBinds"
     ></div>
 
+    <mention-dropdown
+      :active="mention.active"
+      :users="mention.users"
+      :loading="mention.loading"
+      :selected-index="mention.selectedIndex"
+      :position="mention.position"
+      @recalc="updateMentionPosition"
+      @pick="onMentionPick"
+      @close="mentionClose"
+    />
+
     <attachments-form class="comment-form__attachments"
       v-model="form.files"
       :allowedFormats="allowedFormats"
@@ -36,6 +47,7 @@
 import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
+import { useMention } from '@/app/composables/useMention'
 
 import { NButton, ButtonsGroup } from '@vue-norma/ui'
 
@@ -79,6 +91,12 @@ export default {
         files: [],
         link: false
       }
+    }
+  },
+  setup() {
+    const { mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose } = useMention()
+    return {
+      mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose
     }
   },
   computed: {
@@ -182,20 +200,32 @@ export default {
       this.$refs.file.attachFiles()
     },
 
+    // ─── Поле ввода ───────────────────────────────────────
+
     field_onInput(e) {
       if (this.$refs.field.innerHTML == "<br>") {
         this.$refs.field.innerText = ''
       }
       this.form.text = this.$refs.field.innerText
+
+      this.mentionDetect()
     },
     field_onKeyup(e) {
       
     },
     field_onKeydown(e) {
+      const result = this.mentionHandleKeydown(e)
+      if (result?.pick) {
+        this.onMentionPick(result.pick)
+        return
+      }
+      if (result) return
+
       if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
         switch(e.keyCode) {
           case 13: // Enter
             e.preventDefault()
+            this.mentionClose()
             document.execCommand('insertHTML', false, '<br><br>')
             break;
         }
@@ -257,7 +287,13 @@ export default {
     form_onDragOver(e) {
       e.preventDefault()
       this.dragover = true
-    }
+    },
+
+    // mention
+    onMentionPick(user) {
+      this.mentionPick(user)
+      this.form.text = this.$refs.field.innerText
+    },
   },
   mounted() {
     if (this.data) {
@@ -269,7 +305,8 @@ export default {
     }
   },
   beforeUnmount() {
-
+    // Убиваем меншены
+    this.mentionClose()
   }
 }
 </script>
@@ -288,7 +325,7 @@ export default {
   --comment-form--background-hovered: #fff;
   --comment-form--border-hovered: 1px solid #f0f0f0;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --comment-form--background: #181818;
     --comment-form--border: 1px solid #1b1b1b;
     --comment-form--background-dragover: #151515;

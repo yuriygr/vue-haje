@@ -1,23 +1,20 @@
 <template>
   <label :class="controlClass">
     <input
-     class="n-checkbox__input"
+      class="n-checkbox__input"
       v-bind="controlBinds"
       v-on="controlEvents"
-    >
+    />
     <div class="n-checkbox__control">
-      <icon name="ui-check" v-if="checked" size="16" />
+      <span class="n-checkbox__check"></span>
     </div>
     <div class="n-checkbox__label">{{ label }}</div>
   </label>
 </template>
 
 <script>
-import { Icon } from '@vue-norma/ui'
-
 export default {
   name: 'n-checkbox',
-  components: { Icon },
   props: {
     label: {
       type: [ String, Boolean ],
@@ -96,7 +93,7 @@ export default {
   --n-checkbox__control--background-checked: var(--x-color-pink--tint10);
   --n-checkbox__control--border-color-checked: var(--x-color-pink);
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --n-checkbox__control--background: rgba(255,255,255,0.1);
     --n-checkbox__control--border-color: rgba(255,255,255,0.06);
 
@@ -110,11 +107,11 @@ export default {
   $p: #{&};
 
   position: relative;
-  display: inline-flex;
+  display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  min-width: 18px;
-  min-height: 24px;
+  gap: 8px;
+  min-height: 2rem;
   cursor: pointer;
 
   &--checked {
@@ -123,47 +120,58 @@ export default {
       background-color: var(--n-checkbox__control--background-checked);
       border: 1px solid var(--n-checkbox__control--border-color-checked);
     }
+    #{$p}__check {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
+    }
   }
 
   &--disabled {
     opacity: 0.4;
     pointer-events: none;
-    cursor: default;
+    cursor: not-allowed;
   }
 
+  // Нативный элемент
   &__input {
     position: absolute;
-    top: 0;
-    left: 0;
     opacity: 0;
-    padding: 0;
-    margin: 0;
-    visibility: hidden;
+    width: 0;
+    height: 0;
+    pointer-events: none;
   }
 
   &__label {
-    padding-left: 24px;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 500;
-    line-height: calc(1.6 * 1em);
-    user-select: none;
+    line-height: 1.4;
   }
 
   &__control {
-    position: absolute;
-    z-index: 1;
-    top: 3px;
-    left: 0;
+    flex-shrink: 0;
+    margin-top: 1px;
     width: 18px;
     height: 18px;
-    color: var(--n-checkbox__control--color-checked);
     background-color: var(--n-checkbox__control--background);
     border: 1px solid var(--n-checkbox__control--border-color);
     border-radius: 5px;
     box-sizing: border-box;
-    transition: background-color 0.1s linear, border-color 0.1s linear, box-shadow 0.1s linear;
+    transition: background-color 0.1s linear, border-color 0.1s linear;
+    position: relative;
+  }
 
-    svg { display: block; fill: currentColor; }
+  &__check {
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 9px;
+    border: 2px solid var(--n-checkbox__control--color-checked);
+    border-top: none;
+    border-left: none;
+    opacity: 0;
+    transform: rotate(45deg) scale(0.5);
+    transition: opacity 0.1s linear, transform 0.1s linear;
   }
 }
 </style>

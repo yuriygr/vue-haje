@@ -1,6 +1,6 @@
 import { createItemStore, createListStore } from '@/app/components/stores/factory'
 
-export const useHelpPageStore = createItemStore(`help_page`,
+export const useHelpPageStore = createItemStore('help_page',
   (slug) => `help/${slug}`
 )
 export const useHelpPagesStore = createListStore('help_pages',

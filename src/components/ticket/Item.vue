@@ -27,6 +27,7 @@
 
 <script>
 import { MetaInfo } from '@vue-norma/ui'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 
 export default {
   name: 'ticket-item',
@@ -44,6 +45,10 @@ export default {
       }
     }
   },
+  setup() {
+    const { timeAgo } = useTimeAgo()
+    return { timeAgo }
+  },
   computed: {
     ticketUrl() {
       return { name: 'support-ticket', params: { uuid: this.data.uuid } }
@@ -56,7 +61,7 @@ export default {
       return _result
     },
     formatedDate() {
-      return this.$filters.timeAgo(this.data.meta.created_at, this.$i18n.locale)
+      return this.timeAgo(this.data.meta.created_at)
     }
   }
 }
@@ -67,7 +72,7 @@ export default {
   --ticket-item__subject--color: #212529;
   --ticket-item__caption--color: #495057;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --ticket-item__subject--color: #f0f0f0;
     --ticket-item__caption--color: #999;
   }

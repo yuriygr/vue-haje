@@ -3,10 +3,9 @@
 </template>
 
 <script>
-export default {
-  name: 'skeleton'
-}
+export default { name: 'skeleton' }
 </script>
+
 <script setup>
 import { computed } from 'vue'
 
@@ -34,6 +33,10 @@ const $style = computed(() => {
   --skeleton-background: rgba(0, 0, 0, 0.09);
 
   html[data-theme="black"] & {
+    --skeleton-background: rgba(255, 255, 255, 0.05);
+  }
+
+  html[data-theme="void"] & {
     --skeleton-background: rgba(255, 255, 255, 0.05);
   }
 }

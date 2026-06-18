@@ -276,7 +276,7 @@ export default {
       font-family: var(--x-font-family);
       -webkit-text-fill-color: var(--text-field--color);
       transition: background-color 0s 0s, color 0s 0s;
-      transition-delay: calc(infinity * 1s);
+      transition-delay: 9999s;
     }
 
     &:-webkit-autofill::first-line {

@@ -1,33 +1,26 @@
 <template>
-  <entries-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
-        <entry-item :data="item" type="short" :showPinAction="true" />
-      </entry-item-wrapper>
+  <items-list type="entries" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <entry-item v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" :showPinAction="true" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <entry-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <entry-item type="short" />
-      </entry-item-wrapper>
-    </template>
-  </entries-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else :text="$t('user.errors.entries_empty')" />
 </template>
 
 <script>
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
+import { Placeholder } from '@vue-norma/ui'
+
+import { EntryItem } from '@/components/entry'
 import { useUserEntriesStore } from '@/app/components/stores/modules/user'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'user-entries',
@@ -38,12 +31,12 @@ export default {
     }
   },
   components: {
-    EntriesList, EntryItem, EntryItemWrapper,
-    Placeholder, NButton, LoadmoreTrigger
+    Placeholder, EntryItem
   },
   setup() {
     const store = useUserEntriesStore()
-    return { store }
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

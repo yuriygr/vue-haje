@@ -133,7 +133,7 @@ export default {
       return {
         id: this.generateUniqueId(),
         file: null,
-        preview: `https://leonardo2.osnova.io/${file.uuid}/-/scale_crop/300x/`,
+        preview: `https://leonardo3.osnova.io/${file.uuid}/-/scale_crop/300x/`,
         status: 'success',
         spoiler: file.spoiler,
         payload: file,
@@ -240,7 +240,7 @@ export default {
       if (index !== -1) {
         this.images[index].status = status
         if (payload != null) {
-          this.images[index].preview = `https://leonardo2.osnova.io/${payload.uuid}/-/scale_crop/300x/`
+          this.images[index].preview = `https://leonardo3.osnova.io/${payload.uuid}/-/scale_crop/300x/`
           this.images[index].payload = payload
           this.images[index].uuid = payload.uuid
         }
@@ -349,11 +349,24 @@ export default {
     height: inherit;
     border-radius: 8px;
 
+    &:after {
+      content: "";
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, .07);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 90;
+    }
+
     &--status-error {
       img, video {
         filter: blur(5px) grayscale(1);
       }
-      &:after {
+      &:before {
         content: "";
         pointer-events: none;
         border-radius: inherit;
@@ -375,7 +388,7 @@ export default {
     &--spoiler {
       img, video { visibility: hidden; }
       
-      &:after {
+      &:before {
         content: "SPOILER";
         position: absolute;
         inset: 0;

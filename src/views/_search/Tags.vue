@@ -1,25 +1,16 @@
 <template>
-  <tags-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <tag-item-wrapper v-for="item in data" :key="`tag-item-${item.tag_id}`" v-memo="[item.tag_id]">
-        <tag-item :data="item" />
-      </tag-item-wrapper>
+  <items-list type="tags" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <tag-item v-for="item in data" :key="`tag-${item.tag_id}`" v-memo="[item.tag_id]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <tag-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-    
-    <template v-else-if="loading">
-      <tag-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <tag-item />
-      </tag-item-wrapper>
-   </template>
-  </tags-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('search.empty.icon')"
@@ -29,19 +20,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { TagsList, TagItem, TagItemWrapper } from '@/components/tag'
+import { Placeholder } from '@vue-norma/ui'
+
+import { TagItem } from '@/components/tag'
+import { useSearchTagsStore } from '@/app/components/stores/modules/search'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'search-tags',
   components: {
-    TagsList, TagItem, TagItemWrapper,
-    Placeholder, NButton, LoadmoreTrigger
-  },
-  computed: {
-    ...mapState('search/tags', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/tags', [ 'hasMoreItems', 'emptyQuery', 'searching' ]),
+    Placeholder, TagItem
   },
   meta() { return this.meta },
   data() {
@@ -51,24 +39,46 @@ export default {
       }
     }
   },
-  methods: {
-    loadMore() {
-      this.$store.dispatch('search/tags/more')
+  setup() {
+    const store = useSearchTagsStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
+  },
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
+
+    // TODO: Понять зачем это 
+    emptyQuery() {
+      return this.store.filters.query === ''
+    },
+    searching() {
+      return this.store.filters.query != ''
     }
   },
-  async mounted() {
-    await this.$store.dispatch('search/tags/setFilters', {
+  methods: {
+    loadMore() {
+      this.store.more()
+    }
+  },
+  mounted() {
+    this.store.setFilters({
       query: this.$route.query.q, offset: undefined
     })
-    await this.$store.dispatch('search/tags/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('search/tags/clear')
+    this.store.clear()
   },
   watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('search/tags/setFilters', { query: to, offset: undefined })
-      await this.$store.dispatch('search/tags/fetch')
+    '$route.query.q'(to) {
+      this.store.setFilters({
+        query: to, offset: undefined
+      })
+      this.store.fetch()
     }
   }
 }

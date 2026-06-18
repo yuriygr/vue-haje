@@ -1,5 +1,6 @@
 export { default as FeedTimeline } from '@/views/_feed/Timeline'
 export { default as FeedAbyss } from '@/views/_feed/Abyss'
+export { default as FeedsList } from '@/views/_feed/List'
+
 export { default as FeedCustom } from '@/views/_feed/Custom'
 export { default as FeedCustomEntries } from '@/views/_feed/_custom/Entries'
-export { default as FeedsList } from '@/views/_feed/List'

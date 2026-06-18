@@ -54,7 +54,7 @@ export default {
   --help-item__title--color: #212529;
   --help-item__caption--color: #495057;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --help-item__title--color: #f0f0f0;
     --help-item__caption--color: #999;
   }

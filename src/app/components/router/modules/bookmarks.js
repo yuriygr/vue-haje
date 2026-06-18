@@ -1,4 +1,4 @@
-const Bookmarks = () => import('@/views/Bookmarks')
+import Bookmarks from '@/views/Bookmarks'
 
 import {
   BookmarksAll, BookmarksUsers, BookmarksEntries, BookmarksComments, BookmarksFeeds

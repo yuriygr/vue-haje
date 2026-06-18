@@ -32,43 +32,37 @@
   </group>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script setup>
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { onMounted, computed } from 'vue'
 import { Icon, NHeader, Group, Spacer, ButtonsGroup, NButton } from '@vue-norma/ui'
 
-export default {
-  name: 'home',
-  components: {
-    Icon, NHeader, Group, Spacer, ButtonsGroup, NButton
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('home.title')
-      },
-      teasers: [
-        { code: 'stories',         icon: 'stories-line' },
-        { code: 'brain',           icon: 'brain-line' },
-        { code: 'recommendations', icon: 'sparkling-line' },
-        { code: 'combine',         icon: 'function-line' },
-        { code: 'friends',         icon: 'team-line' },
-        { code: 'likes',           icon: 'like-line' },
-        { code: 'blacklist',       icon: 'user-forbid-line' },
-        { code: 'ads',             icon: 'advertisement-line' }
-      ]
-    }
-  },
-  computed: {
-    ...mapGetters('auth', [ 'isAuth' ]),
-  },
-  mounted() {
-    if (this.isAuth) {
-      this.$router.push({ name: 'feed' })
-      return
-    }
-  }
-}
+import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useMeta } from '@/app/composables/useMeta'
+
+const { t } = useI18n()
+const router = useRouter()
+const authStore = useAuthStore()
+
+useMeta(() => ({ title: t('home.title') }))
+
+const isAuth = computed(() => authStore.isAuth)
+
+const teasers = [
+  { code: 'stories',         icon: 'stories-line' },
+  { code: 'brain',           icon: 'brain-line' },
+  { code: 'recommendations', icon: 'sparkling-line' },
+  { code: 'combine',         icon: 'function-line' },
+  { code: 'friends',         icon: 'team-line' },
+  { code: 'likes',           icon: 'like-line' },
+  { code: 'blacklist',       icon: 'user-forbid-line' },
+  { code: 'ads',             icon: 'advertisement-line' }
+]
+
+onMounted(() => {
+  if (isAuth.value) router.push({ name: 'feed' })
+})
 </script>
 
 <style lang="scss">

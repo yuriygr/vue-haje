@@ -8,31 +8,31 @@
       </template>
 
       <div class="comments-tree__refresh-button">
-        <n-button mode="secondary" @click.exact="loadMore" size="m" :disabled="loading">{{ $t('action.refresh') }}</n-button>
+        <n-button mode="secondary" @click.exact="loadMore" size="m" :disabled="loading" :badge="hasNew">{{ $t('action.refresh') }}</n-button>
       </div>
     </div>
 
     <template v-if="data.length == 0">
-      <div class="comments-list" v-if="loading">
-        <comment-item-wrapper v-for="index in 15" :key="`item-${index}`">
-          <comment-item />
-        </comment-item-wrapper>
+      <div class="comments-tree" v-if="loading">
+        <comment-item v-for="index in 15" :key="`item-${index}`" />
       </div>
     </template>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
 
-import { CommentItem, CommentItemWrapper, CommentReply } from '@/components/comment'
+import { CommentItem, CommentReply } from '@/components/comment'
+import { useSSE } from '@/app/composables/useSSE'
 
 export default {
   name: 'entry-comments',
   components: {
     Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader,
-    CommentItem, CommentItemWrapper, CommentReply
+    CommentItem, CommentReply
   },
   props: {
     entry: {
@@ -40,15 +40,19 @@ export default {
       default: false
     }
   },
+  setup(props) {
+    const hasNew = ref(false)
+
+    const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT_ENTRY + '/' + props.entry.uuid)
+    sse.on('has_replies', () => {
+      hasNew.value = true
+    })
+
+    return { hasNew, sse }
+  },
   computed: {
     ...mapState('entry/comments', [ 'data', 'loading', 'error' ]),
     ...mapGetters('entry/comments', [ 'tree' ]),
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
-    humanizeError() {
-      return this.$filters.humanizeError(this.error)
-    }
   },
   methods: {
     async onSuccessAddingComment(result) {
@@ -60,6 +64,7 @@ export default {
     },
     loadMore() {
       this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })
+      this.hasNew = false
     },
     scrollToComment(commentId = false) {
       if (!commentId) return
@@ -90,6 +95,11 @@ export default {
     this.$store.dispatch('entry/comments/clear')
   },
   watch: {
+    uuid(to) {
+      if (to != undefined) {
+        this.$store.dispatch('entry/comments/clear')
+      }
+    },
     '$route.query.comment'(to) {
       if (to) this.scrollToComment(to)
     }
@@ -98,6 +108,9 @@ export default {
 </script>
 
 <style lang="scss">
+.entry-comments {
+  margin-top: 2rem;
+}
 .comments-tree {
   margin: 2rem 0 0;
 
@@ -114,11 +127,12 @@ export default {
       bottom: calc(var(--tabbar--height) + 8px);
     }
 
-    @include on-desktop-device {
+    @include on-tablet-device {
       bottom: 8px;
     }
 
-    .button {
+    @include on-desktop-device {
+      bottom: 8px;
     }
   }
 }

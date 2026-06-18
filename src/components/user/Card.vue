@@ -9,7 +9,7 @@
         <img :src="avatarUrl" alt="" />
       </div>
     </div>
-    <div v-if="localData.profile.bio" class="user-card__bio" v-linkified="localData.profile.bio" />
+    <div v-if="localData.profile.bio" class="user-card__bio" v-markup="localData.profile.bio" />
     <meta-info class="user-card__meta" :items="metaItems" />
     
     <spacer height="20" />
@@ -43,6 +43,8 @@ import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
 import { userActionsMixin } from '@/app/mixins/userActionsMixin'
 import { useUserStore } from '@/app/components/stores/modules/user'
+import { useModals } from '@vue-norma/ui'
+import { timeFormatOnlyYear } from '@/app/services/datetime.js'
 
 let UserAvatarView = defineAsyncComponent(() => import("@/modals/_user/AvatarView.vue"))
 
@@ -63,7 +65,8 @@ export default {
   },
   setup() {
     const store = useUserStore()
-    return { store }
+    const modals = useModals()
+    return { store, modals }
   },
   computed: {
     avatarUrl() {
@@ -79,7 +82,7 @@ export default {
       return _result
     },
     formatedDate() {
-      return this.$filters.timeFormatOnlyYear(this.localData.meta.date_added, this.$i18n.locale)
+      return timeFormatOnlyYear(this.localData.meta.date_added, this.$i18n.locale)
     },
     userLinkBinds() {
       if (this.clickable)
@@ -148,9 +151,8 @@ export default {
         align: 'right'
       })
     },
-    // Да-да
     viewAvatar() {
-      this.$modals.show(UserAvatarView, {
+      this.modals.show(UserAvatarView, {
         data: this.data
       })
     }

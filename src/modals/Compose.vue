@@ -14,6 +14,17 @@
         v-bind="$fieldBinds"
       ></div>
 
+      <mention-dropdown
+        :active="mention.active"
+        :users="mention.users"
+        :loading="mention.loading"
+        :selected-index="mention.selectedIndex"
+        :position="mention.position"
+        @recalc="updateMentionPosition"
+        @pick="onMentionPick"
+        @close="mentionClose"
+      />
+
       <attachments-form class="compose__attachments"
         v-model="form.files"
         :allowedFormats="allowedFormats"
@@ -47,9 +58,9 @@
       <template v-if="drafts.length == 0">
         <placeholder-loading v-if="draftsLoading" />
         <placeholder v-else-if="draftsError"
-          :icon="$t(humanizeError(draftsError).icon)"
-          :header="$t(humanizeError(draftsError).title)"
-          :text="$t(humanizeError(draftsError).description)"
+          :icon="humanizeError(draftsError).icon"
+          :header="humanizeError(draftsError).title"
+          :text="humanizeError(draftsError).description"
         />
         <placeholder v-else
           :icon="$t('errors.empty_drafts.icon')"
@@ -101,13 +112,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, PlaceholderLoading, Group } from '@vue-norma/ui'
+
 import { cancelEvent } from '@/app/services/utilities'
 import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 
-import { useDraft } from '@/composables/useDraft'
-
-import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, PlaceholderLoading, Group } from '@vue-norma/ui'
+import { useDraft } from '@/app/composables/useDraft'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useModals } from '@vue-norma/ui'
+import { useMention } from '@/app/composables/useMention'
 
 export default {
   name: 'compose-modal',
@@ -156,10 +171,19 @@ export default {
       availableViews: [ 'form', 'options', 'drafts', 'gifs' ]
     }
   },
+  setup() {
+    const authStore = useAuthStore()
+    const humanizeError = useHumanizeError()
+    const modals = useModals()
+    const { mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose } = useMention()
+    return {
+      authStore, humanizeError, modals,
+      mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose
+    }
+  },
   computed: {
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
+    authData() { return this.authStore.data },
+    
     ...mapState('drafts', { drafts: 'data', draftsLoading: 'loading', draftsError: 'error' }),
     ...mapGetters('drafts', [ 'hasMoreItems' ]),
     $formClass() {
@@ -205,7 +229,7 @@ export default {
     },
     // Выбираем какого пользователя выводить как автора
     entryUser() {
-      return this.user || this.session_data.user
+      return this.user || this.authData.user
     }
   },
   methods: {
@@ -221,10 +245,10 @@ export default {
     },
     closeModal() {
       if (this.canSubmit) {
-        confirm(this.$t('action.confirm')) && this.$modals.close()
+        confirm(this.$t('action.confirm')) && this.modals.close()
         return
       }
-      this.$modals.close()
+      this.modals.close()
     },
 
     // ─── Публикация ───────────────────────────────────────
@@ -243,7 +267,7 @@ export default {
       .then(async result => {
         await this._draft.discardDraft()
         this.clearForm()
-        this.$modals.close()
+        this.modals.close()
         this.$router.push({ name: 'entry', params: { uuid: result.payload } })
       })
       .catch(error => {
@@ -304,7 +328,9 @@ export default {
         this.$refs.field.innerText = ''
       }
       this.form.text = this.$refs.field.innerText
-      
+
+      this.mentionDetect()
+
       // Сохраняем при каждом нажатии
       this._draft.autoSave(this.form)
     },
@@ -312,10 +338,18 @@ export default {
       
     },
     field_onKeydown(e) {
+      const result = this.mentionHandleKeydown(e)
+      if (result?.pick) {
+        this.onMentionPick(result.pick)
+        return
+      }
+      if (result) return
+
       if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
         switch(e.keyCode) {
           case 13: // Enter
             e.preventDefault()
+            this.mentionClose()
             document.execCommand('insertHTML', false, '<br><br>')
             break;
         }
@@ -373,6 +407,12 @@ export default {
       this.dragover = true
     },
 
+    // mention
+    onMentionPick(user) {
+      this.mentionPick(user)
+      this.form.text = this.$refs.field.innerText
+    },
+
     detectLink() {
       if (this.debounceTimer) clearTimeout(this.debounceTimer)
 
@@ -390,11 +430,6 @@ export default {
           this.form.link = { ...data, url }
         } catch {}
       }, 600)
-    },
-
-
-    humanizeError(error) {
-      return this.$filters.humanizeError(error)
     },
   },
   created() {
@@ -431,6 +466,9 @@ export default {
     })
   },
   beforeUnmount() {
+    // Убиваем меншены
+    this.mentionClose()
+
     // Отменяем pending автосохранение
     this._draft.autoSave.cancel()
 
@@ -448,7 +486,7 @@ export default {
   --compose--background-dragover: #f5f5f5;
   --compose--border-dragover: var(--x-color-pink--tint10);
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --compose--background-dragover: #151515;
     --compose--border-dragover: var(--x-color-pink--shade50);
   }

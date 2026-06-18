@@ -33,6 +33,19 @@
 import { defineAsyncComponent } from 'vue'
 import { NButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
 
+import {
+  useSearchAllStore, useSearchUsersStore, useSearchEntriesStore, useSearchCommentsStore, useSearchTagsStore
+} from '@/app/components/stores/modules/search'
+import { useModals } from '@vue-norma/ui'
+
+const searchStores = {
+  all:      useSearchAllStore,
+  users:    useSearchUsersStore,
+  entries:  useSearchEntriesStore,
+  comments: useSearchCommentsStore,
+  tags:     useSearchTagsStore,
+}
+
 let SearchFilterModal = defineAsyncComponent(() => import("@/modals/SearchFilter.vue"))
 
 export default {
@@ -40,16 +53,17 @@ export default {
   components: {
     NButton, Tabs, TabsItem, Separator, Spacer
   },
-  data() {
-    return { }
+  setup() {
+    const getSearchStore = (key) => searchStores[key]?.()
+    const modals = useModals()
+    return { getSearchStore, modals }
   },
   computed: {
     query() {
       return this.$route.query.q
     },
     hasFilters() {
-      let key = this.$route.meta.key
-      return this.$store.getters[`search/${key}/hasFilters`]
+      return this.getSearchStore(this.$route.meta.key)?.hasFilters ?? false
     },
     tabs() {
       const currentKey = this.$route.meta.key
@@ -92,7 +106,7 @@ export default {
   },
   methods: {
     openFilterModal() {
-      this.$modals.show(SearchFilterModal, {
+      this.modals.show(SearchFilterModal, {
         data: this.$route.meta.key
       })
     },

@@ -1,25 +1,16 @@
 <template>
-  <entries-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
-        <entry-item :data="item" type="short" :showPinAction="false" />
-      </entry-item-wrapper>
+  <items-list type="entries" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <entry-item v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <entry-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <entry-item type="short" />
-      </entry-item-wrapper>
-    </template>
-  </entries-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('errors.empty_feed.icon')"
@@ -30,9 +21,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Placeholder, Spacer, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder } from '@vue-norma/ui'
 
-import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
+import { EntryItem } from '@/components/entry'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'feed-custom-entries',
@@ -43,11 +35,11 @@ export default {
     }
   },
   components: {
-    EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
-    Placeholder, Spacer, NButton, LoadmoreTrigger
+    Placeholder, EntryItem
   },
-  data() {
-    return { }
+  setup() {
+    const humanizeError = useHumanizeError()
+    return { humanizeError }
   },
   computed: {
     ...mapState('feed/custom/entries', [ 'data', 'filters', 'loading', 'error' ]),
@@ -73,7 +65,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

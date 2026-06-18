@@ -41,6 +41,10 @@ export default {
       type: String,
       default: null,
     },
+    invalid: {
+      type: Boolean,
+      default: false
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -55,6 +59,7 @@ export default {
         'n-radio',
         {
           'n-radio--checked': this.checked,
+          'n-radio--invalid':  this.invalid,
           'n-radio--disabled': this.disabled,
         }
       ]
@@ -91,7 +96,7 @@ export default {
   --n-radio__control--background-checked: var(--x-color-pink--tint10);
   --n-radio__control--border-color-checked: var(--x-color-pink);
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --n-radio__control--background: rgba(255,255,255,0.1);
     --n-radio__control--border-color: rgba(255,255,255,0.06);
 
@@ -104,10 +109,11 @@ export default {
 .n-radio {
   $p: #{&};
 
+  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 8px;
+  min-height: 2rem;
   cursor: pointer;
 
   &--checked {
@@ -127,12 +133,30 @@ export default {
     cursor: not-allowed;
   }
 
+  // Нативный элемент
   &__input {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
     pointer-events: none;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &__description {
+    font-size: 13px;
+    line-height: 1.5;
   }
 
   &__control {
@@ -145,7 +169,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.15s, background-color 0.15s;
+    transition: border-color 0.1s linear, background-color 0.1s linear;
     background: var(--n-radio__control--background);
   }
 
@@ -156,25 +180,7 @@ export default {
     background: var(--n-radio__control--color-checked);
     opacity: 0;
     transform: scale(0.5);
-    transition: opacity 0.15s, transform 0.15s;
+    transition: opacity 0.1s linear, transform 0.1s linear;
   }
-}
-
-/* Text content */
-.n-radio__content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.n-radio__label {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.n-radio__description {
-  font-size: 13px;
-  line-height: 1.5;
 }
 </style>

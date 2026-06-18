@@ -65,6 +65,7 @@
 
 <script>
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 
 export default {
   name: 'notification-item',
@@ -85,6 +86,10 @@ export default {
         info: Math.floor(Math.random() * 100) + 50
       }
     }
+  },
+  setup() {
+    const { timeAgo } = useTimeAgo()
+    return { timeAgo }
   },
   computed: {
     link() {
@@ -151,7 +156,7 @@ export default {
       return { name: 'entry', params: { uuid: this.data.entry_uuid }, query: { comment: this.data.comment_id } }
     },
     formatedDate() {
-      return this.$filters.timeAgo(this.data.meta.date_added, this.$i18n.locale)
+      return this.timeAgo(this.data.meta.date_added)
     }
   },
   methods: {

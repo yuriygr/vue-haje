@@ -11,13 +11,24 @@
     },
     "theme": {
       "white": "Tema claro",
-      "black": "Tema escuro"
+      "black": "Tema escuro",
+      "void": "Tema vazio"
     },
     "density": {
       "compact": "Compacto",
       "default": "Padrão",
       "spacious": "Espaçoso"
     }
+  },
+  "time_ago": {
+    "now": "agora mesmo",
+    "about_a_minute": "há cerca de um minuto",
+    "seconds": "há {n} segundos | há {n} segundo | há {n} segundos",
+    "minutes": "há {n} minutos | há {n} minuto | há {n} minutos",
+    "hours":   "há {n} horas | há {n} hora | há {n} horas",
+    "yesterday_at": "ontem às {hours}:{minutes}",
+    "short":        "{day} {month} às {hours}:{minutes}",
+    "full":         "{day} {month} {year} às {hours}:{minutes}"
   },
   "header": {
     "nav": {
@@ -79,7 +90,7 @@
     "title": "Menu",
     "item": {
       "feeds": "@:feeds.title",
-      "bookmarks": "@:bookmarks.title",
+      "bookmarks": "@:bookmarks.title.all",
       "settings": "@:settings.title",
       "support": "@:support.title",
       "help": "@:help.title",
@@ -87,13 +98,6 @@
       "donate": "@:donate.title",
       "login": "Entrar",
       "logout": "Sair"
-    }
-  },
-  "feeds": {
-    "title": "Notícias",
-    "tabs": {
-      "subscribed": "Мои ленты",
-      "manage": "Управление"
     }
   },
   "settings": {

@@ -1,32 +1,14 @@
 import mitt from 'mitt';
 
 /**
- * Небольшая обертка над Mitt.
- * Потому что мне так удобно.
- * 
- * @author Боженька <god@heaven>
- * @version 1.0.1
+ * Устанавливаем mitt как глобальное свойство
  */
-export default new class {
-	bus = false
+export default {
+  install(app, methods = {}) {
+    const bus = mitt()
 
-	install(app, methods = {}) {
-		this.bus = mitt()
+    Object.assign(bus, methods)
 
-		Object.assign(this, methods)
-	
-		app.config.globalProperties.$bus = this
-	}
-
-	emit(id, payload) {
-		this.bus.emit(id, payload)
-	}
-
-	on(id, callback) {
-		this.bus.on(id, callback)
-	}
-
-	off(id) {
-		this.bus.off(id)
-	}
+    app.config.globalProperties.$bus = bus
+  }
 }

@@ -23,7 +23,7 @@
 
       <form-text align="center">
         <i18n-t keypath="auth.forgot.help">
-          <router-link :to="{ name: 'help-page', params: { uuid: 'contacts' } }">{{ $t('auth.forgot.contact_us') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'contacts' } }">{{ $t('auth.forgot.contact_us') }}</router-link>
         </i18n-t>
       </form-text>
     </form-group>

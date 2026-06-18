@@ -19,6 +19,7 @@
 
 <script>
 import { Modal, ModalHeader, ModalBody, NButton } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'entry-delete-modal',
@@ -35,6 +36,10 @@ export default {
       default: () => {}
     }
   },
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       loading: false
@@ -46,7 +51,7 @@ export default {
 
       this.deleteEntry()
       .then(() => {
-        this.$modals.close()
+        this.modals.close()
       })
       .catch()
       .finally(() => {
@@ -54,12 +59,8 @@ export default {
       })
     },
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

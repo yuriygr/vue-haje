@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { NavigationSection, NavigationItem, NavigationTitle } from '@vue-norma/ui'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
 export default {
   name: 'settngs-menu',
@@ -30,8 +30,13 @@ export default {
       }
     }
   },
+  setup() {
+    const authStore = useAuthStore()
+
+    return { authStore }
+  },
   computed: {
-    ...mapGetters('auth', [ 'isAuth' ]),
+    isAuth() { return this.authStore.isAuth },
     sections() {
       let base = [
         {

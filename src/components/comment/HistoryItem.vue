@@ -4,7 +4,7 @@
       <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
       <meta-info class="comment-history__meta" :items="metaItems" />
     </div>
-    <div v-if="data.content" class="comment-history__content" v-linkified="data.content.text" />
+    <div v-if="data.content" class="comment-history__content" v-markup="data.content.text" />
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 import { MetaInfo } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 
 export default {
   name: 'comment-history-item',
@@ -24,10 +25,9 @@ export default {
       type: Object
     }
   },
-  data() {
-    return {
-
-    }
+  setup() {
+    const { timeAgo } = useTimeAgo()
+    return { timeAgo }
   },
   computed: {
     metaItems() {
@@ -38,11 +38,8 @@ export default {
       return _result
     },
     formatedDate() {
-      return this.$filters.timeAgo(this.data.content.date_added, this.$i18n.locale)
+      return this.timeAgo(this.data.content.date_added)
     }
-  },
-  methods: {
- 
   }
 }
 </script>

@@ -14,27 +14,18 @@
 
   <spacer height="15" />
 
-  <helps-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <help-item-wrapper v-for="item in data" :key="`help-${item.page_id}`" v-memo="[item.page_id]">
-        <help-item :data="item" />
-      </help-item-wrapper>
+  <items-list type="helps" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <help-item v-for="item in data" :key="`help-${item.page_id}`" v-memo="[item.page_id]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <help-item v-for="index in 7" :key="`item-${index}`" />
     </template>
-
-    <template v-else-if="loading">
-      <help-item-wrapper v-for="index in 7" :key="`item-${index}`">
-        <help-item />
-      </help-item-wrapper>
-    </template>
-  </helps-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('help.empty.icon')"
@@ -46,14 +37,14 @@
 <script>
 import { Placeholder, Spacer } from '@vue-norma/ui'
 
-import { HelpsList, HelpItem, HelpItemWrapper } from '@/components/help'
+import { HelpItem } from '@/components/help'
 import { useHelpPagesStore } from '@/app/components/stores/modules/help'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'help-pages',
   components: {
-    HelpsList, HelpItem, HelpItemWrapper,
-    Placeholder, Spacer
+    Placeholder, Spacer, HelpItem
   },
   meta() { return this.meta },
   data() {
@@ -65,7 +56,8 @@ export default {
   },
   setup() {
     const store = useHelpPagesStore()
-    return { store }
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

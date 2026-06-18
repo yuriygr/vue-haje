@@ -9,9 +9,9 @@
     <placeholder-loading v-if="loading" />
     <placeholder v-if="(!loading && !error)" :text="$t('help.errors.empty_page')" />
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
   </template>
 </template>
@@ -20,6 +20,8 @@
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
 import { useHelpPageStore } from '@/app/components/stores/modules/help'
+import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'help-page',
@@ -42,7 +44,9 @@ export default {
   },
   setup() {
     const store = useHelpPageStore()
-    return { store }
+    const { timeAgo } = useTimeAgo()
+    const humanizeError = useHumanizeError()
+    return { store, timeAgo, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -51,10 +55,13 @@ export default {
     isEmpty()      { return this.store.isEmpty },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$t('help.meta.edited', { date: this.$filters.timeAgo(this.data.meta.date_edited, this.$i18n.locale) }) })
+      _result.push({ label: this.$t('help.meta.edited', { date: this.formatedDate }) })
 
       return _result
     },
+    formatedDate() {
+      return this.timeAgo(this.data.meta.date_edited)
+    }
   },
   mounted() {
     this.store.fetch(this.slug)
@@ -75,7 +82,7 @@ export default {
     },
     error(to) {
       if (to)
-        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
+        this.meta.title = this.humanizeError(to).title
     }
   }
 }

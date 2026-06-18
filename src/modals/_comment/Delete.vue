@@ -19,6 +19,7 @@
 
 <script>
 import { Modal, ModalHeader, ModalBody, NButton } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'comment-delete-modal',
@@ -30,6 +31,10 @@ export default {
       type: Function,
       default: () => {}
     }
+  },
+  setup() {
+    const modals = useModals()
+    return { modals }
   },
   data() {
     return {
@@ -43,16 +48,12 @@ export default {
       this.deleteComment()
       .then(_ => {
         this.loading = false
-        this.$modals.close()
+        this.modals.close()
       })
     },
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

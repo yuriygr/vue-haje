@@ -11,13 +11,24 @@
     },
     "theme": {
       "white": "Светлая тема",
-      "black": "Темная тема"
+      "black": "Темная тема",
+      "void": "Пустотная тема"
     },
     "density": {
       "compact": "Компактная",
       "default": "Стандартная",
       "spacious": "Просторная"
     }
+  },
+  "time_ago": {
+    "now": "только что",
+    "about_a_minute": "около минуты назад",
+    "seconds": "{n} секунд назад | {n} секунда назад | {n} секунды назад | {n} секунд назад",
+    "minutes": "{n} минут назад | {n} минута назад | {n} минуты назад | {n} минут назад",
+    "hours":   "{n} часов назад | {n} час назад | {n} часа назад | {n} часов назад",
+    "yesterday_at": "вчера в {hours}:{minutes}",
+    "short":        "{day} {month} в {hours}:{minutes}",
+    "full":         "{day} {month} {year} в {hours}:{minutes}"
   },
   "header": {
     "nav": {
@@ -102,7 +113,7 @@
     "title": "Меню",
     "item": {
       "feeds": "@:feeds.title",
-      "bookmarks": "@:bookmarks.title",
+      "bookmarks": "@:bookmarks.title.all",
       "settings": "@:settings.title",
       "support": "@:support.title",
       "help": "@:help.title",
@@ -370,7 +381,7 @@
     "entry_reported": "Жалоба на пост отправлена",
     "entry_pinned": "Запись закреплена",
     "entry_unpinned": "Запись откреплена",
-    "entry_empty_text": "Пост обязан иметь текст",
+    "entry_empty_text_or_file": "Напишите что-нибудь или прикрепите файл",
     "entry_empty_uuid": "Укажите UUID поста",
     "entry_not_owned_by_user": "Запись не принадлежит текущему пользователю",
     "entry_comments_disabled": "Комментарии под записью отключены",
@@ -469,6 +480,9 @@
     "confirm": "Выйти без сохранения?",
     "add_comment": "Отправить",
     "save_comment": "Сохранить"
+  },
+  "state": {
+    "loading": "Загрузка..."
   },
   "report": {
     "reason": {

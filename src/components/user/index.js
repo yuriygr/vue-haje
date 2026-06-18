@@ -1,5 +1,3 @@
-export { default as UsersList } from '@/components/user/List'
 export { default as UserItem } from '@/components/user/Item'
-export { default as UserItemWrapper } from '@/components/user/ItemWrapper'
 export { default as UserBadge } from '@/components/user/Badge'
 export { default as UserCard } from '@/components/user/Card'

@@ -1,3 +1,20 @@
 {
-  "title": "Помощь и поддержка"
+  "title": "Help and Support",
+  "tickets": "Created Tickets",
+  "ticket": "Ticket",
+  "field": {
+    "subject": "Subject",
+    "category": "Category",
+    "message": "Message"
+  },
+  "empty": {
+    "icon": "ghost-line",
+    "title": "No tickets",
+    "description": "Most likely, you haven't had any problems yet"
+  },
+  "empty_ticket": {
+    "icon": "ghost-line",
+    "title": "No ticket",
+    "description": "You couldn't have seen this notification; there was no way"
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <template v-if="(!loading && !error) && Object.keys(data).length > 0">
+  <template v-if="(!loading && !error) && !isEmpty">
     <tag-card :data="data" />
 
     <separator />
@@ -11,71 +11,61 @@
     </router-view>
   </template>
 
-  <template v-if="Object.keys(data).length == 0">
+  <template v-if="isEmpty">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
   </template>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
+import { storeToRefs } from 'pinia'
 
 import { TagCard } from '@/components/tag'
 import { useTagStore } from '@/app/components/stores/modules/tag'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'tag',
-  props: {
-    slug: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: { TagCard, Placeholder, PlaceholderLoading, Separator },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('tag.title'),
-      },
-    }
-  },
-  setup() {
-    const store = useTagStore()
-    return { store }
-  },
-  computed: {
-    data()         { return this.store.data },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    isEmpty()      { return this.store.isEmpty },
-  },
-  methods: { },
-  mounted() {
-    this.store.fetch(this.slug)
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    slug(to) {
-      if (to) {
-        this.store.clear()
-        this.store.fetch(to)
-      }
-    },
-    data(to) {
-      if (to)
-        this.meta.title = `#${to.slug}`
-    },
-    error(to) {
-      if (to)
-        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
-    }
+const props = defineProps({
+  slug: {
+    type: [Boolean, String],
+    default: false
   }
-}
+})
+
+const { t } = useI18n()
+const store = useTagStore()
+const humanizeError = useHumanizeError()
+const { data, loading, error, isEmpty } = storeToRefs(store)
+
+const title = ref(t('tag.title'))
+
+useMeta(() => ({ title: title.value }))
+
+watch(() => props.slug, (to) => {
+  if (to) {
+    store.clear()
+    store.fetch(to)
+  }
+})
+
+watch(data, (to) => {
+  if (to) title.value = `#${to.slug}`
+})
+
+watch(error, (to) => {
+  if (to) title.value = humanizeError(to).title
+})
+
+onMounted(() => {
+  title.value = `#${props.slug}`
+  store.fetch(props.slug)
+})
+onBeforeUnmount(() => store.clear())
 </script>

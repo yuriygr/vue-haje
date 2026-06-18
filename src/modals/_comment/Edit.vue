@@ -21,6 +21,7 @@
 
 <script>
 import { Modal, ModalHeader, ModalBody, NButton, Placeholder } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
 export default {
   name: 'comment-edit-modal',
@@ -33,6 +34,10 @@ export default {
       default: false
     }
   },
+  setup() {
+    const modals = useModals()
+    return { modals }
+  },
   data() {
     return {
       loading: false
@@ -40,12 +45,8 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$modals.close()
+      this.modals.close()
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-</style>

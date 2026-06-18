@@ -1,106 +1,90 @@
 <template>
-  <template v-if="!emptyData">
-    <group v-if="data.users.length > 0">
-      <n-header>{{ $t('bookmarks.section.users') }}</n-header>
+  <group v-if="data.users.length > 0 || loading">
+    <n-header>{{ $t('bookmarks.section.users') }}</n-header>
 
-      <users-list>
-        <user-item-wrapper v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
-          <user-item :data="item" />
-        </user-item-wrapper>
-      </users-list>
+    <items-list type="users" v-if="data.users.length > 0 || loading" :has-data="data.users.length > 0" :loading="loading">
+      <user-item v-for="item in data.users" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]" :data="item" />
 
-      <spacer height="20" />
+      <template #skeleton>
+        <user-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-users' }">{{ $t('action.show_more') }}</n-button>
-    </group>
+    <spacer height="20" />
 
-    <group v-if="data.entries.length > 0">
-      <n-header>{{ $t('bookmarks.section.entries') }}</n-header>
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="{ name: 'bookmarks-users' }">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <entries-list>
-        <entry-item-wrapper v-for="item in data.entries" :key="`entry-${item.uuid}`">
-          <entry-item :data="item" type="short" />
-        </entry-item-wrapper>
-      </entries-list>
+  <group v-if="data.entries.length > 0 || loading">
+    <n-header>{{ $t('bookmarks.section.entries') }}</n-header>
 
-      <spacer height="20" />
+    <items-list type="entries" :has-data="data.entries.length > 0" :loading="loading">
+      <entry-item v-for="item in data.entries" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" type="short" />
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
-    </group>
+      <template #skeleton>
+        <entry-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-    <group v-if="data.comments.length > 0">
-      <n-header>{{ $t('bookmarks.section.comments') }}</n-header>
+    <spacer height="20" />
 
-      <div class="comments-list">
-        <comment-item-wrapper v-for="item in data.comments" :key="`comment-${item.comment_id}`">
-          <comment-item :data="item" replyButton="link" />
-        </comment-item-wrapper>
-      </div>
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="{ name: 'bookmarks-entries' }">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <spacer height="20" />
+  <group v-if="data.feeds.length > 0 || loading">
+    <n-header>{{ $t('bookmarks.section.feeds') }}</n-header>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-comments' }">{{ $t('action.show_more') }}</n-button>
-    </group>
+    <items-list type="feeds" :has-data="data.feeds.length > 0" :loading="loading">
+      <feed-item v-for="item in data.feeds" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]" :data="item" />
 
-    <group v-if="data.feeds.length > 0">
-      <n-header>{{ $t('bookmarks.section.feeds') }}</n-header>
+      <template #skeleton>
+        <feed-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
 
-      <feeds-list>
-        <feed-item-wrapper v-for="item in data.feeds" :key="`feed-${item.feed_id}`" v-memo="[item.feed_id]">
-          <feed-item :data="item" type="short" />
-        </feed-item-wrapper>
-      </feeds-list>
+    <spacer height="20" />
 
-      <spacer height="20" />
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="{ name: 'bookmarks-feeds' }">{{ $t('action.show_more') }}</n-button>
+  </group>
 
-      <n-button component="router-link"  mode="secondary" active-class="" exact-active-class="" :to="{ name: 'bookmarks-feeds' }">{{ $t('action.show_more') }}</n-button>
-    </group>
-  </template>
+  <group v-if="data.comments.length > 0 || loading">
+    <n-header>{{ $t('bookmarks.section.comments') }}</n-header>
 
-  <template v-if="emptyData">
-    <template v-if="loading">
-      <group>
-        <n-header><skeleton :width="80" :height="12" /></n-header>
-        <users-list>
-          <user-item-wrapper v-for="index in 5" :key="`user-skeleton-${index}`">
-            <user-item />
-          </user-item-wrapper>
-        </users-list>
-      </group>
-      <group>
-        <n-header><skeleton :width="91" :height="12" /></n-header>
-        <entries-list>
-          <entry-item-wrapper v-for="index in 5" :key="`entry-skeleton-${index}`">
-            <entry-item />
-          </entry-item-wrapper>
-        </entries-list>
-      </group>
-    </template>
-    <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
-    />
-    <placeholder v-else
-      :icon="$t('bookmarks.empty.icon')"
-      :header="$t('bookmarks.empty.title')"
-      :text="$t('bookmarks.empty.description')"
-    />
-  </template>
+    <items-list type="comments" :has-data="data.feeds.length > 0" :loading="loading">
+      <comment-item v-for="item in data.comments" :key="`comment-${item.comment_id}`" v-memo="[item.comment_id]" :data="item" replyButton="link" />
+
+      <template #skeleton>
+        <comment-item v-for="index in 5" :key="`item-${index}`" />
+      </template>
+    </items-list>
+
+    <spacer height="20" />
+
+    <n-button component="router-link"  mode="secondary" :disabled="loading" active-class="" exact-active-class="" :to="{ name: 'bookmarks-comments' }">{{ $t('action.show_more') }}</n-button>
+  </group>
+
+  <placeholder v-if="error"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
+  />
+  <placeholder v-else-if="emptyData && !loading"
+    :icon="$t('search.empty.icon')"
+    :header="$t('search.empty.title')"
+    :text="$t('search.empty.description')"
+  />
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import {
-  NHeader,
-  Placeholder, PlaceholderLoading, Separator, Spacer,
-  Group, NButton
-} from '@vue-norma/ui'
+import { NHeader, Placeholder, PlaceholderLoading, Separator, Spacer, Group, NButton } from '@vue-norma/ui'
 
-import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
-import { EntriesList, EntryItem, EntryItemWrapper } from '@/components/entry'
-import { CommentItem, CommentItemWrapper } from '@/components/comment'
-import { FeedsList, FeedItem, FeedItemWrapper } from '@/components/feed'
+import { EntryItem } from '@/components/entry'
+import { CommentItem } from '@/components/comment'
+import { UserItem } from '@/components/user'
+import { FeedItem } from '@/components/feed'
+
+import { useBookmarksAllStore } from '@/app/components/stores/modules/bookmarks'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'bookmarks-all',
@@ -108,17 +92,34 @@ export default {
     NHeader,
     Placeholder, PlaceholderLoading, Separator, Spacer,
     Group, NButton,
-    UsersList, UserItem, UserItemWrapper,
-    EntriesList, EntryItem, EntryItemWrapper,
-    CommentItem, CommentItemWrapper,
-    FeedsList, FeedItem, FeedItemWrapper
+    UserItem,
+    EntryItem,
+    CommentItem,
+    FeedItem
+  },
+  meta() { return this.meta },
+  data() {
+    return {
+      meta: {
+        title: this.$t('bookmarks.title.all')
+      }
+    }
+  },
+  setup() {
+    const store = useBookmarksAllStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
-    ...mapState('bookmarks/all', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('bookmarks/all', [ 'emptyData' ])
-  },
-  data() {
-    return { }
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    emptyData()    {
+      return (
+        this.data.entries.length + this.data.users.length + this.data.comments.length + this.data.feeds.length
+      ) == 0
+    },
   },
   methods: {
     formatLink(tab = false) {
@@ -126,15 +127,10 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('bookmarks/all/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('bookmarks/all/clear')
-  },
-  watch: {}
+    this.store.clear()
+  }
 }
 </script>
-
-<style>
-
-</style>

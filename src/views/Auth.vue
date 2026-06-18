@@ -7,9 +7,7 @@
 </template>
 
 <script>
-export default {
-  name: 'auth'
-}
+export default { name: 'auth' }
 </script>
 
 <style lang="scss">

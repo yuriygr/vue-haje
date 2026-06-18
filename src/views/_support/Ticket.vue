@@ -6,9 +6,9 @@
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
-      :icon="$t($filters.humanizeError(error).icon)"
-      :header="$t($filters.humanizeError(error).title)"
-      :text="$t($filters.humanizeError(error).description)"
+      :icon="humanizeError(error).icon"
+      :header="humanizeError(error).title"
+      :text="humanizeError(error).description"
     />
     <placeholder v-else
       :icon="$t('support.empty_ticket.icon')"
@@ -22,6 +22,7 @@
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
 import { useSupportTicketStore } from '@/app/components/stores/modules/support'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'support-ticket',
@@ -44,7 +45,8 @@ export default {
   },
   setup() {
     const store = useSupportTicketStore()
-    return { store }
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -71,7 +73,7 @@ export default {
     },
     error(to) {
       if (to)
-        this.meta.title = this.$t(this.$filters.humanizeError(this.error).title)
+        this.meta.title = this.humanizeError(to).title
     }
   }
 }

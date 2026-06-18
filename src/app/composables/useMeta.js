@@ -1,11 +1,10 @@
-import { watch, onMounted, onActivated, getCurrentInstance } from 'vue'
+import { watchEffect, onMounted, onActivated } from 'vue'
 
 let globalOptions = {
   defaultTitle: false,
   separator: '-'
 }
 
-// Вызывается один раз при install, чтобы пробросить options из app.use(meta, {...})
 export function setMetaOptions(options) {
   globalOptions = { ...globalOptions, ...options }
 }
@@ -42,36 +41,11 @@ function applyAll(meta) {
 export function useMeta(metaFn) {
   onMounted(() => applyAll(metaFn()))
   onActivated(() => applyAll(metaFn()))
-  watch(metaFn, applyAll, { deep: true })
+  watchEffect(() => applyAll(metaFn()))
 
   return {
-    setTitle: (value) => applyTitle(value),
+    setTitle: applyTitle,
     setMeta: applyMeta,
     setDataset: applyDataset
   }
 }
-
-/*
-import { setMetaOptions } from '@/composables/useMeta'
-
-install(app, options = {}) {
-  const merged = { ...this.defaultOptions, ...options }
-  setMetaOptions(merged)
-  app.mixin(this.createMixin(merged)) // старый миксин пока оставляем
-}
-
-
-import { useMeta } from '@/composables/useMeta'
-import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
-
-const { t } = useI18n()
-const title = ref(t('feed.tabs.timeline'))
-
-const { setTitle } = useMeta(() => ({ title: title.value }))
-
-// поменять из метода:
-title.value = t('feed.tabs.other')
-// или напрямую:
-setTitle(t('feed.tabs.other'))
-*/

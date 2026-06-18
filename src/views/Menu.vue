@@ -1,6 +1,6 @@
 <template>
-  <router-link v-if="session_data.user" :to="{ name: 'user', params: { username: session_data.user.username } }" class="user-item-button">
-    <user-item :data="session_data.user" :clickable="false" :showSubscribeAction="false" />
+  <router-link v-if="authData.user" :to="{ name: 'user', params: { username: authData.user.username } }" class="user-item-button">
+    <user-item :data="authData.user" :clickable="false" :showSubscribeAction="false" />
     <div class="user-item-button__chevron">
       <icon name="chevron-line" size="18" />
     </div>
@@ -8,7 +8,7 @@
 
   <spacer height="15" />
 
-  <template v-for="(section, index) in sections" :key="`section-${index}`">
+  <template v-for="(section, index) in menu" :key="`section-${index}`">
     <navigation-section>
       <template v-for="(item, jndex) in section.items" :key="`section-${index}-item-${jndex}`">
         <navigation-item :icon="item.icon" :to="item.to" :chevron="item.chevron" :disabled="item.disabled">
@@ -19,104 +19,93 @@
   </template>
 </template>
 
-<script>
-import { mapState, mapGetters } from 'vuex'
+<script setup>
+import { computed } from 'vue'
 import { NavigationSection, NavigationItem, Icon, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+import { useMeta } from '@/app/composables/useMeta'
 
 import { UserItem } from '@/components/user'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
 
-export default {
-  name: 'menu',
-  components: {
-    UserItem,
-    NavigationSection, NavigationItem, Icon, Spacer
+const { t } = useI18n()
+const authStore = useAuthStore()
+
+useMeta(() => ({ title: t('menu.title') }))
+
+const authData = computed(() => authStore.data)
+const isAuth = computed(() => authStore.isAuth)
+
+const sections = computed(() => [
+  {
+    icon: 'feeds-line',
+    label: t('menu.item.feeds'),
+    to: { name: 'feeds' },
+    disabled: !isAuth.value,
+    chevron: true
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('menu.title')
-      }
-    }
+  {
+    icon: 'bookmarks-line',
+    label: t('menu.item.bookmarks'),
+    to: { name: 'bookmarks' },
+    disabled: !isAuth.value,
+    chevron: true
   },
-  computed: {
-    ...mapGetters('auth', [ 'isAuth' ]),
-    ...mapState('auth', {
-      'session_data': state => state.data
-    }),
-    sections() {
-      let sections = [
-        {
-          icon: 'feeds-line',
-          label: this.$t('menu.item.feeds'),
-          to: { name: 'feeds' },
-          disabled: !this.isAuth,
-          chevron: true
-        },
-        {
-          icon: 'bookmarks-line',
-          label: this.$t('menu.item.bookmarks'),
-          to: { name: 'bookmarks' },
-          disabled: !this.isAuth,
-          chevron: true
-        },
-        {
-          icon: 'settings-line',
-          label: this.$t('menu.item.settings'),
-          to: { name: 'settings' },
-          chevron: true
-        },
-        {
-          icon: 'charity-line',
-          label: this.$t('menu.item.donate'),
-          to: { name: 'donate' },
-          chevron: true
-        }
-      ]
-
-      let main = [
-        {
-          icon: 'support-line',
-          label: this.$t('menu.item.support'),
-          to: { name: 'support' },
-          chevron: true
-        },
-        {
-          icon: 'help-line',
-          label: this.$t('menu.item.help'),
-          to: { name: 'helps' },
-          chevron: true
-        },
-        {
-          icon: 'about-line',
-          label: this.$t('menu.item.about'),
-          to: { name: 'about' },
-          chevron: true
-        }
-      ]
-
-      let last = [
-        this.session_data.is_auth ? {
-          icon: 'logout-line',
-          label: this.$t('menu.item.logout'),
-          to: { name: 'auth-logout' },
-          chevron: false
-        } : {
-          icon: 'login-line',
-          label: this.$t('menu.item.login'),
-          to: { name: 'auth-login' },
-          chevron: true
-        }
-      ]
-
-      return [
-        { items: sections },
-        { items: main },
-        { items: last }
-      ]
-    }
+  {
+    icon: 'settings-line',
+    label: t('menu.item.settings'),
+    to: { name: 'settings' },
+    chevron: true
+  },
+  {
+    icon: 'charity-line',
+    label: t('menu.item.donate'),
+    to: { name: 'donate' },
+    chevron: true
   }
-}
+])
+
+const main = computed(() => [
+  {
+    icon: 'support-line',
+    label: t('menu.item.support'),
+    to: { name: 'support' },
+    disabled: !isAuth.value,
+    chevron: true
+  },
+  {
+    icon: 'help-line',
+    label: t('menu.item.help'),
+    to: { name: 'helps' },
+    chevron: true
+  },
+  {
+    icon: 'about-line',
+    label: t('menu.item.about'),
+    to: { name: 'about' },
+    chevron: true
+  }
+])
+
+const last = computed(() => [
+  isAuth.value ? {
+    icon: 'logout-line',
+    label: t('menu.item.logout'),
+    to: { name: 'auth-logout' },
+    chevron: false
+  } : {
+    icon: 'login-line',
+    label: t('menu.item.login'),
+    to: { name: 'auth-login' },
+    chevron: true
+  }
+])
+
+const menu = computed(() => [
+  { items: sections.value },
+  { items: main.value },
+  { items: last.value }
+])
 </script>
 
 <style lang="scss">
@@ -126,7 +115,7 @@ export default {
   --user-item-button__chevron--color: #adb5bd;
   --user-item-button__chevron--color-hover: #212529;
 
-  html[data-theme='black'] & {
+  html[data-theme="black"] & {
     --user-item-button--background: transparent;
     --user-item-button--background-hover: #1f1f1f;
     --user-item-button__chevron--color: #666;

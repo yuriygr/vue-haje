@@ -11,13 +11,24 @@
     },
     "theme": {
       "white": "ライトテーマ",
-      "black": "ダークテーマ"
+      "black": "ダークテーマ",
+      "void": "ボイドテーマ"
     },
     "density": {
       "compact": "コンパクト",
       "default": "スタンダード",
       "spacious": "広々とした"
     }
+  },
+  "time_ago": {
+    "now": "たった今",
+    "about_a_minute": "約1分前",
+    "seconds": "{n}秒前",
+    "minutes": "{n}分前",
+    "hours":   "{n}時間前",
+    "yesterday_at": "昨日 {hours}:{minutes}",
+    "short":        "{month}{day}日 {hours}:{minutes}",
+    "full":         "{year}年{month}月{day}日 {hours}:{minutes}"
   },
   "header": {
     "nav": {
@@ -101,7 +112,7 @@
     "title": "メニュー",
     "item": {
       "feeds": "@:feeds.title",
-      "bookmarks": "@:bookmarks.title",
+      "bookmarks": "@:bookmarks.title.all",
       "settings": "@:settings.title",
       "support": "@:support.title",
       "help": "@:help.title",

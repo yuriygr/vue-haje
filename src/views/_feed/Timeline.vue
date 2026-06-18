@@ -4,27 +4,18 @@
     <spacer height="30" />
   </template>
 
-  <entries-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <entry-item-wrapper v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]">
-        <entry-item :data="item" type="short" :showPinAction="false" />
-      </entry-item-wrapper>
+  <items-list type="entries" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <entry-item v-for="item in data" :key="`entry-${item.uuid}`" v-memo="[item.uuid]" :data="item" />
 
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+    <template #skeleton>
+      <entry-item v-for="index in 15" :key="`item-${index}`" />
     </template>
-  
-    <template v-else-if="loading">
-      <entry-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <entry-item type="short" />
-      </entry-item-wrapper>
-    </template>
-  </entries-list>
+  </items-list>
   
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('errors.empty_feed.icon')"
@@ -35,18 +26,20 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, Spacer, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+import { Placeholder, Spacer } from '@vue-norma/ui'
 
-import { EntriesList, EntryItem, EntryItemWrapper, EntryPseudoForm } from '@/components/entry'
+import { EntryItem, EntryPseudoForm } from '@/components/entry'
+import { useFeedTimelineStore } from '@/app/components/stores/modules/feed'
+import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useModals } from '@vue-norma/ui'
 
 const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
 export default {
   name: 'feed-timeline',
   components: {
-    EntriesList,EntryItem, EntryItemWrapper, EntryPseudoForm,
-    Placeholder, Spacer, NButton, LoadmoreTrigger,
+    Placeholder, Spacer, EntryItem, EntryPseudoForm,
   },
   meta() { return this.meta },
   data() {
@@ -56,26 +49,37 @@ export default {
       }
     }
   },
+  setup() {
+    const store = useFeedTimelineStore()
+    const authStore = useAuthStore()
+    const humanizeError = useHumanizeError()
+    const modals = useModals()
+    return { store, authStore, humanizeError, modals }
+  },
   computed: {
-    ...mapState('feed/timeline', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feed/timeline', [ 'hasMoreItems' ]),
-    ...mapGetters('auth', [ 'isAuth' ])
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
+
+    isAuth() { return this.authStore.isAuth },
   },
   methods: {
     openComposeModal(event) {
-      this.$modals.show(ComposeModal, {
+      this.modals.show(ComposeModal, {
         draggedFiles: event.dataTransfer ? [...event.dataTransfer.files] : []
       })
     },
     loadMore() {
-      this.$store.dispatch('feed/timeline/more')
+      this.store.more()
     }
   },
   mounted() {
-    this.$store.dispatch('feed/timeline/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('feed/timeline/clear')
+    this.store.clear()
   }
 }
 </script>

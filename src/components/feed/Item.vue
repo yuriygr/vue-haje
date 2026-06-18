@@ -44,9 +44,9 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { useModals } from '@vue-norma/ui'
 
-let FeedReportModal = defineAsyncComponent(() => import("@/modals/_feed/Report.vue"))
-
+let ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
 export default {
   name: 'feed-item',
@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       default: true
     }
+  },
+  setup() {
+    const modals = useModals()
+    return { modals }
   },
   data() {
     return {
@@ -191,8 +195,8 @@ export default {
       this.$popover.close()
     },
     report() {
-      this.$modals.show(FeedReportModal, {
-        reportFeed: this.reportFeed
+      this.modals.show(ReportModal, {
+        callback: this.reportFeed
       })
       this.$popover.close()
     }

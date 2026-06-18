@@ -1,5 +1,11 @@
-import { createListStore } from '@/app/components/stores/factory'
+import { createItemStore, createListStore } from '@/app/components/stores/factory'
 
+export const useBookmarksAllStore = createItemStore('bookmarks', () => 'my/bookmarks/all', {
+  users: [],
+  entries: [],
+  comments: [],
+  feeds: []
+})
 export const useBookmarksUsersStore = createListStore('bookmarks_users', 'my/bookmarks/users', { offset: 0 })
 export const useBookmarksEntriesStore = createListStore('bookmarks_entries', 'my/bookmarks/entries', { offset: 0 })
 export const useBookmarksCommentsStore = createListStore('bookmarks_comments', 'my/bookmarks/comments', { offset: 0 })

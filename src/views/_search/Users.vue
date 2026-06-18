@@ -1,25 +1,16 @@
 <template>
-  <users-list v-if="data.length > 0 || loading">
-    <template v-if="data.length > 0">
-      <user-item-wrapper v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]">
-        <user-item :data="item" />
-      </user-item-wrapper>
-      
-      <loadmore-trigger v-if="hasMoreItems" @intersected="loadMore" />
-      <n-button v-if="hasMoreItems" mode="secondary" @click.exact="loadMore" size="l" :stretched="true" :disabled="loading">{{ $t('action.load_more') }}</n-button>
+  <items-list type="users" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
+    <user-item v-for="item in data" :key="`user-short-${item.user_id}`" v-memo="[item.user_id]" :data="item" />
+
+    <template #skeleton>
+      <user-item v-for="index in 15" :key="`item-${index}`" />
     </template>
- 
-    <template v-else-if="loading">
-      <user-item-wrapper v-for="index in 15" :key="`item-${index}`">
-        <user-item />
-      </user-item-wrapper>
-    </template>
-  </users-list>
+  </items-list>
 
   <placeholder v-else-if="error"
-    :icon="$t($filters.humanizeError(error).icon)"
-    :header="$t($filters.humanizeError(error).title)"
-    :text="$t($filters.humanizeError(error).description)"
+    :icon="humanizeError(error).icon"
+    :header="humanizeError(error).title"
+    :text="humanizeError(error).description"
   />
   <placeholder v-else
     :icon="$t('search.empty.icon')"
@@ -29,19 +20,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { Placeholder, NHeader, NButton, LoadmoreTrigger } from '@vue-norma/ui'
-import { UsersList, UserItem, UserItemWrapper } from '@/components/user'
+import { Placeholder } from '@vue-norma/ui'
+
+import { UserItem } from '@/components/user'
+import { useSearchUsersStore } from '@/app/components/stores/modules/search'
+import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
   name: 'search-users',
   components: {
-    UsersList, UserItem, UserItemWrapper,
-    Placeholder, NHeader, NButton, LoadmoreTrigger
-  },
-  computed: {
-    ...mapState('search/users', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('search/users', [ 'hasMoreItems', 'emptyQuery', 'searching' ])
+    Placeholder, UserItem
   },
   meta() { return this.meta },
   data() {
@@ -51,24 +39,46 @@ export default {
       }
     }
   },
-  methods: {
-    loadMore() {
-      this.$store.dispatch('search/users/more')
+  setup() {
+    const store = useSearchUsersStore()
+    const humanizeError = useHumanizeError()
+    return { store, humanizeError }
+  },
+  computed: {
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
+
+    // TODO: Понять зачем это 
+    emptyQuery() {
+      return this.store.filters.query === ''
+    },
+    searching() {
+      return this.store.filters.query != ''
     }
   },
- async mounted() {
-    await this.$store.dispatch('search/users/setFilters', {
+  methods: {
+    loadMore() {
+      this.store.more()
+    }
+  },
+  mounted() {
+    this.store.setFilters({
       query: this.$route.query.q, offset: undefined
     })
-    await this.$store.dispatch('search/users/fetch')
+    this.store.fetch()
   },
   beforeUnmount() {
-    this.$store.dispatch('search/users/clear')
+    this.store.clear()
   },
   watch: {
-    async '$route.query.q'(to) {
-      await this.$store.dispatch('search/users/setFilters', { query: to, offset: undefined })
-      await this.$store.dispatch('search/users/fetch')
+    '$route.query.q'(to) {
+      this.store.setFilters({
+        query: to, offset: undefined
+      })
+      this.store.fetch()
     }
   }
 }
