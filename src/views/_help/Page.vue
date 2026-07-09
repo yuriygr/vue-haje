@@ -55,11 +55,11 @@ export default {
     isEmpty()      { return this.store.isEmpty },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$t('help.meta.edited', { date: this.formatedDate }) })
+      _result.push({ label: this.$t('help.meta.edited', { date: this.formattedDate }) })
 
       return _result
     },
-    formatedDate() {
+    formattedDate() {
       return this.timeAgo(this.data.meta.date_edited)
     }
   },

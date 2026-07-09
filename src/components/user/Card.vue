@@ -77,11 +77,11 @@ export default {
     metaItems() {
       let _result = []
 
-      _result.push({ label: this.$t('user.meta.from_date', { date: this.formatedDate }) })
+      _result.push({ label: this.$t('user.meta.from_date', { date: this.formattedDate }) })
 
       return _result
     },
-    formatedDate() {
+    formattedDate() {
       return timeFormatOnlyYear(this.localData.meta.date_added, this.$i18n.locale)
     },
     userLinkBinds() {

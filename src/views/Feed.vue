@@ -1,6 +1,6 @@
 <template>
   <tabs>
-    <template v-for="item in tabs" :key="`feed-tab-${item.key}`">
+    <template v-for="item in tab_items" :key="`feed-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.key == $route.meta.tab" :icon="item.icon">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -30,7 +30,7 @@ export default {
   computed: {
     cachedComponents() { return this.appStore.cachedComponents },
     
-    tabs() {
+    tab_items() {
       return [
         {
           key: 'timeline',

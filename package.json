@@ -1,25 +1,12 @@
 {
   "name": "vue-haje",
-  "productName": "Futubra",
-  "version": "1.11.7",
+  "version": "1.11.9",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode local",
     "build": "vue-cli-service build --mode prod",
     "analyze": "NODE_ENV=analyze npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yuriygr/vue-haje.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yuriygr/vue-haje/issues"
-  },
-  "sideEffects": [
-    "*.css",
-    "*.scss",
-    "*.vue"
-  ],
   "dependencies": {
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
     "@vue-norma/ui": "^3.0.4",
@@ -39,6 +26,7 @@
     "@intlify/unplugin-vue-i18n": "^1.2.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "compression-webpack-plugin": "^10.0.0",
     "sass": "^1.32.7",
@@ -47,5 +35,18 @@
     "vite-plugin-compression": "^0.5.1",
     "vue-tsc": "^3.2.4",
     "webpack-bundle-analyzer": "^5.3.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/yuriygr/vue-haje/issues"
+  },
+  "productName": "Futubra",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuriygr/vue-haje.git"
+  },
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "*.vue"
+  ]
 }

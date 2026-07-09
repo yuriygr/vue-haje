@@ -32,11 +32,11 @@ export default {
 
       this.data.state.is_official && _result.push({ label: this.$t('tag.meta.official') })
       this.data.state.is_nsfw && _result.push({ label: this.$t('tag.meta.nsfw') })
-      _result.push({ label: this.$t('tag.meta.from_date', { date: this.formatedDate }) })
+      _result.push({ label: this.$t('tag.meta.from_date', { date: this.formattedDate }) })
 
       return _result
     },
-    formatedDate() {
+    formattedDate() {
       return timeFormatOnlyYear(this.data.date_added, this.$i18n.locale)
     }
   },

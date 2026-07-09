@@ -12,6 +12,10 @@
       <div v-if="data.content.text" class="entry__content" v-markup="data.content.text" />
       <attachments class="entry__attachments" v-if="data.files || data.links" :files="data.files" :links="data.links" mode="full" />
       <meta-info class="entry__meta" :items="metaItems" />
+      <div v-if="data.pinned_comment && type == 'short'"  class="entry__pinned_comment">
+        <user-item :data="data.pinned_comment.user" :showSubscribeAction="false" mode="small"/>
+        <div class="pinned_comment__content" v-markup="data.pinned_comment.content.text" />
+      </div>
     </div>
   </template>
   
@@ -69,7 +73,10 @@ export default {
     },
     type: {
       type: String,
-      default: 'short'
+      default: 'short',
+      validator(value) {
+        return ['short', 'full'].includes(value)
+      }
     },
     showPinAction: {
       type: Boolean,
@@ -80,7 +87,6 @@ export default {
     return {
       isPopoverActive: false,
       loading: {
-        stars: false,
         bookmarks: false
       },
       skeletonWidths: {
@@ -104,7 +110,7 @@ export default {
       let _result = []
 
       this.data.state.is_comments_enabled && _result.push({ label: this.$t('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
-      _result.push({ label: this.formatedDate, to: this.entryLink, action: this.prefetchEntry })
+      _result.push({ label: this.formattedDate, to: this.entryLink, action: this.prefetchEntry })
       this.data.state.is_edited && _result.push({ label: this.$t('entry.meta.edited'), action: this.history })
 
       return _result
@@ -189,7 +195,7 @@ export default {
         }]
       ]
     },
-    formatedDate() {
+    formattedDate() {
       return this.type == 'short'
         ? this.timeAgo(this.data.meta.date_added)
         : this.fullDate(this.data.meta.date_added)
@@ -221,7 +227,9 @@ export default {
         this.data.user.state.me_subscribed = !(result.status == 'unsubscribed')
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      })
     },
     subscribe() {
       this.$api.post(`user/${this.data.user.username}/subscribe`)
@@ -229,7 +237,9 @@ export default {
         this.data.user.state.me_subscribed = (result.status == 'subscribed')
         this.$popover.close()
       })
-      .catch(error => this.$alerts.danger({ text: error.status }))
+      .catch(error => {
+        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      })
     },
 
     toggleBookmarks() {
@@ -329,6 +339,15 @@ export default {
 
 <style lang="scss">
 .entry {
+  --pinned_comment-border--color: rgba(0, 0, 0, 0.07); 
+
+  html[data-theme="black"] & {
+    --pinned_comment-border--color: rgba(255, 255, 255, 0.07); 
+  }
+}
+
+
+.entry {
   &__header {
     display: flex;
     justify-content: space-between;
@@ -341,17 +360,45 @@ export default {
     font-size: 1.5rem;
     line-height: calc(1.4 * 1em);
     word-break: break-word;
+    overflow: hidden;
     -webkit-font-smoothing: subpixel-antialiased;
     margin-bottom: .75rem;
   }
 
-  &__reactions {
-    justify-content: flex-start !important;
-    margin: 1rem 0;
-  }
-
   &__attachments {
     margin-bottom: 1rem;
+  }
+
+  &__pinned_comment {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding: .75rem;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    width: 100%;
+    border: 1px solid var(--pinned_comment-border--color);
+
+    @include on-mobile-device {
+      grid-template-columns: auto;
+      gap: .5rem;
+    }
+
+    .user-item {
+      margin-right: .75rem;
+    }
+
+    .pinned_comment__content {
+      font-size: 1.2rem;
+      line-height: 1.3em;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 </style>

@@ -54,13 +54,13 @@ const elClass = computed(() => [
   `badge-item--type-${props.data.type}`
 ])
 
-const formatedDate = computed(() =>
+const formattedDate = computed(() =>
   timeFormatOnlyYear(props.data.date_added, locale.value)
 )
 
 const metaItems = computed(() => [
   { label: t(`badge.type.${props.data.type}`) },
-  { label: t('badge.date', { date: formatedDate.value }) }
+  { label: t('badge.date', { date: formattedDate.value }) }
 ])
 </script>
 

@@ -12,7 +12,7 @@
         <template v-else>
           <div class="comment__header">
             <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
-            <div class="comment__author" v-if="entryAuthorID == data.user.user_id">{{ $t('comment.meta.author') }}</div>
+            <div class="comment__author" v-if="entryAuthorID === data.user.user_id">{{ $t('comment.meta.author') }}</div>
           </div>
           <div v-if="data.content.text" class="comment__content" v-markup="data.content.text" />
           <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
@@ -49,7 +49,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { Icon, NButton, MetaInfo } from '@vue-norma/ui'
+import { Icon, MetaInfo } from '@vue-norma/ui'
 
 import Attachments from '@/components/attachments'
 import { UserItem } from '@/components/user'
@@ -66,7 +66,7 @@ export default {
   name: 'comment-item',
   components: {
     UserItem, Attachments, CommentForm,
-    Icon, NButton, MetaInfo
+    Icon, MetaInfo
   },
   props: {
     data: {
@@ -91,8 +91,8 @@ export default {
       }
     },
     entryAuthorID: {
-      type: [ Boolean, Number ],
-      default: 0
+      type: Number,
+      default: null
     },
     maxBranchesLevel: {
       type: Number,
@@ -106,7 +106,6 @@ export default {
       isHighlighted:false,
 
       loading: {
-        stars: false,
         bookmarks: false
       },
       skeletonWidths: {
@@ -135,7 +134,7 @@ export default {
       this.replyButton == 'action' && _result.push({ label: this.$t('comment.meta.reply'), action: this.toggleReplyForm })
       this.replyButton == 'link' && _result.push({ label: this.$t('comment.meta.reply'), to: this.commentLink })
 
-      _result.push({ label: this.formatedDate, to: this.commentLink })
+      _result.push({ label: this.formattedDate, to: this.commentLink })
       
       this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
 
@@ -158,12 +157,12 @@ export default {
         {
           icon: 'ui-pencil',
           label: this.$t('action.edit'),
-          action: this.edit
+          action: this.startEdit
         },
         {
           icon: 'ui-delete',
           label: this.$t('action.delete'),
-          action: this.delete
+          action: this.openDeleteModal
         }
       ]
 
@@ -196,7 +195,7 @@ export default {
         ]
       ]
     },
-    formatedDate() {
+    formattedDate() {
       return this.timeAgo(this.data.meta.date_added)
     }
   },
@@ -281,11 +280,11 @@ export default {
       })
       this.$popover.close()
     },
-    edit() {
+    startEdit() {
       this.isEdit = true
       this.$popover.close()
     },
-    delete() {
+    openDeleteModal() {
       this.modals.show(CommentDeleteModal, {
         deleteComment: this.deleteComment
       })

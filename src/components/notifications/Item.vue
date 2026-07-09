@@ -143,7 +143,7 @@ export default {
     },
     metaItems() {
       let _result = []
-      _result.push({ label: this.formatedDate })
+      _result.push({ label: this.formattedDate })
       return _result
     },
     senderLink() {
@@ -155,7 +155,7 @@ export default {
     commentLink() {
       return { name: 'entry', params: { uuid: this.data.entry_uuid }, query: { comment: this.data.comment_id } }
     },
-    formatedDate() {
+    formattedDate() {
       return this.timeAgo(this.data.meta.date_added)
     }
   },

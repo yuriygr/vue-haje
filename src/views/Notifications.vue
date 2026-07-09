@@ -7,7 +7,7 @@
   <spacer height="15" />
 
   <tabs>
-    <template v-for="item in tabs" :key="`notification-tab-${item.key}`">
+    <template v-for="item in tab_items" :key="`notification-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.key === filters.tab">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -77,7 +77,7 @@ export default {
     error()        { return this.store.error },
     hasMoreItems() { return this.store.hasMoreItems },
 
-    tabs() {
+    tab_items() {
       return [
         { 
           key: 'all',
@@ -117,7 +117,7 @@ export default {
       ]
     },
     availableKeys() {
-      return this.tabs.map(el => el.key)
+      return this.tab_items.map(el => el.key)
     }
   },
   methods: {

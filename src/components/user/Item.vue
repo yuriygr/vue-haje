@@ -92,7 +92,7 @@ export default {
     return {
       sizes: {
         'hero': 120,
-        'normal': 55,
+        'normal': 70,
         'small': 40
       },
       skeletonWidths: {

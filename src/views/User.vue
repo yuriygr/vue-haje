@@ -5,7 +5,7 @@
     <spacer height="15" />
 
     <tabs>
-      <template v-for="item in tabItems" :key="`user-tab-${item.key}`">
+      <template v-for="item in tab_items" :key="`user-tab-${item.key}`">
         <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
       </template>
     </tabs>
@@ -58,7 +58,7 @@ const title = ref(t('user.title'))
 
 useMeta(() => ({ title: title.value }))
 
-const tabItems = computed(() => [
+const tab_items = computed(() => [
   {
     key: 'entries',
     to: { name: 'user', params: { username: props.username } },

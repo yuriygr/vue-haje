@@ -33,11 +33,11 @@ export default {
     metaItems() {
       let _result = []
 
-      _result.push({ label: this.formatedDate })
+      _result.push({ label: this.formattedDate })
 
       return _result
     },
-    formatedDate() {
+    formattedDate() {
       return this.timeAgo(this.data.content.date_added)
     }
   }

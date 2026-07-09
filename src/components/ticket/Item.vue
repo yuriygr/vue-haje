@@ -57,10 +57,10 @@ export default {
       let _result = []
       _result.push({ label: this.$t(`ticket.meta.status_${this.data.status}`) })
       _result.push({ label: this.$t(`ticket.meta.priority_${this.data.priority}`) })
-      _result.push({ label: this.formatedDate })
+      _result.push({ label: this.formattedDate })
       return _result
     },
-    formatedDate() {
+    formattedDate() {
       return this.timeAgo(this.data.meta.created_at)
     }
   }

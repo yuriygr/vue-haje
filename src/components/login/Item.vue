@@ -11,7 +11,7 @@
       </div>
       <div class="login-item__content">
         <div class="login-item__key">Дата:</div>
-        <div class="login-item__value">{{ formatedDate }}</div>
+        <div class="login-item__value">{{ formattedDate }}</div>
       </div>
     </div>
   </template>
@@ -60,7 +60,7 @@ const skeletonWidths = {
   ts: Math.floor(Math.random() * 100) + 50,
 }
 
-const formatedDate = computed(() => timeAgo(props.data.date_added))
+const formattedDate = computed(() => timeAgo(props.data.date_added))
 </script>
 
 <style lang="scss">
