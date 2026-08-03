@@ -19,7 +19,7 @@
 import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
-import { useUserSubscribersStore } from '@/app/components/stores/modules/user'
+import { useUserSubscribersStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

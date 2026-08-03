@@ -37,7 +37,7 @@
 import { Modal, ModalHeader, ModalBody, NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
 import { CommentHistoryItem } from '@/components/comment'
-import { useCommentHistoryStore } from '@/app/components/stores/modules/comment'
+import { useCommentHistoryStore } from '@/app/store/modules/comment'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
 

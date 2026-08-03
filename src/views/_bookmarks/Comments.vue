@@ -23,7 +23,7 @@
 import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 import { CommentItem } from '@/components/comment'
-import { useBookmarksCommentsStore } from '@/app/components/stores/modules/bookmarks'
+import { useBookmarksCommentsStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

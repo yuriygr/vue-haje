@@ -1,0 +1,5 @@
+export { default as BookmarksAll } from '@/views/_bookmarks/All.vue'
+export { default as BookmarksUsers } from '@/views/_bookmarks/Users.vue'
+export { default as BookmarksEntries } from '@/views/_bookmarks/Entries.vue'
+export { default as BookmarksComments } from '@/views/_bookmarks/Comments.vue'
+export { default as BookmarksFeeds } from '@/views/_bookmarks/Feeds.vue'

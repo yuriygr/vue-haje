@@ -23,7 +23,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
-import { useSearchUsersStore } from '@/app/components/stores/modules/search'
+import { useSearchUsersStore } from '@/app/store/modules/search'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

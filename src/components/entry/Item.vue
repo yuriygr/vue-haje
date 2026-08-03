@@ -46,7 +46,7 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 
-import { useEntryStore } from '@/app/components/stores/modules/entry'
+import { useEntryStore } from '@/app/store/modules/entry'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useModals } from '@vue-norma/ui'
 
@@ -55,6 +55,7 @@ const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 const EntryPinModal = defineAsyncComponent(() => import("@/modals/_entry/Pin.vue"))
 const EntryHistoryModal = defineAsyncComponent(() => import("@/modals/_entry/History.vue"))
 const EntryDeleteModal = defineAsyncComponent(() => import("@/modals/_entry/Delete.vue"))
+const EntryStatsModal = defineAsyncComponent(() => import("@/modals/_entry/Stats.vue"))
 
 const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
@@ -188,6 +189,11 @@ export default {
           action: this.history
         }] : [],
         ...(this.data.user.state.is_me && this.showPinAction) ? _pin : [],
+        ...(this.data.user.state.is_me) ? [{
+            icon: 'ui-stats',
+            label: this.$t('action.stats'),
+            action: this.stats
+        }] : [],
         ...(this.data.user.state.is_me) ? _edit : [{
           icon: 'ui-error-warning',
           label: this.$t('action.report'),
@@ -302,6 +308,12 @@ export default {
     },
 
     // Modals
+    stats() {
+      this.modals.show(EntryStatsModal, {
+        pinEntry: this.togglePin
+      })
+      this.$popover.close()
+    },
     pin() {
       this.modals.show(EntryPinModal, {
         pinEntry: this.togglePin

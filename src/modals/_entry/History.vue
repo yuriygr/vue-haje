@@ -37,7 +37,7 @@
 import { Modal, ModalHeader, ModalBody, NButton, LoadmoreTrigger, Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 
 import { EntryHistoryItem } from '@/components/entry'
-import { useEntryHistoryStore } from '@/app/components/stores/modules/entry'
+import { useEntryHistoryStore } from '@/app/store/modules/entry'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
 

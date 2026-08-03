@@ -23,7 +23,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { EntryItem } from '@/components/entry'
-import { useSearchEntriesStore } from '@/app/components/stores/modules/search'
+import { useSearchEntriesStore } from '@/app/store/modules/search'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

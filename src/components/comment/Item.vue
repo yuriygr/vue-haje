@@ -180,12 +180,12 @@ export default {
       ]
 
       return [
+        ..._bookmark,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),
           action: this.copyLink
         },
-        ..._bookmark,
         ...(this.data.user.state.is_me) ? _edit : [
           {
             icon: 'ui-error-warning',

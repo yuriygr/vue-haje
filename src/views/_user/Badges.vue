@@ -19,7 +19,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { BadgeItem } from '@/components/badge'
-import { useUserBadgesStore } from '@/app/components/stores/modules/user'
+import { useUserBadgesStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

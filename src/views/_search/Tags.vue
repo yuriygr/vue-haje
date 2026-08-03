@@ -23,7 +23,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { TagItem } from '@/components/tag'
-import { useSearchTagsStore } from '@/app/components/stores/modules/search'
+import { useSearchTagsStore } from '@/app/store/modules/search'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

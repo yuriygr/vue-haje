@@ -19,26 +19,29 @@
     }
   },
   "report": {
-    "title": "Complaint"
+    "title": "Reclamação"
   },
   "search-filter": {
-    "title": "Search filter"
+    "title": "Filtro de pesquisa"
   },
   "entry-history": {
-    "title": "Version history"
+    "title": "Histórico de versões"
   },
   "entry-delete": {
-    "title": "Delete entry",
-    "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
+    "title": "Excluir entrada",
+    "help": "Por algum motivo você vai apagar a postagem. Tem certeza de que isso é realmente necessário??"
+  },
+  "entry-stats": {
+    "title": "Estatísticas da entrada"
   },
   "comment-history": {
-    "title": "Version history"
+    "title": "Histórico de versões"
   },
   "comment-edit": {
-    "title": "Edit comment"
+    "title": "Editar comentário"
   },
   "comment-delete": {
-    "title": "Delete comment",
-    "help": "For some reason you are going to delete the comment, are you sure this is really necessary?"
+    "title": "Excluir comentário",
+    "help": "Por algum motivo você vai apagar o comentário. Tem certeza de que isso é realmente necessário??"
   }
 }

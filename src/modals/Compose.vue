@@ -55,7 +55,7 @@
         </template>
       </modal-header>
 
-      <template v-if="drafts.length == 0">
+      <template v-if="draftsData.length == 0">
         <placeholder-loading v-if="draftsLoading" />
         <placeholder v-else-if="draftsError"
           :icon="humanizeError(draftsError).icon"
@@ -111,7 +111,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, PlaceholderLoading, Group } from '@vue-norma/ui'
 
 import { cancelEvent } from '@/app/services/utilities'
@@ -119,7 +118,8 @@ import AttachmentsForm from '@/components/attachments/form'
 import { UserItem } from '@/components/user'
 
 import { useDraft } from '@/app/composables/useDraft'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useEntryDraftsStore } from '@/app/store/modules/entry_drafts'
+import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
 import { useMention } from '@/app/composables/useMention'
@@ -173,19 +173,22 @@ export default {
   },
   setup() {
     const authStore = useAuthStore()
+    const draftsStore = useEntryDraftsStore()
     const humanizeError = useHumanizeError()
     const modals = useModals()
     const { mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose } = useMention()
+    
     return {
-      authStore, humanizeError, modals,
+      authStore, draftsStore, humanizeError, modals,
       mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose
     }
   },
   computed: {
-    authData() { return this.authStore.data },
+    authData()      { return this.authStore.data },
+    draftsData()    { return this.draftsStore.data },
+    draftsLoading() { return this.draftsStore.loading },
+    draftsError()   { return this.draftsStore.error },
     
-    ...mapState('drafts', { drafts: 'data', draftsLoading: 'loading', draftsError: 'error' }),
-    ...mapGetters('drafts', [ 'hasMoreItems' ]),
     $formClass() {
       return [
         'compose',
@@ -240,7 +243,7 @@ export default {
                         : this.availableViews[0] ?? 'form'
 
       if (view === 'drafts') {
-        this.$store.dispatch('drafts/fetch')
+        this._draft.loadDrafts()
       }
     },
     closeModal() {
@@ -433,6 +436,7 @@ export default {
     },
   },
   created() {
+    // TODO: Это сделано ради костылей. В будущем стоит убрать
     this._draft = useDraft(this, { mode: this.mode })
   },
   mounted() {
@@ -476,7 +480,7 @@ export default {
     this._draft.saveLocal(this.form)
 
     // Очищаем стор черновиков
-    this.$store.dispatch('drafts/clear')
+    this.draftsStore.clear()
   }
 }
 </script>

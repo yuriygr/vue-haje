@@ -38,7 +38,7 @@
 import { Placeholder, Spacer } from '@vue-norma/ui'
 
 import { HelpItem } from '@/components/help'
-import { useHelpPagesStore } from '@/app/components/stores/modules/help'
+import { useHelpPagesStore } from '@/app/store/modules/help'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

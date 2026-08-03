@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { ref, nextTick } from 'vue'
 import { Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader } from '@vue-norma/ui'
 
 import { CommentItem, CommentReply } from '@/components/comment'
+import { useEntryCommentsStore } from '@/app/store/modules/entry_comments'
 import { useSSE } from '@/app/composables/useSSE'
 
 export default {
@@ -42,64 +42,56 @@ export default {
   },
   setup(props) {
     const hasNew = ref(false)
+    const store  = useEntryCommentsStore()
 
     const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT_ENTRY + '/' + props.entry.uuid)
     sse.on('has_replies', () => {
       hasNew.value = true
     })
 
-    return { hasNew, sse }
+    return { hasNew, sse, store }
   },
   computed: {
-    ...mapState('entry/comments', [ 'data', 'loading', 'error' ]),
-    ...mapGetters('entry/comments', [ 'tree' ]),
+    data()    { return this.store.data },
+    loading() { return this.store.loading },
+    error()   { return this.store.error },
+    tree()    { return this.store.tree },
   },
   methods: {
     async onSuccessAddingComment(result) {
-      await this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })
+      await this.store.more(this.entry.uuid)
       this.scrollToComment(result.payload.comment_id)
     },
     onErrorAddingComment(error) {
       this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
     },
-    loadMore() {
-      this.$store.dispatch('entry/comments/more', { uuid: this.entry.uuid })
+    async loadMore() {
+      await this.store.more(this.entry.uuid)
       this.hasNew = false
     },
     scrollToComment(commentId = false) {
       if (!commentId) return
 
-      this.$nextTick(() => {
+      nextTick(() => {
         const element = document.getElementById(`comment-${commentId}`)
-        if (element) {
-          const yOffset = -90 
-          const y = element.getBoundingClientRect().top + window.scrollY + yOffset
-          
-          window.scrollTo({
-            top: y,
-            behavior: 'instant'
-          })
+        if (!element) return
 
-          this.$bus.emit('comment.highlight', commentId)
-        }
+        const yOffset = -90
+        const y = element.getBoundingClientRect().top + window.scrollY + yOffset
+
+        window.scrollTo({ top: y, behavior: 'instant' })
+        this.$bus.emit('comment.highlight', commentId)
       })
     }
   },
-  mounted() {
-    this.$store.dispatch('entry/comments/fetch', { uuid: this.entry.uuid })
-    .then(_ => {
-      this.scrollToComment(this.$route.query.comment)
-    })
+  async mounted() {
+    await this.store.fetch(this.entry.uuid)
+    this.scrollToComment(this.$route.query.comment)
   },
   beforeUnmount() {
-    this.$store.dispatch('entry/comments/clear')
+    this.store.clear()
   },
   watch: {
-    uuid(to) {
-      if (to != undefined) {
-        this.$store.dispatch('entry/comments/clear')
-      }
-    },
     '$route.query.comment'(to) {
       if (to) this.scrollToComment(to)
     }

@@ -19,7 +19,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
-import { useUserSubscriptionsStore } from '@/app/components/stores/modules/user'
+import { useUserSubscriptionsStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

@@ -38,19 +38,21 @@
 </template>
 
 <script setup>
+// Imports
 import { computed, watch, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { NButton, Spacer, Placeholder, useModals } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'
 
-import { useFeedsStore } from '@/app/components/stores/modules/feeds'
+import { useFeedsStore } from '@/app/store/modules/feeds'
 import { FeedItem } from '@/components/feed'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
 const FeedCreateModal = defineAsyncComponent(() => import("@/modals/_feed/Create.vue"))
 
+// Composables
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -61,17 +63,21 @@ const { data, filters, loading, error, hasMoreItems } = storeToRefs(store)
 
 useMeta(() => ({ title: t('feeds.title') }))
 
+// Computed
 const query = computed(() => route.query.q ?? '')
 
+// Methods
 const openCreateModal = () => modals.show(FeedCreateModal)
 const loadMore = () => store.more()
 const changeInput = (value) => router.replace({ name: route.name, query: { ...route.query, q: value } })
 
+// Watchers
 watch(() => route.query.q, (to) => {
   store.setFilters({ query: to, offset: undefined })
   store.fetch()
 })
 
+// Lifecycle hooks
 onMounted(() => {
   store.setFilters({ query: query.value, offset: undefined })
   store.fetch()

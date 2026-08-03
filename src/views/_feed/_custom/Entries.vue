@@ -20,14 +20,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { Placeholder } from '@vue-norma/ui'
 
 import { EntryItem } from '@/components/entry'
+import { useCustomFeedEntries } from '@/app/store/modules/custom_feed'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
-  name: 'feed-custom-entries',
+  name: 'custom-feed-entries',
   props: {
     uuid: {
       type: [ Boolean, String ],
@@ -38,30 +38,28 @@ export default {
     Placeholder, EntryItem
   },
   setup() {
+    const store = useCustomFeedEntries()
     const humanizeError = useHumanizeError()
-    return { humanizeError }
+
+    return { store, humanizeError }
   },
   computed: {
-    ...mapState('feed/custom/entries', [ 'data', 'filters', 'loading', 'error' ]),
-    ...mapGetters('feed/custom/entries', [ 'hasMoreItems' ])
+    data()         { return this.store.data },
+    filters()      { return this.store.filters },
+    loading()      { return this.store.loading },
+    error()        { return this.store.error },
+    hasMoreItems() { return this.store.hasMoreItems },
   },
   methods: {
     loadMore() {
-      this.$store.dispatch('feed/custom/entries/more')
+      this.store.more(this.uuid)
     }
   },
   mounted() {
-    this.$store.dispatch('feed/custom/entries/fetch')
+    this.store.fetch(this.uuid)
   },
   beforeUnmount() {
-    this.$store.dispatch('feed/custom/entries/clear')
-  },
-  watch: {
-    '$route.params.uuid'(to) {
-      if (to) {
-        this.$store.dispatch('feed/custom/entries/fetch')
-      }
-    }
+    this.store.clear()
   }
 }
 </script>

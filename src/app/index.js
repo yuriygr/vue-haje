@@ -1,6 +1,7 @@
 // app components & services
-import { router, directives, store, stores, global_ui, i18n } from '@/app/components'
-import { api, alerts, meta, new_api, new_meta, popover, bus } from '@/app/services'
+import router from '@/app/router'
+import store from '@/app/store'
+import { api, alerts, meta, new_api, new_meta, popover, bus, directives, global_ui, i18n } from '@/app/services'
 //import { toast } from '@vue-norma/ui'
 
 
@@ -25,12 +26,8 @@ export default new class {
   install(app, options = {}) {
 		this.options = { ...this.options, ...options }
 
-    // probrasivaem-s
-    store.$api = api
-    
     app.use(router, app)
     app.use(directives)
-    app.use(store)
     app.use(global_ui)
     app.use(meta, this.options.meta)
   
@@ -43,7 +40,7 @@ export default new class {
     app.use(new_api, this.options.api)
     app.use(new_meta, this.options.meta)
     app.use(bus)
-    app.use(stores)
+    app.use(store)
     app.use(i18n)
   }
 }

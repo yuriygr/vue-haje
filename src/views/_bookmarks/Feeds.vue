@@ -23,7 +23,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { FeedItem } from '@/components/feed'
-import { useBookmarksFeedsStore } from '@/app/components/stores/modules/bookmarks'
+import { useBookmarksFeedsStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

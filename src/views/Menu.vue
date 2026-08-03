@@ -20,19 +20,22 @@
 </template>
 
 <script setup>
+// Imports
 import { computed } from 'vue'
 import { NavigationSection, NavigationItem, Icon, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
-import { useMeta } from '@/app/composables/useMeta'
 
 import { UserItem } from '@/components/user'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAuthStore } from '@/app/store/modules/auth'
+import { useMeta } from '@/app/composables/useMeta'
 
+// Composables
 const { t } = useI18n()
 const authStore = useAuthStore()
 
 useMeta(() => ({ title: t('menu.title') }))
 
+// Computed
 const authData = computed(() => authStore.data)
 const isAuth = computed(() => authStore.isAuth)
 

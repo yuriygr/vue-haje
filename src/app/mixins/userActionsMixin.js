@@ -9,7 +9,8 @@ export const userActionsMixin = {
       localData: null,
       loading: {
         subscribe: false,
-        bookmarks: false
+        bookmarks: false,
+        mute: false
       }
     }
   },
@@ -47,6 +48,11 @@ export const userActionsMixin = {
         this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
       })
       .finally(() => this.loading.subscribe = false)
+    },
+    // Мьют
+    toggleMute() {
+      this.loading.mute = true
+      alert("Нет")
     },
 
     // Закладки

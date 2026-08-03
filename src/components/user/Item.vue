@@ -129,8 +129,22 @@ export default {
         }
       ]
 
+      let _mute = [
+        this.localData.state.is_muted ?
+        {
+          icon: 'ui-unmute',
+          label: this.$t('action.unmute'),
+          action: this.toggleMute 
+        } : {
+          icon: 'ui-mute',
+          label: this.$t('action.mute'),
+          action: this.toggleMute 
+        }
+      ]
+
       return [
         ...(this.localData.state.is_me) ? [] : _bookmark,
+        ...(this.localData.state.is_me) ? [] : _mute,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),

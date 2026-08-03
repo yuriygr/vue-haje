@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { useAppStore } from '@/app/components/stores/modules/app'
+import { useAppStore } from '@/app/store/modules/app'
 import { NButton, NHeader, Group, Placeholder } from '@vue-norma/ui'
 
 export default {

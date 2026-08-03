@@ -83,7 +83,7 @@ import { CommentItem } from '@/components/comment'
 import { UserItem } from '@/components/user'
 import { TagItem } from '@/components/tag'
 
-import { useSearchAllStore } from '@/app/components/stores/modules/search'
+import { useSearchAllStore } from '@/app/store/modules/search'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

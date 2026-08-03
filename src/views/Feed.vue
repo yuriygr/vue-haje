@@ -16,7 +16,7 @@
 
 <script>
 import { Spacer, Tabs, TabsItem } from '@vue-norma/ui'
-import { useAppStore } from '@/app/components/stores/modules/app'
+import { useAppStore } from '@/app/store/modules/app'
 
 export default {
   name: 'feed',

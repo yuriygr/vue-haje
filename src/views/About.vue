@@ -23,20 +23,26 @@
 </template>
 
 <script setup>
+// Imports
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { NHeader, Separator, NavigationSection, NavigationItem, NavigationFooter, MetaInfo } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'
 
-import { useAppStore } from '@/app/components/stores/modules/app'
+import { useAppStore } from '@/app/store/modules/app'
 import { useMeta } from '@/app/composables/useMeta'
 
+// Composables
 const { t } = useI18n()
 const store = useAppStore()
 const { title: appTitle, version: appVersion } = storeToRefs(store)
 
 useMeta(() => ({ title: t('about.title') }))
 
+// Methods
+const refresh = () => window.location.reload()
+
+// Computed
 const metaItems = computed(() => [
   { label: t('app.version', { version: appVersion.value }) }
 ])
@@ -50,8 +56,6 @@ const helpItems = computed(() => [
   { label: t('about.item.ai-usage'),       to: { name: 'help-page', params: { slug: 'ai-usage' } },       chevron: true },
   { label: t('about.item.rules'),          to: { name: 'help-page', params: { slug: 'rules' } },          chevron: true },
 ])
-
-const refresh = () => window.location.reload()
 </script>
 
 <style lang="scss">

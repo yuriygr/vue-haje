@@ -31,6 +31,9 @@
     "title": "Delete entry",
     "help": "For some reason you are going to delete the post, are you sure this is really necessary?"
   },
+  "entry-stats": {
+    "title": "Entry stats"
+  },
   "comment-history": {
     "title": "Version history"
   },

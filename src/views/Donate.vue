@@ -37,10 +37,13 @@
 </template>
 
 <script setup>
+// Imports
 import { useI18n } from 'vue-i18n'
 import { Group, NHeader } from '@vue-norma/ui'
+
 import { useMeta } from '@/app/composables/useMeta'
 
+// Composables
 const { t } = useI18n()
 
 useMeta(() => ({ title: t('donate.title') }))

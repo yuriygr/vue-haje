@@ -1,0 +1,6 @@
+export { default as SearchAll } from '@/views/_search/Al.vuel'
+export { default as SearchUsers } from '@/views/_search/Users.vue'
+export { default as SearchTags } from '@/views/_search/Tags.vue'
+export { default as SearchEntries } from '@/views/_search/Entries.vue'
+export { default as SearchComments } from '@/views/_search/Comments.vue'
+export { default as SearchFeeds } from '@/views/_search/Comments.vue'

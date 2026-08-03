@@ -22,16 +22,18 @@
 </template>
 
 <script setup>
+// Imports
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'
 
 import { TagCard } from '@/components/tag'
-import { useTagStore } from '@/app/components/stores/modules/tag'
+import { useTagStore } from '@/app/store/modules/tag'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+// Props
 const props = defineProps({
   slug: {
     type: [Boolean, String],
@@ -39,6 +41,7 @@ const props = defineProps({
   }
 })
 
+// Composables
 const { t } = useI18n()
 const store = useTagStore()
 const humanizeError = useHumanizeError()
@@ -48,6 +51,7 @@ const title = ref(t('tag.title'))
 
 useMeta(() => ({ title: title.value }))
 
+// Watchers
 watch(() => props.slug, (to) => {
   if (to) {
     store.clear()
@@ -63,6 +67,7 @@ watch(error, (to) => {
   if (to) title.value = humanizeError(to).title
 })
 
+// Lifecycle hooks
 onMounted(() => {
   title.value = `#${props.slug}`
   store.fetch(props.slug)

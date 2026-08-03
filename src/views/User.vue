@@ -1,5 +1,5 @@
 <template>
-  <template v-if="(!loading && !error) && Object.keys(data).length > 0">
+  <template v-if="(!loading && !error) && !isEmpty">
     <user-card :data="data" />
 
     <spacer height="15" />
@@ -19,7 +19,7 @@
     </router-view>
   </template>
 
-  <template v-if="Object.keys(data).length == 0">
+  <template v-if="isEmpty">
     <placeholder-loading v-if="loading" />
     <placeholder v-else-if="error"
       :icon="humanizeError(error).icon"
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+// Imports
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -37,10 +38,11 @@ import { Placeholder, PlaceholderLoading, Spacer, Tabs, TabsItem } from '@vue-no
 import { storeToRefs } from 'pinia'
 
 import { UserCard } from '@/components/user'
-import { useUserStore } from '@/app/components/stores/modules/user'
+import { useUserStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+// Props
 const props = defineProps({
   username: {
     type: [Boolean, String],
@@ -48,16 +50,19 @@ const props = defineProps({
   }
 })
 
+// Composables
 const { t } = useI18n()
 const route = useRoute()
 const store = useUserStore()
 const humanizeError = useHumanizeError()
 const { data, loading, error, isEmpty } = storeToRefs(store)
 
+// State
 const title = ref(t('user.title'))
 
 useMeta(() => ({ title: title.value }))
 
+// Computed
 const tab_items = computed(() => [
   {
     key: 'entries',
@@ -85,6 +90,7 @@ const tab_items = computed(() => [
   },
 ])
 
+// Watchers
 watch(() => props.username, (to) => {
   if (to) {
     store.clear()
@@ -101,6 +107,7 @@ watch(error, (to) => {
   if (to) title.value = humanizeError(to).title
 })
 
+// Lifecycle hooks
 onMounted(() => store.fetch(props.username))
 onBeforeUnmount(() => store.clear())
 </script>

@@ -43,8 +43,8 @@ import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup }
 import { to } from '@/app/services/utilities'
 
 import { NotificationItem } from '@/components/notifications'
-import { useNotificationsStore } from '@/app/components/stores/modules/notifications'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useNotificationsStore } from '@/app/store/modules/notifications'
+import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 import { useI18n } from 'vue-i18n'

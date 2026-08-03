@@ -21,7 +21,7 @@
 <script>
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
-import { useSupportTicketStore } from '@/app/components/stores/modules/support'
+import { useSupportTicketStore } from '@/app/store/modules/support'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

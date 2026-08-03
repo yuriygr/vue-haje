@@ -23,7 +23,7 @@
 import { Group, NHeader, Placeholder } from '@vue-norma/ui'
 
 import { LoginItem } from '@/components/login'
-import { useLoginsStore } from '@/app/components/stores/modules/logins'
+import { useLoginsStore } from '@/app/store/modules/logins'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

@@ -19,7 +19,7 @@
 <script>
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
-import { useHelpPageStore } from '@/app/components/stores/modules/help'
+import { useHelpPageStore } from '@/app/store/modules/help'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 

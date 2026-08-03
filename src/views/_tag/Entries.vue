@@ -19,7 +19,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { EntryItem } from '@/components/entry'
-import { useTagEntriesStore } from '@/app/components/stores/modules/tag'
+import { useTagEntriesStore } from '@/app/store/modules/tag'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

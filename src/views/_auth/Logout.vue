@@ -4,7 +4,7 @@
 
 <script>
 import { PlaceholderLoading } from '@vue-norma/ui'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAuthStore } from '@/app/store/modules/auth'
 
 export default {
   name: 'auth-logout',

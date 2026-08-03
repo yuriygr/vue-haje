@@ -31,6 +31,9 @@
     "title": "投稿を削除",
     "help": "この投稿を削除しようとしています。本当に必要ですか？"
   },
+  "entry-stats": {
+    "title": "記録統計"
+  },
   "comment-history": {
     "title": "コメントの編集履歴"
   },

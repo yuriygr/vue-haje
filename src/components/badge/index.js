@@ -1,1 +1,0 @@
-export { default as BadgeItem } from '@/components/badge/Item'

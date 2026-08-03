@@ -16,10 +16,11 @@ import { onMounted, onUnmounted } from 'vue'
 import { AlertsLayer, IconsSpriteLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
 
 import { AppTabbar, AppContent, AppLayout } from '@/components/_app'
+import { applyMeta, applyDataset } from '@/app/composables/useMeta'
 import { useSSE } from '@/app/composables/useSSE'
 import { useModals } from '@vue-norma/ui'
-import { useAppStore } from '@/app/components/stores/modules/app'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAppStore } from '@/app/store/modules/app'
+import { useAuthStore } from '@/app/store/modules/auth'
 
 export default {
   name: 'app',
@@ -68,11 +69,11 @@ export default {
   },
   methods: {
     setModal(state = false) {
-     this.changeDataset('modal', state ? 'on' : false)
+     applyDataset('modal', state ? 'on' : false)
     }, 
     setLocale(state = false) {
       this.$i18n.locale = state
-      this.changeDataset('locale', state || false)
+      applyDataset('locale', state || false)
 
       if (state) {
         document.documentElement.setAttribute('lang', state)
@@ -81,14 +82,14 @@ export default {
       }
     },
     setTheme(state = false) {
-      this.changeDataset('theme', state)
-      this.changeMeta('theme-color', this.themeStatusBar)
+      applyDataset('theme', state)
+      applyMeta('theme-color', this.themeStatusBar)
     }, 
     setDensity(state = false) {
-      this.changeDataset('density', state)
+      applyDataset('density', state)
     }, 
     setLayout(state = false) {
-      this.changeDataset('layout', state ?? false)
+      applyDataset('layout', state ?? false)
     },
     updateFavicon(state) {
       const favicon = document.querySelector('link[rel="icon"]')

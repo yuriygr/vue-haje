@@ -54,8 +54,8 @@
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
-import { useAppStore } from '@/app/components/stores/modules/app'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAppStore } from '@/app/store/modules/app'
+import { useAuthStore } from '@/app/store/modules/auth'
 
 export default {
   name: 'auth-register',

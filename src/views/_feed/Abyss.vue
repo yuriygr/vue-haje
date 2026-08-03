@@ -29,8 +29,8 @@ import { defineAsyncComponent } from 'vue'
 import { Placeholder, Spacer } from '@vue-norma/ui'
 
 import { EntryItem, EntryPseudoForm } from '@/components/entry'
-import { useFeedAbyssStore } from '@/app/components/stores/modules/feed'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useFeedAbyssStore } from '@/app/store/modules/feed'
+import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
 

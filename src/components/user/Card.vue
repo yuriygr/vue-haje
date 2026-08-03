@@ -42,7 +42,7 @@ import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo, Spacer } from '@vue-norma/ui'
 
 import { userActionsMixin } from '@/app/mixins/userActionsMixin'
-import { useUserStore } from '@/app/components/stores/modules/user'
+import { useUserStore } from '@/app/store/modules/user'
 import { useModals } from '@vue-norma/ui'
 import { timeFormatOnlyYear } from '@/app/services/datetime.js'
 
@@ -121,9 +121,24 @@ export default {
         }
       ]
 
+      let _mute = [
+        this.localData.state.is_muted ?
+        {
+          icon: 'ui-unmute',
+          label: this.$t('action.unmute'),
+          action: this.toggleMute
+        } : {
+          icon: 'ui-mute',
+          label: this.$t('action.mute'),
+          action: this.toggleMute
+        }
+      ]
+
+
       return [
         ...(this.localData.state.is_me) ? [] : _notify,
         ...(this.localData.state.is_me) ? [] : _bookmark,
+        ...(this.localData.state.is_me) ? [] : _mute,
         {
           icon: 'ui-link',
           label: this.$t('action.copy_link'),

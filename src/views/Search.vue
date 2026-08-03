@@ -35,7 +35,7 @@ import { NButton, Tabs, TabsItem, Separator, Spacer } from '@vue-norma/ui'
 
 import {
   useSearchAllStore, useSearchUsersStore, useSearchEntriesStore, useSearchCommentsStore, useSearchTagsStore
-} from '@/app/components/stores/modules/search'
+} from '@/app/store/modules/search'
 import { useModals } from '@vue-norma/ui'
 
 const searchStores = {

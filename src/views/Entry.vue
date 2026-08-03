@@ -28,7 +28,7 @@ import { storeToRefs } from 'pinia'
 import { truncateText } from '@/app/services/content'
 import EntryComments from '@/views/EntryComments'
 import { EntryItem } from '@/components/entry'
-import { useEntryStore } from '@/app/components/stores/modules/entry'
+import { useEntryStore } from '@/app/store/modules/entry'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 

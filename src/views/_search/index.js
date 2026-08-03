@@ -1,6 +1,0 @@
-export { default as SearchAll } from '@/views/_search/All'
-export { default as SearchUsers } from '@/views/_search/Users'
-export { default as SearchTags } from '@/views/_search/Tags'
-export { default as SearchEntries } from '@/views/_search/Entries'
-export { default as SearchComments } from '@/views/_search/Comments'
-export { default as SearchFeeds } from '@/views/_search/Comments'

@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
 import { debounce } from '@/app/services/utilities'
+import { useEntryDraftsStore } from '@/app/store/modules/entry_drafts'
 
 const LOCAL_KEY = 'compose_draft'
 
@@ -9,6 +10,8 @@ export function useDraft(vm, { mode = 'add' } = {}) {
 
   const isSaving = ref(false)
   const lastSaved = ref(null)
+  const draftsStore = useEntryDraftsStore()
+
 
   const isEditMode = mode === 'edit'
 
@@ -39,6 +42,10 @@ export function useDraft(vm, { mode = 'add' } = {}) {
 
   // ─── Серверное сохранение ───────────────────────────────
 
+  async function loadDrafts() {
+    draftsStore.fetch()
+  }
+
   async function saveRemote(form) {
     if (isSaving.value) return
     isSaving.value = true
@@ -54,7 +61,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     }
 
     try {
-      await $store.dispatch('drafts/save', payload)
+      // TOOD: replace via api
       lastSaved.value = new Date()
     } catch (error) {
       $alerts.danger({ text: $t(`alerts.${error.status}`) })
@@ -75,7 +82,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
 
   async function loadDraft(id) {
     try {
-      return await $store.dispatch('drafts/load', id)
+      // TOOD: replace via api
     } catch (error) {
       $alerts.danger({ text: $t(`alerts.${error.status}`) })
       return null
@@ -86,7 +93,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
 
   async function deleteDraft(id) {
     try {
-      await $store.dispatch('drafts/remove', id)
+      // TOOD: replace via api
     } catch (error) {
       $alerts.danger({ text: $t(`alerts.${error.status}`) })
     }
@@ -97,7 +104,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
   async function deleteAll() {
     clearLocal()
     try {
-      await $store.dispatch('drafts/deleteAll')
+      // TOOD: replace via api
       $alerts.success({ text: $t('alerts.deleted') })
     } catch (error) {
       $alerts.danger({ text: $t(`alerts.${error.status}`) })
@@ -110,7 +117,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     clearLocal()
     autoSave.cancel()
     try {
-      await $store.dispatch('drafts/discard')
+      // TOOD: replace via api
     } catch {}
   }
 
@@ -125,6 +132,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     clearLocal,
 
     // Серверные операции
+    loadDrafts,
     loadDraft,
     deleteDraft,
     deleteAll,

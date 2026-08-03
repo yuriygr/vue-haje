@@ -83,7 +83,7 @@ import { CommentItem } from '@/components/comment'
 import { UserItem } from '@/components/user'
 import { FeedItem } from '@/components/feed'
 
-import { useBookmarksAllStore } from '@/app/components/stores/modules/bookmarks'
+import { useBookmarksAllStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

@@ -15,14 +15,17 @@
 </template>
 
 <script setup>
+// Imports
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { Tabs, TabsItem, Spacer } from '@vue-norma/ui'
 
+// Composables
 const { t } = useI18n()
 const route = useRoute()
 
+// Methods
 const formatLink = (tab = false) => {
   const { q } = route.query
   return tab
@@ -30,6 +33,7 @@ const formatLink = (tab = false) => {
     : { name: 'bookmarks', query: { q } }
 }
 
+// Computed
 const tab_items = computed(() => [
   { key: 'all',      to: formatLink(),           label: t('bookmarks.tabs.all') },
   { key: 'users',    to: formatLink('users'),    label: t('bookmarks.tabs.users') },

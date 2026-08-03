@@ -23,7 +23,7 @@
 import { Placeholder } from '@vue-norma/ui'
 
 import { UserItem } from '@/components/user'
-import { useBookmarksUsersStore } from '@/app/components/stores/modules/bookmarks'
+import { useBookmarksUsersStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {

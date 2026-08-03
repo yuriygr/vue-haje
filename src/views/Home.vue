@@ -30,6 +30,9 @@
       </template>
     </div>
   </group>
+
+  <group>
+  </group>
 </template>
 
 <script setup>
@@ -38,7 +41,7 @@ import { useRouter } from 'vue-router'
 import { onMounted, computed } from 'vue'
 import { Icon, NHeader, Group, Spacer, ButtonsGroup, NButton } from '@vue-norma/ui'
 
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAuthStore } from '@/app/store/modules/auth'
 import { useMeta } from '@/app/composables/useMeta'
 
 const { t } = useI18n()

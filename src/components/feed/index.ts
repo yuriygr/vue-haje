@@ -1,0 +1,1 @@
+export { default as FeedItem } from '@/components/feed/Item.vue'

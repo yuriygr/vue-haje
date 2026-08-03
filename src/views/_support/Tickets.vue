@@ -56,7 +56,7 @@ import { Placeholder, NButton, NHeader, Group } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'
 
 import { TicketItem } from '@/components/ticket'
-import { useSupportTicketsStore } from '@/app/components/stores/modules/support'
+import { useSupportTicketsStore } from '@/app/store/modules/support'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 

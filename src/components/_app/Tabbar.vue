@@ -42,7 +42,7 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Tabbar, TabbarItem, Icon } from '@vue-norma/ui'
-import { useAuthStore } from '@/app/components/stores/modules/auth'
+import { useAuthStore } from '@/app/store/modules/auth'
 import { useModals } from '@vue-norma/ui'
 
 let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))

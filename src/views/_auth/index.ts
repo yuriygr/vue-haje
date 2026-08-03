@@ -1,0 +1,6 @@
+export { default as AuthLogin } from '@/views/_auth/Login.vue'
+export { default as AuthForgot } from '@/views/_auth/Forgot.vue'
+export { default as AuthForgotCode } from '@/views/_auth/ForgotCode.vue'
+export { default as AuthForgotChange } from '@/views/_auth/ForgotChange.vue'
+export { default as AuthRegister } from '@/views/_auth/Register.vue'
+export { default as AuthLogout } from '@/views/_auth/Logout.vue'
