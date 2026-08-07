@@ -7,7 +7,7 @@
   <spacer height="15" />
 
   <tabs>
-    <template v-for="item in tab_items" :key="`notification-tab-${item.key}`">
+    <template v-for="item in tabItems" :key="`notification-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.key === filters.tab">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -40,8 +40,8 @@
 
 <script>
 import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup } from '@vue-norma/ui'
-import { to } from '@/app/services/utilities'
 
+import { to } from '@/app/services/utilities'
 import { NotificationItem } from '@/components/notifications'
 import { useNotificationsStore } from '@/app/store/modules/notifications'
 import { useAuthStore } from '@/app/store/modules/auth'
@@ -77,7 +77,7 @@ export default {
     error()        { return this.store.error },
     hasMoreItems() { return this.store.hasMoreItems },
 
-    tab_items() {
+    tabItems() {
       return [
         { 
           key: 'all',
@@ -117,7 +117,7 @@ export default {
       ]
     },
     availableKeys() {
-      return this.tab_items.map(el => el.key)
+      return this.tabItems.map(el => el.key)
     }
   },
   methods: {

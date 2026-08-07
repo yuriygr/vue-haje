@@ -1,29 +1,29 @@
 <template>
   <group>
-    <n-header>{{ $t('auth.forgot.title') }}</n-header>
+    <n-header>{{ t('auth.forgot.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
       <form-text>
-        {{ $t('auth.forgot.suggest') }}
+        {{ t('auth.forgot.suggest') }}
       </form-text>
 
-      <form-block :label="$t('auth.field.email')">
+      <form-block :label="t('auth.field.email')">
         <text-field tabindex="1" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
 
       <form-block>
-        <n-button size="l" :stretched="true" tabindex="2">{{ $t('auth.button.continue') }}</n-button>
+        <n-button size="l" :stretched="true" tabindex="2">{{ t('auth.button.continue') }}</n-button>
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ t('auth.button.back') }}</n-button>
       </form-block>
 
       <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.forgot.help">
-          <router-link :to="{ name: 'help-page', params: { slug: 'contacts' } }">{{ $t('auth.forgot.contact_us') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'contacts' } }">{{ t('auth.forgot.contact_us') }}</router-link>
         </i18n-t>
       </form-text>
     </form-group>
@@ -44,6 +44,9 @@
 <script>
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'auth-forgot',
@@ -51,12 +54,8 @@ export default {
     VueHcaptcha,
     NButton, NHeader, Group, Spacer
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('auth.forgot.title')
-      },
       error: false,
       loading: false,
 
@@ -66,7 +65,12 @@ export default {
       }
     }
   },
-  computed: {  },
+  setup() {
+    const { t } = useI18n()
+    useMeta(() => ({ title: t('auth.forgot.title') }))
+
+    return { t }
+  },
   methods: {
     async submit() {
       this.loading = true
@@ -76,12 +80,12 @@ export default {
       
       this.$api.post('auth/forgot', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
         this.$router.push({ name: 'auth-forgot-code', params: { token: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })
@@ -114,6 +118,5 @@ export default {
       this.error = false
     }
   },
-  mounted() { }
 }
 </script>

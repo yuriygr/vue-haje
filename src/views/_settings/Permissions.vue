@@ -56,20 +56,18 @@
 
 <script>
 import { Icon, Group, NHeader, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useI18n } from 'vue-i18n'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'settings-permissions',
   components: {
     Icon, Group, NHeader, Placeholder, PlaceholderLoading
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('settings.permissions.title')
-      },
-
       data: false,
 
       error: false,
@@ -77,8 +75,11 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const humanizeError = useHumanizeError()
-    return { humanizeError }
+    useMeta(() => ({ title: t('settings.permissions.title') }))
+
+    return { t, humanizeError }
   },
   methods: {
     // Fetching

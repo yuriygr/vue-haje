@@ -7,7 +7,7 @@
   
   <template v-if="Object.keys(data).length == 0">
     <placeholder-loading v-if="loading" />
-    <placeholder v-if="(!loading && !error)" :text="$t('help.errors.empty_page')" />
+    <placeholder v-if="(!loading && !error)" :text="t('help.errors.empty_page')" />
     <placeholder v-else-if="error"
       :icon="humanizeError(error).icon"
       :header="humanizeError(error).title"
@@ -17,11 +17,14 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { useHelpPageStore } from '@/app/store/modules/help'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'help-page',
@@ -34,19 +37,17 @@ export default {
   components: {
     Placeholder, PlaceholderLoading, NHeader, MetaInfo
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('help.title')
-      },
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useHelpPageStore()
     const { timeAgo } = useTimeAgo()
     const humanizeError = useHumanizeError()
-    return { store, timeAgo, humanizeError }
+
+    const title = ref(t('help.title'))
+
+    useMeta(() => ({ title: title.value }))
+
+    return { t, title, store, timeAgo, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -55,7 +56,7 @@ export default {
     isEmpty()      { return this.store.isEmpty },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$t('help.meta.edited', { date: this.formattedDate }) })
+      _result.push({ label: this.t('help.meta.edited', { date: this.formattedDate }) })
 
       return _result
     },
@@ -78,11 +79,11 @@ export default {
     },
     data(to) {
       if (to)
-        this.meta.title = to.title
+        this.title = to.title
     },
     error(to) {
       if (to)
-        this.meta.title = this.humanizeError(to).title
+        this.title = this.humanizeError(to).title
     }
   }
 }

@@ -19,7 +19,7 @@
   <spacer height="15" />
 
   <tabs>
-    <template v-for="item in tab_items" :key="`search-tab-${item.key}`">
+    <template v-for="item in tabItems" :key="`search-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.active" :disabled="item.disabled">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -65,7 +65,7 @@ export default {
     hasFilters() {
       return this.getSearchStore(this.$route.meta.key)?.hasFilters ?? false
     },
-    tab_items() {
+    tabItems() {
       const currentKey = this.$route.meta.key
       return [
         {

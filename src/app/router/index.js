@@ -3,9 +3,8 @@ import { useAppStore } from '@/app/store/modules/app'
 import { useModals } from '@vue-norma/ui'
 
 import Entry from '@/views/Entry'
-const Home = () => import('@/views/Home')
-const Donate = () => import('@/views/Donate')
 import Menu from '@/views/Menu'
+const Donate = () => import('@/views/Donate')
 const About = () => import('@/views/About')
 
 // Load modules from folder
@@ -19,7 +18,7 @@ requireModule.keys().forEach(filename => {
 const routes = [
 	...Object.values(modules).flat(),
 	
-	{ path: '/', name: 'home', component: Home },
+	{ path: '/', name: 'home', redirect: { name: 'feed' } },
 	
 	{ path: '/e/:uuid', name: 'entry', component: Entry, props: true },
 

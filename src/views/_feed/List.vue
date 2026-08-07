@@ -13,36 +13,35 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('errors.empty_feeds.icon')"
-    :header="$t('errors.empty_feeds.title')"
-    :text="$t('errors.empty_feeds.description')"
+    :icon="t('errors.empty_feeds.icon')"
+    :header="t('errors.empty_feeds.title')"
+    :text="t('errors.empty_feeds.description')"
   />
 </template>
 
 <script>
 import { Placeholder } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { FeedItem } from '@/components/feed'
 import { useFeedFeedsStore } from '@/app/store/modules/feed'
+
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'feed-feeds',
   components: {
     Placeholder, FeedItem
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('feed.tabs.feeds')
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useFeedFeedsStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+
+    useMeta(() => ({ title: t('feed.tabs.feeds') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

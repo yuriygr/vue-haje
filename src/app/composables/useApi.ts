@@ -60,7 +60,11 @@ export function useApi() {
     token = t
   }
 
-  function preparePostData(params: Record<string, any>) {
+  function preparePostData(params: Record<string, any> | FormData) {
+    if (params instanceof FormData) {
+      return params
+    }
+    
     const formData = new FormData()
     Object.keys(params).forEach(key => formData.append(key, params[key]))
     return formData
@@ -70,9 +74,19 @@ export function useApi() {
     return instance.value!.get(path, { params })
   }
 
-  function post(path: string, params: Record<string, any> = {}) {
+  function post(
+    path: string,
+    params: Record<string, any> = {},
+    options: { headers?: Record<string, string>; [key: string]: any } = {}
+  ) {
+    const { headers, ...rest } = options
+  
     return instance.value!.post(path, preparePostData(params), {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      ...rest,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...headers,
+      },
     })
   }
 

@@ -45,7 +45,7 @@
 
 <script>
 import { cancelEvent } from '@/app/services/utilities'
-import AttachmentsForm from '@/components/attachments/form'
+import AttachmentsForm from '@/components/attachments/Form'
 import { UserItem } from '@/components/user'
 import { useMention } from '@/app/composables/useMention'
 

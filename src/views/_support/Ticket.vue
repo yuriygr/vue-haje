@@ -21,8 +21,10 @@
 <script>
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 
+import { useI18n } from 'vue-i18n'
 import { useSupportTicketStore } from '@/app/store/modules/support'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'support-ticket',
@@ -35,18 +37,13 @@ export default {
   components: {
     Placeholder, PlaceholderLoading, NHeader, MetaInfo
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('support.ticket')
-      },
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useSupportTicketStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+    useMeta(() => ({ title: t('support.ticket') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

@@ -13,36 +13,34 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('search.empty.icon')"
-    :header="$t('search.empty.title')"
-    :text="$t('search.empty.description')"
+    :icon="t('search.empty.icon')"
+    :header="t('search.empty.title')"
+    :text="t('search.empty.description')"
   />
 </template>
 
 <script>
 import { Placeholder } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { UserItem } from '@/components/user'
 import { useSearchUsersStore } from '@/app/store/modules/search'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'search-users',
   components: {
     Placeholder, UserItem
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('search.title.users')
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useSearchUsersStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+
+    useMeta(() => ({ title: t('search.title.users') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

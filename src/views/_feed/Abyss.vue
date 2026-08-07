@@ -18,21 +18,23 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('errors.empty_feed.icon')"
-    :header="$t('errors.empty_feed.title')"
-    :text="$t('errors.empty_feed.description')"
+    :icon="t('errors.empty_feed.icon')"
+    :header="t('errors.empty_feed.title')"
+    :text="t('errors.empty_feed.description')"
   />
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Placeholder, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { EntryItem, EntryPseudoForm } from '@/components/entry'
 import { useFeedAbyssStore } from '@/app/store/modules/feed'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
+import { useMeta } from '@/app/composables/useMeta'
 
 let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
@@ -41,20 +43,16 @@ export default {
   components: {
     Placeholder, Spacer, EntryItem, EntryPseudoForm
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t(`feed.tabs.abyss`)
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useFeedAbyssStore()
     const authStore = useAuthStore()
     const humanizeError = useHumanizeError()
     const modals = useModals()
-    return { store, authStore, humanizeError, modals }
+
+    useMeta(() => ({ title: t('feed.tabs.abyss') }))
+
+    return { t, store, authStore, humanizeError, modals }
   },
   computed: {
     data()         { return this.store.data },

@@ -1,18 +1,18 @@
 <template>
   <group>
-    <n-header>{{ $t('auth.forgot-change.title') }}</n-header>
+    <n-header>{{ t('auth.forgot-change.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
       <form-text>
-        {{ $t('auth.forgot-change.suggest') }}
+        {{ t('auth.forgot-change.suggest') }}
       </form-text>
 
-      <form-block :label="$t('auth.field.password')">
+      <form-block :label="t('auth.field.password')">
         <text-field tabindex="1" type="password" name="password" v-model.trim="password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>
-        <n-button size="l" :stretched="true" tabindex="2" :disabled="loading">{{ $t('auth.button.save') }}</n-button>
+        <n-button size="l" :stretched="true" tabindex="2" :disabled="loading">{{ t('auth.button.save') }}</n-button>
       </form-block>
     </form-group>
   </group>
@@ -20,6 +20,9 @@
 
 <script>
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'auth-forgot-change',
@@ -32,17 +35,19 @@ export default {
       default: ""
     }
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('auth.forgot-change.title')
-      },
       error: false,
       loading: false,
 
       password: ''
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    useMeta(() => ({ title: t('auth.forgot-change.title') }))
+
+    return { t }
   },
   computed: {
     canSubmit() {
@@ -59,11 +64,11 @@ export default {
         password: this.password
       })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
 
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       })
       .finally(_ => this.loading = false)
     },

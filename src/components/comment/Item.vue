@@ -51,7 +51,7 @@
 import { defineAsyncComponent } from 'vue'
 import { Icon, MetaInfo } from '@vue-norma/ui'
 
-import Attachments from '@/components/attachments'
+import Attachments from '@/components/attachments/Index.vue'
 import { UserItem } from '@/components/user'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useModals } from '@vue-norma/ui'

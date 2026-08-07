@@ -1,38 +1,38 @@
 <template>
   <group>
-    <n-header>{{ $t('auth.create_account.title') }}</n-header>
+    <n-header>{{ t('auth.create_account.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
-      <form-block :label="$t('auth.field.name')">
+      <form-block :label="t('auth.field.name')">
         <text-field tabindex="1" type="text" name="name" v-model.trim="form.name" :disabled="loading" autocomplete="name" />
       </form-block>
 
-      <form-block :label="$t('auth.field.username')">
+      <form-block :label="t('auth.field.username')">
         <text-field tabindex="2" type="text" name="username" v-model.trim="form.username" :disabled="loading" autocomplete="username" />
       </form-block>
 
-      <form-block :label="$t('auth.field.email')">
+      <form-block :label="t('auth.field.email')">
         <text-field tabindex="3" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
 
-      <form-block :label="$t('auth.field.password')">
+      <form-block :label="t('auth.field.password')">
         <text-field tabindex="4" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>
-        <n-button tabindex="5" size="l" :stretched="true" :disabled="loading">{{ $t('auth.button.continue') }}</n-button>
+        <n-button tabindex="5" size="l" :stretched="true" :disabled="loading">{{ t('auth.button.continue') }}</n-button>
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ $t('auth.create_account.already') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-login' }" :stretched="true">{{ t('auth.create_account.already') }}</n-button>
       </form-block>
 
       <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.create_account.agreement">
-          <router-link :to="{ name: 'help-page', params: { slug: 'user-agreement' } }">{{ $t('auth.create_account.terms') }}</router-link>
-          <router-link :to="{ name: 'help-page', params: { slug: 'privacy' } }">{{ $t('auth.create_account.privacy') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'user-agreement' } }">{{ t('auth.create_account.terms') }}</router-link>
+          <router-link :to="{ name: 'help-page', params: { slug: 'privacy' } }">{{ t('auth.create_account.privacy') }}</router-link>
         </i18n-t>
       </form-text>
     </form-group>
@@ -51,11 +51,13 @@
 </template>
 
 <script>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha'
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
 import { useAppStore } from '@/app/store/modules/app'
 import { useAuthStore } from '@/app/store/modules/auth'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'auth-register',
@@ -63,12 +65,8 @@ export default {
     VueHcaptcha,
     NButton, NHeader, Group, Spacer
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('auth.create_account.title')
-      },
       error: false,
       loading: false,
 
@@ -82,16 +80,18 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const store = useAppStore()
     const authStore = useAuthStore()
 
-    return { store, authStore }
+    useMeta(() => ({ title: t('auth.create_account.title') }))
+
+    return { t, store, authStore }
   },
   computed: {
     theme() { return this.store.theme },
 
     authData() { return this.authStore.data },
-
   },
   methods: {
     async submit() {
@@ -107,7 +107,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })

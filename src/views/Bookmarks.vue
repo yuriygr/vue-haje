@@ -1,6 +1,6 @@
 <template>
   <tabs>
-    <template v-for="item in tab_items" :key="`bookmarks-tab-${item.key}`">
+    <template v-for="item in tabItems" :key="`bookmarks-tab-${item.key}`">
       <tabs-item :to="item.to" :selected="item.key === $route.meta.key">{{ item.label }}</tabs-item>
     </template>
   </tabs>
@@ -34,7 +34,7 @@ const formatLink = (tab = false) => {
 }
 
 // Computed
-const tab_items = computed(() => [
+const tabItems = computed(() => [
   { key: 'all',      to: formatLink(),           label: t('bookmarks.tabs.all') },
   { key: 'users',    to: formatLink('users'),    label: t('bookmarks.tabs.users') },
   { key: 'entries',  to: formatLink('entries'),  label: t('bookmarks.tabs.entries') },

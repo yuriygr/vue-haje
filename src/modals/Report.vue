@@ -2,7 +2,7 @@
   <modal size="small">
     <modal-header :title="$t('modals.report.title')">
       <template #after>
-         <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
+        <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
       </template>
     </modal-header>
 

@@ -41,27 +41,6 @@
       "auth": "Authorization"
     }
   },
-  "home": {
-    "title": "Welcome",
-    "hero": {
-      "title": "Meet, <span>Futubra!</span>",
-      "description": "It’s somehow unfair that all social networks in Russia are in the hands of one person, don’t you think?"
-    },
-    "teasers": {
-      "item": {
-        "recommendations": { "title": "No recommendations", "info": "The news feed contains only what you subscribed to and without recommendations to add your ex and her new boyfriend as friends" }, 
-        "combine": { "title": "No extra features", "info": "Looking for delivery, horoscope, weather forecast, music and marketplace? Wrong tab, buddy" },
-        "friends": { "title": "No friends", "info": "Only subscriptions to user content that is interesting to you" },
-        "likes": { "title": "No likes", "info": "We don’t want to see posts with kittens on a regular basis for the sake of gaining ratings?" },
-        "blacklist": { "title": "No blacklists", "info": "Don't you like what the other person writes? Don't read it, it's not difficult" },
-        "ads": { "title": "No brands", "info": "Personally, I can’t get enough of their advertising on the Internet and in my mailbox" }
-      }
-    },
-    "action": {
-      "login": "Sign In",
-      "create_account": "@:auth.create_account.title"
-    }
-  },
   "feed": {
     "title": "Feed",
     "tabs": {

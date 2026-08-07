@@ -114,7 +114,7 @@
 import { Modal, ModalHeader, ModalBody, NButton, ButtonsGroup, Placeholder, PlaceholderLoading, Group } from '@vue-norma/ui'
 
 import { cancelEvent } from '@/app/services/utilities'
-import AttachmentsForm from '@/components/attachments/form'
+import AttachmentsForm from '@/components/attachments/Form'
 import { UserItem } from '@/components/user'
 
 import { useDraft } from '@/app/composables/useDraft'

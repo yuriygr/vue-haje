@@ -1,4 +1,27 @@
 {
+  "about": {
+    "hero": {
+      "title": "Conheça o <span>Futubra!</span>",
+      "description": "Não é meio injusto que todas as redes sociais da Rússia estejam nas mãos de uma única pessoa, você não acha?"
+    },
+    "teasers": {
+      "item": {
+        "stories": { "title": "Sem stories", "info": "Já estou de saco cheio dos seus stories, não consigo mais assistir. Uma história mais fodástica que a outra, só isso" }, 
+        "brain": { "title": "Sem redes neurais", "info": "Damos preferência a conteúdo feito com as mãos ou os pés de um ser humano" }, 
+        "recommendations": { "title": "Sem recomendações", "info": "O feed de notícias mostra só o que você segue, sem recomendações pra adicionar sua ex e o novo namorado dela nos amigos" }, 
+        "combine": { "title": "Sem funções desnecessárias", "info": "Procurando entrega, horóscopo, previsão do tempo, música e marketplace? Errou de aba, amigo" },
+        "friends": { "title": "Sem amigos", "info": "Só assinaturas de conteúdo de usuários que te interessam" },
+        "likes": { "title": "Sem curtidas", "info": "A gente não quer ficar vendo posts de gatinhos o tempo todo só pra juntar avaliação, né?" },
+        "blacklist": { "title": "Sem listas negras", "info": "Não gosta do que outra pessoa escreve? Não leia, não é difícil" },
+        "ads": { "title": "Sem marcas", "info": "Somos contra a ditadura dos grandes anunciantes" }
+      }
+    },
+    "action": {
+      "login": "Entrar",
+      "create_account": "@:auth.create_account.title"
+    },
+    "readmore": "Saiba mais"
+  },
   "compose": {
     "tab": {
       "drafts": "Rascunhos",

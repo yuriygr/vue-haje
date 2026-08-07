@@ -40,18 +40,16 @@
 <script>
 import { NButton, Group, NHeader, Spacer, Placeholder } from '@vue-norma/ui'
 
+import { useI18n } from 'vue-i18n'
+import { useMeta } from '@/app/composables/useMeta'
+
 export default {
   name: 'settings-notifications',
   components: {
     NButton, Group, NHeader, Spacer, Placeholder
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('settings.notifications.title')
-      },
-
       form: {
         mentions: false,
         subscriptions: false,
@@ -63,6 +61,12 @@ export default {
 
       loading: true
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    useMeta(() => ({ title: t('settings.notifications.title') }))
+
+    return { t }
   },
   methods: {
     // Fetching

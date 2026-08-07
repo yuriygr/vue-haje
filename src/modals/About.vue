@@ -1,56 +1,52 @@
 <template>
-  <div class="hero">
-    <div class="hero__title" v-html="$t('home.hero.title')" />
-    <div class="hero__description" v-html="$t('home.hero.description')" />
-
-    <buttons-group class="hero__actions">
-      <n-button size="l" component="router-link" :to="{ name: 'auth-register' }">
-        {{ $t('home.action.create_account') }}
-      </n-button>
-      <n-button size="l" mode="tertiary" component="router-link" :to="{ name: 'auth-login' }">
-        {{ $t('home.action.login') }}
-      </n-button>
-    </buttons-group>
-  </div>
-
-  <spacer height="40" />
-
-  <group>
-    <div class="teasers__grid">
-      <template v-for="(item, key) in teasers" :key="`teaser-item-${key}`">
-        <div :class="[ 'teaser-item' ]">
-          <div class="teaser-item__icon">
-            <icon :name="item.icon" size="20" />
-          </div>
-          <div class="teaser-item__content">
-            <div class="teaser-item__title">{{ $t(`home.teasers.item.${item.code}.title`) }}</div>
-            <div class="teaser-item__info">{{ $t(`home.teasers.item.${item.code}.info`) }}</div>
-          </div>
-        </div>
-      </template>
+  <modal>
+    <div class="about__close">
+      <n-button icon_before="ui-close-circle" mode="tertiary" @click.exact="closeModal" :title="$t('action.close')" />
     </div>
-  </group>
 
-  <group>
-  </group>
+    <modal-body>
+      <div class="hero">
+        <div class="hero__title" v-html="$t('modals.about.hero.title')" />
+        <div class="hero__description" v-html="$t('modals.about.hero.description')" />
+
+        <buttons-group class="hero__actions">
+          <n-button size="l" component="router-link" :to="{ name: 'auth-register' }">
+            {{ $t('modals.about.action.create_account') }}
+          </n-button>
+          <n-button size="l" mode="tertiary" component="router-link" :to="{ name: 'auth-login' }">
+            {{ $t('modals.about.action.login') }}
+          </n-button>
+        </buttons-group>
+      </div>
+
+      <group>
+        <div class="teasers__grid">
+          <template v-for="(item, key) in teasers" :key="`teaser-item-${key}`">
+            <div :class="[ 'teaser-item' ]">
+              <div class="teaser-item__icon">
+                <icon :name="item.icon" size="20" />
+              </div>
+              <div class="teaser-item__content">
+                <div class="teaser-item__title">{{ $t(`modals.about.teasers.item.${item.code}.title`) }}</div>
+                <div class="teaser-item__info">{{ $t(`modals.about.teasers.item.${item.code}.info`) }}</div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </group>
+    </modal-body>
+  </modal>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { onMounted, computed } from 'vue'
-import { Icon, NHeader, Group, Spacer, ButtonsGroup, NButton } from '@vue-norma/ui'
-
-import { useAuthStore } from '@/app/store/modules/auth'
-import { useMeta } from '@/app/composables/useMeta'
+import {
+  Modal, ModalBody, Icon, Group, ButtonsGroup, NButton,
+  useModals
+} from '@vue-norma/ui'
 
 const { t } = useI18n()
-const router = useRouter()
-const authStore = useAuthStore()
-
-useMeta(() => ({ title: t('home.title') }))
-
-const isAuth = computed(() => authStore.isAuth)
+const modals = useModals()
 
 const teasers = [
   { code: 'stories',         icon: 'stories-line' },
@@ -63,19 +59,27 @@ const teasers = [
   { code: 'ads',             icon: 'advertisement-line' }
 ]
 
-onMounted(() => {
-  if (isAuth.value) router.push({ name: 'feed' })
-})
+function closeModal() {
+  modals.close()
+}
+
+defineExpose({ closeModal })
 </script>
 
 <style lang="scss">
+.about__close {
+  padding: var(--modal--padding);
+  display: flex;
+  justify-content: right;
+}
+
 .hero {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 4vh 0 5vh;
+  padding: 0 0 12vh;
 
   &__title {
     font-size: 3rem;

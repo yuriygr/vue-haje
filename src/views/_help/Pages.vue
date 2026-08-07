@@ -5,7 +5,7 @@
         icon="search-line"
         size="m"
         :modelValue="query"
-        :placeholder="$t('search.search-field.placeholder')"
+        :placeholder="t('search.search-field.placeholder')"
 
         @keyup.enter="changeInput($event.target.value)"
       />
@@ -28,17 +28,19 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('help.empty.icon')"
-    :header="$t('help.empty.title')"
-    :text="$t('help.empty.description')"
+    :icon="t('help.empty.icon')"
+    :header="t('help.empty.title')"
+    :text="t('help.empty.description')"
   />
 </template>
 
 <script>
 import { Placeholder, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { HelpItem } from '@/components/help'
 import { useHelpPagesStore } from '@/app/store/modules/help'
+import { useMeta } from '@/app/composables/useMeta'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
 export default {
@@ -46,18 +48,14 @@ export default {
   components: {
     Placeholder, Spacer, HelpItem
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('help.title')
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useHelpPagesStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+
+    useMeta(() => ({ title: t('help.title') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

@@ -1,4 +1,4 @@
-export { default as SearchAll } from '@/views/_search/Al.vuel'
+export { default as SearchAll } from '@/views/_search/All.vue'
 export { default as SearchUsers } from '@/views/_search/Users.vue'
 export { default as SearchTags } from '@/views/_search/Tags.vue'
 export { default as SearchEntries } from '@/views/_search/Entries.vue'

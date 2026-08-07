@@ -13,36 +13,34 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('bookmarks.empty.icon')"
-    :header="$t('bookmarks.empty.title')"
-    :text="$t('bookmarks.empty.description')"
+    :icon="t('bookmarks.empty.icon')"
+    :header="t('bookmarks.empty.title')"
+    :text="t('bookmarks.empty.description')"
   />
 </template>
 
 <script>
 import { Placeholder } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { UserItem } from '@/components/user'
 import { useBookmarksUsersStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'bookmarks-users',
   components: {
     Placeholder, UserItem
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('bookmarks.title.users')
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useBookmarksUsersStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+
+    useMeta(() => ({ title: t('bookmarks.title.users') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

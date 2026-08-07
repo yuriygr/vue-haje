@@ -1,6 +1,6 @@
 <template>
   <group>
-    <n-header>{{ $t('settings.login-activity.title') }}</n-header>
+    <n-header>{{ t('settings.login-activity.title') }}</n-header>
 
     <items-list type="logins" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
       <login-item v-for="item in data" :key="`login-item-${item.login_id}`" v-memo="[item.login_id]" :data="item" />
@@ -15,34 +15,32 @@
       :header="humanizeError(error).title"
       :text="humanizeError(error).description"
     />
-    <placeholder v-else :text="$t('settings.login-activity.empty')" />
+    <placeholder v-else :text="t('settings.login-activity.empty')" />
   </group>
 </template>
 
 <script>
 import { Group, NHeader, Placeholder } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { LoginItem } from '@/components/login'
 import { useLoginsStore } from '@/app/store/modules/logins'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'settings-login-activity',
   components: {
     Group, NHeader, Placeholder, LoginItem
   },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('settings.login-activity.title')
-      }
-    }
-  },
   setup() {
+    const { t } = useI18n()
     const store = useLoginsStore()
     const humanizeError = useHumanizeError()
-    return { store, humanizeError }
+
+    useMeta(() => ({ title: t('settings.login-activity.title') }))
+
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -57,7 +55,7 @@ export default {
     async revokeSession(loginId) {
       const error = await this.store.revokeSession(loginId)
       if (error) {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       }
     }
   },

@@ -1,10 +1,10 @@
 <template>
   <group>
-    <n-header>{{ $t('auth.forgot-code.title') }}</n-header>
+    <n-header>{{ t('auth.forgot-code.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
       <form-text>
-        {{ $t('auth.forgot-code.suggest') }}
+        {{ t('auth.forgot-code.suggest') }}
       </form-text>
 
       <form-block>
@@ -12,17 +12,17 @@
       </form-block>
 
       <form-block>
-        <n-button size="l" ref="submit" :stretched="true" tabindex="2" :disabled="!canSubmit">{{ $t('auth.button.continue') }}</n-button>
+        <n-button size="l" ref="submit" :stretched="true" tabindex="2" :disabled="!canSubmit">{{ t('auth.button.continue') }}</n-button>
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ $t('auth.button.back') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ t('auth.button.back') }}</n-button>
       </form-block>
 
       <spacer heigth="40" />
 
       <form-text align="center">
-        {{ $t('auth.forgot-code.help') }}
+        {{ t('auth.forgot-code.help') }}
       </form-text>
     </form-group>
   </group>
@@ -30,6 +30,9 @@
 
 <script>
 import { NButton, NHeader, Group, Spacer, Placeholder, PlaceholderLoading } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useMeta } from '@/app/composables/useMeta'
 
 export default {
   name: 'auth-forgot-code',
@@ -42,20 +45,21 @@ export default {
       default: ""
     }
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('auth.forgot-code.title')
-      },
-
       error: false,
       loading: false,
 
       digits: Array(6).fill(''),
 
-      code: '113122'
+      code: ''
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    useMeta(() => ({ title: t('auth.forgot-code.title') }))
+
+    return { t }
   },
   computed: {
     canSubmit() {
@@ -72,11 +76,11 @@ export default {
         code: this.code
       })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
         this.$router.push({ name: 'auth-forgot-change', params: { token: this.token } })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       })
       .finally(_ => this.loading = false)
     },

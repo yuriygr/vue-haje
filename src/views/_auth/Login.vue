@@ -1,29 +1,29 @@
 <template>
   <group>
-    <n-header>{{ $t('auth.login.title') }}</n-header>
+    <n-header>{{ t('auth.login.title') }}</n-header>
 
     <form-group @submit="submit" :loading="loading">
-      <form-block :label="$t('auth.field.email')">
+      <form-block :label="t('auth.field.email')">
         <text-field tabindex="1" type="email" name="email" v-model.trim="form.email" :disabled="loading" autocomplete="email" />
       </form-block>
 
-      <form-block :label="$t('auth.field.password')">
+      <form-block :label="t('auth.field.password')">
         <text-field tabindex="2" type="password" name="password" v-model.trim="form.password" :disabled="loading" autocomplete="password" />
       </form-block>
 
       <form-block>
-        <n-button tabindex="3" size="l" :stretched="true" :disabled="loading">{{ $t('auth.button.login') }}</n-button>
+        <n-button tabindex="3" size="l" :stretched="true" :disabled="loading">{{ t('auth.button.login') }}</n-button>
       </form-block>
 
       <form-block>
-        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ $t('auth.login.forgot') }}</n-button>
+        <n-button component="router-link" mode="secondary" :to="{ name: 'auth-forgot' }" :stretched="true">{{ t('auth.login.forgot') }}</n-button>
       </form-block>
 
       <spacer heigth="40" />
 
       <form-text align="center">
         <i18n-t keypath="auth.login.create_account">
-          <router-link :to="{ name: 'auth-register' }">{{ $t('auth.create_account.title') }}</router-link>
+          <router-link :to="{ name: 'auth-register' }">{{ t('auth.create_account.title') }}</router-link>
         </i18n-t>
       </form-text>
     </form-group>
@@ -32,6 +32,9 @@
 
 <script>
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useMeta } from '@/app/composables/useMeta'
 import { useAuthStore } from '@/app/store/modules/auth'
 
 export default {
@@ -39,12 +42,8 @@ export default {
   components: {
     NButton, NHeader, Group, Spacer
   },
-  meta() { return this.meta },
   data() {
     return {
-      meta: {
-        title: this.$t('auth.login.title')
-      },
       error: false,
       loading: false,
 
@@ -55,9 +54,12 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const authStore = useAuthStore()
 
-    return { authStore }
+    useMeta(() => ({ title: t('auth.login.title') }))
+
+    return { t, authStore }
   },
   computed: {
     canSubmit() {
@@ -76,7 +78,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       })
       .finally(_ => this.loading = false)
     },
@@ -140,7 +142,3 @@ export default {
   mounted() { }
 }
 </script>
-
-<style lang="scss">
-
-</style>

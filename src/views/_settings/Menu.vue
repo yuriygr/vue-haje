@@ -13,109 +13,100 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
 import { NavigationSection, NavigationItem, NavigationTitle } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useMeta } from '@/app/composables/useMeta'
 import { useAuthStore } from '@/app/store/modules/auth'
 
-export default {
-  name: 'settngs-menu',
-  components: {
-    NavigationSection, NavigationItem, NavigationTitle
-  },
-  meta() { return this.meta },
-  data() {
-    return {
-      meta: {
-        title: this.$t('settings.title')
-      }
+defineOptions({
+  name: 'settings-menu'
+})
+
+// Composables
+const { t } = useI18n()
+const authStore = useAuthStore()
+
+useMeta(() => ({ title: t('settings.title') }))
+
+// Computed
+const isAuth = computed(() => authStore.isAuth)
+
+const sections = computed(() => {
+  const base = [
+    {
+      icon: 'user-edit-line',
+      label: t('settings.item.profile'),
+      to: { name: 'settings-profile' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'bell-line',
+      label: t('settings.item.notifications'),
+      to: { name: 'settings-notifications' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'link-line',
+      label: t('settings.item.connections'),
+      to: { name: 'settings-connections' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'palette-line',
+      label: t('settings.item.appearance'),
+      to: { name: 'settings-appearance' }
     }
-  },
-  setup() {
-    const authStore = useAuthStore()
+  ]
 
-    return { authStore }
-  },
-  computed: {
-    isAuth() { return this.authStore.isAuth },
-    sections() {
-      let base = [
-        {
-          icon: 'user-edit-line',
-          label: this.$t('settings.item.profile'),
-          to: { name: 'settings-profile' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'bell-line',
-          label: this.$t('settings.item.notifications'),
-          to: { name: 'settings-notifications' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'link-line',
-          label: this.$t('settings.item.connections'),
-          to: { name: 'settings-connections' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'palette-line',
-          label: this.$t('settings.item.appearance'),
-          to: { name: 'settings-appearance' }
-        }
-      ]
-
-      let secure = [
-        {
-          icon: 'user-lock-line',
-          label: this.$t('settings.item.account'),
-          to: { name: 'settings-account' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'password-line',
-          label: this.$t('settings.item.password'),
-          to: { name: 'settings-password' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'user-history-line',
-          label: this.$t('settings.item.login-activity'),
-          to: { name: 'settings-login-activity' },
-          disabled: !this.isAuth
-        },
-        {
-          icon: 'user-permissions-line',
-          label: this.$t('settings.item.permissions'),
-          to: { name: 'settings-permissions' },
-          disabled: !this.isAuth
-        }
-      ]
-
-      let danger = [
-        {
-          icon: 'gdpr-line',
-          label: this.$t('settings.item.gdpr'),
-          to: { name: 'settings-gdpr' },
-          disabled: !this.isAuth || true
-        },
-        {
-          icon: 'delete-bin-line',
-          label: this.$t('settings.item.delete-account'),
-          to: { name: 'settings-delete-account' },
-          disabled: !this.isAuth
-        }
-      ]
-
-      return [
-        { label: this.$t('settings.section.base'), items: base },
-        { label: this.$t('settings.section.secure'), items: secure },
-        { label: this.$t('settings.section.danger'), items: danger }
-      ]
+  const secure = [
+    {
+      icon: 'user-lock-line',
+      label: t('settings.item.account'),
+      to: { name: 'settings-account' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'password-line',
+      label: t('settings.item.password'),
+      to: { name: 'settings-password' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'user-history-line',
+      label: t('settings.item.login-activity'),
+      to: { name: 'settings-login-activity' },
+      disabled: !isAuth.value
+    },
+    {
+      icon: 'user-permissions-line',
+      label: t('settings.item.permissions'),
+      to: { name: 'settings-permissions' },
+      disabled: !isAuth.value
     }
-  }
-}
+  ]
+
+  const danger = [
+    {
+      icon: 'gdpr-line',
+      label: t('settings.item.gdpr'),
+      to: { name: 'settings-gdpr' },
+      disabled: !isAuth.value || true
+    },
+    {
+      icon: 'delete-bin-line',
+      label: t('settings.item.delete-account'),
+      to: { name: 'settings-delete-account' },
+      disabled: !isAuth.value
+    }
+  ]
+
+  return [
+    { label: t('settings.section.base'), items: base },
+    { label: t('settings.section.secure'), items: secure },
+    { label: t('settings.section.danger'), items: danger }
+  ]
+})
 </script>
-
-<style lang="scss">
-
-</style>

@@ -60,7 +60,7 @@ const EntryStatsModal = defineAsyncComponent(() => import("@/modals/_entry/Stats
 const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
 import { UserItem } from '@/components/user'
-import Attachments from '@/components/attachments'
+import Attachments from '@/components/attachments/Index.vue'
 
 export default {
   name: 'entry-item',

@@ -1,7 +1,8 @@
 // app components & services
 import router from '@/app/router'
 import store from '@/app/store'
-import { api, alerts, meta, new_api, new_meta, popover, bus, directives, global_ui, i18n } from '@/app/services'
+import i18n from '@/app/locales'
+import { api, alerts, meta, old_api, popover, bus, directives, global_ui } from '@/app/services'
 //import { toast } from '@vue-norma/ui'
 
 
@@ -29,16 +30,15 @@ export default new class {
     app.use(router, app)
     app.use(directives)
     app.use(global_ui)
-    app.use(meta, this.options.meta)
   
-    app.use(api, this.options.api)
+    app.use(old_api, this.options.api)
     app.use(alerts)
     app.use(popover)
 
     // Рефакторинг - В С Ё
     //app.use(toast)
-    app.use(new_api, this.options.api)
-    app.use(new_meta, this.options.meta)
+    app.use(api, this.options.api)
+    app.use(meta, this.options.meta)
     app.use(bus)
     app.use(store)
     app.use(i18n)
