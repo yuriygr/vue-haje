@@ -42,9 +42,9 @@
       :text="humanizeError(error).description"
     />
     <placeholder v-else
-      :icon="$t('support.empty.icon')"
-      :header="$t('support.empty.title')"
-      :text="$t('support.empty.description')"
+      :icon="t('support.empty.icon')"
+      :header="t('support.empty.title')"
+      :text="t('support.empty.description')"
     />
   </group>
 </template>
@@ -60,17 +60,19 @@ import { useSupportTicketsStore } from '@/app/store/modules/support'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+// Composables
 const { t } = useI18n()
 const store = useSupportTicketsStore()
 const humanizeError = useHumanizeError()
 const { data, filters, loading, error, hasMoreItems } = storeToRefs(store)
-
 useMeta(() => ({ title: t('support.title') }))
 
+// Methods
 function loadMore() {
   store.more()
 }
 
+// Lifecycle hooks
 onMounted(() => store.fetch())
 onBeforeUnmount(() => store.clear())
 </script>

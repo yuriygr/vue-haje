@@ -25,14 +25,6 @@ import { Tabs, TabsItem, Spacer } from '@vue-norma/ui'
 const { t } = useI18n()
 const route = useRoute()
 
-// Methods
-const formatLink = (tab = false) => {
-  const { q } = route.query
-  return tab
-    ? { name: `bookmarks-${tab}`, query: { q } }
-    : { name: 'bookmarks', query: { q } }
-}
-
 // Computed
 const tabItems = computed(() => [
   { key: 'all',      to: formatLink(),           label: t('bookmarks.tabs.all') },
@@ -41,4 +33,12 @@ const tabItems = computed(() => [
   { key: 'comments', to: formatLink('comments'), label: t('bookmarks.tabs.comments') },
   { key: 'feeds',    to: formatLink('feeds'),    label: t('bookmarks.tabs.feeds') },
 ])
+
+// Methods
+function formatLink(tab = false) {
+  const { q } = route.query
+  return tab
+    ? { name: `bookmarks-${tab}`, query: { q } }
+    : { name: 'bookmarks', query: { q } }
+}
 </script>

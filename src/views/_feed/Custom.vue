@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Placeholder, PlaceholderLoading, Separator } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'
@@ -28,6 +28,7 @@ import { useCustomFeed } from '@/app/store/modules/custom_feed'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+// Props
 const props = defineProps({
   uuid: {
     type: [Boolean, String],
@@ -35,15 +36,14 @@ const props = defineProps({
   }
 })
 
+// Composables
 const { t } = useI18n()
 const store = useCustomFeed()
 const humanizeError = useHumanizeError()
 const { data, loading, error, isEmpty } = storeToRefs(store)
+const { setTitle } = useMeta(() => ({ title: t('feed.title') }))
 
-const title = ref(t('feed.title'))
-
-useMeta(() => ({ title: title.value }))
-
+// Watchers
 watch(() => props.uuid, (to) => {
   if (to) {
     store.clear()
@@ -52,15 +52,14 @@ watch(() => props.uuid, (to) => {
 })
 
 watch(data, (to) => {
-  if (to) title.value = to.title
+  if (to) setTitle(to.title)
 })
 
 watch(error, (to) => {
-  if (to) title.value = humanizeError(to).title
+  if (to) setTitle(humanizeError(to).title)
 })
 
-onMounted(() => {
-  store.fetch(props.uuid)
-})
+// Lifecycle hooks
+onMounted(() => store.fetch(props.uuid))
 onBeforeUnmount(() => store.clear())
 </script>

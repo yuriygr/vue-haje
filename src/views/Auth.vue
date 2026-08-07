@@ -7,7 +7,7 @@
 </template>
 
 <script>
-export default { name: 'auth' }
+defineOptions({ name: 'auth' })
 </script>
 
 <style lang="scss">

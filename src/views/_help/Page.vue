@@ -1,11 +1,11 @@
 <template>
-  <template v-if="(!loading && !error) && Object.keys(data).length > 0">
-    <n-header>{{ data.title  }}</n-header>
+  <template v-if="(!loading && !error) && !isEmpty">
+    <n-header>{{ data.title }}</n-header>
     <meta-info :items="metaItems" />
     <div v-html="data.content" />
   </template>
-  
-  <template v-if="Object.keys(data).length == 0">
+
+  <template v-if="isEmpty">
     <placeholder-loading v-if="loading" />
     <placeholder v-if="(!loading && !error)" :text="t('help.errors.empty_page')" />
     <placeholder v-else-if="error"
@@ -16,8 +16,8 @@
   </template>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup>
+import { computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
@@ -26,65 +26,56 @@ import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'help-page',
-  props: {
-    slug: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: {
-    Placeholder, PlaceholderLoading, NHeader, MetaInfo
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useHelpPageStore()
-    const { timeAgo } = useTimeAgo()
-    const humanizeError = useHumanizeError()
+defineOptions({
+  name: 'help-page'
+})
 
-    const title = ref(t('help.title'))
-
-    useMeta(() => ({ title: title.value }))
-
-    return { t, title, store, timeAgo, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    isEmpty()      { return this.store.isEmpty },
-    metaItems() {
-      let _result = []
-      _result.push({ label: this.t('help.meta.edited', { date: this.formattedDate }) })
-
-      return _result
-    },
-    formattedDate() {
-      return this.timeAgo(this.data.meta.date_edited)
-    }
-  },
-  mounted() {
-    this.store.fetch(this.slug)
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    slug(to) {
-      if (to) {
-        this.store.clear()
-        this.store.fetch(to)
-      }
-    },
-    data(to) {
-      if (to)
-        this.title = to.title
-    },
-    error(to) {
-      if (to)
-        this.title = this.humanizeError(to).title
-    }
+// Props
+const props = defineProps({
+  slug: {
+    type: [Boolean, String],
+    default: false
   }
-}
+})
+
+// Composables
+const { t } = useI18n()
+const store = useHelpPageStore()
+const { timeAgo } = useTimeAgo()
+const humanizeError = useHumanizeError()
+const { setTitle } = useMeta(() => ({ title: t('help.title') }))
+
+// Computed
+const data = computed(() => store.data)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const isEmpty = computed(() => store.isEmpty)
+
+const formattedDate = computed(() => timeAgo(data.value.meta.date_edited))
+
+const metaItems = computed(() => {
+  const result = []
+  result.push({ label: t('help.meta.edited', { date: formattedDate.value }) })
+  return result
+})
+
+// Watchers
+watch(() => props.slug, (to) => {
+  if (to) {
+    store.clear()
+    store.fetch(to)
+  }
+})
+
+watch(data, (to) => {
+  if (to) setTitle(to.title)
+})
+
+watch(error, (to) => {
+  if (to) setTitle(humanizeError(to).title)
+})
+
+// Lifecycle hooks
+onMounted(() => store.fetch(props.slug))
+onBeforeUnmount(() => store.clear())
 </script>

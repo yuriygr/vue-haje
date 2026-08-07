@@ -71,6 +71,7 @@ import { TintsGrid, TintItem } from '@/components/tint'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'settings-profile',
@@ -97,9 +98,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+
     useMeta(() => ({ title: t('settings.profile.title') }))
 
-    return { t }
+    return { t, api }
   },
   computed: {
     sexs() {
@@ -114,7 +117,7 @@ export default {
     // Fetching
     fetchProfile() {
       this.loading.profile = true
-      return this.$api.get('settings/profile')
+      return this.api.get('settings/profile')
       .then(result => {
         this.profile = result
       })
@@ -125,7 +128,7 @@ export default {
     },
     fetchTints() {
       this.loading.tint = true
-      return this.$api.get('settings/tint')
+      return this.api.get('settings/tint')
       .then(result => {
         this.tints = result.items
       })
@@ -142,7 +145,7 @@ export default {
     // Submits
     submitProfile() {
       this.loading.profile = true
-      return this.$api.post('settings/profile', this.profile)
+      return this.api.post('settings/profile', this.profile)
       .then(result => {
         this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
 
@@ -154,7 +157,7 @@ export default {
     },
     submitTint() {
       this.loading.tint = true
-      return this.$api.post('settings/tint', { code: this.profile.tint })
+      return this.api.post('settings/tint', { code: this.profile.tint })
       .then(result => {
         this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
 
@@ -171,7 +174,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

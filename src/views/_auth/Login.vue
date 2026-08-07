@@ -36,6 +36,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useAuthStore } from '@/app/store/modules/auth'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'auth-login',
@@ -55,11 +56,12 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
     const authStore = useAuthStore()
 
     useMeta(() => ({ title: t('auth.login.title') }))
 
-    return { t, authStore }
+    return { t, api, authStore }
   },
   computed: {
     canSubmit() {
@@ -71,7 +73,7 @@ export default {
       this.loading = true
       this.error = false
 
-      this.$api.post('auth/login', this.form)
+      this.api.post('auth/login', this.form)
       .then(result => {
         this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })

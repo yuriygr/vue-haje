@@ -51,19 +51,19 @@ export default {
         {
           key: 'timeline',
           to: { name: 'feed-timeline' },
-          label: this.$t('feed.tabs.timeline'),
+          label: this.t('feed.tabs.timeline'),
           icon: false
         },
         {
           key: 'list',
           to: { name: 'feed-list' },
-          label: this.$t('feed.tabs.feeds'),
+          label: this.t('feed.tabs.feeds'),
           icon: 'spark-line'
         },
         {
           key: 'abyss',
           to: { name: 'feed-abyss' },
-          label: this.$t('feed.tabs.abyss'),
+          label: this.t('feed.tabs.abyss'),
           icon: false
         },
       ]

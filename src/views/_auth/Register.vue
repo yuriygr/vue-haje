@@ -58,6 +58,7 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/app/store/modules/app'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'auth-register',
@@ -81,12 +82,13 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
     const store = useAppStore()
     const authStore = useAuthStore()
 
     useMeta(() => ({ title: t('auth.create_account.title') }))
 
-    return { t, store, authStore }
+    return { t, api, store, authStore }
   },
   computed: {
     theme() { return this.store.theme },
@@ -100,7 +102,7 @@ export default {
 
       await this.$refs.captcha.executeAsync()
 
-      this.$api.post('auth/register', this.form)
+      this.api.post('auth/register', this.form)
       .then(result => {
         this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })

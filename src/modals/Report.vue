@@ -21,12 +21,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import {
-  Modal, ModalHeader, ModalBody, NButton,
-  useModals
-} from '@vue-norma/ui'
+import { Modal, ModalHeader, ModalBody, NButton } from '@vue-norma/ui'
 
+import { useI18n } from 'vue-i18n'
+import { useModals } from '@vue-norma/ui'
+
+// Props
 const props = defineProps({
   callback: {
     type: Function,
@@ -34,12 +34,15 @@ const props = defineProps({
   }
 })
 
+// Composables
 const { t } = useI18n()
 const modals = useModals()
 
+// State
 const loading = ref(false)
 const current = ref('')
 
+// Computed
 const reasons = computed(() => [
   { key: 'gore',       label: t('report.reason.gore') },
   { key: 'harassment', label: t('report.reason.harassment') },
@@ -51,6 +54,7 @@ const reasons = computed(() => [
   { key: 'terrorism',  label: t('report.reason.terrorism') },
 ])
 
+// Methods
 async function submit() {
   loading.value = true
   try {

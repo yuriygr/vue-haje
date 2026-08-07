@@ -33,6 +33,7 @@ import { NButton, NHeader, Group, Spacer, Placeholder, PlaceholderLoading } from
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'auth-forgot-code',
@@ -57,9 +58,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+
     useMeta(() => ({ title: t('auth.forgot-code.title') }))
 
-    return { t }
+    return { t, api }
   },
   computed: {
     canSubmit() {
@@ -71,7 +74,7 @@ export default {
       this.loading = true
       this.error = false
       
-      this.$api.post('auth/forgot-code', {
+      this.api.post('auth/forgot-code', {
         token: this.token,
         code: this.code
       })

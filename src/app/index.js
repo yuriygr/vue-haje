@@ -30,6 +30,7 @@ export default new class {
     app.use(router, app)
     app.use(directives)
     app.use(global_ui)
+    app.use(bus)
   
     app.use(old_api, this.options.api)
     app.use(alerts)
@@ -39,7 +40,6 @@ export default new class {
     //app.use(toast)
     app.use(api, this.options.api)
     app.use(meta, this.options.meta)
-    app.use(bus)
     app.use(store)
     app.use(i18n)
   }

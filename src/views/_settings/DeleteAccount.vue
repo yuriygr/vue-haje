@@ -27,6 +27,7 @@ import { NButton, NHeader, Group } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'settings-delete-account',
@@ -45,9 +46,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+
     useMeta(() => ({ title: t('settings.delete-account.title') }))
 
-    return { t }
+    return { t, api }
   },
   computed: {
     canSubmit() {
@@ -57,10 +60,9 @@ export default {
   methods: {
     submit() {
       this.loading = true
-      return this.$api.post('settings/delete-account', this.form)
+      return this.api.post('settings/delete-account', this.form)
       .then(result => {
         this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
-
       })
       .catch(error => {
         this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })

@@ -13,7 +13,9 @@
     <form-block>
       <n-checkbox :label="$t('settings.notifications.field.new_post')" v-model="form.new_post" :disabled="loading" />
     </form-block>
+  </group>
 
+  <group>
     <n-header>{{ $t('settings.notifications.feedback') }}</n-header>
 
     <form-block>
@@ -23,8 +25,9 @@
     <form-block>
       <n-checkbox :label="$t('settings.notifications.field.comments')" v-model="form.comments" :disabled="loading" />
     </form-block>
+  </group>
 
-
+  <group>
     <n-header>{{ $t('settings.notifications.others') }}</n-header>
 
     <form-block>
@@ -39,9 +42,10 @@
 
 <script>
 import { NButton, Group, NHeader, Spacer, Placeholder } from '@vue-norma/ui'
-
 import { useI18n } from 'vue-i18n'
+
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'settings-notifications',
@@ -64,33 +68,35 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+    
     useMeta(() => ({ title: t('settings.notifications.title') }))
 
-    return { t }
+    return { t, api }
   },
   methods: {
     // Fetching
     fetch() {
       this.loading = true
-      return this.$api.get('settings/notifications')
+      return this.api.get('settings/notifications')
       .then(result => {
         this.form = result.notifications
       })
       .catch(error => {
-        this.$alerts.danger({ text: error.status })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       })
       .finally(_ => this.loading = false)
     },
     // Submit
     submit() {
       this.loading = true
-      return this.$api.postJSON('settings/notifications', this.form)
+      return this.api.postJSON('settings/notifications', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
 
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
       })
       .finally(_ => this.loading = false)
     }
@@ -100,7 +106,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -60,7 +60,6 @@ const store = useFeedsStore()
 const humanizeError = useHumanizeError()
 const modals = useModals()
 const { data, filters, loading, error, hasMoreItems } = storeToRefs(store)
-
 useMeta(() => ({ title: t('feeds.title') }))
 
 // Computed

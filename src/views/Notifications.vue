@@ -1,7 +1,7 @@
 <template>
   <buttons-group :withGap="true">
-    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="load_more_loading">{{ $t('notifications.action.read_all') }}</n-button>
-    <n-button component="router-link" icon_before="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="$t('notifications.action.settings')" />
+    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="load_more_loading">{{ t('notifications.action.read_all') }}</n-button>
+    <n-button component="router-link" icon_before="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="t('notifications.action.settings')" />
   </buttons-group>
   
   <spacer height="15" />
@@ -32,9 +32,9 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('notifications.empty.icon')"
-    :header="$t('notifications.empty.title')"
-    :text="$t('notifications.empty.description')"
+    :icon="t('notifications.empty.icon')"
+    :header="t('notifications.empty.title')"
+    :text="t('notifications.empty.description')"
   />
 </template>
 
@@ -68,7 +68,7 @@ export default {
 
     useMeta(() => ({ title: t('notifications.title') }))
 
-    return { authStore, store, humanizeError }
+    return { t, authStore, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -82,37 +82,37 @@ export default {
         { 
           key: 'all',
           to: this.formatLink(),
-          label: this.$t('notifications.tabs.all')
+          label: this.t('notifications.tabs.all')
         },
         { 
           key: 'subscription',
           to: this.formatLink('subscription'),
-          label: this.$t('notifications.tabs.subscriptions')
+          label: this.t('notifications.tabs.subscriptions')
         },
         { 
           key: 'comment',
           to: this.formatLink('comment'),
-          label: this.$t('notifications.tabs.comments')
+          label: this.t('notifications.tabs.comments')
         },
         { 
           key: 'reply',
           to: this.formatLink('reply'),
-          label: this.$t('notifications.tabs.replies')
+          label: this.t('notifications.tabs.replies')
         },
         { 
           key: 'mention',
           to: this.formatLink('mention'),
-          label: this.$t('notifications.tabs.mentions')
+          label: this.t('notifications.tabs.mentions')
         },
         { 
           key: 'new_post',
           to: this.formatLink('new_post'),
-          label: this.$t('notifications.tabs.new_post')
+          label: this.t('notifications.tabs.new_post')
         },
         { 
           key: 'system',
           to: this.formatLink('system'),
-          label: this.$t('notifications.tabs.system')
+          label: this.t('notifications.tabs.system')
         }
       ]
     },
@@ -129,29 +129,29 @@ export default {
     async seen() {
       const [error] = await to(this.store.seen())
       error
-        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
         : this.authStore.seenNotifications()
     },
 
     async read(notifyId) {
       const [error] = await to(this.store.read(notifyId))
-      if (error) this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      if (error) this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
     },
 
     async onRead(notifyId) {
       this.$popover.close()
       const [error, result] = await to(this.store.read(notifyId))
       error
-        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
     },
 
     async onHide(notifyId) {
       this.$popover.close()
       const [error, result] = await to(this.store.hide(notifyId))
       error
-        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
     },
 
     async readAll() {
@@ -159,8 +159,8 @@ export default {
 
       const [error, result] = await to(this.store.readAll())
       error
-        ? this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
 
       this.load_more_loading = false
     },

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 
-interface ApiOptions {
+export interface ApiOptions {
   baseURL: string
   version: string
   withCredentials?: boolean

@@ -33,6 +33,8 @@ import { useTagStore } from '@/app/store/modules/tag'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'tag' })
+
 // Props
 const props = defineProps({
   slug: {
@@ -46,10 +48,7 @@ const { t } = useI18n()
 const store = useTagStore()
 const humanizeError = useHumanizeError()
 const { data, loading, error, isEmpty } = storeToRefs(store)
-
-const title = ref(t('tag.title'))
-
-useMeta(() => ({ title: title.value }))
+const { setTitle } = useMeta(() => ({ title: t('tag.title') }))
 
 // Watchers
 watch(() => props.slug, (to) => {
@@ -60,16 +59,16 @@ watch(() => props.slug, (to) => {
 })
 
 watch(data, (to) => {
-  if (to) title.value = `#${to.slug}`
+  if (to) setTitle(`#${to.slug}`)
 })
 
 watch(error, (to) => {
-  if (to) title.value = humanizeError(to).title
+  if (to) setTitle(humanizeError(to).title)
 })
 
 // Lifecycle hooks
 onMounted(() => {
-  title.value = `#${props.slug}`
+  setTitle(`#${props.slug}`)
   store.fetch(props.slug)
 })
 onBeforeUnmount(() => store.clear())

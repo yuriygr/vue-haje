@@ -23,6 +23,7 @@ import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'auth-forgot-change',
@@ -45,9 +46,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+
     useMeta(() => ({ title: t('auth.forgot-change.title') }))
 
-    return { t }
+    return { t, api }
   },
   computed: {
     canSubmit() {
@@ -59,7 +62,7 @@ export default {
       this.loading = true
       this.error = false
       
-      this.$api.post('auth/forgot-change', {
+      this.api.post('auth/forgot-change', {
         token: this.token,
         password: this.password
       })

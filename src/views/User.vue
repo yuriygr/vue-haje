@@ -5,7 +5,7 @@
     <spacer height="15" />
 
     <tabs>
-      <template v-for="item in tab_items" :key="`user-tab-${item.key}`">
+      <template v-for="item in tabItems" :key="`user-tab-${item.key}`">
         <tabs-item :to="item.to" :selected="item.active">{{ item.label }}</tabs-item>
       </template>
     </tabs>
@@ -42,6 +42,8 @@ import { useUserStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'user' })
+
 // Props
 const props = defineProps({
   username: {
@@ -56,14 +58,10 @@ const route = useRoute()
 const store = useUserStore()
 const humanizeError = useHumanizeError()
 const { data, loading, error, isEmpty } = storeToRefs(store)
-
-// State
-const title = ref(t('user.title'))
-
-useMeta(() => ({ title: title.value }))
+const { setTitle } = useMeta(() => ({ title: t('user.title') }))
 
 // Computed
-const tab_items = computed(() => [
+const tabItems = computed(() => [
   {
     key: 'entries',
     to: { name: 'user', params: { username: props.username } },
@@ -100,11 +98,11 @@ watch(() => props.username, (to) => {
 
 watch(data, (to) => {
   if (to.profile?.name && to.username)
-    title.value = `${to.profile.name} (@${to.username})`
+    setTitle(`${to.profile.name} (@${to.username})`)
 }, { immediate: true })
 
 watch(error, (to) => {
-  if (to) title.value = humanizeError(to).title
+  if (to) setTitle(humanizeError(to).title)
 })
 
 // Lifecycle hooks

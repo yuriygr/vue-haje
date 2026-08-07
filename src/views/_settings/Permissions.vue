@@ -60,6 +60,7 @@ import { Icon, Group, NHeader, Placeholder, PlaceholderLoading } from '@vue-norm
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useI18n } from 'vue-i18n'
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'settings-permissions',
@@ -76,16 +77,17 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
     const humanizeError = useHumanizeError()
     useMeta(() => ({ title: t('settings.permissions.title') }))
 
-    return { t, humanizeError }
+    return { t, api, humanizeError }
   },
   methods: {
     // Fetching
     fetch() {
       this.loading = true
-      return this.$api.get('settings/permissions')
+      return this.api.get('settings/permissions')
       .then(result => {
         this.data = result
       })

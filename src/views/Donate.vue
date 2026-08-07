@@ -1,6 +1,6 @@
 <template>
   <group>
-    <n-header>{{ $t('donate.title') }}</n-header>
+    <n-header>{{ t('donate.title') }}</n-header>
     <div>
       <p>Футубра — это не просто социальная сеть. Это сообщество, где люди и их идеи важнее прибыли, а искреннее общение заменяет навязчивую рекламу. Мы не продаем ваши данные, не размещаем баннеры и не работаем на инвесторов. Мой проект существует только благодаря вам.</p>
       <h3>Почему ваша поддержка так важна?</h3>
@@ -43,8 +43,9 @@ import { Group, NHeader } from '@vue-norma/ui'
 
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'donate' })
+
 // Composables
 const { t } = useI18n()
-
 useMeta(() => ({ title: t('donate.title') }))
 </script>

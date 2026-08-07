@@ -1,7 +1,7 @@
 import { watchEffect, onMounted, onActivated } from 'vue'
 
-interface MetaOptions {
-  defaultTitle: string | false
+export interface MetaOptions {
+  defaultTitle?: string | false
   separator: string
 }
 

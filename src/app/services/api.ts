@@ -1,15 +1,8 @@
 import type { App } from 'vue'
-import { initApi } from '@/app/composables/useApi'
-
-interface ApiPluginOptions {
-  key?: string
-  baseURL: string
-  version: string
-  withCredentials?: boolean
-}
+import { initApi, type ApiOptions } from '@/app/composables/useApi'
 
 export default {
-  install(app: App, options: ApiPluginOptions) {
+  install(app: App, options: ApiOptions) {
     initApi(options)
   }
 }

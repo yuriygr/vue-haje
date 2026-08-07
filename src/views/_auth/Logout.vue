@@ -2,42 +2,44 @@
   <placeholder-loading />
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { PlaceholderLoading } from '@vue-norma/ui'
+
 import { useAuthStore } from '@/app/store/modules/auth'
+import { useApi } from '@/app/composables/useApi'
 
-export default {
-  name: 'auth-logout',
-  components: {
-    PlaceholderLoading
-  },
-  setup() {
-    const authStore = useAuthStore()
+defineOptions({
+  name: 'auth-logout'
+})
 
-    return { authStore }
-  },
-  computed: {
-    authData() { return this.authStore.data },
-  },
-  methods: {
-    logout() {
-      this.loading = true
-      this.error = false
+// Composables
+const router = useRouter()
+const route = useRoute()
+const api = useApi()
+const authStore = useAuthStore()
 
-      this.$api.post('auth/logout', { logout_hash: this.authData.logout_hash })
-      .then(result => {
-        this.authStore.fetch()
-        this.$router.push(this.$route.query.redirect || { name: 'home' })
-      })
-      .catch(error => {
-        this.error = error
-      })
-      .finally(_ => this.loading = false)
-    }
-  },
-  watch: {},
-  mounted() {
-    this.logout()
-  }
+const loading = ref(false)
+const error = ref(null)
+
+// Methods
+function logout() {
+  loading.value = true
+  error.value = null
+
+  api.post('auth/logout', { logout_hash: authStore.data.logout_hash })
+  .then(() => {
+    authStore.fetch()
+    router.push(route.query.redirect || { name: 'home' })
+  })
+  .catch(err => {
+    error.value = err
+  })
+  .finally(() => loading.value = false)
 }
+
+onMounted(() => {
+  logout()
+})
 </script>

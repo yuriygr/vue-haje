@@ -32,6 +32,9 @@ import { useEntryStore } from '@/app/store/modules/entry'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'entry' })
+
+// Props
 const props = defineProps({
   uuid: {
     type: String,
@@ -40,15 +43,14 @@ const props = defineProps({
   }
 })
 
+// Composables
 const { t } = useI18n()
 const store = useEntryStore()
 const humanizeError = useHumanizeError()
 const { data, loading, error, isEmpty } = storeToRefs(store)
+const { setTitle } = useMeta(() => ({ title: t('entry.title') }))
 
-const title = ref(t('entry.title'))
-
-useMeta(() => ({ title: title.value }))
-
+// Watchers
 watch(() => props.uuid, (to) => {
   if (to != undefined) {
     store.clear()
@@ -58,13 +60,14 @@ watch(() => props.uuid, (to) => {
 
 watch(data, (to) => {
   if (to.content)
-    title.value = to.content.text != '' ? truncateText(to.content.text) : t('entry.title')
+  setTitle(to.content.text != '' ? truncateText(to.content.text) : t('entry.title'))
 }, { immediate: true })
 
 watch(error, (to) => {
-  if (to) title.value = humanizeError(to).title
+  if (to) setTitle(humanizeError(to).title)
 })
 
+// Lifecycle hooks
 onMounted(() => store.fetch(props.uuid))
 onBeforeUnmount(() => store.clear())
 </script>

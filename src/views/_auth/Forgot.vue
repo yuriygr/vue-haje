@@ -47,6 +47,7 @@ import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'auth-forgot',
@@ -67,9 +68,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+
     useMeta(() => ({ title: t('auth.forgot.title') }))
 
-    return { t }
+    return { t, api }
   },
   methods: {
     async submit() {
@@ -78,7 +81,7 @@ export default {
 
       await this.$refs.captcha.executeAsync()
       
-      this.$api.post('auth/forgot', this.form)
+      this.api.post('auth/forgot', this.form)
       .then(result => {
         this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
         this.$router.push({ name: 'auth-forgot-code', params: { token: result.payload } })

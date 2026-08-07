@@ -2,8 +2,6 @@
   <router-view></router-view>
 </template>
 
-<script>
-export default {
-  name: 'help'
-}
+<script setup>
+defineOptions({ name: 'help' })
 </script>

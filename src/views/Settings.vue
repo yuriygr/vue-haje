@@ -2,6 +2,6 @@
   <router-view></router-view>
 </template>
 
-<script>
-export default { name: 'settings' }
+<script setup>
+defineOptions({ name: 'settings' })
 </script>

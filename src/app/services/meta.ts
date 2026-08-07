@@ -1,13 +1,8 @@
 import type { App } from 'vue'
-import { setMetaOptions } from '@/app/composables/useMeta'
-
-interface MetaPluginOptions {
-  defaultTitle?: string | false
-  separator?: string
-}
+import { setMetaOptions, type MetaOptions } from '@/app/composables/useMeta'
 
 export default {
-  install(app: App, options: MetaPluginOptions = {}) {
+  install(app: App, options: MetaOptions) {
     setMetaOptions(options)
   }
 }

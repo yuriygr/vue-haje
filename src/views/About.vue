@@ -18,7 +18,7 @@
     </template>
   </navigation-section>
   <navigation-footer>
-    <a href="#" @click.prevent="refresh">{{ $t('about.refresh') }}</a>
+    <a href="#" @click.prevent="refresh">{{ t('about.refresh') }}</a>
   </navigation-footer>
 </template>
 
@@ -32,15 +32,13 @@ import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/app/store/modules/app'
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'about' })
+
 // Composables
 const { t } = useI18n()
 const store = useAppStore()
 const { title: appTitle, version: appVersion } = storeToRefs(store)
-
 useMeta(() => ({ title: t('about.title') }))
-
-// Methods
-const refresh = () => window.location.reload()
 
 // Computed
 const metaItems = computed(() => [
@@ -56,6 +54,9 @@ const helpItems = computed(() => [
   { label: t('about.item.ai-usage'),       to: { name: 'help-page', params: { slug: 'ai-usage' } },       chevron: true },
   { label: t('about.item.rules'),          to: { name: 'help-page', params: { slug: 'rules' } },          chevron: true },
 ])
+
+// Methods
+const refresh = () => window.location.reload()
 </script>
 
 <style lang="scss">

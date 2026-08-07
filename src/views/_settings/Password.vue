@@ -31,6 +31,7 @@ import { NButton, NHeader, Group } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
+import { useApi } from '@/app/composables/useApi'
 
 export default {
   name: 'settings-password',
@@ -50,9 +51,11 @@ export default {
   },
   setup() {
     const { t } = useI18n()
+    const api = useApi()
+    
     useMeta(() => ({ title: t('settings.password.title') }))
 
-    return { t }
+    return { t, api }
   },
   computed: {
     canSubmit() {
@@ -65,7 +68,7 @@ export default {
     },
     submit() {
       this.loading = true
-      return this.$api.post('settings/password', this.form)
+      return this.api.post('settings/password', this.form)
       .then(result => {
         this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
       })

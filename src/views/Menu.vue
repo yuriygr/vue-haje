@@ -29,6 +29,8 @@ import { UserItem } from '@/components/user'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useMeta } from '@/app/composables/useMeta'
 
+defineOptions({ name: 'menu' })
+
 // Composables
 const { t } = useI18n()
 const authStore = useAuthStore()
