@@ -15,7 +15,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "types": [
-      "vite/client"
+      "webpack-env",
+      "node"
     ],
     "paths": {
       "@/*": [

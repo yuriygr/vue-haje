@@ -75,8 +75,9 @@
   />
 </template>
 
-<script>
-import { NHeader, Placeholder, PlaceholderLoading, Separator, Spacer, Group, NButton } from '@vue-norma/ui'
+<script setup>
+import { computed, onMounted, onBeforeUnmount } from 'vue'
+import { NHeader, Placeholder, Spacer, Group, NButton } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { EntryItem } from '@/components/entry'
@@ -88,47 +89,27 @@ import { useBookmarksAllStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'bookmarks-all',
-  components: {
-    NHeader,
-    Placeholder, PlaceholderLoading, Separator, Spacer,
-    Group, NButton,
-    UserItem,
-    EntryItem,
-    CommentItem,
-    FeedItem
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useBookmarksAllStore()
-    const humanizeError = useHumanizeError()
+defineOptions({
+  name: 'bookmarks-all'
+})
 
-    useMeta(() => ({ title: t('bookmarks.title.all') }))
+// Composables
+const { t } = useI18n()
+const store = useBookmarksAllStore()
+const humanizeError = useHumanizeError()
+useMeta(() => ({ title: t('bookmarks.title.all') }))
 
-    return { t, store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    emptyData()    {
-      return (
-        this.data.entries.length + this.data.users.length + this.data.comments.length + this.data.feeds.length
-      ) == 0
-    },
-  },
-  methods: {
-    formatLink(tab = false) {
-      return { name: `bookmarks-${tab}`}
-    },
-  },
-  mounted() {
-    this.store.fetch()
-  },
-  beforeUnmount() {
-    this.store.clear()
-  }
-}
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+
+const emptyData = computed(() =>
+  data.value.entries.length + data.value.users.length + data.value.comments.length + data.value.feeds.length === 0
+)
+
+// Lifecycle hooks
+onMounted(() => store.fetch())
+onBeforeUnmount(() => store.clear())
 </script>

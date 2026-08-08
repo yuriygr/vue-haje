@@ -2,12 +2,13 @@ import { watchEffect, onMounted, onActivated } from 'vue'
 
 export interface MetaOptions {
   defaultTitle?: string | false
-  separator: string
+  separator?: string | false
 }
 
-interface MetaData {
+export interface MetaData {
   title?: string
   description?: string
+  canonical?: string
   [key: string]: string | undefined
 }
 
@@ -51,10 +52,30 @@ export function applyDataset(key: string, value?: string | false): void {
   }
 }
 
+/**
+ * Ставит/обновляет <link rel="canonical">. Если href не передан —
+ * подставляется текущий URL без query-параметров и хэша (стандартная
+ * практика для SPA: self-referencing canonical по умолчанию, чтобы
+ * избежать дублей контента из-за query-параметров вроде ?utm_source=...).
+ */
+export function applyCanonical(href?: string): void {
+  const url = href || `${window.location.origin}${window.location.pathname}`
+ 
+  let link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+  if (!link) {
+    link = document.createElement('link')
+    link.setAttribute('rel', 'canonical')
+    document.head.appendChild(link)
+  }
+ 
+  link.setAttribute('href', url)
+}
+
 function applyAll(meta?: MetaData | null): void {
   if (!meta) return
   if (meta.title) applyTitle(meta.title)
   if (meta.description) applyMeta('description', meta.description)
+    applyCanonical(meta.canonical)
 }
 
 // ─── Реактивный composable для мета-данных страницы ─────────────────────
@@ -70,6 +91,7 @@ export function useMeta(metaFn: MetaFn) {
   return {
     setTitle: applyTitle,
     setMeta: applyMeta,
-    setDataset: applyDataset
+    setDataset: applyDataset,
+    setCanonical: applyCanonical
   }
 }

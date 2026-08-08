@@ -34,57 +34,56 @@
   />
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Placeholder, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 
 import { HelpItem } from '@/components/help'
 import { useHelpPagesStore } from '@/app/store/modules/help'
 import { useMeta } from '@/app/composables/useMeta'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
-export default {
-  name: 'help-pages',
-  components: {
-    Placeholder, Spacer, HelpItem
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useHelpPagesStore()
-    const humanizeError = useHumanizeError()
+defineOptions({
+  name: 'help-pages'
+})
 
-    useMeta(() => ({ title: t('help.title') }))
+// Composables
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const store = useHelpPagesStore()
+const humanizeError = useHumanizeError()
+useMeta(() => ({ title: t('help.title') }))
 
-    return { t, store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
-    query()        { return this.$route.query.q ?? '' },
-  },
-  methods: {
-    changeInput(value) {
-      this.$router.replace({ name: this.$route.name, query: { ...this.$route.query, q: value } })
-    },
-    loadMore() {
-      this.store.more(this.slug)
-    }
-  },
-  mounted() {
-    this.store.setFilters({ query: this.query, offset: undefined })
-    this.store.fetch(this.slug)
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    '$route.query.q'(to) {
-      this.store.setFilters({ query: to, offset: undefined })
-      this.store.fetch()
-    }
-  }
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const hasMoreItems = computed(() => store.hasMoreItems)
+const query = computed(() => route.query.q ?? '')
+
+// Methods
+function changeInput(value) {
+  router.replace({ name: route.name, query: { ...route.query, q: value } })
 }
+
+function loadMore() {
+  store.more()
+}
+
+// Watchers
+watch(() => route.query.q, (to) => {
+  store.setFilters({ query: to, offset: undefined })
+  store.fetch()
+})
+
+// Lifecycle hooks
+onMounted(() => {
+  store.setFilters({ query: query.value, offset: undefined })
+  store.fetch()
+})
+onBeforeUnmount(() => store.clear())
 </script>

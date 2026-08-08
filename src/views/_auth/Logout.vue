@@ -20,6 +20,7 @@ const route = useRoute()
 const api = useApi()
 const authStore = useAuthStore()
 
+// State
 const loading = ref(false)
 const error = ref(null)
 
@@ -29,8 +30,8 @@ function logout() {
   error.value = null
 
   api.post('auth/logout', { logout_hash: authStore.data.logout_hash })
-  .then(() => {
-    authStore.fetch()
+  .then(async () => {
+    await authStore.fetch()
     router.push(route.query.redirect || { name: 'home' })
   })
   .catch(err => {
@@ -38,8 +39,6 @@ function logout() {
   })
   .finally(() => loading.value = false)
 }
-
-onMounted(() => {
-  logout()
-})
+// Lifecycle hooks
+onMounted(() => logout())
 </script>

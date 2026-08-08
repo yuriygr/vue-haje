@@ -6,30 +6,30 @@
   >
     <div class="app-tabbar__layout">
       <tabbar class="app-tabbar__tabbar">
-        <tabbar-item :to="{ name: 'feed' }" :title="$t('header.nav.feed')">
+        <tabbar-item :to="{ name: 'feed' }" :title="t('header.nav.feed')">
           <icon name="home-line" size="20" />
         </tabbar-item>
       
-        <tabbar-item :to="{ name: 'search' }" :title="$t('header.nav.search')" :preActive="$route.meta.section == 'search'">
+        <tabbar-item :to="{ name: 'search' }" :title="t('header.nav.search')" :preActive="$route.meta.section == 'search'">
           <icon name="search-line" size="20" />
         </tabbar-item>
 
-        <tabbar-item @click="openComposeModal" :title="$t('header.nav.compose')">
+        <tabbar-item @click="openComposeModal" :title="t('header.nav.compose')">
           <icon name="edit-line" size="20" />
         </tabbar-item>
 
-        <tabbar-item :to="{ name: 'notifications' }" :title="$t('header.nav.notifications')" :badge="hasNewNotifications">
+        <tabbar-item :to="{ name: 'notifications' }" :title="t('header.nav.notifications')" :badge="hasNewNotifications">
           <icon name="bell-line" size="20" />
         </tabbar-item>
 
         <template v-if="authData.is_auth">
-          <tabbar-item :to="{ name: 'menu' }" :title="$t('header.nav.menu')" :preActive="$route.meta.section == 'menu'">
+          <tabbar-item :to="{ name: 'menu' }" :title="t('header.nav.menu')" :preActive="$route.meta.section == 'menu'">
             <icon name="menu-line" size="20" />
           </tabbar-item>
         </template>
 
         <template v-else>
-          <tabbar-item :to="{ name: 'auth' }" :title="$t('header.nav.auth')">
+          <tabbar-item :to="{ name: 'auth' }" :title="t('header.nav.auth')">
             <icon name="login-line" size="20" />
           </tabbar-item>
         </template>
@@ -39,36 +39,38 @@
   </div>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue'
+<script setup>
+import { computed, defineAsyncComponent } from 'vue'
 import { Tabbar, TabbarItem, Icon } from '@vue-norma/ui'
-import { useAuthStore } from '@/app/store/modules/auth'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
 import { useModals } from '@vue-norma/ui'
+import { useAuthStore } from '@/app/store/modules/auth'
 
-let ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
+defineOptions({
+  name: 'app-tabbar'
+})
 
-export default {
-  name: 'app-tabbar',
-  components: { Tabbar, TabbarItem, Icon },
-  setup() {
-    const authStore = useAuthStore()
-    const modals = useModals()
-    return { authStore, modals }
-  },
-  computed: {
-    authData()            { return this.authStore.data },
-    isAuth()              { return this.authStore.isAuth },
-    hasNewNotifications() { return this.authStore.hasNewNotifications },
-  },
-  methods: {
-    openComposeModal() {
-      if (!this.isAuth) {
-        this.$router.push({ name: 'auth' })
-        return
-      }
-      this.modals.show(ComposeModal)
-    }
+const ComposeModal = defineAsyncComponent(() => import('@/modals/Compose.vue'))
+
+// Composables
+const router = useRouter()
+const { t } = useI18n()
+const authStore = useAuthStore()
+const modals = useModals()
+
+const authData = computed(() => authStore.data)
+const isAuth = computed(() => authStore.isAuth)
+const hasNewNotifications = computed(() => authStore.hasNewNotifications)
+
+// Methods
+function openComposeModal() {
+  if (!isAuth.value) {
+    router.push({ name: 'auth' })
+    return
   }
+  modals.show(ComposeModal)
 }
 </script>
 

@@ -19,7 +19,8 @@
   />
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
@@ -28,37 +29,29 @@ import { useBookmarksEntriesStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'bookmarks-entries',
-  components: {
-    Placeholder, EntryItem
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useBookmarksEntriesStore()
-    const humanizeError = useHumanizeError()
+defineOptions({
+  name: 'bookmarks-entries'
+})
 
-    useMeta(() => ({ title: t('bookmarks.title.entries') }))
+// Composables
+const { t } = useI18n()
+const store = useBookmarksEntriesStore()
+const humanizeError = useHumanizeError()
+useMeta(() => ({ title: t('bookmarks.title.entries') }))
 
-    return { t, store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
-  },
-  methods: {
-    loadMore() {
-      this.store.more()
-    }
-  },
-  mounted() {
-    this.store.fetch()
-  },
-  beforeUnmount() {
-    this.store.clear()
-  }
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const hasMoreItems = computed(() => store.hasMoreItems)
+
+// Methods
+function loadMore() {
+  store.more()
 }
+
+// Lifecycle hooks
+onMounted(() => store.fetch())
+onBeforeUnmount(() => store.clear())
 </script>

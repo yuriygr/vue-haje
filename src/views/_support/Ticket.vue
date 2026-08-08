@@ -11,9 +11,9 @@
       :text="humanizeError(error).description"
     />
     <placeholder v-else
-      :icon="$t('support.empty_ticket.icon')"
-      :header="$t('support.empty_ticket.title')"
-      :text="$t('support.empty_ticket.description')"
+      :icon="t('support.empty_ticket.icon')"
+      :header="t('support.empty_ticket.title')"
+      :text="t('support.empty_ticket.description')"
     />
   </template>
 </template>

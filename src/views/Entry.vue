@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Placeholder } from '@vue-norma/ui'
 import { storeToRefs } from 'pinia'

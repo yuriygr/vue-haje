@@ -21,7 +21,8 @@ module.exports = defineConfig({
     }]),
     config.plugin('DefinePlugin').use(DefinePlugin, [{
       'process.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
-      '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': JSON.stringify(false)
+      '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': JSON.stringify(false),
+      '__VUE_PROD_DEVTOOLS__': JSON.stringify(false)
     }])
   },
   transpileDependencies: true,

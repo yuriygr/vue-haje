@@ -19,8 +19,9 @@
   />
 </template>
 
-<script>
-import { Placeholder, NButton, LoadmoreTrigger } from '@vue-norma/ui'
+<script setup>
+import { computed, onMounted, onBeforeUnmount } from 'vue'
+import { Placeholder } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { CommentItem } from '@/components/comment'
@@ -28,38 +29,29 @@ import { useBookmarksCommentsStore } from '@/app/store/modules/bookmarks'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'bookmarks-comments',
-  components: {
-    CommentItem,
-    Placeholder, NButton, LoadmoreTrigger
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useBookmarksCommentsStore()
-    const humanizeError = useHumanizeError()
+defineOptions({
+  name: 'bookmarks-comments'
+})
 
-    useMeta(() => ({ title: t('bookmarks.title.comments') }))
+// Composables
+const { t } = useI18n()
+const store = useBookmarksCommentsStore()
+const humanizeError = useHumanizeError()
+useMeta(() => ({ title: t('bookmarks.title.comments') }))
 
-    return { t, store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
-  },
-  methods: {
-    loadMore() {
-      this.store.more()
-    }
-  },
-  mounted() {
-    this.store.fetch()
-  },
-  beforeUnmount() {
-    this.store.clear()
-  }
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const hasMoreItems = computed(() => store.hasMoreItems)
+
+// Methods
+function loadMore() {
+  store.more()
 }
+
+// Lifecycle hooks
+onMounted(() => store.fetch())
+onBeforeUnmount(() => store.clear())
 </script>

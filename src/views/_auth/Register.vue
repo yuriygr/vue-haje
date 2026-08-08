@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha'
+import { defineAsyncComponent } from 'vue'
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
@@ -59,6 +59,8 @@ import { useAppStore } from '@/app/store/modules/app'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+
+const VueHcaptcha = defineAsyncComponent(() => import('@hcaptcha/vue3-hcaptcha'))
 
 export default {
   name: 'auth-register',

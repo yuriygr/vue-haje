@@ -42,12 +42,16 @@
 </template>
 
 <script>
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import { defineAsyncComponent } from 'vue'
 import { NButton, NHeader, Group, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useAppStore } from '@/app/store/modules/app'
+import { useAuthStore } from '@/app/store/modules/auth'
+
+const VueHcaptcha = defineAsyncComponent(() => import('@hcaptcha/vue3-hcaptcha'))
 
 export default {
   name: 'auth-forgot',
@@ -69,10 +73,16 @@ export default {
   setup() {
     const { t } = useI18n()
     const api = useApi()
-
+    const store = useAppStore()
+    const authStore = useAuthStore()
     useMeta(() => ({ title: t('auth.forgot.title') }))
 
-    return { t, api }
+    return { t, api, store, authStore }
+  },
+  computed: {
+    theme() { return this.store.theme },
+
+    authData() { return this.authStore.data },
   },
   methods: {
     async submit() {

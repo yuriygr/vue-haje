@@ -13,9 +13,9 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else
-    :icon="$t('errors.empty_feed.icon')"
-    :header="$t('errors.empty_feed.title')"
-    :text="$t('errors.empty_feed.description')"
+    :icon="t('errors.empty_feed.icon')"
+    :header="t('errors.empty_feed.title')"
+    :text="t('errors.empty_feed.description')"
   />
 </template>
 
@@ -25,6 +25,7 @@ import { Placeholder } from '@vue-norma/ui'
 import { EntryItem } from '@/components/entry'
 import { useCustomFeedEntries } from '@/app/store/modules/custom_feed'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'custom-feed-entries',
@@ -38,10 +39,11 @@ export default {
     Placeholder, EntryItem
   },
   setup() {
+    const { t } = useI18n()
     const store = useCustomFeedEntries()
     const humanizeError = useHumanizeError()
 
-    return { store, humanizeError }
+    return { t, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },

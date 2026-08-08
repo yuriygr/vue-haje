@@ -1,12 +1,12 @@
 <template>
   <group>
-    <n-header>{{ $t('settings.permissions.title') }}</n-header>
+    <n-header>{{ t('settings.permissions.title') }}</n-header>
 
     <template v-if="(!loading && !error) && Object.keys(data).length > 0">
       <div class="permission-item-wrapper" v-for="(i_value, i_key) in data">
         <div :class="[ 'permission-item', `permission-item--state-${i_value ? 'allowed' : 'denied'}`]">
           <div class="permission-item__state"><icon :name="i_value ? 'check-line' : 'cross-line'" size="11" /></div>
-          <div class="permission-item__label">{{ $t(`settings.permissions.items.${i_key}`) }}</div>
+          <div class="permission-item__label">{{ t(`settings.permissions.items.${i_key}`) }}</div>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
         :header="humanizeError(error).title"
         :text="humanizeError(error).description"
       />
-      <placeholder v-else :text="$t('settings.permissions.empty')" />
+      <placeholder v-else :text="t('settings.permissions.empty')" />
     </template>
   </group>
 </template>

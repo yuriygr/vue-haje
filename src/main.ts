@@ -5,7 +5,7 @@ import '@/registerServiceWorker'
 import App from '@/App.vue'
 
 // app components & services
-import Norma from '@/app/index.js'
+import Norma from '@/app/index'
 
 // some styles
 import '@/assets/scss/main.scss'

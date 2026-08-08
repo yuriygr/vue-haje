@@ -12,49 +12,48 @@
     :header="humanizeError(error).title"
     :text="humanizeError(error).description"
   />
-  <placeholder v-else :text="$t('user.errors.subscriptions_empty')" />
+  <placeholder v-else :text="t('user.errors.subscriptions_empty')" />
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { UserItem } from '@/components/user'
 import { useUserSubscriptionsStore } from '@/app/store/modules/user'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
-export default {
-  name: 'user-subscriptions',
-  props: {
-    username: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: {
-    UserItem,  Placeholder
-  },
-  setup() {
-    const store = useUserSubscriptionsStore()
-    const humanizeError = useHumanizeError()
-    return { store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
-  },
-  methods: {
-    loadMore() {
-      this.store.more(this.username)
-    }
-  },
-  mounted() {
-    this.store.fetch(this.username)
-  },
-  beforeUnmount() {
-    this.store.clear()
+defineOptions({
+  name: 'user-subscriptions'
+})
+
+// Props
+const props = defineProps({
+  username: {
+    type: [Boolean, String],
+    default: false
   }
+})
+
+// Composables
+const { t } = useI18n()
+const store = useUserSubscriptionsStore()
+const humanizeError = useHumanizeError()
+
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const hasMoreItems = computed(() => store.hasMoreItems)
+
+// Methods
+function loadMore() {
+  store.more(props.username)
 }
+
+// Lifecycle hooks
+onMounted(() => store.fetch(props.username))
+onBeforeUnmount(() => store.clear())
 </script>

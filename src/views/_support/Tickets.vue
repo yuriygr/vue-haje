@@ -1,12 +1,12 @@
 <template>
   <group>
-    <n-header>{{ $t('support.title') }}</n-header>
+    <n-header>{{ t('support.title') }}</n-header>
     <form-group>
-      <form-block :label="$t('support.field.subject')">
+      <form-block :label="t('support.field.subject')">
         <text-field tabindex="1" type="text" name="subject" />
       </form-block>
 
-      <form-block :label="$t('support.field.category')">
+      <form-block :label="t('support.field.category')">
         <select-field tabindex="2" name="category">
           <option>category</option>
           <option>category</option>
@@ -15,18 +15,18 @@
         </select-field>
       </form-block>
 
-      <form-block :label="$t('support.field.message')">
+      <form-block :label="t('support.field.message')">
         <textarea></textarea>
       </form-block>
 
       <form-block>
-        <n-button tabindex="3" size="l">{{ $t('action.create') }}</n-button>
+        <n-button tabindex="3" size="l">{{ t('action.create') }}</n-button>
       </form-block>
     </form-group>
   </group>
 
   <group>
-    <n-header>{{ $t('support.tickets') }}</n-header>
+    <n-header>{{ $('support.tickets') }}</n-header>
 
     <items-list type="tickets" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
       <ticket-item v-for="item in data" :key="`ticket-${item.uuid}`" v-memo="[item.uuid]" :data="item" />

@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 defineOptions({ name: 'auth' })
 </script>
 

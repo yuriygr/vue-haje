@@ -2,6 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 
 export interface ApiOptions {
+  key?: string
   baseURL: string
   version: string
   withCredentials?: boolean
