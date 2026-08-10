@@ -32,6 +32,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'settings-password',
@@ -52,10 +53,11 @@ export default {
   setup() {
     const { t } = useI18n()
     const api = useApi()
-    
+    const toast = useToast()
+
     useMeta(() => ({ title: t('settings.password.title') }))
 
-    return { t, api }
+    return { t, api, toast }
   },
   computed: {
     canSubmit() {
@@ -70,10 +72,10 @@ export default {
       this.loading = true
       return this.api.post('settings/password', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     }

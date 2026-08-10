@@ -37,6 +37,7 @@ import { useI18n } from 'vue-i18n'
 import { useMeta } from '@/app/composables/useMeta'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'auth-login',
@@ -58,10 +59,11 @@ export default {
     const { t } = useI18n()
     const api = useApi()
     const authStore = useAuthStore()
-
+    const toast = useToast()
+    
     useMeta(() => ({ title: t('auth.login.title') }))
 
-    return { t, api, authStore }
+    return { t, api, toast, authStore }
   },
   computed: {
     canSubmit() {
@@ -73,14 +75,15 @@ export default {
       this.loading = true
       this.error = false
 
-      this.api.post('auth/login', this.form)
+      return this.api.post('auth/login', this.form)
       .then(async result => {
         await this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     }

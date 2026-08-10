@@ -6,7 +6,7 @@ import { useEntryDraftsStore } from '@/app/store/modules/entry_drafts'
 const LOCAL_KEY = 'compose_draft'
 
 export function useDraft(vm, { mode = 'add' } = {}) {
-  const { $api, $alerts, $t, $store } = vm
+  const { $api, $toast, $t, $store } = vm
 
   const isSaving = ref(false)
   const lastSaved = ref(null)
@@ -64,7 +64,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
       // TOOD: replace via api
       lastSaved.value = new Date()
     } catch (error) {
-      $alerts.danger({ text: $t(`alerts.${error.status}`) })
+      $toast.danger(this.$t(`alerts.${error.status}`))
     } finally {
       isSaving.value = false
     }
@@ -84,7 +84,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     try {
       // TOOD: replace via api
     } catch (error) {
-      $alerts.danger({ text: $t(`alerts.${error.status}`) })
+      $toast.danger(this.$t(`alerts.${error.status}`))
       return null
     }
   }
@@ -95,7 +95,7 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     try {
       // TOOD: replace via api
     } catch (error) {
-      $alerts.danger({ text: $t(`alerts.${error.status}`) })
+      $toast.danger(this.$t(`alerts.${error.status}`))
     }
   }
 
@@ -105,9 +105,9 @@ export function useDraft(vm, { mode = 'add' } = {}) {
     clearLocal()
     try {
       // TOOD: replace via api
-      $alerts.success({ text: $t('alerts.deleted') })
+      $toast.success(this.$t(`alerts.${result.status}`))
     } catch (error) {
-      $alerts.danger({ text: $t(`alerts.${error.status}`) })
+      $toast.danger(this.$t(`alerts.${error.status}`))
     }
   }
 

@@ -45,6 +45,10 @@
 <script>
 import axios from 'axios'
 import { Icon } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'attachments-form',
@@ -73,6 +77,13 @@ export default {
       images: [],
       localUniqueId: 0
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    const api = useApi()
+    const toast = useToast()
+
+    return { t, toast, api }
   },
   watch: {
     modelValue: {
@@ -175,7 +186,7 @@ export default {
       const formData = new FormData()
       formData.append('file', object.file)
 
-      return await this.$api.upload('/upload', formData, {
+      return await this.api.upload('/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         signal: object.controller.signal,
         onUploadProgress: (progressEvent) => {
@@ -190,7 +201,7 @@ export default {
       })
       .catch(error => {
         if (!axios.isCancel(error)) {
-          this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+          this.toast.danger(this.t(`alerts.${error.status}`))
           this.updateImageStatus(object.id, 'error')
         }
       })

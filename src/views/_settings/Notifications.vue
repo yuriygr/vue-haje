@@ -46,6 +46,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'settings-notifications',
@@ -69,9 +70,11 @@ export default {
   setup() {
     const { t } = useI18n()
     const api = useApi()
+    const toast = useToast()
+
     useMeta(() => ({ title: t('settings.notifications.title') }))
 
-    return { t, api }
+    return { t, toast, api }
   },
   methods: {
     // Fetching
@@ -82,7 +85,7 @@ export default {
         this.form = result.notifications
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     },
@@ -91,11 +94,10 @@ export default {
       this.loading = true
       return this.api.postJSON('settings/notifications', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
-
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     }

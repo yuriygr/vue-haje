@@ -48,6 +48,7 @@ import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 import { useI18n } from 'vue-i18n'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'notifications',
@@ -65,10 +66,11 @@ export default {
     const store = useNotificationsStore()
     const authStore = useAuthStore()
     const humanizeError = useHumanizeError()
+    const toast = useToast()
 
     useMeta(() => ({ title: t('notifications.title') }))
 
-    return { t, authStore, store, humanizeError }
+    return { t, toast, authStore, store, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -129,29 +131,29 @@ export default {
     async seen() {
       const [error] = await to(this.store.seen())
       error
-        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
         : this.authStore.seenNotifications()
     },
 
     async read(notifyId) {
       const [error] = await to(this.store.read(notifyId))
-      if (error) this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+      if (error) this.toast.danger(this.t(`alerts.${error.status}`))
     },
 
     async onRead(notifyId) {
       this.$popover.close()
       const [error, result] = await to(this.store.read(notifyId))
       error
-        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
+        : this.toast.success(this.t(`alerts.${result.status}`))
     },
 
     async onHide(notifyId) {
       this.$popover.close()
       const [error, result] = await to(this.store.hide(notifyId))
       error
-        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
+        : this.toast.success(this.t(`alerts.${result.status}`))
     },
 
     async readAll() {
@@ -159,8 +161,8 @@ export default {
 
       const [error, result] = await to(this.store.readAll())
       error
-        ? this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
-        : this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
+        : this.toast.success(this.t(`alerts.${result.status}`))
 
       this.load_more_loading = false
     },

@@ -12,7 +12,7 @@
         <template v-else>
           <div class="comment__header">
             <user-item :data="data.user" :showSubscribeAction="false" mode="small" />
-            <div class="comment__author" v-if="entryAuthorID === data.user.user_id">{{ $t('comment.meta.author') }}</div>
+            <div class="comment__author" v-if="entryAuthorID === data.user.user_id">{{ t('comment.meta.author') }}</div>
           </div>
           <div v-if="data.content.text" class="comment__content" v-markup="data.content.text" />
           <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
@@ -23,7 +23,7 @@
         <div class="deleted-item__icon">
           <icon name="cross-line" :size="8" />
         </div>
-        <div class="deleted-item__label">{{ $t('comment.deleted', { reason: 0 }) }}</div>
+        <div class="deleted-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
       </div>
     </div>
     <template v-for="item in data.replies">
@@ -50,11 +50,13 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Icon, MetaInfo } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import Attachments from '@/components/attachments/Index.vue'
 import { UserItem } from '@/components/user'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useModals } from '@vue-norma/ui'
+import { useToast } from '@/app/composables/useToast'
 
 const CommentForm = defineAsyncComponent(() => import("@/components/comment/Form.vue"))
 const CommentHistoryModal = defineAsyncComponent(() => import("@/modals/_comment/History.vue"))
@@ -116,9 +118,12 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const { timeAgo } = useTimeAgo()
     const modals = useModals()
-    return { timeAgo, modals }
+    const toast = useToast()
+
+    return { t, timeAgo, modals, toast }
   },
   computed: {
     elClass() {
@@ -131,18 +136,18 @@ export default {
     metaItems() {
       let _result = []
 
-      this.replyButton == 'action' && _result.push({ label: this.$t('comment.meta.reply'), action: this.toggleReplyForm })
-      this.replyButton == 'link' && _result.push({ label: this.$t('comment.meta.reply'), to: this.commentLink })
+      this.replyButton == 'action' && _result.push({ label: this.t('comment.meta.reply'), action: this.toggleReplyForm })
+      this.replyButton == 'link' && _result.push({ label: this.t('comment.meta.reply'), to: this.commentLink })
 
       _result.push({ label: this.formattedDate, to: this.commentLink })
       
-      this.data.state.is_edited && _result.push({ label: this.$t('comment.meta.edited'), action: this.history })
+      this.data.state.is_edited && _result.push({ label: this.t('comment.meta.edited'), action: this.history })
 
       if (this.replyButton == 'action' && this.data.parent_id != 0) {
-         _result.push({ label: '↑', to: this.parentLink, title: this.$t('comment.meta.parent') })
+         _result.push({ label: '↑', to: this.parentLink, title: this.t('comment.meta.parent') })
       }
 
-      _result.push({ label: '⋯', action: this.toggleOptions, title: this.$t('action.options') })
+      _result.push({ label: '⋯', action: this.toggleOptions, title: this.t('action.options') })
 
       return _result
     },
@@ -156,12 +161,12 @@ export default {
       let _edit = [
         {
           icon: 'ui-pencil',
-          label: this.$t('action.edit'),
+          label: this.t('action.edit'),
           action: this.startEdit
         },
         {
           icon: 'ui-delete',
-          label: this.$t('action.delete'),
+          label: this.t('action.delete'),
           action: this.openDeleteModal
         }
       ]
@@ -170,11 +175,11 @@ export default {
         this.data.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
-          label: this.$t('action.remove-bookmark'),
+          label: this.t('action.remove-bookmark'),
           action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
-          label: this.$t('action.add-bookmark'),
+          label: this.t('action.add-bookmark'),
           action: this.toggleBookmarks
         }
       ]
@@ -183,13 +188,13 @@ export default {
         ..._bookmark,
         {
           icon: 'ui-link',
-          label: this.$t('action.copy_link'),
+          label: this.t('action.copy_link'),
           action: this.copyLink
         },
         ...(this.data.user.state.is_me) ? _edit : [
           {
             icon: 'ui-error-warning',
-            label: this.$t('action.report'),
+            label: this.t('action.report'),
             action: this.report
           }
         ]
@@ -223,11 +228,11 @@ export default {
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
 
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ =>  this.loading.bookmarks = false)
     },
@@ -242,7 +247,7 @@ export default {
     copyLink() {
       let _url = this.$router.resolve(this.commentLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
+        this.toast.success(this.t('success.link_copied'))
       })
       this.$popover.close()
     },
@@ -250,20 +255,20 @@ export default {
     deleteComment() {
       return this.$api.delete(`comment/${this.data.comment_id}`)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
     reportComment(reason = 0) {
       return this.$api.post(`comment/${this.data.comment_id}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
@@ -301,7 +306,7 @@ export default {
       })
     },
     onEditError(error) {
-      this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      this.toast.danger(this.t(`alerts.${error.status}`))
     },
     onEditCancel() {
       this.isEdit = false

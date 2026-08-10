@@ -27,6 +27,7 @@ import { Group, Placeholder, Separator, NButton, ButtonsGroup, Spacer, NHeader }
 import { CommentItem, CommentReply } from '@/components/comment'
 import { useEntryCommentsStore } from '@/app/store/modules/entry_comments'
 import { useSSE } from '@/app/composables/useSSE'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'entry-comments',
@@ -43,13 +44,14 @@ export default {
   setup(props) {
     const hasNew = ref(false)
     const store  = useEntryCommentsStore()
+    const toast = useToast()
 
     const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT_ENTRY + '/' + props.entry.uuid)
     sse.on('has_replies', () => {
       hasNew.value = true
     })
 
-    return { hasNew, sse, store }
+    return { hasNew, toast, sse, store }
   },
   computed: {
     data()    { return this.store.data },
@@ -63,7 +65,7 @@ export default {
       this.scrollToComment(result.payload.comment_id)
     },
     onErrorAddingComment(error) {
-      this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+      this.toast.danger(this.t(`alerts.${error.status}`))
     },
     async loadMore() {
       await this.store.more(this.entry.uuid)

@@ -123,6 +123,7 @@ import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useModals } from '@vue-norma/ui'
 import { useMention } from '@/app/composables/useMention'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'compose-modal',
@@ -175,11 +176,13 @@ export default {
     const authStore = useAuthStore()
     const draftsStore = useEntryDraftsStore()
     const humanizeError = useHumanizeError()
+    const toast = useToast()
     const modals = useModals()
+
     const { mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose } = useMention()
     
     return {
-      authStore, draftsStore, humanizeError, modals,
+      authStore, draftsStore, humanizeError, modals, toast,
       mention, mentionDetect, mentionHandleKeydown, updateMentionPosition, mentionPick, mentionClose
     }
   },
@@ -266,7 +269,7 @@ export default {
         ? 'entry'
         : `entry/${this.data.uuid}`
 
-      this.$api.postJSON(endpoint, this.form)
+      return this.$api.postJSON(endpoint, this.form)
       .then(async result => {
         await this._draft.discardDraft()
         this.clearForm()
@@ -275,7 +278,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     },

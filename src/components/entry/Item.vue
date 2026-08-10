@@ -4,9 +4,9 @@
       <div class="entry__header">
         <user-item :data="data.user" :showSubscribeAction="false" />
         <buttons-group class="entry__options">
-          <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" :disabled="true" :title="$t('entry.meta.hidden_from_feed')" />
-          <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" :disabled="true" :title="$t('entry.meta.pinned')" />
-          <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+          <n-button icon_before="ui-eye-off" v-if="data.state.is_hidden_from_feed" mode="tertiary" :disabled="true" :title="t('entry.meta.hidden_from_feed')" />
+          <n-button icon_before="ui-pushpin" v-if="showPinAction && data.state.is_pinned" mode="tertiary" :disabled="true" :title="t('entry.meta.pinned')" />
+          <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="t('action.options')" />
         </buttons-group>
       </div>
       <div v-if="data.content.text" class="entry__content" v-markup="data.content.text" />
@@ -24,7 +24,7 @@
       <div class="entry__header">
         <user-item :showSubscribeAction="false" />
         <buttons-group class="entry__options">
-          <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
+          <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="t('action.options')" />
         </buttons-group>
       </div>
       <div class="entry__content">
@@ -45,10 +45,12 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
 
 import { useEntryStore } from '@/app/store/modules/entry'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
 import { useModals } from '@vue-norma/ui'
+import { useToast } from '@/app/composables/useToast'
 
 const ComposeModal = defineAsyncComponent(() => import("@/modals/Compose.vue"))
 
@@ -101,18 +103,21 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const entryStore = useEntryStore()
     const { timeAgo, fullDate } = useTimeAgo()
     const modals = useModals()
-    return { entryStore, timeAgo, fullDate, modals }
+    const toast = useToast()
+
+    return { t, entryStore, timeAgo, fullDate, modals, toast }
   },
   computed: {
     metaItems() {
       let _result = []
 
-      this.data.state.is_comments_enabled && _result.push({ label: this.$t('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
+      this.data.state.is_comments_enabled && _result.push({ label: this.t('entry.meta.comments', this.data.counters.comments), to: this.commentsLink, action: this.prefetchEntry })
       _result.push({ label: this.formattedDate, to: this.entryLink, action: this.prefetchEntry })
-      this.data.state.is_edited && _result.push({ label: this.$t('entry.meta.edited'), action: this.history })
+      this.data.state.is_edited && _result.push({ label: this.t('entry.meta.edited'), action: this.history })
 
       return _result
     },
@@ -127,11 +132,11 @@ export default {
         this.data.user.state.me_subscribed ? 
         {
           icon: 'user-unfollow-line',
-          label: this.$t('action.unsubscribe'),
+          label: this.t('action.unsubscribe'),
           action: this.unsubscribe
         } : {
           icon: 'user-add-line',
-          label: this.$t('action.subscribe'),
+          label: this.t('action.subscribe'),
           action: this.subscribe
         }
       ]
@@ -139,12 +144,12 @@ export default {
       let _edit = [
         {
           icon: 'ui-pencil',
-          label: this.$t('action.edit'),
+          label: this.t('action.edit'),
           action: this.edit
         },
         {
           icon: 'ui-delete',
-          label: this.$t('action.delete'),
+          label: this.t('action.delete'),
           action: this.delete
         }
       ]
@@ -153,11 +158,11 @@ export default {
         this.data.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
-          label: this.$t('action.remove-bookmark'),
+          label: this.t('action.remove-bookmark'),
           action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
-          label: this.$t('action.add-bookmark'),
+          label: this.t('action.add-bookmark'),
           action: this.toggleBookmarks
         }
       ]
@@ -166,11 +171,11 @@ export default {
         this.data.state.is_pinned ?
         {
           icon: 'ui-unpin',
-          label: this.$t('entry.action.unpin'),
+          label: this.t('entry.action.unpin'),
           action: this.togglePin
         } : {
           icon: 'ui-pushpin',
-          label: this.$t('entry.action.pin'),
+          label: this.t('entry.action.pin'),
           action: this.pin
         }
       ]
@@ -180,23 +185,23 @@ export default {
         ..._bookmark,
         {
           icon: 'ui-link',
-          label: this.$t('action.copy_link'),
+          label: this.t('action.copy_link'),
           action: this.copyLink
         },
         ...(this.data.state.is_edited) ? [{
           icon: 'ui-history',
-          label: this.$t('entry.action.history'),
+          label: this.t('entry.action.history'),
           action: this.history
         }] : [],
         ...(this.data.user.state.is_me && this.showPinAction) ? _pin : [],
         ...(this.data.user.state.is_me) ? [{
             icon: 'ui-stats',
-            label: this.$t('action.stats'),
+            label: this.t('action.stats'),
             action: this.stats
         }] : [],
         ...(this.data.user.state.is_me) ? _edit : [{
           icon: 'ui-error-warning',
-          label: this.$t('action.report'),
+          label: this.t('action.report'),
           action: this.report
         }]
       ]
@@ -222,7 +227,7 @@ export default {
     copyLink() {
       let _url = this.$router.resolve(this.entryLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
+        this.toast.success(this.t('success.link_copied'))
       })
       this.$popover.close()
     },
@@ -234,7 +239,7 @@ export default {
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
     subscribe() {
@@ -244,14 +249,14 @@ export default {
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
     toggleBookmarks() {
       this.loading.bookmarks = true
 
-      this.$api.post('my/bookmarks', {
+      return this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
         object: 'entry',
         entry_id: this.data.entry_id
@@ -263,11 +268,11 @@ export default {
           ? this.data.counters.bookmarks++
           : this.data.counters.bookmarks--
 
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ =>  this.loading.bookmarks = false)
     },
@@ -279,31 +284,31 @@ export default {
       return this.$api.post(path)
       .then(result => {
         this.data.state.is_pinned = (result.status == 'entry_pinned')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
     reportEntry(reason = 0) {
       return this.$api.post(`entry/${this.data.uuid}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
     deleteEntry() {
       return this.$api.delete(`entry/${this.data.uuid}`)
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 

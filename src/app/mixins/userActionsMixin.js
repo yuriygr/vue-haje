@@ -1,5 +1,9 @@
 import { defineAsyncComponent } from 'vue'
 import { useModals } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 const ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
@@ -13,6 +17,14 @@ export const userActionsMixin = {
         mute: false
       }
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    const api = useApi()
+    const toast = useToast()
+    const modals = useModals()
+
+    return { t, toast, api, modals }
   },
   computed: {
     userLink() {
@@ -41,25 +53,38 @@ export const userActionsMixin = {
       .then(result => {
         this.localData.state.me_subscribed = result.status === 'subscribed'
         this.$emit('update:data', { ...this.localData })
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$toast.success(this.$t(`alerts.${result.status}`))
         this.onSubscribeResult(result)
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$toast.danger(this.$t(`alerts.${error.status}`))
       })
       .finally(() => this.loading.subscribe = false)
     },
     // Мьют
     toggleMute() {
       this.loading.mute = true
-      alert("Нет")
+      const path = this.localData.state.is_muted
+        ? `user/${this.localData.username}/unmute`
+        : `user/${this.localData.username}/mute`
+
+      this.$api.post(path)
+      .then(result => {
+        this.localData.state.is_muted = result.status === 'muted'
+        this.$emit('update:data', { ...this.localData })
+        this.$toast.success(this.$t(`alerts.${result.status}`))
+      })
+      .catch(error => {
+        this.$toast.danger(this.$t(`alerts.${error.status}`))
+      })
+      .finally(() => this.loading.mute = false)
     },
 
     // Закладки
     toggleBookmarks() {
       this.loading.bookmarks = true
 
-      this.$api.post('my/bookmarks', {
+      return this.$api.post('my/bookmarks', {
         type: this.localData.state.is_bookmarked ? 'remove' : 'add',
         object: 'user',
         user_id: this.localData.user_id
@@ -67,11 +92,11 @@ export const userActionsMixin = {
       .then(result => {
         this.localData.state.is_bookmarked = result.status === 'added'
         this.$emit('update:data', { ...this.localData })
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$toast.success(this.$t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$toast.danger(this.$t(`alerts.${error.status}`))
       })
       .finally(() => this.loading.bookmarks = false)
     },
@@ -82,15 +107,15 @@ export const userActionsMixin = {
         ? `user/${this.localData.username}/unnotify`
         : `user/${this.localData.username}/notify`
 
-      this.$api.post(path)
+      return this.$api.post(path)
       .then(result => {
         this.localData.state.me_subscribed_to_new_posts = result.status === 'subscribed'
         this.$emit('update:data', { ...this.localData })
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$toast.success(this.$t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$toast.danger(this.$t(`alerts.${error.status}`))
       })
     },
 
@@ -98,10 +123,10 @@ export const userActionsMixin = {
     reportUser(reason = 0) {
       return this.$api.post(`user/${this.localData.username}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.$toast.success(this.$t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.$toast.danger(this.$t(`alerts.${error.status}`))
       })
     },
 
@@ -109,15 +134,14 @@ export const userActionsMixin = {
     copyLink() {
       const url = this.$router.resolve(this.userLink)
       navigator.clipboard.writeText(window.location.origin + url.fullPath).then(() => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
+        this.$toast.success(this.$t('success.link_copied'))
       })
       this.$popover.close()
     },
 
     // Открыть модалку репорта
     report() {
-      const { show } = useModals()
-      show(ReportModal, {
+      this.modals.show(ReportModal, {
         callback: this.reportUser
       })
       this.$popover.close()

@@ -34,6 +34,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'auth-forgot-code',
@@ -59,10 +60,11 @@ export default {
   setup() {
     const { t } = useI18n()
     const api = useApi()
+    const toast = useToast()
 
     useMeta(() => ({ title: t('auth.forgot-code.title') }))
 
-    return { t, api }
+    return { t, api, toast }
   },
   computed: {
     canSubmit() {
@@ -74,22 +76,20 @@ export default {
       this.loading = true
       this.error = false
       
-      this.api.post('auth/forgot-code', {
+      return this.api.post('auth/forgot-code', {
         token: this.token,
         code: this.code
       })
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$router.push({ name: 'auth-forgot-change', params: { token: this.token } })
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .finally(_ => this.loading = false)
     },
-    cleanError(type) {
 
-    },
     helpLink() {
       return {
         name: 'help', params: { uuid: 'contact-us' }

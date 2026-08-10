@@ -56,7 +56,6 @@ export default  {
 
 			modals.close()
 			app.config.globalProperties.$popover.close()
-			app.config.globalProperties.$alerts.close()
 
 		
 			if (to?.name === 'entry') {

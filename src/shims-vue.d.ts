@@ -1,6 +1,7 @@
 /* eslint-disable */
 import type { useApi } from '@/app/composables/useApi'
 import type { initBus } from '@/app/composables/useBus'
+import type { initToast } from '@/app/composables/useToast'
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
@@ -12,5 +13,12 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     $api: ReturnType<typeof useApi>
     $bus: ReturnType<typeof initBus>
+    $toast: ReturnType<typeof initToast>
+  }
+}
+
+declare module 'pinia' {
+  export interface PiniaCustomProperties {
+    $api: ReturnType<typeof useApi>
   }
 }

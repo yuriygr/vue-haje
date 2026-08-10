@@ -17,9 +17,9 @@
           mode="tertiary"
           @click.exact="toggleSubscribe"
           :disabled="loading.subscribe"
-          :title="$t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
+          :title="t(data.state.me_subscribed ? 'action.unsubscribe' : 'action.subscribe')"
         />
-        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="$t('action.options')" />
+        <n-button icon_before="ui-more" mode="tertiary" @click.exact="toggleOptions" ref="options" :title="t('action.options')" />
       </buttons-group>
     </div>
   </template>
@@ -35,7 +35,7 @@
         <skeleton :width="skeletonWidths.info" :height="8" />
       </div>
       <buttons-group :withGap="true" class="feed-item__actions">
-        <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="$t('action.options')" />
+        <n-button icon_before="ui-more" mode="tertiary" :disabled="true" :title="t('action.options')" />
       </buttons-group>
     </div>
   </template>
@@ -44,7 +44,10 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import { NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
 import { useModals } from '@vue-norma/ui'
+import { useToast } from '@/app/composables/useToast'
 
 let ReportModal = defineAsyncComponent(() => import("@/modals/Report.vue"))
 
@@ -65,8 +68,11 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const modals = useModals()
-    return { modals }
+    const toast = useToast()
+
+    return { t, modals, toast }    
   },
   data() {
     return {
@@ -99,7 +105,7 @@ export default {
     },
     metaItems() {
       let _result = []
-      _result.push({ label: this.$t('feed.meta.author', { author: this.data.author.name }), to: { name: 'user', params: { username: this.data.author.username } } })
+      _result.push({ label: this.t('feed.meta.author', { author: this.data.author.name }), to: { name: 'user', params: { username: this.data.author.username } } })
       return _result
     },
     optionsItems() {
@@ -107,11 +113,11 @@ export default {
         this.data.state.is_bookmarked ?
         {
           icon: 'ui-bookmark-remove',
-          label: this.$t('action.remove-bookmark'),
+          label: this.t('action.remove-bookmark'),
           action: this.toggleBookmarks
         } : {
           icon: 'ui-bookmark-add',
-          label: this.$t('action.add-bookmark'),
+          label: this.t('action.add-bookmark'),
           action: this.toggleBookmarks
         }
       ]
@@ -120,12 +126,12 @@ export default {
         ..._bookmark,
         {
           icon: 'ui-link',
-          label: this.$t('action.copy_link'),
+          label: this.t('action.copy_link'),
           action: this.copyLink
         },
         {
           icon: 'ui-error-warning',
-          label: this.$t('action.report'),
+          label: this.t('action.report'),
           action: this.report
         }
       ]
@@ -147,31 +153,32 @@ export default {
       let _path = this.data.state.me_subscribed
         ? `feed/${this.data.uuid}/unsubscribe`
         : `feed/${this.data.uuid}/subscribe`
-      this.$api.post(_path)
+
+      return this.$api.post(_path)
       .then(result => {
         this.data.state.me_subscribed = (result.status == 'subscribed')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.subscribe = false)
     },
 
     toggleBookmarks() {
       this.loading.bookmarks = true
-      this.$api.post('my/bookmarks', {
+      return this.$api.post('my/bookmarks', {
         type: this.data.state.is_bookmarked ? 'remove' : 'add',
         object: 'feed',
         feed_id: this.data.feed_id
       })
       .then(result => {
         this.data.state.is_bookmarked = (result.status == 'added')
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$popover.close()
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.bookmarks = false)
     },
@@ -179,10 +186,10 @@ export default {
     reportFeed(reason = 0) {
       return this.$api.post(`feed/${this.data.uuid}/report`, { reason })
       .then(result => {
-        this.$alerts.success({ text: this.$t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.$t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
     },
 
@@ -190,7 +197,7 @@ export default {
     copyLink() {
       let _url = this.$router.resolve(this.feedLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.$alerts.success({ text: this.$t('success.link_copied') })
+        this.toast.success(this.t('success.link_copied'))
       })
       this.$popover.close()
     },

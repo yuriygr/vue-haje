@@ -27,7 +27,7 @@ import { LoginItem } from '@/components/login'
 import { useLoginsStore } from '@/app/store/modules/logins'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
-
+import { useToast } from '@/app/composables/useToast'
 export default {
   name: 'settings-login-activity',
   components: {
@@ -37,10 +37,11 @@ export default {
     const { t } = useI18n()
     const store = useLoginsStore()
     const humanizeError = useHumanizeError()
+    const toast = useToast()
 
     useMeta(() => ({ title: t('settings.login-activity.title') }))
 
-    return { t, store, humanizeError }
+    return { t, store, toast, humanizeError }
   },
   computed: {
     data()         { return this.store.data },
@@ -55,7 +56,7 @@ export default {
     async revokeSession(loginId) {
       const error = await this.store.revokeSession(loginId)
       if (error) {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       }
     }
   },

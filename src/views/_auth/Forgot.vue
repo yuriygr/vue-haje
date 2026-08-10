@@ -48,6 +48,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 import { useAppStore } from '@/app/store/modules/app'
 import { useAuthStore } from '@/app/store/modules/auth'
 
@@ -75,9 +76,11 @@ export default {
     const api = useApi()
     const store = useAppStore()
     const authStore = useAuthStore()
+    const toast = useToast()
+
     useMeta(() => ({ title: t('auth.forgot.title') }))
 
-    return { t, api, store, authStore }
+    return { t, api, toast, store, authStore }
   },
   computed: {
     theme() { return this.store.theme },
@@ -91,21 +94,18 @@ export default {
 
       await this.$refs.captcha.executeAsync()
       
-      this.api.post('auth/forgot', this.form)
+      return this.api.post('auth/forgot', this.form)
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
+        this.toast.success(this.t(`alerts.${result.status}`))
         this.$router.push({ name: 'auth-forgot-code', params: { token: result.payload } })
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })
       .finally(_ => this.loading = false)
-    },
-    cleanError(type) {
-
     },
     helpLink() {
       return {

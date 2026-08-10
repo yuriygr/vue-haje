@@ -34,24 +34,23 @@
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
-import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
+import { useI18n } from 'vue-i18n'
+import { useTimeAgo } from '@/app/composables/useTimeAgo'
+import type { Login } from '@/types/login'
 
-const props = defineProps({
-  data: {
-    default: false
-  },
-  clickable: {
-    type: Boolean,
-    default: true
-  },
-  showSubscribeAction: {
-    type: Boolean,
-    default: true
-  }
+const props = withDefaults(defineProps<{
+  data: Login | null
+  clickable?: boolean
+  showSubscribeAction?: boolean
+}>(), {
+  data: null,
+  clickable: true,
+  showSubscribeAction: true
 })
 
+const { t } = useI18n()
 const { timeAgo } = useTimeAgo()
 
 const skeletonWidths = {
@@ -60,7 +59,9 @@ const skeletonWidths = {
   ts: Math.floor(Math.random() * 100) + 50,
 }
 
-const formattedDate = computed(() => timeAgo(props.data.date_added))
+const formattedDate = computed(() =>
+  props.data ? timeAgo(props.data.date_added) : ''
+)
 </script>
 
 <style lang="scss">

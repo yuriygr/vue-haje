@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 
+// Types
 export interface ApiOptions {
   key?: string
   baseURL: string
@@ -8,6 +9,7 @@ export interface ApiOptions {
   withCredentials?: boolean
 }
 
+// Plugin
 const instance: { value: AxiosInstance | null } = { value: null }
 let token: string | false = false
 

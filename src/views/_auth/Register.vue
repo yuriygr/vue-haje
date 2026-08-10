@@ -59,7 +59,7 @@ import { useAppStore } from '@/app/store/modules/app'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
-
+import { useToast } from '@/app/composables/useToast'
 const VueHcaptcha = defineAsyncComponent(() => import('@hcaptcha/vue3-hcaptcha'))
 
 export default {
@@ -87,10 +87,11 @@ export default {
     const api = useApi()
     const store = useAppStore()
     const authStore = useAuthStore()
+    const toast = useToast()
 
     useMeta(() => ({ title: t('auth.create_account.title') }))
 
-    return { t, api, store, authStore }
+    return { t, api, toast, store, authStore }
   },
   computed: {
     theme() { return this.store.theme },
@@ -104,22 +105,21 @@ export default {
 
       await this.$refs.captcha.executeAsync()
 
-      this.api.post('auth/register', this.form)
-      .then(result => {
-        this.authStore.fetch()
+      return this.api.post('auth/register', this.form)
+      .then(async result => {
+        await this.authStore.fetch()
         this.$router.push(this.$route.query.redirect || { name: 'feed' })
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
         this.error = error
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })
       .finally(_ => this.loading = false)
     },
-    cleanError(type) {
 
-    },
     // captcha
     onVerify(token, ekey) {
       this.form['h-captcha-response'] = token

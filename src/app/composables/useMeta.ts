@@ -1,5 +1,6 @@
 import { watchEffect, onMounted, onActivated } from 'vue'
 
+// Types
 export interface MetaOptions {
   defaultTitle?: string | false
   separator?: string | false
@@ -12,6 +13,7 @@ export interface MetaData {
   [key: string]: string | undefined
 }
 
+// Plugin
 type MetaFn = () => MetaData | undefined | null
 
 let globalOptions: MetaOptions = {

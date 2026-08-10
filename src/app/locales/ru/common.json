@@ -347,6 +347,9 @@
     },
     "date": "Получен {date}"
   },
+  "success": {
+    "link_copied": "Ссылка скопирована в буфер обмена"
+  },
   "alerts": {
     "already_logged": "Уже авторизован",
     "please_enter_captcha": "Пройдите капчу",
@@ -420,10 +423,15 @@
     "challenge_code_confirmed": "Код подтвержден",
     "challenge_invalide_code": "Код недействителен",
 
+    "subscribed": "Подписались",
+    "unsubscribed": "Отписались",
+
     "invalid_json_format": "Неправильный формат JSON",
+    "method_not_allowed": "Метод недоступен или не существует",
 
     "err_canceled": "Запрос отменен",
     "err_network": "Ошибка соединения",
+    "ERR_NETWORK": "Ошибка соединения",
     "todo": "В разработке"
   },
   "action": {

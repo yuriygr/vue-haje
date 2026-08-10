@@ -37,7 +37,7 @@ import { timeFormatOnlyYear } from '@/app/services/datetime.js'
 
 const props = defineProps({
   data: {
-    default: false
+    default: null
   }
 })
 
@@ -55,7 +55,7 @@ const elClass = computed(() => [
 ])
 
 const formattedDate = computed(() =>
-  timeFormatOnlyYear(props.data.date_added, locale.value)
+  props.data ? timeFormatOnlyYear(props.data.date_added, locale.value) : ''
 )
 
 const metaItems = computed(() => [

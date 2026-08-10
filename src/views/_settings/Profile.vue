@@ -72,6 +72,7 @@ import { useI18n } from 'vue-i18n'
 
 import { useMeta } from '@/app/composables/useMeta'
 import { useApi } from '@/app/composables/useApi'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'settings-profile',
@@ -99,10 +100,11 @@ export default {
   setup() {
     const { t } = useI18n()
     const api = useApi()
+    const toast = useToast()
 
     useMeta(() => ({ title: t('settings.profile.title') }))
 
-    return { t, api }
+    return { t, api, toast }
   },
   computed: {
     sexs() {
@@ -122,7 +124,7 @@ export default {
         this.profile = result
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.profile = false)
     },
@@ -133,7 +135,7 @@ export default {
         this.tints = result.items
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.tint = false)
     },
@@ -147,11 +149,10 @@ export default {
       this.loading.profile = true
       return this.api.post('settings/profile', this.profile)
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
-
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.profile = false)
     },
@@ -159,11 +160,10 @@ export default {
       this.loading.tint = true
       return this.api.post('settings/tint', { code: this.profile.tint })
       .then(result => {
-        this.$alerts.success({ text: this.t(`alerts.${result.status}`) })
-
+        this.toast.success(this.t(`alerts.${result.status}`))
       })
       .catch(error => {
-        this.$alerts.danger({ text: this.t(`alerts.${error.status}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`))
       })
       .then(_ => this.loading.tint = false)
     }
