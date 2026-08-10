@@ -17,8 +17,14 @@ interface NormaOptions {
   toast: Partial<ToastOptions>
 }
 
+/**
+ * Думаю, это самая Norma'льная реализация такого
+ * 
+ * @author Юрий Гринёв <a1d516ac5f5d290@gmail.com>
+ * @version 1.1.0
+ */
 export default new class {
-	options: NormaOptions = {
+	options: Readonly<NormaOptions> = {
     api: {
       key:     process.env.VUE_APP_API_KEY,
       baseURL: process.env.VUE_APP_API_ENDPOINT as string,

@@ -66,13 +66,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useToast } from '@/app/composables/useToast'
-import type { ToastItem } from '@/types/toast'
+import type { ToastItem } from '@/app/composables/useToast'
 
 defineOptions({ name: 'toast-layer' })
 
+// Composables
 const toast = useToast()
+
+// Computed
 const toasts = computed(() => toast._state.toasts)
 
+// Methods
 function onMouseEnter() {
   toasts.value.forEach(item => toast._pauseTimer(item))
 }
@@ -243,17 +247,19 @@ function runAction(item: ToastItem) {
   opacity: 0;
   transition: opacity 0.15s, background 0.15s;
 
+  &:hover {
+    background: rgba(0,0,0,0.07);
+    color: var(--toast-text);
+  }
+
   svg {
     width: 12px;
     height: 12px;
   }
 }
+
 .toast-item:hover .toast-item__close {
   opacity: 1;
-}
-.toast-item__close:hover {
-  background: rgba(0,0,0,0.07);
-  color: var(--toast-text);
 }
 
 

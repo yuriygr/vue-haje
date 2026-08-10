@@ -15,12 +15,11 @@
   </div>
 </template>
 
-<script>
-export default { name: 'items-list' }
-</script>
-
 <script setup>
 import { NButton, LoadmoreTrigger } from '@vue-norma/ui'
+
+defineOptions({ name: 'items-list' })
+defineEmits(['more'])
 
 const props = defineProps({
   type:    { type: String,  default: 'default' },
@@ -29,7 +28,6 @@ const props = defineProps({
   hasData: { type: Boolean, default: false },
 })
 
-defineEmits(['more'])
 </script>
 
 <style lang="scss">

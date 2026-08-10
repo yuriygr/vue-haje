@@ -85,7 +85,7 @@ const tabItems = computed(() => [
     to: { name: 'user-badges', params: { username: props.username } },
     label: t('user.tabs.badges', data.value.counters.badges),
     active: route.name == 'user-badges'
-  },
+  }
 ])
 
 // Watchers

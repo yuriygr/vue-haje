@@ -46,7 +46,7 @@ const router = createRouter({
 	}
 })
 
-export default  {
+export default {
 	install(app, options) {
 		router.install(app)
 

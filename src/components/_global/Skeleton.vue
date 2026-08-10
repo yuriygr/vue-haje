@@ -2,12 +2,10 @@
   <span class="skeleton" :style="$style"></span>
 </template>
 
-<script>
-export default { name: 'skeleton' }
-</script>
-
 <script setup>
 import { computed } from 'vue'
+
+defineOptions({ name: 'skeleton' })
 
 const props = defineProps({
   width: {

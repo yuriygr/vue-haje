@@ -65,11 +65,15 @@
 
 <script>
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
+import { useI18n } from 'vue-i18n'
+
+import { to } from '@/app/services/utilities'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
+import { useNotificationsStore } from '@/app/store/modules/notifications'
+import { useToast } from '@/app/composables/useToast'
 
 export default {
   name: 'notification-item',
-  emits: [ 'click', 'read', 'hide' ],
   components: {
     Icon, NButton, ButtonsGroup, MetaInfo
   },
@@ -88,8 +92,12 @@ export default {
     }
   },
   setup() {
+    const { t } = useI18n()
     const { timeAgo } = useTimeAgo()
-    return { timeAgo }
+    const store = useNotificationsStore()
+    const toast = useToast()
+
+    return { t, timeAgo, store, toast }
   },
   computed: {
     link() {
@@ -168,14 +176,26 @@ export default {
         align: 'right'
       })
     },
-    onClick() {
-      this.$emit('click', this.data.notify_id)
+
+    async onClick() {
+      const [error] = await to(this.store.read(this.data.notify_id))
+      if (error) this.toast.danger(this.t(`alerts.${error.status}`))
     },
-    readNotify() {
-      this.$emit('read', this.data.notify_id)
+
+    async readNotify() {
+      this.$popover.close()
+      const [error, result] = await to(this.store.read(this.data.notify_id))
+      error
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
+        : this.toast.success(this.t(`alerts.${result.status}`))
     },
-    hideNotify() {
-      this.$emit('hide', this.data.notify_id)
+
+    async hideNotify() {
+      this.$popover.close()
+      const [error, result] = await to(this.store.hide(this.data.notify_id))
+      error
+        ? this.toast.danger(this.t(`alerts.${error.status}`))
+        : this.toast.success(this.t(`alerts.${result.status}`))
     }
   }
 }

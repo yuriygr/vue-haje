@@ -33,7 +33,6 @@
             <icon name="login-line" size="20" />
           </tabbar-item>
         </template>
-
       </tabbar>
     </div>
   </div>
@@ -48,9 +47,7 @@ import { useI18n } from 'vue-i18n'
 import { useModals } from '@vue-norma/ui'
 import { useAuthStore } from '@/app/store/modules/auth'
 
-defineOptions({
-  name: 'app-tabbar'
-})
+defineOptions({ name: 'app-tabbar' })
 
 const ComposeModal = defineAsyncComponent(() => import('@/modals/Compose.vue'))
 
@@ -60,6 +57,7 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 const modals = useModals()
 
+// Computed
 const authData = computed(() => authStore.data)
 const isAuth = computed(() => authStore.isAuth)
 const hasNewNotifications = computed(() => authStore.hasNewNotifications)

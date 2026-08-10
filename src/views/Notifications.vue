@@ -1,6 +1,6 @@
 <template>
   <buttons-group :withGap="true">
-    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="load_more_loading">{{ t('notifications.action.read_all') }}</n-button>
+    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="readmore_loading">{{ t('notifications.action.read_all') }}</n-button>
     <n-button component="router-link" icon_before="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="t('notifications.action.settings')" />
   </buttons-group>
   
@@ -15,11 +15,7 @@
   <spacer height="30" />
 
   <items-list type="notifications" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
-    <notification-item v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]" :data="item"
-      @click="read"
-      @read="onRead"
-      @hide="onHide"
-    />
+    <notification-item v-for="item in data" :key="`notification-${item.notify_id}`" v-memo="[item.state.is_readed]" :data="item" />
 
     <template #skeleton>
       <notification-item v-for="index in 15" :key="`item-${index}`" />
@@ -58,7 +54,7 @@ export default {
   },
   data() {
     return {
-      load_more_loading: false
+      readmore_loading: false
     }
   },
   setup() {
@@ -135,36 +131,15 @@ export default {
         : this.authStore.seenNotifications()
     },
 
-    async read(notifyId) {
-      const [error] = await to(this.store.read(notifyId))
-      if (error) this.toast.danger(this.t(`alerts.${error.status}`))
-    },
-
-    async onRead(notifyId) {
-      this.$popover.close()
-      const [error, result] = await to(this.store.read(notifyId))
-      error
-        ? this.toast.danger(this.t(`alerts.${error.status}`))
-        : this.toast.success(this.t(`alerts.${result.status}`))
-    },
-
-    async onHide(notifyId) {
-      this.$popover.close()
-      const [error, result] = await to(this.store.hide(notifyId))
-      error
-        ? this.toast.danger(this.t(`alerts.${error.status}`))
-        : this.toast.success(this.t(`alerts.${result.status}`))
-    },
-
     async readAll() {
-      this.load_more_loading = true
+      this.readmore_loading = true
 
       const [error, result] = await to(this.store.readAll())
       error
         ? this.toast.danger(this.t(`alerts.${error.status}`))
         : this.toast.success(this.t(`alerts.${result.status}`))
 
-      this.load_more_loading = false
+      this.readmore_loading = false
     },
     loadMore() {
       this.store.more()
