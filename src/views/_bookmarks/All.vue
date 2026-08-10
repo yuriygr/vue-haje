@@ -79,6 +79,7 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { NHeader, Placeholder, Spacer, Group, NButton } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { EntryItem } from '@/components/entry'
 import { CommentItem } from '@/components/comment'
@@ -97,14 +98,10 @@ defineOptions({
 const { t } = useI18n()
 const store = useBookmarksAllStore()
 const humanizeError = useHumanizeError()
+const { data, loading, error } = storeToRefs(store)
 useMeta(() => ({ title: t('bookmarks.title.all') }))
 
 // Computed
-const data = computed(() => store.data)
-const filters = computed(() => store.filters)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-
 const emptyData = computed(() =>
   data.value.entries.length + data.value.users.length + data.value.comments.length + data.value.feeds.length === 0
 )

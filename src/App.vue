@@ -16,9 +16,11 @@ import { onMounted, onUnmounted } from 'vue'
 import { IconsSpriteLayer, ModalsLayer, PopoverLayer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
+import { to } from '@/app/services/utilities'
 import { AppTabbar, AppContent, AppLayout } from '@/components/_app'
 import { applyMeta, applyDataset } from '@/app/composables/useMeta'
 import { useSSE } from '@/app/composables/useSSE'
+import { useBus } from '@/app/composables/useBus'
 import { useModals } from '@vue-norma/ui'
 import { useToast } from '@/app/composables/useToast'
 import { useAppStore } from '@/app/store/modules/app'
@@ -42,10 +44,15 @@ export default {
     const modals = useModals()
     const toast = useToast()
     const { t } = useI18n()
+    const bus = useBus()
     
     const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT)
 
-    sse.on('has_notice', authStore.hasNotice)
+    // Выглядит слегка костыльно, но в целом окей
+    sse.on('has_notice', (payload) => {
+      bus.emit('app:has_notice', payload)
+      authStore.hasNotice(payload)
+    })
 
     const handleSpoilerClick = (e) => {
       if (e.target.classList.contains('spoiler')) {
@@ -106,9 +113,8 @@ export default {
     this.modals.on('show', _ => this.modal = true)
     this.modals.on('close', _ => this.modal = false)
 
-    try {
-      await this.authStore.fetch()
-    } catch (error) {
+    const [error] = await to(this.authStore.fetch())
+    if (error) {
       this.toast.danger(this.t('errors.init_failed'))
       console.error('[App] Init failed:', error)
     }

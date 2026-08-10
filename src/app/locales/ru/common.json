@@ -425,6 +425,7 @@
 
     "subscribed": "Подписались",
     "unsubscribed": "Отписались",
+    "saved": "Сохранено",
 
     "invalid_json_format": "Неправильный формат JSON",
     "method_not_allowed": "Метод недоступен или не существует",

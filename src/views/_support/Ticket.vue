@@ -18,60 +18,49 @@
   </template>
 </template>
 
-<script>
+<script setup lang="ts">
+import { watch, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
-
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+
 import { useSupportTicketStore } from '@/app/store/modules/support'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 
-export default {
-  name: 'support-ticket',
-  props: {
-    uuid: {
-      type: [ Boolean, String ],
-      default: false
-    }
-  },
-  components: {
-    Placeholder, PlaceholderLoading, NHeader, MetaInfo
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useSupportTicketStore()
-    const humanizeError = useHumanizeError()
-    useMeta(() => ({ title: t('support.ticket') }))
+defineOptions({ name: 'support-ticket' })
 
-    return { t, store, humanizeError }
-  },
-  computed: {
-    data()         { return this.store.data },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    isEmpty()      { return this.store.isEmpty },
-  },
-  mounted() {
-    this.store.fetch(this.uuid)
-  },
-  beforeUnmount() {
-    this.store.clear()
-  },
-  watch: {
-    uuid(to) {
-      if (to) {
-        this.store.clear()
-        this.store.fetch(to)
-      }
-    },
-    data(to) {
-      if (to)
-        this.meta.title = to.title
-    },
-    error(to) {
-      if (to)
-        this.meta.title = this.humanizeError(to).title
-    }
+const props = defineProps({
+  uuid: {
+    type: String,
+    default: null
   }
-}
+})
+
+// Composables
+const { t } = useI18n()
+const store = useSupportTicketStore()
+const humanizeError = useHumanizeError()
+const { data, loading, error, isEmpty } = storeToRefs(store)
+const { setTitle } = useMeta(() => ({ title: t('support.ticket') }))
+
+// Watchers
+watch(() => props.uuid, (to) => {
+  if (to) {
+    store.clear()
+    store.fetch(to)
+  }
+})
+
+watch(() => store.data, (to) => {
+  if (to) setTitle(to.subject)
+})
+
+watch(() => store.error, (to) => {
+  if (to) setTitle(humanizeError(to).title)
+})
+
+// Lifecycle hooks
+onMounted(() => store.fetch(props.uuid))
+onBeforeUnmount(() => store.clear())
 </script>

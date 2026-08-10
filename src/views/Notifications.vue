@@ -45,6 +45,7 @@ import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
 import { useI18n } from 'vue-i18n'
 import { useToast } from '@/app/composables/useToast'
+import { useBus } from '@/app/composables/useBus'
 
 export default {
   name: 'notifications',
@@ -52,21 +53,21 @@ export default {
     Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup,
     NotificationItem
   },
-  data() {
-    return {
-      readmore_loading: false
-    }
-  },
   setup() {
     const { t } = useI18n()
     const store = useNotificationsStore()
     const authStore = useAuthStore()
     const humanizeError = useHumanizeError()
     const toast = useToast()
+    const bus = useBus()
 
     useMeta(() => ({ title: t('notifications.title') }))
 
-    return { t, toast, authStore, store, humanizeError }
+    bus.on('app:has_notice', () => {
+      store.loadNew()
+    })
+
+    return { t, toast, authStore, store, humanizeError, bus }
   },
   computed: {
     data()         { return this.store.data },
@@ -161,6 +162,7 @@ export default {
     this.store.fetch()
   },
   beforeUnmount() {
+    this.bus.off('app:has_notice')
     this.store.clear()
   },
   watch: {

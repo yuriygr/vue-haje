@@ -6,6 +6,10 @@ const initialFilters = { tab: '', offset: 0 }
 const useBase = createListStore('notifications', 'my/notifications', initialFilters)
 
 export const useNotificationsStore = extendStore(useBase, (store) => ({
+  loadNew() {
+    console.log('new notify')
+  },
+
   async readAll() {
     const [error, result] = await to(
       this.$api.post('my/notifications/read', { mode: 'all' })
@@ -29,12 +33,14 @@ export const useNotificationsStore = extendStore(useBase, (store) => ({
     const item = store.data.find(n => n.notify_id === notifyId)
     if (!item || item.state.is_readed) return
   
+    // Оптимистично помечаем как прочитанный
     item.state.is_readed = true
   
     const [error, result] = await to(
       this.$api.post(`my/notifications/${notifyId}/read`)
     )
     if (error) {
+      // Возвращаем при ошибке
       item.state.is_readed = false
       throw error
     }

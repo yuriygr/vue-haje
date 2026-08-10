@@ -19,14 +19,13 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { EntryItem } from '@/components/entry'
 import { useTagEntriesStore } from '@/app/store/modules/tag'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 
-defineOptions({
-  name: 'tag-entries'
-})
+defineOptions({ name: 'tag-entries' })
 
 // Props
 const props = defineProps({
@@ -40,13 +39,7 @@ const props = defineProps({
 const { t } = useI18n()
 const store = useTagEntriesStore()
 const humanizeError = useHumanizeError()
-
-// Computed
-const data = computed(() => store.data)
-const filters = computed(() => store.filters)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-const hasMoreItems = computed(() => store.hasMoreItems)
+const { data, loading, error, hasMoreItems } = storeToRefs(store)
 
 // Methods
 function loadMore() {

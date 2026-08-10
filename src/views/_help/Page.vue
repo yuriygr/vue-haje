@@ -20,6 +20,7 @@
 import { computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Placeholder, PlaceholderLoading, NHeader, MetaInfo } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { useHelpPageStore } from '@/app/store/modules/help'
 import { useTimeAgo } from '@/app/composables/useTimeAgo.js'
@@ -43,14 +44,10 @@ const { t } = useI18n()
 const store = useHelpPageStore()
 const { timeAgo } = useTimeAgo()
 const humanizeError = useHumanizeError()
+const { data, loading, error, isEmpty } = storeToRefs(store)
 const { setTitle } = useMeta(() => ({ title: t('help.title') }))
 
 // Computed
-const data = computed(() => store.data)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-const isEmpty = computed(() => store.isEmpty)
-
 const formattedDate = computed(() => timeAgo(data.value.meta.date_edited))
 
 const metaItems = computed(() => {

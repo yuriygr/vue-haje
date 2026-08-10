@@ -39,6 +39,7 @@ import { computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Placeholder, Spacer } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 import { HelpItem } from '@/components/help'
 import { useHelpPagesStore } from '@/app/store/modules/help'
@@ -55,14 +56,10 @@ const router = useRouter()
 const { t } = useI18n()
 const store = useHelpPagesStore()
 const humanizeError = useHumanizeError()
+const { data, loading, error, hasMoreItems } = storeToRefs(store)
 useMeta(() => ({ title: t('help.title') }))
 
 // Computed
-const data = computed(() => store.data)
-const filters = computed(() => store.filters)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-const hasMoreItems = computed(() => store.hasMoreItems)
 const query = computed(() => route.query.q ?? '')
 
 // Methods

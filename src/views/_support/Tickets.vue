@@ -26,7 +26,7 @@
   </group>
 
   <group>
-    <n-header>{{ $('support.tickets') }}</n-header>
+    <n-header>{{ t('support.tickets') }}</n-header>
 
     <items-list type="tickets" v-if="data.length > 0 || loading" :has-data="data.length > 0" :loading="loading" :has-more="hasMoreItems" @more="loadMore">
       <ticket-item v-for="item in data" :key="`ticket-${item.uuid}`" v-memo="[item.uuid]" :data="item" />

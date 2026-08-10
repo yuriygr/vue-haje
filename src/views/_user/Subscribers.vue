@@ -19,6 +19,7 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { UserItem } from '@/components/user'
 import { useUserSubscribersStore } from '@/app/store/modules/user'
@@ -40,13 +41,8 @@ const props = defineProps({
 const { t } = useI18n()
 const store = useUserSubscribersStore()
 const humanizeError = useHumanizeError()
+const { data, loading, error, hasMoreItems } = storeToRefs(store)
 
-// Computed
-const data = computed(() => store.data)
-const filters = computed(() => store.filters)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-const hasMoreItems = computed(() => store.hasMoreItems)
 
 // Methods
 function loadMore() {

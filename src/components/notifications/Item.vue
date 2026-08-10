@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { Icon, NButton, ButtonsGroup, MetaInfo } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
 
@@ -83,21 +84,39 @@ export default {
       default: null
     },
   },
-  data() {
-    return {
-      skeletonWidths: {
-        label: Math.floor(Math.random() * 100) + 100,
-        info: Math.floor(Math.random() * 100) + 50
-      }
-    }
-  },
-  setup() {
+  setup(props) {
+    // Composables
     const { t } = useI18n()
     const { timeAgo } = useTimeAgo()
     const store = useNotificationsStore()
     const toast = useToast()
 
-    return { t, timeAgo, store, toast }
+    const skeletonWidths = {
+      label: Math.floor(Math.random() * 100) + 120,
+      info: Math.floor(Math.random() * 100) + 60
+    }
+
+    // Computed
+    const formattedDate = computed(() =>
+      props.data ? timeAgo(props.data.meta.date_added) : ''
+    )
+
+    const noticeIcon = computed(() => {
+      switch (props.data.type) {
+        case 'subscription':
+          return 'user-follow-line'
+        case 'mention':
+          return 'at-line'
+        case 'reply':
+          return 'reply-line'
+        case 'comment':
+          return 'comments-line'
+        case 'new_post':
+          return ''
+      }
+    })
+
+    return { t, formattedDate, store, toast, noticeIcon, skeletonWidths }
   },
   computed: {
     link() {
@@ -121,20 +140,6 @@ export default {
       }
     },
 
-    noticeIcon() {
-      switch (this.data.type) {
-        case 'subscription':
-          return 'user-follow-line'
-        case 'mention':
-          return 'at-line'
-        case 'reply':
-          return 'reply-line'
-        case 'comment':
-          return 'comments-line'
-        case 'new_post':
-          return ''
-      }
-    },
     optionsItems() {
       return [
         ...!this.data.state.is_readed ? [{
@@ -162,9 +167,6 @@ export default {
     },
     commentLink() {
       return { name: 'entry', params: { uuid: this.data.entry_uuid }, query: { comment: this.data.comment_id } }
-    },
-    formattedDate() {
-      return this.timeAgo(this.data.meta.date_added)
     }
   },
   methods: {

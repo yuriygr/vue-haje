@@ -19,6 +19,7 @@
 import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { Placeholder } from '@vue-norma/ui'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { BadgeItem } from '@/components/badge'
 import { useUserBadgesStore } from '@/app/store/modules/user'
@@ -40,13 +41,7 @@ const props = defineProps({
 const { t } = useI18n()
 const store = useUserBadgesStore()
 const humanizeError = useHumanizeError()
-
-// Computed
-const data = computed(() => store.data)
-const filters = computed(() => store.filters)
-const loading = computed(() => store.loading)
-const error = computed(() => store.error)
-const hasMoreItems = computed(() => store.hasMoreItems)
+const { data, loading, error, hasMoreItems } = storeToRefs(store)
 
 // Methods
 function loadMore() {
