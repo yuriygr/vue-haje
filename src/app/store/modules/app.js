@@ -14,9 +14,10 @@ export const useAppStore = defineStore('app', () => {
   const basePath = ref(process.env.VUE_APP_BASE_URL)
   const version  = ref(process.env.PACKAGE_VERSION)
 
-  const theme   = ref(localStorage.getItem('theme')   || process.env.VUE_APP_DEFAULT_THEME)
-  const density = ref(localStorage.getItem('density') || process.env.VUE_APP_DEFAULT_DENSITY)
-  const locale  = ref(localStorage.getItem('locale')  || process.env.VUE_APP_I18N_LOCALE)
+  const theme   = ref(getStoredOrDefault('theme', process.env.VUE_APP_DEFAULT_THEME))
+  const density = ref(getStoredOrDefault('density', process.env.VUE_APP_DEFAULT_DENSITY))
+  const locale  = ref(getStoredOrDefault('locale', process.env.VUE_APP_I18N_LOCALE))
+  const zen     = ref(getStoredOrDefault('zen', process.env.VUE_APP_DEFAULT_ZEN === 'true', true))
 
   const cachedComponents = ref([])
 
@@ -25,6 +26,7 @@ export const useAppStore = defineStore('app', () => {
   watch(theme,   val => localStorage.setItem('theme',   val))
   watch(density, val => localStorage.setItem('density', val))
   watch(locale,  val => localStorage.setItem('locale',  val))
+  watch(zen,     val => localStorage.setItem('zen',     val))
 
   // ─── Getters ─────────────────────────────────────────────────────────────────
 
@@ -36,11 +38,20 @@ export const useAppStore = defineStore('app', () => {
   const themes    = computed(() => ['white', 'black', 'void'])
   const densities = computed(() => ['compact', 'default', 'spacious'])
 
+  // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+  function getStoredOrDefault(key, defaultValue, parse = false) {
+    const stored = localStorage.getItem(key)
+    if (stored === null) return defaultValue
+    return parse ? JSON.parse(stored) : stored
+  }
+
   // ─── Actions ─────────────────────────────────────────────────────────────────
 
   function setTheme(payload)   { theme.value   = payload }
   function setLocale(payload)  { locale.value  = payload }
   function setDensity(payload) { density.value = payload }
+  function setZen(payload)     { zen.value = payload }
 
   function addCachedComponent(componentName) {
     if (!cachedComponents.value.includes(componentName)) {
@@ -61,12 +72,12 @@ export const useAppStore = defineStore('app', () => {
   return {
     // state
     title, basePath, version,
-    theme, density, locale,
+    theme, density, locale, zen,
     cachedComponents,
     // getters
     themeStatusBar, themes, densities,
     // actions
-    setTheme, setLocale, setDensity,
+    setTheme, setLocale, setDensity, setZen,
     addCachedComponent, removeCachedComponent, resetCachedComponents,
   }
 })

@@ -1,7 +1,7 @@
 <template>
   <router-link v-if="authData.user" :to="{ name: 'user', params: { username: authData.user.username } }" class="user-item-button">
     <user-item :data="authData.user" :clickable="false" :showSubscribeAction="false" />
-    <div class="user-item-button__chevron">
+    <div class="user-item-button__chevron" aria-hidden="true">
       <icon name="chevron-line" size="18" />
     </div>
   </router-link>
@@ -41,7 +41,7 @@ useMeta(() => ({ title: t('menu.title') }))
 const authData = computed(() => authStore.data)
 const isAuth = computed(() => authStore.isAuth)
 
-const sections = computed(() => [
+const primaryItems = computed(() => [
   {
     icon: 'feeds-line',
     label: t('menu.item.feeds'),
@@ -70,7 +70,7 @@ const sections = computed(() => [
   }
 ])
 
-const main = computed(() => [
+const secondaryItems = computed(() => [
   {
     icon: 'support-line',
     label: t('menu.item.support'),
@@ -92,7 +92,7 @@ const main = computed(() => [
   }
 ])
 
-const last = computed(() => [
+const authItem = computed(() => [
   isAuth.value ? {
     icon: 'logout-line',
     label: t('menu.item.logout'),
@@ -107,9 +107,9 @@ const last = computed(() => [
 ])
 
 const menu = computed(() => [
-  { items: sections.value },
-  { items: main.value },
-  { items: last.value }
+  { items: primaryItems.value },
+  { items: secondaryItems.value },
+  { items: authItem.value }
 ])
 </script>
 

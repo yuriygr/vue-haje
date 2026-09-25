@@ -19,7 +19,7 @@
 import { NButton, LoadmoreTrigger } from '@vue-norma/ui'
 
 defineOptions({ name: 'items-list' })
-defineEmits(['more'])
+const emit = defineEmits(['more'])
 
 const props = defineProps({
   type:    { type: String,  default: 'default' },

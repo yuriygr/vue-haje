@@ -1,19 +1,16 @@
 export const humanizeError = (error) => {
-  const snakeCase = string => {
-    return string.replace(/\W+/g, " ")
-      .split(/ |\B(?=[A-Z])/)
-      .map(word => word.toLowerCase())
-      .join('');
-  }
-
-  let _code = snakeCase(error.status)
+  const code = error.code ?? error.status ?? 'unknown_error'
+  const isInternal = code === 'internal_server_error'
 
   return {
-    icon: `errors.${_code}.icon`,
-    title: `errors.${_code}.title`,
-    description: `errors.${_code}.description`
+    icon: `errors.${code}.icon`,
+    title: `errors.${code}.title`,
+    // для internal — не переводим, показываем реальный текст ошибки
+    description: isInternal ? error.message : `errors.${code}.description`,
+    payload: error.payload ?? error.message
   }
 }
+
 
 export const cancelEvent = (event) => {
   event = event || window.event

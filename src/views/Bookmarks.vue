@@ -1,7 +1,7 @@
 <template>
   <tabs>
     <template v-for="item in tabItems" :key="`bookmarks-tab-${item.key}`">
-      <tabs-item :to="item.to" :selected="item.key === $route.meta.key">{{ item.label }}</tabs-item>
+      <tabs-item :to="item.to" :selected="item.key === route.meta.key">{{ item.label }}</tabs-item>
     </template>
   </tabs>
 

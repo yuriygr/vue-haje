@@ -1,6 +1,6 @@
 <template>
   <buttons-group :withGap="true">
-    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="readmore_loading">{{ t('notifications.action.read_all') }}</n-button>
+    <n-button mode="secondary" @click.exact="readAll" size="l" :stretched="true" :disabled="readall_loading">{{ t('notifications.action.read_all') }}</n-button>
     <n-button component="router-link" icon_before="settings-line" size="l" mode="secondary" :to="{ name: 'settings-notifications' }" :title="t('notifications.action.settings')" />
   </buttons-group>
   
@@ -34,8 +34,11 @@
   />
 </template>
 
-<script>
-import { Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup } from '@vue-norma/ui'
+<script setup>
+import { watch, computed, onMounted, onBeforeUnmount, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { Tabs, TabsItem, Placeholder, Spacer, NButton, ButtonsGroup } from '@vue-norma/ui'
 
 import { to } from '@/app/services/utilities'
 import { NotificationItem } from '@/components/notifications'
@@ -43,139 +46,104 @@ import { useNotificationsStore } from '@/app/store/modules/notifications'
 import { useAuthStore } from '@/app/store/modules/auth'
 import { useHumanizeError } from '@/app/composables/useHumanizeError'
 import { useMeta } from '@/app/composables/useMeta'
-import { useI18n } from 'vue-i18n'
 import { useToast } from '@/app/composables/useToast'
 import { useBus } from '@/app/composables/useBus'
 
-export default {
-  name: 'notifications',
-  components: {
-    Tabs, TabsItem, Placeholder, Separator, Spacer, NButton, ButtonsGroup,
-    NotificationItem
-  },
-  setup() {
-    const { t } = useI18n()
-    const store = useNotificationsStore()
-    const authStore = useAuthStore()
-    const humanizeError = useHumanizeError()
-    const toast = useToast()
-    const bus = useBus()
+// Composables
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const store = useNotificationsStore()
+const authStore = useAuthStore()
+const humanizeError = useHumanizeError()
+const toast = useToast()
+const bus = useBus()
 
-    useMeta(() => ({ title: t('notifications.title') }))
+useMeta(() => ({ title: t('notifications.title') }))
 
-    bus.on('app:has_notice', () => {
-      store.loadNew()
-    })
+// Stte
+const readall_loading = ref(false)
 
-    return { t, toast, authStore, store, humanizeError, bus }
-  },
-  computed: {
-    data()         { return this.store.data },
-    filters()      { return this.store.filters },
-    loading()      { return this.store.loading },
-    error()        { return this.store.error },
-    hasMoreItems() { return this.store.hasMoreItems },
+// Computed
+const data = computed(() => store.data)
+const filters = computed(() => store.filters)
+const loading = computed(() => store.loading)
+const error = computed(() => store.error)
+const hasMoreItems = computed(() => store.hasMoreItems)
 
-    tabItems() {
-      return [
-        { 
-          key: 'all',
-          to: this.formatLink(),
-          label: this.t('notifications.tabs.all')
-        },
-        { 
-          key: 'subscription',
-          to: this.formatLink('subscription'),
-          label: this.t('notifications.tabs.subscriptions')
-        },
-        { 
-          key: 'comment',
-          to: this.formatLink('comment'),
-          label: this.t('notifications.tabs.comments')
-        },
-        { 
-          key: 'reply',
-          to: this.formatLink('reply'),
-          label: this.t('notifications.tabs.replies')
-        },
-        { 
-          key: 'mention',
-          to: this.formatLink('mention'),
-          label: this.t('notifications.tabs.mentions')
-        },
-        { 
-          key: 'new_post',
-          to: this.formatLink('new_post'),
-          label: this.t('notifications.tabs.new_post')
-        },
-        { 
-          key: 'system',
-          to: this.formatLink('system'),
-          label: this.t('notifications.tabs.system')
-        }
-      ]
-    },
-    availableKeys() {
-      return this.tabItems.map(el => el.key)
-    }
-  },
-  methods: {
-    formatLink(tab = false) {
-      return tab 
-        ? { name: this.$route.name, query: { tab } }
-        : { name: this.$route.name }
-    },
-    async seen() {
-      const [error] = await to(this.store.seen())
-      error
-        ? this.toast.danger(this.t(`alerts.${error.status}`))
-        : this.authStore.seenNotifications()
-    },
+const tabItems = computed(() => [
+  { key: 'all',          to: formatLink(),               label: t('notifications.tabs.all') },
+  { key: 'subscription', to: formatLink('subscription'), label: t('notifications.tabs.subscriptions') },
+  { key: 'comment',      to: formatLink('comment'),      label: t('notifications.tabs.comments') },
+  { key: 'reply',        to: formatLink('reply'),        label: t('notifications.tabs.replies') },
+  { key: 'mention',      to: formatLink('mention'),      label: t('notifications.tabs.mentions') },
+  { key: 'new_post',     to: formatLink('new_post'),     label: t('notifications.tabs.new_post') },
+  { key: 'system',       to: formatLink('system'),       label: t('notifications.tabs.system') }
+])
 
-    async readAll() {
-      this.readmore_loading = true
+const availableKeys = computed(() => tabItems.value.map(el => el.key))
 
-      const [error, result] = await to(this.store.readAll())
-      error
-        ? this.toast.danger(this.t(`alerts.${error.status}`))
-        : this.toast.success(this.t(`alerts.${result.status}`))
-
-      this.readmore_loading = false
-    },
-    loadMore() {
-      this.store.more()
-    },
-    deleteTabQuery() {
-      let query = Object.assign({}, this.$route.query)
-      delete query.tab
-      this.$router.replace({ name: this.$route.name, query })
-    },
-  },
-  mounted() {
-    this.seen()
-
-    const tab = this.availableKeys.includes(this.$route.query.tab) 
-      ? this.$route.query.tab 
-      : 'all'
-    
-    this.store.setFilters({ tab, offset: undefined })
-    this.store.fetch()
-  },
-  beforeUnmount() {
-    this.bus.off('app:has_notice')
-    this.store.clear()
-  },
-  watch: {
-    '$route.query.tab': {
-      handler(to) {
-        const tab = this.availableKeys.includes(to) ? to : 'all'
-        if (tab === this.filters.tab) return // Проверка на дубликаты
-        
-        this.store.setFilters({ tab, offset: undefined })
-        this.store.fetch()
-      },
-      immediate: false 
-    }
-  }
+// Methods
+function formatLink(tab = false) {
+  return tab
+    ? { name: route.name, query: { tab } }
+    : { name: route.name }
 }
+
+async function seen() {
+  const [err] = await to(store.seen())
+  err
+    ? toast.danger(t(`alerts.${err.status}`))
+    : authStore.seenNotifications()
+}
+
+async function readAll() {
+  readall_loading.value = true
+
+  const [err, result] = await to(store.readAll())
+  err
+    ? toast.danger(t(`alerts.${err.status}`))
+    : toast.success(t(`alerts.${result.status}`))
+
+  readall_loading.value = false
+}
+
+function loadMore() {
+  store.more()
+}
+
+function onHasNotice(payload) {
+  payload && store.loadNew()
+}
+
+// Watch
+watch(
+  () => route.query.tab,
+  (to) => {
+    const tab = availableKeys.value.includes(to) ? to : 'all'
+    if (tab === filters.value.tab) return // Проверка на дубликаты
+
+    store.setFilters({ tab, offset: undefined })
+    store.fetch()
+  },
+  { immediate: false }
+)
+
+// Lifecycle hooks
+onMounted(() => {
+  seen()
+
+  const tab = availableKeys.value.includes(route.query.tab)
+    ? route.query.tab
+    : 'all'
+
+  bus.on('app:has_notice', onHasNotice)
+  store.setFilters({ tab, offset: undefined })
+  store.fetch()
+})
+
+onBeforeUnmount(() => {
+  bus.off('app:has_notice', onHasNotice)
+  store.clear()
+})
 </script>

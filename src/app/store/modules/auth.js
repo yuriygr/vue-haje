@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuth = computed(() => data.value.is_auth)
 
   const hasNewNotifications = computed(() =>
-    data.value.user?.state.has_new_notifications ?? false
+    data.value.user?.state?.has_new_notifications ?? false
   )
 
   // ─── Actions ─────────────────────────────────────────────────────────────────

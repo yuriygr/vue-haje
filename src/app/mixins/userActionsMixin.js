@@ -73,6 +73,7 @@ export const userActionsMixin = {
         this.localData.state.is_muted = result.status === 'muted'
         this.$emit('update:data', { ...this.localData })
         this.$toast.success(this.$t(`alerts.${result.status}`))
+        this.$popover.close()
       })
       .catch(error => {
         this.$toast.danger(this.$t(`alerts.${error.status}`))

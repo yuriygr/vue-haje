@@ -50,7 +50,7 @@
   <group v-if="data.comments.length > 0 || loading">
     <n-header>{{ t('bookmarks.section.comments') }}</n-header>
 
-    <items-list type="comments" :has-data="data.feeds.length > 0" :loading="loading">
+    <items-list type="comments" :has-data="data.comments.length > 0" :loading="loading">
       <comment-item v-for="item in data.comments" :key="`comment-${item.comment_id}`" v-memo="[item.comment_id]" :data="item" replyButton="link" />
 
       <template #skeleton>
@@ -69,9 +69,9 @@
     :text="humanizeError(error).description"
   />
   <placeholder v-else-if="emptyData && !loading"
-    :icon="t('search.empty.icon')"
-    :header="t('search.empty.title')"
-    :text="t('search.empty.description')"
+    :icon="t('bookmarks.empty.icon')"
+    :header="t('bookmarks.empty.title')"
+    :text="t('bookmarks.empty.description')"
   />
 </template>
 

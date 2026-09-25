@@ -54,6 +54,11 @@
     "title": "Record not found",
     "description": "Most likely, she was never here. "
   },
+  "entry_deleted": {
+    "icon": "ghost-line",
+    "title": "Record not found",
+    "description": "Most likely, she was never here. "
+  },
   "entry_hidden": {
     "icon": "ghost-line",
     "title": "Post hidden",

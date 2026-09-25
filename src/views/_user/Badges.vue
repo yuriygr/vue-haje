@@ -44,9 +44,8 @@ const humanizeError = useHumanizeError()
 const { data, loading, error, hasMoreItems } = storeToRefs(store)
 
 // Methods
-function loadMore() {
-  store.more(props.username)
-}
+const loadMore = () => store.more(props.username)
+
 
 // Lifecycle hooks
 onMounted(() => store.fetch(props.username))

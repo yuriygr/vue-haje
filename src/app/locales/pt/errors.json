@@ -54,6 +54,11 @@
     "title": "Registro não encontrado",
     "description": "Muito provavelmente, ela nunca esteve aqui. Mas quem sabe com certeza, a verdade?"
   },
+  "entry_deleted": {
+    "icon": "ghost-line",
+    "title": "Registro não encontrado",
+    "description": "Muito provavelmente, ela nunca esteve aqui. Mas quem sabe com certeza, a verdade?"
+  },
   "entry_hidden": {
     "icon": "ghost-line",
     "title": "Postagem oculta",

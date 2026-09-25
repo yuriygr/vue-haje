@@ -37,6 +37,7 @@ export const createItemStore = (storeId, endpointBuilder, initialData = {}, init
     },
 
     async fetch(prop = '') {
+      this.controller?.abort()
       this.loading = true
       this.error = null
 
@@ -116,6 +117,7 @@ export const createListStore = (storeId, endpointBuilder, initialFilters = {}, i
 
   actions: {
     async fetch(prop = '', initial = true) {
+      this.controller?.abort()
       this.loading = true
       this.error = null
 

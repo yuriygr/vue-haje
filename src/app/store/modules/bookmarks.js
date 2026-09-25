@@ -1,6 +1,6 @@
 import { createItemStore, createListStore } from '@/app/store/factory'
 
-export const useBookmarksAllStore = createItemStore('bookmarks', () => 'my/bookmarks/all', {
+export const useBookmarksAllStore = createItemStore('bookmarks_all', () => 'my/bookmarks/all', {
   users: [],
   entries: [],
   comments: [],

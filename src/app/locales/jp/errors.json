@@ -54,6 +54,11 @@
     "title": "投稿が見つかりません",
     "description": "おそらく、最初から存在していなかったのでしょう。でも、確かなことは誰にもわかりませんね"
   },
+  "entry_deleted": {
+    "icon": "ghost-line",
+    "title": "投稿が見つかりません",
+    "description": "おそらく、最初から存在していなかったのでしょう。でも、確かなことは誰にもわかりませんね"
+  },
   "entry_hidden": {
     "icon": "user-unfollow-line",
     "title": "投稿が非表示です",

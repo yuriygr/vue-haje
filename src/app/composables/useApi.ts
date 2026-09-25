@@ -34,20 +34,41 @@ function createInstance(options: ApiOptions) {
   )
 
   ax.interceptors.response.use(
-    (data) => JSON.parse(data.request.response),
+    (response) => {
+      if (response.config.responseType === 'blob') {
+        return response
+      }
+      return JSON.parse(response.request.response)
+    },
     (error) => {
       if (!error.response) {
         return Promise.reject({
-          code: error.code,
-          status: error.code ?? 'network_error'
+          code: 'network_error',
+          status: 'network_error'
         })
       }
-      const response = error.response.data
-      return Promise.reject({
-        code: response.code,
-        error: response.error,
-        status: response.status
+  
+      const parseBody = (data: any) => ({
+        httpStatus: error.response.status,
+        code: data.code,
+        message: data.message,
+        status: data.status,
+        payload: data.payload
       })
+  
+      if (error.config?.responseType === 'blob' && error.response.data instanceof Blob) {
+        return error.response.data.text().then((text: string) => {
+          let parsed
+          try {
+            parsed = JSON.parse(text)
+          } catch {
+            parsed = { code: 'internal_server_error', message: text, status: 'internal_server_error' }
+          }
+          return Promise.reject(parseBody(parsed))
+        })
+      }
+  
+      return Promise.reject(parseBody(error.response.data))
     }
   )
 
