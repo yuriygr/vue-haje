@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 permissions:
@@ -37,8 +37,13 @@ jobs:
       - name: Create 404.html for SPA fallback
         run: cp dist/index.html dist/404.html
 
-      - name: Ensure CNAME exists
-        run: echo "futubra.ru" > dist/CNAME
+      - name: Verify CNAME exists
+        run: |
+          if [ -f dist/CNAME ]; then
+            echo "✅ dist/CNAME found: $(cat dist/CNAME)"
+          else
+            echo "::warning::dist/CNAME not found. Custom domain may be reset after deployment. Add a CNAME file to public/ if you use a custom domain."
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
