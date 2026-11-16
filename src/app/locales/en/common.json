@@ -335,7 +335,10 @@
     "add-bookmark": "Add to bookmarks",
     "confirm": "Leave without saving?",
     "add_comment": "Send",
-    "save_comment": "Save"
+    "save_comment": "Save",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "stats": "Statistics"
   },
   "brands": {
     "grustnogram": {
