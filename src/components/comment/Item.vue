@@ -4,13 +4,13 @@
       <branches :count="level - 1" />
       <div v-if="data.user.state.is_muted" class="comment__abandoned">
         <div class="abandoned-item__icon">
-          <icon name="user-forbidden-line" :size="8" />
+          <icon name="user-forbidden-line" :size="12" />
         </div>
         <div class="abandoned-item__label">{{ t('user.muted') }}</div>
       </div>
       <div v-else-if="data.status == 2" class="comment__abandoned">
         <div class="abandoned-item__icon">
-          <icon name="cross-line" :size="8" />
+          <icon name="cross-line" :size="12" />
         </div>
         <div class="abandoned-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
       </div>
@@ -424,14 +424,12 @@ export default {
       color: var(--abandoned-item__icon--color);
       display: flex;
       justify-content: center;
-      padding: 1.3rem;
+      padding: 1rem;
       margin-right: 1rem;
       border-radius: 8px;
 
       svg {
         fill: currentColor;
-        width: 1rem;
-        height: 1rem;
         display: block;
       }
     }
