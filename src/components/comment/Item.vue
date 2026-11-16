@@ -4,11 +4,17 @@
       <branches :count="level - 1" />
       <div v-if="data.user.state.is_muted" class="comment__abandoned">
         <div class="abandoned-item__icon">
-          <icon name="ui-mute" :size="8" />
+          <icon name="user-forbidden-line" :size="8" />
         </div>
         <div class="abandoned-item__label">{{ t('user.muted') }}</div>
       </div>
-      <div v-else-if="data.status == 1" class="comment__body">
+      <div v-else-if="data.status == 2" class="comment__abandoned">
+        <div class="abandoned-item__icon">
+          <icon name="cross-line" :size="8" />
+        </div>
+        <div class="abandoned-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
+      </div>
+      <div v-else class="comment__body">
         <comment-form v-if="isEdit" mode="edit"
           :data="data"
           @success="onEditSuccess"
@@ -24,12 +30,6 @@
           <attachments class="comment__attachments"  v-if="data.files || data.link" :files="data.files" :link="data.link" mode="compact" />
           <meta-info class="comment__meta" :items="metaItems" />
         </template>
-      </div>
-      <div v-else-if="data.status == 2" class="comment__abandoned">
-        <div class="abandoned-item__icon">
-          <icon name="cross-line" :size="8" />
-        </div>
-        <div class="abandoned-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
       </div>
     </div>
     <template v-for="item in data.replies">
