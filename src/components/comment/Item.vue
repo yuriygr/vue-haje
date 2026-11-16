@@ -19,11 +19,17 @@
           <meta-info class="comment__meta" :items="metaItems" />
         </template>
       </div>
-      <div v-else-if="data.status == 2" class="comment__deleted">
-        <div class="deleted-item__icon">
+      <div v-else-if="data.status == 2" class="comment__abandoned">
+        <div class="abandoned-item__icon">
           <icon name="cross-line" :size="8" />
         </div>
-        <div class="deleted-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
+        <div class="abandoned-item__label">{{ t('comment.deleted', { reason: 0 }) }}</div>
+      </div>
+      <div v-else-if="data.user.state.is_muted" class="comment__abandoned">
+        <div class="abandoned-item__icon">
+          <icon name="ui-mute" :size="8" />
+        </div>
+        <div class="abandoned-item__label">{{ t('user.muted') }}</div>
       </div>
     </div>
     <template v-for="item in data.replies">
@@ -340,18 +346,18 @@ export default {
   --comment__author--background: var(--x-color-pink--tint70); 
   --comment__author--color: var(--x-color-pink--tint10); 
 
-  --deleted-item__icon--background: #f5f5f5;
-  --deleted-item__icon--color: #666;
-  --deleted-item__label--color: #666;
+  --abandoned-item__icon--background: #f5f5f5;
+  --abandoned-item__icon--color: #666;
+  --abandoned-item__label--color: #666;
 
   html[data-theme="black"] & {
     --comment--background-highlighted: rgba(255, 255, 255, 0.05);
     --comment__author--background: var(--x-color-pink--shade50); 
     --comment__author--color: var(--x-color-pink--tint60); 
 
-    --deleted-item__icon--background: #161616;
-    --deleted-item__icon--color: #919190;
-    --deleted-item__label--color: #919190;
+    --abandoned-item__icon--background: #161616;
+    --abandoned-item__icon--color: #919190;
+    --abandoned-item__label--color: #919190;
   }
 }
 
@@ -402,7 +408,7 @@ export default {
   }
 
   
-  &__deleted {
+  &__abandoned {
     display: inline-flex;
     flex-direction: row;
     align-items: center;
@@ -413,9 +419,9 @@ export default {
 
     padding: 1rem 0;
 
-    .deleted-item__icon {
-      background: var(--deleted-item__icon--background);
-      color: var(--deleted-item__icon--color);
+    .abandoned-item__icon {
+      background: var(--abandoned-item__icon--background);
+      color: var(--abandoned-item__icon--color);
       display: flex;
       justify-content: center;
       padding: 1.3rem;
@@ -430,8 +436,8 @@ export default {
       }
     }
 
-    .deleted-item__label {
-      color: var(--deleted-item__label--color);
+    .abandoned-item__label {
+      color: var(--abandoned-item__label--color);
       font-size: 1.4rem;
       line-height: calc(1.4 * 1em);
     }

@@ -73,7 +73,8 @@
       "logout": "Logout",
       "notify_new_posts": "Notify about new posts",
       "dont_notify_new_posts": "Don't notify about new posts"
-    }
+    },
+    "muted": "User muted"
   },
   "tag": {
     "title": "Tag",
