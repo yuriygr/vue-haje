@@ -103,7 +103,7 @@ export default {
       this.loading = true
       this.error = false
 
-      await this.$refs.captcha.executeAsync()
+      //await this.$refs.captcha.executeAsync()
 
       return this.api.post('auth/register', this.form)
       .then(async result => {
@@ -113,7 +113,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.toast.danger(this.t(`alerts.${error.status}`))
+        this.toast.danger(this.t(`alerts.${error.status}`), { title: this.t(`alerts.${error.message}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })

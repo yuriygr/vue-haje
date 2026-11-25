@@ -403,9 +403,10 @@
     "name_to_short": "Имя слишком короткое",
     "name_to_long": "Имя слишком длинное",
 
-    "email_needed": "Необходимо указать e-mail",
+    "email_needed": "Необходимо указать E-mail",
     "email_not_valid": "E-mail некорректен",
     "email_already_used": "E-mail уже используется",
+    "email_service_in_blacklist": "Сервис электронной почты в черном списке",
 
     "password_empty": "Необходио указать пароль",
     "password_to_short": "Слишком короткий пароль",
@@ -413,12 +414,12 @@
     "password_not_changed": "Пароль не изменен",
     "password_changed": "Пароль успешно изменен",
 
-    "username_empty": "Необходимо указать имя пользователя",
-    "username_to_short": "Имя пользователя слишком короткое",
-    "username_to_long": "Имя пользователя слишком длинное",
-    "username_not_valid": "Имя пользователя некорректно",
-    "username_already_used": "Имя пользователя уже используется",
-    "username_in_blacklist": "Имя пользователя в черном списке",
+    "username_empty": "Необходимо указать Логин",
+    "username_to_short": "Логин слишком короткий",
+    "username_to_long": "Логин слишком длинный (компенсируешь?)",
+    "username_not_valid": "Логин некорректен",
+    "username_already_used": "Логин уже используется",
+    "username_in_blacklist": "Логин в черном списке",
 
     "challenge_code_sended": "Код отправлен на ваш e-mail",
     "challenge_code_confirmed": "Код подтвержден",
@@ -431,6 +432,7 @@
     "invalid_json_format": "Неправильный формат JSON",
     "method_not_allowed": "Метод недоступен или не существует",
 
+    "bad_request": "Ошибка запроса",
     "err_canceled": "Запрос отменен",
     "err_network": "Ошибка соединения",
     "ERR_NETWORK": "Ошибка соединения",
