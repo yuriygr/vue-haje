@@ -8,7 +8,7 @@
       </template>
 
       <div class="comments-tree__refresh-button">
-        <n-button mode="secondary" @click.exact="loadMore" size="m" :disabled="loading" :badge="hasNew">{{ $t('action.refresh') }}</n-button>
+        <n-button mode="secondary" @click.exact="loadMore" size="m" :disabled="loading" :badge="hasNew">{{ t('action.refresh') }}</n-button>
       </div>
     </div>
 
@@ -28,6 +28,7 @@ import { CommentItem, CommentReply } from '@/components/comment'
 import { useEntryCommentsStore } from '@/app/store/modules/entry_comments'
 import { useSSE } from '@/app/composables/useSSE'
 import { useToast } from '@/app/composables/useToast'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'entry-comments',
@@ -45,13 +46,14 @@ export default {
     const hasNew = ref(false)
     const store  = useEntryCommentsStore()
     const toast = useToast()
+    const { t } = useI18n()
 
     const sse = useSSE(process.env.VUE_APP_SSE_ENDPOINT_ENTRY + '/' + props.entry.uuid)
     sse.on('has_replies', () => {
       hasNew.value = true
     })
 
-    return { hasNew, toast, sse, store }
+    return { t, hasNew, toast, sse, store }
   },
   computed: {
     data()    { return this.store.data },

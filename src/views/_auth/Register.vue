@@ -113,7 +113,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.toast.danger(this.t(`alerts.${error.status}`), { title: this.t(`alerts.${error.message}`) })
+        this.toast.danger(this.t(`alerts.${error.status}`), { title: this.t(`alerts.${error.code}`) })
         this.form['h-captcha-response'] = ''
         this.$refs.captcha.reset()
       })

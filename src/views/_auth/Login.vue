@@ -83,7 +83,7 @@ export default {
       })
       .catch(error => {
         this.error = error
-        this.toast.danger(this.t(`alerts.${error.status}`))
+        this.toast.danger(this.t(`alerts.${error.status}`), { title: this.t(`alerts.${error.code}`) })
       })
       .finally(_ => this.loading = false)
     }

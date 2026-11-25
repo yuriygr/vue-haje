@@ -355,6 +355,7 @@
     "already_logged": "Уже авторизован",
     "please_enter_captcha": "Пройдите капчу",
     "nope_deleting": "Нет, никуда ты не уйдешь",
+    "unauthorized": "Необходимо выполнить авторизацию",
 
     "entry_added": "Запись добавлена",
     "entry_edited": "Запись изменена",
@@ -398,6 +399,7 @@
     "user_cant_edit_comments": "Вы не можете редактировать комментарии",
     "user_cant_subscribe_to_users": "Вы не можете подписываться на других пользователей",
     "user_cant_attach_images": "Вы не можете прикреплять файлы",
+    "user_not_found": "Пользователь не найден",
 
     "name_empty": "Необходимо указать Имя",
     "name_to_short": "Имя слишком короткое",
