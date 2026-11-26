@@ -227,7 +227,7 @@ export default {
     copyLink() {
       let _url = this.$router.resolve(this.entryLink)
       navigator.clipboard.writeText(window.location.origin + _url.fullPath).then(_ => {
-        this.toast.success(this.t('success.link_copied'))
+        this.toast.success(this.t('alerts.link_copied'))
       })
       this.$popover.close()
     },

@@ -79,9 +79,12 @@
   "unsubscribed": "Unsubscribed",
   "saved": "Saved",
   "updated": "Updated",
-  "muted": "User muted",
-  "unmuted": "User unmuted",
-  
+  "muted": "Muted",
+  "unmuted": "Unmuted",
+  "added": "Added",
+  "removed": "Removed",
+  "link_copied": "Link copied to clipboard",
+
   "invalid_json_format": "Invalid JSON format",
   "method_not_allowed": "Method unavailable or does not exist",
   

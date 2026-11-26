@@ -135,7 +135,7 @@ export const userActionsMixin = {
     copyLink() {
       const url = this.$router.resolve(this.userLink)
       navigator.clipboard.writeText(window.location.origin + url.fullPath).then(() => {
-        this.$toast.success(this.$t('success.link_copied'))
+        this.$toast.success(this.$t('alerts.link_copied'))
       })
       this.$popover.close()
     },
