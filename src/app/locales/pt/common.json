@@ -326,31 +326,5 @@
     "report": "Reportar",
     "remove-bookmark": "Remover dos favoritos",
     "add-bookmark": "Adicionar aos favoritos"
-  },
-  "brands": {
-    "grustnogram": {
-      "label": "Grustnogram",
-      "icon": "grustnogram-line"
-    },
-    "lichess": {
-      "label": "Lichess",
-      "icon": "lichess-fill"
-    },
-    "github": {
-      "label": "Github",
-      "icon": "github-fill"
-    },
-    "telegram": {
-      "label": "Telegram",
-      "icon": "telegram-fill"
-    },
-    "donationalerts": {
-      "label": "Donation Alerts",
-      "icon": "donationalerts-fill"
-    },
-    "vk": {
-      "label": "Vkontakte",
-      "icon": "vk-fill"
-    }
   }
 }

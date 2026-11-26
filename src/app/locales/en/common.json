@@ -312,58 +312,53 @@
     "date": "Received {date}"
   },
   "action": {
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "back": "Back",
     "options": "More",
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
+    "create": "Create",
     "apply": "Apply",
     "save": "Save",
-    "go_away": "Go",
+    "go_away": "Go to",
     "create_entry": "Send",
     "save_entry": "Save",
-    "send_report": "Submit a complaint",
+    "send_report": "Report",
     "load_more": "Load more",
-    "show_more": "See all",
+    "show_more": "View all",
     "cancel": "Cancel",
     "close": "Close",
     "edit": "Edit",
     "delete": "Delete",
-    "refresh": "Update",
-    "attach_image": "Attach an image",
+    "refresh": "Refresh",
+    "attach_image": "Attach image",
+    "select_gif": "Attach GIF",
     "copy_link": "Copy link",
-    "report": "Complain",
+    "reports": "Reports",
+    "report": "Report",
     "remove-bookmark": "Remove from bookmarks",
     "add-bookmark": "Add to bookmarks",
-    "confirm": "Leave without saving?",
+    "confirm": "Exit without saving?",
     "add_comment": "Send",
     "save_comment": "Save",
     "mute": "Mute",
     "unmute": "Unmute",
     "stats": "Statistics"
   },
-  "brands": {
-    "grustnogram": {
-      "label": "Sadgram",
-      "icon": "grustnogram-line"
-    },
-    "lichess": {
-      "label": "Lichess",
-      "icon": "lichess-fill"
-    },
-    "github": {
-      "label": "Github",
-      "icon": "github-fill"
-    },
-    "telegram": {
-      "label": "Telegram",
-      "icon": "telegram-fill"
-    },
-    "donationalerts": {
-      "label": "Donation Alerts",
-      "icon": "donationalerts-fill"
-    },
-    "vk": {
-      "label": "In contact with",
-      "icon": "vk-fill"
+  "state": {
+    "loading": "Loading..."
+  },
+  "report": {
+    "reason": {
+      "gore": "Gore and dismemberment",
+      "harassment": "Harassment",
+      "hateful": "Hate speech",
+      "self-harm": "Self-harm",
+      "nudity": "Nudity and explicit content",
+      "spam": "Spam",
+      "screamer": "Shocking or repulsive content",
+      "terrorism": "Terrorism"
     }
   }
 }
