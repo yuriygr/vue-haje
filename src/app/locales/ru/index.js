@@ -1,4 +1,5 @@
 import common from './common.json'
+import alerts from './alerts.json'
 import errors from './errors.json'
 import modals from './modals.json'
 import notifications from './notifications.json'
@@ -9,6 +10,7 @@ import search from './search.json'
 
 export default {
   ...common,
+  alerts,
   errors,
   modals,
   notifications,
